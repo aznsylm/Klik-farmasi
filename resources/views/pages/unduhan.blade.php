@@ -1,49 +1,59 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unduhan</title>
-    {{-- <link rel="stylesheet" href="{{ asset('css/app.css') }}"> <!-- Tambahkan jika menggunakan CSS --> --}}
-</head>
-<body>
-    <!-- Navbar -->
-    <nav style="background-color: #f8f9fa; padding: 10px;">
-        <ul style="list-style: none; display: flex; gap: 15px; margin: 0; padding: 0;">
-            <li><a href="{{ url('/') }}">Beranda</a></li>
-            <li><a href="{{ url('/artikel') }}">Artikel</a></li>
-            <li><a href="{{ url('/tanya-jawab') }}">Tanya Jawab</a></li>
-            <li><a href="{{ url('/unduhan') }}">Unduhan</a></li>
-            <li><a href="{{ url('/pengingat') }}">Pengingat</a></li>
-        </ul>
+@extends('layouts.app')
 
-        <!-- Auth Buttons -->
-        <div style="display: flex; gap: 10px;">
-            @guest
-                <a href="{{ route('login') }}" style="text-decoration: none; padding: 5px 10px; background-color: #007bff; color: white; border-radius: 5px;">Login</a>
-                <a href="{{ route('register') }}" style="text-decoration: none; padding: 5px 10px; background-color: #28a745; color: white; border-radius: 5px;">Register</a>
-            @endguest
+@section('title', 'Unduhan')
 
-            @auth
-                <form action="{{ route('logout') }}" method="POST" style="display: inline;">
-                    @csrf
-                    <button type="submit" style="text-decoration: none; padding: 5px 10px; background-color: #dc3545; color: white; border: none; border-radius: 5px; cursor: pointer;">
-                        Logout
-                    </button>
-                </form>
-            @endauth
+@section('content')
+    <section class="py-5">
+        <div class="container px-5 my-5">
+            <div class="text-center mb-5">
+                <h1 class="fw-bolder">Unduhan Informasi Hipertensi</h1>
+                <p class="lead fw-normal text-muted mb-0">Dapatkan materi edukasi tentang hipertensi</p>
+            </div>
+            <div class="row gx-5">
+                {{-- File 1 --}}
+                <div class="col-lg-6">
+                    <div class="position-relative mb-5">
+                        <img class="img-fluid rounded-3 mb-3" src="{{ asset('assets/sample-2.jpg') }}" alt="Panduan Hipertensi" style="width: 600px; height: 400px; object-fit: cover;" />
+                        <a class="h3 fw-bolder text-decoration-none link-dark stretched-link" href="https://drive.google.com/file/d/1-example-link/view" target="_blank">
+                            Panduan Lengkap Hipertensi
+                        </a>
+                    </div>
+                </div>
+                {{-- File 2 --}}
+                <div class="col-lg-6">
+                    <div class="position-relative mb-5">
+                        <img class="img-fluid rounded-3 mb-3" src="{{ asset('assets/sample-4.jpg') }}" alt="Tips Pola Hidup Sehat" style="width: 600px; height: 400px; object-fit: cover;" />
+                        <a class="h3 fw-bolder text-decoration-none link-dark stretched-link" href="https://drive.google.com/file/d/2-example-link/view" target="_blank">
+                            Tips Pola Hidup Sehat untuk Penderita Hipertensi
+                        </a>
+                    </div>
+                </div>
+                {{-- File 3 --}}
+                <div class="col-lg-6">
+                    <div class="position-relative mb-5 mb-lg-0">
+                        <img class="img-fluid rounded-3 mb-3" src="{{ asset('assets/sample-3.jpg') }}" alt="Daftar Makanan Sehat" style="width: 600px; height: 400px; object-fit: cover;" />
+                        <a class="h3 fw-bolder text-decoration-none link-dark stretched-link" href="https://drive.google.com/file/d/3-example-link/view" target="_blank">
+                            Daftar Makanan Sehat untuk Hipertensi
+                        </a>
+                    </div>
+                </div>
+                {{-- File 4 --}}
+                <div class="col-lg-6">
+                    <div class="position-relative">
+                        <img class="img-fluid rounded-3 mb-3" src="{{ asset('assets/sample-5.jpg') }}" alt="Olahraga Aman" style="width: 600px; height: 400px; object-fit: cover;" />
+                        <a class="h3 fw-bolder text-decoration-none link-dark stretched-link" href="https://drive.google.com/file/d/4-example-link/view" target="_blank">
+                            Panduan Olahraga Aman untuk Hipertensi
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
-    </nav>
+    </section>
 
-    <!-- Konten Utama -->
-    <main style="padding: 20px;">
-        <h1>Halaman Unduhan</h1>
-        <p>Ini adalah konten sementara untuk halaman artikel.</p>
-    </main>
-
-    <!-- Footer -->
-    <footer style="background-color: #f8f9fa; padding: 10px; text-align: center;">
-        <p>&copy; 2025 Klik Farmasi. All rights reserved.</p>
-    </footer>
-</body>
-</html>
+    <section class="py-5 bg-light">
+        <div class="container px-5 my-5">
+            <h2 class="display-4 fw-bolder mb-4">Mari tingkatkan kesadaran tentang hipertensi</h2>
+            <a class="btn btn-lg btn-primary" href="mailto:support@klikfarmasi.com">Hubungi Kami</a>
+        </div>
+    </section>
+@endsection

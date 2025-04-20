@@ -1,287 +1,157 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pengingat</title>
-    {{-- <link rel="stylesheet" href="{{ asset('css/app.css') }}"> <!-- Tambahkan jika menggunakan CSS --> --}}
-    <style>
-        /* Styling untuk pop-up */
-        .popup-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
+@extends('layouts.app')
 
-        .popup-content {
-            position: relative; /* Tambahkan ini */
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            text-align: center;
-            max-width: 400px;
-            width: 100%;
-        }
+@section('title', 'Pengingat Minum Obat')
 
-        .popup-content button {
-            margin-top: 10px;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
+@section('content')
+    <section class="py-5">
+        <div class="container px-5">
+            <!-- Form Pengingat -->
+            <div class="bg-light rounded-3 py-5 px-4 px-md-5 mb-5">
+                <div class="text-center mb-5">
+                    <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i class="bi bi-alarm"></i></div>
+                    <h1 class="fw-bolder">Pengingat Minum Obat</h1>
+                    <p class="lead fw-normal text-muted mb-0">Isi formulir di bawah ini untuk membuat pengingat minum obat</p>
+                </div>
+                <div class="row gx-5 justify-content-center">
+                    <div class="col-lg-8 col-xl-6">
+                        <form id="formPengingat" method="POST" action="">
+                            @csrf
+                            <!-- Nama Pasien -->
+                            <div class="form-floating mb-3">
+                                <input class="form-control" id="namaPasien" name="namaPasien" type="text" placeholder="Masukkan nama pasien" required />
+                                <label for="namaPasien">Nama Pasien</label>
+                            </div>
+                            <!-- Jenis Kelamin -->
+                            <div class="form-floating mb-3">
+                                <select class="form-select" id="jenisKelamin" name="jenisKelamin" required>
+                                    <option value="" selected>Pilih</option>
+                                    <option value="Laki-laki">Laki-laki</option>
+                                    <option value="Perempuan">Perempuan</option>
+                                </select>
+                                <label for="jenisKelamin">Jenis Kelamin</label>
+                            </div>
+                            <!-- Usia -->
+                            <div class="form-floating mb-3">
+                                <input class="form-control" id="usia" name="usia" type="number" placeholder="Masukkan usia" required />
+                                <label for="usia">Usia</label>
+                            </div>
+                            <!-- Nomor WhatsApp -->
+                            <div class="form-floating mb-3">
+                                <input class="form-control" id="nomorWa" name="nomorWa" type="tel" placeholder="+62 812-3456-7890" pattern="^\+62\s?\d{3,4}-\d{3,4}-\d{3,4}$" required />
+                                <label for="nomorWa">Nomor WhatsApp</label>
+                            </div>
+                            <!-- Diagnosa Penyakit -->
+                            <div class="form-floating mb-3">
+                                <select class="form-select" id="diagnosa" name="diagnosa" required>
+                                    <option value="" selected>Pilih</option>
+                                    <option value="Non-Komplikasi">Hipertensi Non-Komplikasi</option>
+                                    <option value="Komplikasi">Hipertensi Komplikasi</option>
+                                </select>
+                                <label for="diagnosa">Diagnosa Penyakit</label>
+                            </div>
+                            <!-- Tekanan Darah -->
+                            <div class="form-floating mb-3">
+                                <input class="form-control" id="tekananDarah" name="tekananDarah" type="text" placeholder="Contoh: 120/80 mmHg" required />
+                                <label for="tekananDarah">Tekanan Darah</label>
+                            </div>
+                            <!-- Daftar Obat -->
+                            <div id="daftarObat" class="mb-3 mt-5">
+                                <label class="form-label"><strong>Daftar Obat</strong></label>
+                                <div id="obatContainer"></div>
+                                <button type="button" class="btn btn-primary mt-2" id="tambahObat">Tambah Obat</button>
+                            </div>
+                            <!-- Button Submit -->
+                            @guest
+                                <button type="button" id="submitButton" class="btn btn-primary btn-submit w-100">
+                                    <i class="bi bi-box-arrow-in-right me-2"></i> Submit
+                                </button>
+                            @endguest
 
-        .popup-content .login-btn {
-            background-color: #007bff;
-            color: white;
-        }
-
-        .popup-content .register-btn {
-            background-color: #28a745;
-            color: white;
-        }
-
-        #closePopup {
-            position: absolute;
-            top: -5px;
-            right: 10px;
-            background: none;
-            border: none;
-            font-size: 18px;
-            cursor: pointer;
-        }
-
-        /* Container Styling */
-        .container {
-            background-color: #f9f9f9;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 30px;
-        }
-
-        /* Form Title */
-        h2 {
-            font-family: 'Poppins', sans-serif;
-            font-weight: 600;
-            color: #333;
-        }
-
-        /* Labels */
-        .form-label {
-            font-weight: 500;
-            color: #555;
-        }
-
-        /* Inputs and Selects */
-        .form-control, .form-select {
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 10px;
-            font-size: 14px;
-            transition: all 0.3s ease;
-        }
-
-        .form-control:focus, .form-select:focus {
-            border-color: #007bff;
-            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-        }
-
-        /* Buttons */
-        .btn {
-            font-family: 'Poppins', sans-serif;
-            font-weight: 500;
-            border-radius: 5px;
-            padding: 10px 20px;
-            transition: all 0.3s ease;
-        }
-
-        .btn-primary {
-            background-color: #007bff;
-            border: none;
-        }
-
-        .btn-primary:hover {
-            background-color: #0056b3;
-        }
-
-        .btn-success {
-            background-color: #28a745;
-            border: none;
-        }
-
-        .btn-success:hover {
-            background-color: #218838;
-        }
-
-        /* Obat Section */
-        #daftarObat {
-            background-color: #fff;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 20px;
-        }
-
-        #daftarObat label {
-            font-weight: bold;
-            color: #333;
-        }
-
-        /* Obat Items */
-        #obatContainer .mb-3 {
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 15px;
-            margin-bottom: 10px;
-            background-color: #f8f9fa;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .row .col-md-4, .row .col-md-6 {
-                margin-bottom: 15px;
-            }
-        }
-    </style>
-</head>
-<body>
-    <!-- Navbar -->
-    <nav style="background-color: #f8f9fa; padding: 10px;">
-        <ul style="list-style: none; display: flex; gap: 15px; margin: 0; padding: 0;">
-            <li><a href="{{ url('/') }}">Beranda</a></li>
-            <li><a href="{{ url('/artikel') }}">Artikel</a></li>
-            <li><a href="{{ url('/tanya-jawab') }}">Tanya Jawab</a></li>
-            <li><a href="{{ url('/unduhan') }}">Unduhan</a></li>
-            <li><a href="{{ url('/pengingat') }}">Pengingat</a></li>
-        </ul>
-
-        <!-- Auth Buttons -->
-        <div style="display: flex; gap: 10px;">
-            @guest
-                <a href="{{ route('login') }}" style="text-decoration: none; padding: 5px 10px; background-color: #007bff; color: white; border-radius: 5px;">Login</a>
-                <a href="{{ route('register') }}" style="text-decoration: none; padding: 5px 10px; background-color: #28a745; color: white; border-radius: 5px;">Register</a>
-            @endguest
-
-            @auth
-                <form action="{{ route('logout') }}" method="POST" style="display: inline;">
-                    @csrf
-                    <button type="submit" style="text-decoration: none; padding: 5px 10px; background-color: #dc3545; color: white; border: none; border-radius: 5px; cursor: pointer;">
-                        Logout
-                    </button>
-                </form>
-            @endauth
+                            @auth
+                                <button type="submit" class="btn btn-primary btn-submit w-100">
+                                    <i class="bi bi-check-circle me-2"></i> Submit
+                                </button>
+                            @endauth
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
-    </nav>
-
-    <!-- Konten Utama -->
-    <main style="padding: 20px;">
-        <div class="container my-5">
-            <h2 class="text-center mb-4">Pengingat Minum Obat</h2>
-            <form id="formPengingat">
-                <!-- Nama Pasien -->
-                <div class="mb-3">
-                    <label for="namaPasien" class="form-label">Nama Pasien</label>
-                    <input type="text" class="form-control" id="namaPasien" name="namaPasien" placeholder="Masukkan nama pasien" required>
-                </div>
-
-                <!-- Jenis Kelamin, Usia, Nomor WA (1 Row) -->
-                <div class="row mb-3">
-                    <div class="col-md-4">
-                        <label for="jenisKelamin" class="form-label">Jenis Kelamin</label>
-                        <select class="form-select" id="jenisKelamin" name="jenisKelamin" required>
-                            <option value="">Pilih</option>
-                            <option value="Laki-laki">Laki-laki</option>
-                            <option value="Perempuan">Perempuan</option>
-                        </select>
-                    </div>
-                    <div class="col-md-4">
-                        <label for="usia" class="form-label">Usia</label>
-                        <input type="number" class="form-control" id="usia" name="usia" placeholder="Masukkan usia" required>
-                    </div>
-                    <div class="col-md-4">
-                        <label for="nomorWa" class="form-label">Nomor WhatsApp</label>
-                        <input type="tel" class="form-control" id="nomorWa" name="nomorWa" placeholder="+62 812-3456-7890" pattern="^\+62\s?\d{3,4}-\d{3,4}-\d{3,4}$" required>
-                    </div>
-                </div>
-
-                <!-- Diagnosa dan Tekanan Darah (1 Row) -->
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <label for="diagnosa" class="form-label">Diagnosa Penyakit</label>
-                        <select class="form-select" id="diagnosa" name="diagnosa" required>
-                            <option value="">Pilih</option>
-                            <option value="Non-Komplikasi">Hipertensi Non-Komplikasi</option>
-                            <option value="Komplikasi">Hipertensi Komplikasi</option>
-                        </select>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="tekananDarah" class="form-label">Tekanan Darah</label>
-                        <input type="text" class="form-control" id="tekananDarah" name="tekananDarah" placeholder="Contoh: 120/80 mmHg" required>
-                    </div>
-                </div>
-
-                <!-- Daftar Obat -->
-                <div id="daftarObat" class="mb-3 mt-5">
-                    <label class="form-label"><strong>Daftar Obat</strong></label>
-                    <div id="obatContainer"></div>
-                    <button type="button" class="btn btn-primary mt-2" id="tambahObat">Tambah Obat</button>
-                </div>
-
-                <!-- Button Submit -->
-                @guest
-                    <button type="button" id="submitButton" style="padding: 10px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">
-                        Submit
-                    </button>
-                @endguest
-
-                @auth
-                    <button type="submit" style="padding: 10px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">
-                        Submit
-                    </button>
-                @endauth
-            </form>
-        </div>
-    </main>
+    </section>
 
     <!-- Pop-up -->
-    <div class="popup-overlay" id="popupOverlay">
-        <div class="popup-content">
+    <div class="popup-overlay" id="popupOverlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.7); z-index: 9999; align-items: center; justify-content: center;">
+        <div class="popup-content" style="position: relative; background: #fff; border-radius: 10px; padding: 30px; width: 90%; max-width: 400px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); text-align: center; animation: fadeIn 0.3s ease-in-out;">
             <!-- Tombol Close -->
-            <button id="closePopup" style="position: absolute;  background: none; border: none; font-size: 28px; cursor: pointer;">&times;</button>
+            <button id="closePopup" style="position: absolute; top: 10px; right: 10px; background: none; border: none; font-size: 24px; font-weight: bold; color: #333; cursor: pointer;">&times;</button>
             
-            <p>Anda harus login terlebih dahulu untuk mengirimkan data.</p>
-            <a href="{{ route('login') }}"><button class="login-btn">Login</button></a>
-            <a href="{{ route('register') }}"><button class="register-btn">Register</button></a>
+            <h2 style="font-size: 1.5rem; color: #333; margin-bottom: 15px;">Login Diperlukan</h2>
+            <p style="font-size: 1rem; color: #555; margin-bottom: 20px;">Anda harus login terlebih dahulu untuk mengirimkan data.</p>
+            <div style="display: flex; gap: 10px; justify-content: center;">
+                <a href="{{ route('login') }}">
+                    <button class="login-btn" style="padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 1rem;">Login</button>
+                </a>
+                <a href="{{ route('register') }}">
+                    <button class="register-btn" style="padding: 10px 20px; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 1rem;">Register</button>
+                </a>
+            </div>
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer style="background-color: #f8f9fa; padding: 10px; text-align: center;">
-        <p>&copy; 2025 Klik Farmasi. All rights reserved.</p>
-    </footer>
+    <style>
+        /* Animasi untuk pop-up */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Tombol Submit */
+        .btn-submit {
+            padding: 15px 0;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 50px;
+            background-color: #007bff;
+            color: white;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-submit:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-submit:active {
+            transform: translateY(0);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Full Width */
+        .w-100 {
+            width: 100%;
+            max-width: 600px; /* Maksimal lebar tombol */
+            margin: 0 auto; /* Pusatkan tombol */
+        }
+    </style>
 
     <script>
-        // JavaScript untuk menampilkan pop-up
-        document.getElementById('submitButton').addEventListener('click', function () {
-            document.getElementById('popupOverlay').style.display = 'flex';
-        });
-
-        // JavaScript untuk menutup pop-up
-        document.getElementById('closePopup').addEventListener('click', function () {
-            document.getElementById('popupOverlay').style.display = 'none';
-        });
-
         document.addEventListener('DOMContentLoaded', function () {
-            
             const diagnosa = document.getElementById('diagnosa');
             const tambahObat = document.getElementById('tambahObat');
             const obatContainer = document.getElementById('obatContainer');
+            const form = document.getElementById('formPengingat');
             let totalObat = 0;
 
             const daftarObat = [
@@ -321,6 +191,7 @@
                 "Furosemid tab 40 mg",
             ];
 
+            // Atur jumlah maksimal obat berdasarkan diagnosa
             diagnosa.addEventListener('change', function () {
                 totalObat = 0;
                 obatContainer.innerHTML = '';
@@ -328,13 +199,14 @@
 
                 if (diagnosa.value === 'Non-Komplikasi') {
                     tambahObat.dataset.maxObat = 2;
-                    tambahObat.dataset.minObat = 0;
+                    tambahObat.dataset.minObat = 1; // Minimal 1 obat
                 } else if (diagnosa.value === 'Komplikasi') {
-                    tambahObat.dataset.maxObat = 99;
-                    tambahObat.dataset.minObat = 2;
+                    tambahObat.dataset.maxObat = 5;
+                    tambahObat.dataset.minObat = 2; // Minimal 2 obat
                 }
             });
 
+            // Tambah obat
             tambahObat.addEventListener('click', function () {
                 const maxObat = parseInt(tambahObat.dataset.maxObat || 0);
 
@@ -371,22 +243,27 @@
                 }
             });
 
-            const form = document.getElementById('formPengingat');
+            // Validasi sebelum submit
             form.addEventListener('submit', function (e) {
                 e.preventDefault();
 
                 const minObat = parseInt(tambahObat.dataset.minObat || 0);
 
                 if (totalObat < minObat) {
-                    alert(`Silakan tambahkan minimal ${minObat} obat sebelum menyimpan pengingat.`);
-                } else if (totalObat === 0) {
-                    alert("Silakan tambahkan setidaknya 1 obat.");
+                    alert(`Silakan tambahkan minimal ${minObat} obat.`);
                 } else {
                     alert('Form berhasil disubmit!');
                     form.submit();
                 }
             });
+
+            document.getElementById('submitButton').addEventListener('click', function () {
+                document.getElementById('popupOverlay').style.display = 'flex';
+            });
+
+            document.getElementById('closePopup').addEventListener('click', function () {
+                document.getElementById('popupOverlay').style.display = 'none';
+            });
         });
     </script>
-</body>
-</html>
+@endsection
