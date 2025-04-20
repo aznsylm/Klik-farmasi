@@ -27,6 +27,10 @@ Route::middleware(['auth', \App\Http\Middleware\RoleMiddleware::class . ':admin'
 
     // Tambahkan route untuk mengelola data user
     Route::get('/admin/users', [AdminController::class, 'index'])->name('admin.users');
+    Route::get('/admin/users/{id}', [AdminController::class, 'show'])->name('admin.userDetail');
+    Route::get('/admin/users/{id}/edit', [AdminController::class, 'edit'])->name('admin.userEdit');
+    Route::put('/admin/users/{id}', [AdminController::class, 'update'])->name('admin.userUpdate');
+    Route::delete('/admin/users/{id}', [AdminController::class, 'destroy'])->name('admin.deleteUser');
 });
 
 // Dashboard User

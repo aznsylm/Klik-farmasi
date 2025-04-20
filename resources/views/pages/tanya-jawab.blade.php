@@ -17,10 +17,21 @@
             <li><a href="{{ url('/pengingat') }}">Pengingat</a></li>
         </ul>
 
-         <!-- Auth Buttons -->
+        <!-- Auth Buttons -->
         <div style="display: flex; gap: 10px;">
-            <a href="{{ route('login') }}" style="text-decoration: none; padding: 5px 10px; background-color: #007bff; color: white; border-radius: 5px;">Login</a>
-            <a href="{{ route('register') }}" style="text-decoration: none; padding: 5px 10px; background-color: #28a745; color: white; border-radius: 5px;">Register</a>
+            @guest
+                <a href="{{ route('login') }}" style="text-decoration: none; padding: 5px 10px; background-color: #007bff; color: white; border-radius: 5px;">Login</a>
+                <a href="{{ route('register') }}" style="text-decoration: none; padding: 5px 10px; background-color: #28a745; color: white; border-radius: 5px;">Register</a>
+            @endguest
+
+            @auth
+                <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+                    @csrf
+                    <button type="submit" style="text-decoration: none; padding: 5px 10px; background-color: #dc3545; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                        Logout
+                    </button>
+                </form>
+            @endauth
         </div>
     </nav>
 

@@ -57,6 +57,97 @@
             font-size: 18px;
             cursor: pointer;
         }
+
+        /* Container Styling */
+        .container {
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+
+        /* Form Title */
+        h2 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            color: #333;
+        }
+
+        /* Labels */
+        .form-label {
+            font-weight: 500;
+            color: #555;
+        }
+
+        /* Inputs and Selects */
+        .form-control, .form-select {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+
+        /* Buttons */
+        .btn {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            border-radius: 5px;
+            padding: 10px 20px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            border: none;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+        }
+
+        /* Obat Section */
+        #daftarObat {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+        }
+
+        #daftarObat label {
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* Obat Items */
+        #obatContainer .mb-3 {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 10px;
+            background-color: #f8f9fa;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .row .col-md-4, .row .col-md-6 {
+                margin-bottom: 15px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -72,48 +163,90 @@
 
         <!-- Auth Buttons -->
         <div style="display: flex; gap: 10px;">
-            <a href="{{ route('login') }}" style="text-decoration: none; padding: 5px 10px; background-color: #007bff; color: white; border-radius: 5px;">Login</a>
-            <a href="{{ route('register') }}" style="text-decoration: none; padding: 5px 10px; background-color: #28a745; color: white; border-radius: 5px;">Register</a>
+            @guest
+                <a href="{{ route('login') }}" style="text-decoration: none; padding: 5px 10px; background-color: #007bff; color: white; border-radius: 5px;">Login</a>
+                <a href="{{ route('register') }}" style="text-decoration: none; padding: 5px 10px; background-color: #28a745; color: white; border-radius: 5px;">Register</a>
+            @endguest
+
+            @auth
+                <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+                    @csrf
+                    <button type="submit" style="text-decoration: none; padding: 5px 10px; background-color: #dc3545; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                        Logout
+                    </button>
+                </form>
+            @endauth
         </div>
     </nav>
 
     <!-- Konten Utama -->
     <main style="padding: 20px;">
-        <h1>Form Pengingat Obat</h1>
-        <form id="pengingatForm" action="{{ url('/pengingat') }}" method="POST" style="display: flex; flex-direction: column; gap: 15px; max-width: 400px;">
-            @csrf <!-- Tambahkan CSRF token untuk keamanan -->
-            
-            <!-- Input Nama -->
-            <div>
-                <label for="nama" style="display: block; margin-bottom: 5px;">Nama Lengkap:</label>
-                <input type="text" id="nama" name="nama" placeholder="Masukkan nama lengkap" required style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px;">
-            </div>
+        <div class="container my-5">
+            <h2 class="text-center mb-4">Pengingat Minum Obat</h2>
+            <form id="formPengingat">
+                <!-- Nama Pasien -->
+                <div class="mb-3">
+                    <label for="namaPasien" class="form-label">Nama Pasien</label>
+                    <input type="text" class="form-control" id="namaPasien" name="namaPasien" placeholder="Masukkan nama pasien" required>
+                </div>
 
-            <!-- Input Nama Obat -->
-            <div>
-                <label for="nama_obat" style="display: block; margin-bottom: 5px;">Nama Obat:</label>
-                <input type="text" id="nama_obat" name="nama_obat" placeholder="Masukkan nama obat" required style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px;">
-            </div>
+                <!-- Jenis Kelamin, Usia, Nomor WA (1 Row) -->
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="jenisKelamin" class="form-label">Jenis Kelamin</label>
+                        <select class="form-select" id="jenisKelamin" name="jenisKelamin" required>
+                            <option value="">Pilih</option>
+                            <option value="Laki-laki">Laki-laki</option>
+                            <option value="Perempuan">Perempuan</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="usia" class="form-label">Usia</label>
+                        <input type="number" class="form-control" id="usia" name="usia" placeholder="Masukkan usia" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="nomorWa" class="form-label">Nomor WhatsApp</label>
+                        <input type="tel" class="form-control" id="nomorWa" name="nomorWa" placeholder="+62 812-3456-7890" pattern="^\+62\s?\d{3,4}-\d{3,4}-\d{3,4}$" required>
+                    </div>
+                </div>
 
-            <!-- Input Jadwal Minum Obat -->
-            <div>
-                <label for="jadwal" style="display: block; margin-bottom: 5px;">Jadwal Minum Obat:</label>
-                <input type="datetime-local" id="jadwal" name="jadwal" required style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px;">
-            </div>
+                <!-- Diagnosa dan Tekanan Darah (1 Row) -->
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="diagnosa" class="form-label">Diagnosa Penyakit</label>
+                        <select class="form-select" id="diagnosa" name="diagnosa" required>
+                            <option value="">Pilih</option>
+                            <option value="Non-Komplikasi">Hipertensi Non-Komplikasi</option>
+                            <option value="Komplikasi">Hipertensi Komplikasi</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="tekananDarah" class="form-label">Tekanan Darah</label>
+                        <input type="text" class="form-control" id="tekananDarah" name="tekananDarah" placeholder="Contoh: 120/80 mmHg" required>
+                    </div>
+                </div>
 
-            <!-- Button Submit -->
-            @guest
-                <button type="button" id="submitButton" style="padding: 10px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">
-                    Submit
-                </button>
-            @endguest
+                <!-- Daftar Obat -->
+                <div id="daftarObat" class="mb-3 mt-5">
+                    <label class="form-label"><strong>Daftar Obat</strong></label>
+                    <div id="obatContainer"></div>
+                    <button type="button" class="btn btn-primary mt-2" id="tambahObat">Tambah Obat</button>
+                </div>
 
-            @auth
-                <button type="submit" style="padding: 10px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">
-                    Submit
-                </button>
-            @endauth
-        </form>
+                <!-- Button Submit -->
+                @guest
+                    <button type="button" id="submitButton" style="padding: 10px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                        Submit
+                    </button>
+                @endguest
+
+                @auth
+                    <button type="submit" style="padding: 10px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                        Submit
+                    </button>
+                @endauth
+            </form>
+        </div>
     </main>
 
     <!-- Pop-up -->
@@ -142,6 +275,117 @@
         // JavaScript untuk menutup pop-up
         document.getElementById('closePopup').addEventListener('click', function () {
             document.getElementById('popupOverlay').style.display = 'none';
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            
+            const diagnosa = document.getElementById('diagnosa');
+            const tambahObat = document.getElementById('tambahObat');
+            const obatContainer = document.getElementById('obatContainer');
+            let totalObat = 0;
+
+            const daftarObat = [
+                "Verapamil tab 80 mg",
+                "Verapamil tab lepas lambat 240 mg",
+                "Valsartan tab 80 mg",
+                "Valsartan tab 160 mg",
+                "Telmisartan tab 40 mg",
+                "Telmisartan tab 80 mg",
+                "Ramipril tab 2,5 mg",
+                "Ramipril tab 5 mg",
+                "Amlodipin tab 5 mg",
+                "Amlodipin tab 10 mg",
+                "Atenolol tab 50 mg",
+                "Atenolol tab 100 mg",
+                "Bisoprolol tab 2,5 mg",
+                "Bisoprolol tab 5 mg",
+                "Bisoprolol tab 10 mg",
+                "Diltiazem kapsul lepas lambat 100 mg",
+                "Diltiazem kapsul lepas lambat 200 mg",
+                "Hidroklorotiazid tab 25 mg",
+                "Imidapril tab 5 mg",
+                "Imidapril tab 10 mg",
+                "Irbesartan tab 150 mg",
+                "Irbesartan tab 300 mg",
+                "Kandesartan tab 8 mg",
+                "Kandesartan tab 16 mg",
+                "Kaptopril tab 12,5 mg",
+                "Kaptopril tab 25 mg",
+                "Kaptopril tab 50 mg",
+                "Klonidin tab 0,15 mg",
+                "Lisinopril tab 5 mg",
+                "Lisinopril tab 10 mg",
+                "Metildopa tab 250 mg",
+                "Nifedipin tab 10 mg",
+                "Furosemid tab 20 mg",
+                "Furosemid tab 40 mg",
+            ];
+
+            diagnosa.addEventListener('change', function () {
+                totalObat = 0;
+                obatContainer.innerHTML = '';
+                tambahObat.disabled = false;
+
+                if (diagnosa.value === 'Non-Komplikasi') {
+                    tambahObat.dataset.maxObat = 2;
+                    tambahObat.dataset.minObat = 0;
+                } else if (diagnosa.value === 'Komplikasi') {
+                    tambahObat.dataset.maxObat = 99;
+                    tambahObat.dataset.minObat = 2;
+                }
+            });
+
+            tambahObat.addEventListener('click', function () {
+                const maxObat = parseInt(tambahObat.dataset.maxObat || 0);
+
+                if (totalObat < maxObat) {
+                    totalObat++;
+
+                    const obatDiv = document.createElement('div');
+                    obatDiv.classList.add('mb-3');
+                    obatDiv.innerHTML = `
+                        <div class="mb-2">
+                            <label for="namaObat${totalObat}" class="form-label">Obat ke-${totalObat}</label>
+                            <select class="form-select" id="namaObat${totalObat}" name="namaObat[]" required>
+                                <option value="">Pilih Obat</option>
+                                ${daftarObat.map(obat => `<option value="${obat}">${obat}</option>`).join('')}
+                            </select>
+                        </div>
+                        <div class="mb-2">
+                            <label for="jumlahObat${totalObat}" class="form-label">Jumlah Obat</label>
+                            <select class="form-select" id="jumlahObat${totalObat}" name="jumlahObat[]" required>
+                                <option value="30 tablet/bulan">30 tablet/bulan</option>
+                                <option value="90 tablet/bulan">90 tablet/bulan</option>
+                            </select>
+                        </div>
+                        <div class="mb-2">
+                            <label for="waktuMinum${totalObat}" class="form-label">Waktu Minum Obat</label>
+                            <input type="time" class="form-control" id="waktuMinum${totalObat}" name="waktuMinum[]" required>
+                        </div>
+                    `;
+                    obatContainer.appendChild(obatDiv);
+                }
+
+                if (totalObat === maxObat) {
+                    tambahObat.disabled = true;
+                }
+            });
+
+            const form = document.getElementById('formPengingat');
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+
+                const minObat = parseInt(tambahObat.dataset.minObat || 0);
+
+                if (totalObat < minObat) {
+                    alert(`Silakan tambahkan minimal ${minObat} obat sebelum menyimpan pengingat.`);
+                } else if (totalObat === 0) {
+                    alert("Silakan tambahkan setidaknya 1 obat.");
+                } else {
+                    alert('Form berhasil disubmit!');
+                    form.submit();
+                }
+            });
         });
     </script>
 </body>
