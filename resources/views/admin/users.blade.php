@@ -1,49 +1,95 @@
-<h1>Daftar User</h1>
+@extends('layouts.app')
 
-@if (session('success'))
-    <div style="color: green; margin-bottom: 10px;">
-        {{ session('success') }}
+@section('title', 'Daftar User')
+
+@section('content')
+    <div class="container py-5">
+        <div class="text-center mb-4">
+            <h1 class="fw-bold">Daftar User</h1>
+            <p class="text-muted">Kelola data pengguna dengan mudah di halaman ini.</p>
+        </div>
+
+        <!-- Notifikasi Sukses -->
+        @if (session('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+
+        <!-- Tabel Daftar User -->
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>Nama</th>
+                        <th>Email</th>
+                        <th class="text-center">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($users as $user)
+                        <tr>
+                            <td>{{ $user->name }}</td>
+                            <td>{{ $user->email }}</td>
+                            <td class="text-center">
+                                <!-- Tombol Lihat Detail -->
+                                <a href="{{ route('admin.userDetail', $user->id) }}" class="btn btn-info btn-sm me-1">
+                                    <i class="bi bi-eye"></i> Detail
+                                </a>
+
+                                <!-- Tombol Edit -->
+                                <a href="{{ route('admin.userEdit', $user->id) }}" class="btn btn-warning btn-sm me-1">
+                                    <i class="bi bi-pencil"></i> Edit
+                                </a>
+
+                                <!-- Tombol Hapus -->
+                                <form action="{{ route('admin.deleteUser', $user->id) }}" method="POST" style="display: inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus user ini?')">
+                                        <i class="bi bi-trash"></i> Hapus
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Tombol Kembali ke Dashboard -->
+        <div class="text-center mt-4">
+            <a href="{{ route('admin.dashboard') }}" class="btn btn-primary">
+                <i class="bi bi-arrow-left"></i> Kembali ke Dashboard
+            </a>
+        </div>
     </div>
-@endif
 
-<table border="1" style="width: 100%; border-collapse: collapse; text-align: left;">
-    <thead>
-        <tr>
-            <th style="padding: 10px; background-color: #f8f9fa;">Nama</th>
-            <th style="padding: 10px; background-color: #f8f9fa;">Email</th>
-            <th style="padding: 10px; background-color: #f8f9fa;">Aksi</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach ($users as $user)
-            <tr>
-                <td style="padding: 10px;">{{ $user->name }}</td>
-                <td style="padding: 10px;">{{ $user->email }}</td>
-                <td style="padding: 10px;">
-                    <!-- Tombol Lihat Detail -->
-                    <a href="{{ route('admin.userDetail', $user->id) }}" style="padding: 5px 10px; background-color: #17a2b8; color: white; text-decoration: none; border-radius: 5px;">
-                        Detail
-                    </a>
+    <style>
+        .table {
+            border-radius: 10px;
+            overflow: hidden;
+        }
 
-                    <!-- Tombol Edit -->
-                    <a href="{{ route('admin.userEdit', $user->id) }}" style="padding: 5px 10px; background-color: #ffc107; color: white; text-decoration: none; border-radius: 5px;">
-                        Edit
-                    </a>
+        .btn {
+            transition: all 0.3s ease;
+        }
 
-                    <!-- Tombol Hapus -->
-                    <form action="{{ route('admin.deleteUser', $user->id) }}" method="POST" style="display: inline;">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" style="padding: 5px 10px; background-color: #dc3545; color: white; border: none; border-radius: 5px; cursor: pointer;">
-                            Hapus
-                        </button>
-                    </form>
-                </td>
-            </tr>
-        @endforeach
-    </tbody>
-</table>
+        .btn:hover {
+            transform: scale(1.05);
+        }
 
-<a href="{{ route('admin.dashboard') }}" style="display: inline-block; margin-top: 20px; padding: 10px 20px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px;">
-    Kembali ke Dashboard
-</a>
+        .btn-danger:hover {
+            background-color: #a71d2a;
+        }
+
+        .btn-warning:hover {
+            background-color: #e0a800;
+        }
+
+        .btn-info:hover {
+            background-color: #138496;
+        }
+    </style>
+@endsection

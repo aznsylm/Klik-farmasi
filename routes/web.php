@@ -5,7 +5,7 @@ use App\Http\Controllers\PageController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProfileController;
 
-Route::get('/', [PageController::class, 'beranda'])->name('tanya-jawab');
+Route::get('/', [PageController::class, 'beranda'])->name('beranda');
 Route::get('/tanya-jawab', [PageController::class, 'tanyaJawab'])->name('tanya-jawab');
 Route::get('/artikel', [PageController::class, 'artikel'])->name('artikel');
 Route::get('/unduhan', [PageController::class, 'unduhan'])->name('unduhan');

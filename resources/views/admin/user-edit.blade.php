@@ -1,23 +1,59 @@
-<h1>Edit User</h1>
-<form action="{{ route('admin.userUpdate', $user->id) }}" method="POST" style="max-width: 400px;">
-    @csrf
-    @method('PUT')
+@extends('layouts.app')
 
-    <div style="margin-bottom: 10px;">
-        <label for="name">Nama:</label>
-        <input type="text" id="name" name="name" value="{{ $user->name }}" required style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px;">
+@section('title', 'Edit User')
+
+@section('content')
+    <div class="container py-5">
+        <div class="text-center mb-4">
+            <h1 class="fw-bold">Edit User</h1>
+            <p class="text-muted">Perbarui informasi pengguna di sini.</p>
+        </div>
+
+        <!-- Form Edit User -->
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body">
+                        <form action="{{ route('admin.userUpdate', $user->id) }}" method="POST">
+                            @csrf
+                            @method('PUT')
+
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Nama:</label>
+                                <input type="text" id="name" name="name" value="{{ $user->name }}" class="form-control" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email:</label>
+                                <input type="email" id="email" name="email" value="{{ $user->email }}" class="form-control" required>
+                            </div>
+
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-success">
+                                    <i class="bi bi-save me-2"></i> Simpan Perubahan
+                                </button>
+                                <a href="{{ route('admin.users') }}" class="btn btn-primary">
+                                    <i class="bi bi-arrow-left me-2"></i> Kembali ke Daftar User
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div style="margin-bottom: 10px;">
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" value="{{ $user->email }}" required style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px;">
-    </div>
+    <style>
+        .card {
+            border-radius: 15px;
+        }
 
-    <button type="submit" style="padding: 10px 20px; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer;">
-        Simpan Perubahan
-    </button>
-</form>
+        .btn {
+            transition: all 0.3s ease;
+        }
 
-<a href="{{ route('admin.users') }}" style="display: inline-block; margin-top: 20px; padding: 10px 20px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px;">
-    Kembali ke Daftar User
-</a>
+        .btn:hover {
+            transform: scale(1.05);
+        }
+    </style>
+@endsection

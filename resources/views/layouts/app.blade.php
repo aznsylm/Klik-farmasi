@@ -23,6 +23,51 @@
     <!-- Footer -->
     @include('layouts.footer')
 
+    <!-- Button Kembali ke Atas -->
+    <button id="backToTop" class="btn btn-primary rounded-circle shadow" style="display: none; position: fixed; bottom: 20px; right: 20px; z-index: 1000;">
+        <i class="bi bi-arrow-up"></i>
+    </button>
+
+    <script>
+        // Tampilkan tombol saat scroll ke bawah
+        const backToTopButton = document.getElementById('backToTop');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 200) {
+                backToTopButton.style.display = 'block';
+            } else {
+                backToTopButton.style.display = 'none';
+            }
+        });
+
+        // Scroll ke atas saat tombol diklik
+        backToTopButton.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+
+    <style>
+        #backToTop {
+            width: 50px;
+            height: 50px;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            transition: all 0.3s ease;
+        }
+
+        #backToTop:hover {
+            background-color: #0056b3;
+            transform: scale(1.1);
+        }
+    </style>
+
     <!-- Bootstrap Core JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Core Theme JS -->

@@ -38,10 +38,27 @@
                         <span class="text-white">{{ Auth::user()->name }}</span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end text-small shadow" aria-labelledby="dropdownUser">
+                        @if(Auth::user()->role === 'admin')
+                            <!-- Opsi untuk Admin -->
+                            <li>
+                                <a class="dropdown-item" href="{{ route('admin.dashboard') }}">
+                                    <i class="bi bi-speedometer2 me-2"></i> Dashboard
+                                </a>
+                            </li>
+                        @else
+                            <!-- Opsi untuk User -->
+                            <li>
+                                <a class="dropdown-item" href="{{ route('user.dashboard') }}">
+                                    <i class="bi bi-speedometer2 me-2"></i> Dashboard
+                                </a>
+                            </li>
+                        @endif
                         <li>
                             <form action="{{ route('logout') }}" method="POST" style="display: inline;">
                                 @csrf
-                                <button type="submit" class="dropdown-item">Logout</button>
+                                <button type="submit" class="dropdown-item">
+                                    <i class="bi bi-box-arrow-right me-2"></i> Logout
+                                </button>
                             </form>
                         </li>
                     </ul>
