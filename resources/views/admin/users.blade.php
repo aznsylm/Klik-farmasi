@@ -91,5 +91,17 @@
         .btn-info:hover {
             background-color: #138496;
         }
+
+        /* Responsiveness */
+        @media (max-width: 768px) {
+            .table {
+                font-size: 0.9rem; /* Kurangi ukuran font tabel di layar kecil */
+            }
+
+            .btn {
+                font-size: 0.7rem; /* Kurangi ukuran font tombol di layar kecil */
+                padding: 5px 10px; /* Kurangi padding tombol di layar kecil */
+            }
+        }
     </style>
 @endsection

@@ -11,7 +11,7 @@
 
         <div class="row justify-content-center">
             <!-- Card Kelola Data User -->
-            <div class="col-md-6 col-lg-4 mb-4">
+            <div class="col-12 col-md-6 col-lg-4 mb-4">
                 <div class="card shadow-sm border-0">
                     <div class="card-body text-center">
                         <h5 class="card-title fw-bold">Kelola Data User</h5>
@@ -24,7 +24,7 @@
             </div>
 
             <!-- Card Logout -->
-            <div class="col-md-6 col-lg-4 mb-4">
+            <div class="col-12 col-md-6 col-lg-4 mb-4">
                 <div class="card shadow-sm border-0">
                     <div class="card-body text-center">
                         <h5 class="card-title fw-bold">Logout</h5>
