@@ -10,6 +10,19 @@
         </div>
 
         <div class="row justify-content-center">
+            <!-- Card Kelola Artikel -->
+            <div class="col-12 col-md-6 col-lg-4 mb-4">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body text-center">
+                        <h5 class="card-title fw-bold">Kelola Artikel</h5>
+                        <p class="card-text text-muted">Lihat, tambahkan, dan kelola artikel di sistem.</p>
+                        <a href="{{ route('admin.articles.index') }}" class="btn btn-success w-100">
+                            <i class="bi bi-file-earmark-text me-2"></i> Kelola Artikel
+                        </a>
+                    </div>
+                </div>
+            </div>
+
             <!-- Card Kelola Data User -->
             <div class="col-12 col-md-6 col-lg-4 mb-4">
                 <div class="card shadow-sm border-0">
@@ -18,6 +31,19 @@
                         <p class="card-text text-muted">Lihat dan kelola data pengguna di sistem.</p>
                         <a href="{{ route('admin.users') }}" class="btn btn-primary w-100">
                             <i class="bi bi-people-fill me-2"></i> Kelola Data User
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card Kelola Berita -->
+            <div class="col-12 col-md-6 col-lg-4 mb-4">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body text-center">
+                        <h5 class="card-title fw-bold">Kelola Berita</h5>
+                        <p class="card-text text-muted">Lihat, tambahkan, dan kelola berita di sistem.</p>
+                        <a href="{{ route('admin.news.index') }}" class="btn btn-info w-100">
+                            <i class="bi bi-newspaper me-2"></i> Kelola Berita
                         </a>
                     </div>
                 </div>

@@ -20,7 +20,7 @@
         <!-- Tabel Daftar User -->
         <div class="table-responsive">
             <table class="table table-bordered table-hover">
-                <thead class="table-light">
+                <thead class="table-dark">
                     <tr>
                         <th>Nama</th>
                         <th>Email</th>
@@ -60,18 +60,34 @@
 
         <!-- Tombol Kembali ke Dashboard -->
         <div class="text-center mt-4">
-            <a href="{{ route('admin.dashboard') }}" class="btn btn-primary">
+            <a href="{{ route('admin.dashboard') }}" class="btn btn-secondary">
                 <i class="bi bi-arrow-left"></i> Kembali ke Dashboard
             </a>
         </div>
     </div>
 
     <style>
+        /* Tabel */
         .table {
             border-radius: 10px;
             overflow: hidden;
         }
 
+        .table thead {
+            background-color: #343a40;
+            color: #fff;
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        .table td, .table th {
+            vertical-align: middle;
+            text-align: center;
+        }
+
+        /* Tombol */
         .btn {
             transition: all 0.3s ease;
         }
@@ -90,6 +106,16 @@
 
         .btn-info:hover {
             background-color: #138496;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            border: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
         }
 
         /* Responsiveness */

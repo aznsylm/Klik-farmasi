@@ -11,6 +11,7 @@ Route::get('/artikel', [PageController::class, 'artikel'])->name('artikel');
 Route::get('/unduhan', [PageController::class, 'unduhan'])->name('unduhan');
 Route::get('/pengingat', [PageController::class, 'pengingat'])->name('pengingat');
 
+
 Route::get('/dashboard', function () {
     if (auth()->user()->role === 'admin') {
         return redirect()->route('admin.dashboard');
@@ -20,17 +21,23 @@ Route::get('/dashboard', function () {
 })->middleware(['auth'])->name('dashboard');
 
 // Dashboard Admin
-Route::middleware(['auth', \App\Http\Middleware\RoleMiddleware::class . ':admin'])->group(function () {
-    Route::get('/admin/dashboard', function () {
+Route::middleware(['auth', \App\Http\Middleware\RoleMiddleware::class . ':admin'])->prefix('admin')->name('admin.')->group(function () {
+    // Dashboard Admin
+    Route::get('/dashboard', function () {
         return view('admin.dashboard'); // Buat view untuk admin
-    })->name('admin.dashboard');
+    })->name('dashboard');
 
-    // Tambahkan route untuk mengelola data user
-    Route::get('/admin/users', [AdminController::class, 'index'])->name('admin.users');
-    Route::get('/admin/users/{id}', [AdminController::class, 'show'])->name('admin.userDetail');
-    Route::get('/admin/users/{id}/edit', [AdminController::class, 'edit'])->name('admin.userEdit');
-    Route::put('/admin/users/{id}', [AdminController::class, 'update'])->name('admin.userUpdate');
-    Route::delete('/admin/users/{id}', [AdminController::class, 'destroy'])->name('admin.deleteUser');
+    // Kelola Data User
+    Route::get('/users', [AdminController::class, 'index'])->name('users');
+    Route::get('/users/{id}', [AdminController::class, 'show'])->name('userDetail');
+    Route::get('/users/{id}/edit', [AdminController::class, 'edit'])->name('userEdit');
+    Route::put('/users/{id}', [AdminController::class, 'update'])->name('userUpdate');
+    Route::delete('/users/{id}', [AdminController::class, 'destroy'])->name('deleteUser');
+
+    // Kelola Artikel
+    Route::resource('articles', \App\Http\Controllers\Admin\ArticleController::class);
+    // Kelola Berita
+    Route::resource('news', \App\Http\Controllers\Admin\NewsController::class);
 });
 
 // Dashboard User

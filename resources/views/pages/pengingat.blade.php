@@ -6,10 +6,12 @@
     <section class="py-5">
         <div class="container px-5">
             <!-- Form Pengingat -->
-            <div class="bg-light rounded-3 py-5 px-4 px-md-5 mb-5">
+            <div class="bg-light rounded-3 py-5 px-4 px-md-5 mb-5 shadow">
                 <div class="text-center mb-5">
-                    <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i class="bi bi-alarm"></i></div>
-                    <h1 class="fw-bolder">Pengingat Minum Obat</h1>
+                    <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3">
+                        <i class="bi bi-alarm" style="font-size: 2rem;"></i>
+                    </div>
+                    <h1 class="fw-bold">Pengingat Minum Obat</h1>
                     <p class="lead fw-normal text-muted mb-0">Isi formulir di bawah ini untuk membuat pengingat minum obat</p>
                 </div>
                 <div class="row gx-5 justify-content-center">
@@ -58,7 +60,9 @@
                             <div id="daftarObat" class="mb-3 mt-5">
                                 <label class="form-label"><strong>Daftar Obat</strong></label>
                                 <div id="obatContainer"></div>
-                                <button type="button" class="btn btn-primary mt-2" id="tambahObat">Tambah Obat</button>
+                                <button type="button" class="btn btn-primary mt-2" id="tambahObat">
+                                    <i class="bi bi-plus-circle"></i> Tambah Obat
+                                </button>
                             </div>
                             <!-- Button Submit -->
                             @guest
@@ -80,38 +84,66 @@
     </section>
 
     <!-- Pop-up -->
-    <div class="popup-overlay" id="popupOverlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.7); z-index: 9999; align-items: center; justify-content: center;">
-        <div class="popup-content" style="position: relative; background: #fff; border-radius: 10px; padding: 30px; width: 90%; max-width: 400px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); text-align: center; animation: fadeIn 0.3s ease-in-out;">
+    <div class="popup-overlay" id="popupOverlay" style="display: none;">
+        <div class="popup-content position-relative">
             <!-- Tombol Close -->
-            <button id="closePopup" style="position: absolute; top: 10px; right: 10px; background: none; border: none; font-size: 24px; font-weight: bold; color: #333; cursor: pointer;">&times;</button>
-            
-            <h2 style="font-size: 1.5rem; color: #333; margin-bottom: 15px;">Login Diperlukan</h2>
-            <p style="font-size: 1rem; color: #555; margin-bottom: 20px;">Anda harus login terlebih dahulu untuk mengirimkan data.</p>
-            <div style="display: flex; gap: 10px; justify-content: center;">
-                <a href="{{ route('login') }}">
-                    <button class="login-btn" style="padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 1rem;">Login</button>
-                </a>
-                <a href="{{ route('register') }}">
-                    <button class="register-btn" style="padding: 10px 20px; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 1rem;">Register</button>
-                </a>
+            <button id="closePopup" class="popup-close">&times;</button>
+            <h2>Login Diperlukan</h2>
+            <p>Anda harus login terlebih dahulu untuk mengirimkan data.</p>
+            <div class="popup-buttons">
+                <a href="{{ route('login') }}" class="btn btn-primary">Login</a>
+                <a href="{{ route('register') }}" class="btn btn-success">Register</a>
             </div>
         </div>
     </div>
 
     <style>
-        /* Animasi untuk pop-up */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: scale(0.9);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
+        /* Pop-up Styling */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
         }
 
-        /* Tombol Submit */
+        .popup-content {
+            background: #fff;
+            border-radius: 10px;
+            padding: 30px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .popup-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            cursor: pointer;
+        }
+
+        .popup-buttons .btn {
+            margin: 5px;
+        }
+
+        /* Form Styling */
+        .form-floating .form-control {
+            border-radius: 8px;
+        }
+
         .btn-submit {
             padding: 15px 0;
             font-size: 1.1rem;
@@ -136,13 +168,6 @@
         .btn-submit:active {
             transform: translateY(0);
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Full Width */
-        .w-100 {
-            width: 100%;
-            max-width: 600px; /* Maksimal lebar tombol */
-            margin: 0 auto; /* Pusatkan tombol */
         }
     </style>
 

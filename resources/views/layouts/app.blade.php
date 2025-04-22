@@ -8,6 +8,8 @@
     <link rel="icon" type="image/x-icon" href="{{ asset('assets/favicon.ico') }}">
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Core Theme CSS -->
     <link href="{{ asset('css/styles.css') }}" rel="stylesheet">
 </head>
@@ -27,6 +29,28 @@
     <button id="backToTop" class="btn btn-primary rounded-circle shadow" style="display: none; position: fixed; bottom: 20px; right: 20px; z-index: 1000;">
         <i class="bi bi-arrow-up"></i>
     </button>
+
+
+
+    <style>
+        #backToTop {
+            width: 50px;
+            height: 50px;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            transition: all 0.3s ease;
+        }
+
+        #backToTop:hover {
+            background-color: #0056b3;
+            transform: scale(1.1);
+        }
+    </style>
 
     <script>
         // Tampilkan tombol saat scroll ke bawah
@@ -48,25 +72,6 @@
         });
     </script>
 
-    <style>
-        #backToTop {
-            width: 50px;
-            height: 50px;
-            font-size: 1.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            transition: all 0.3s ease;
-        }
-
-        #backToTop:hover {
-            background-color: #0056b3;
-            transform: scale(1.1);
-        }
-    </style>
 
     <!-- Bootstrap Core JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
