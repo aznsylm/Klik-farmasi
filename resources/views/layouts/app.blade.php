@@ -26,16 +26,14 @@
     @include('layouts.footer')
 
     <!-- Button Kembali ke Atas -->
-    <button id="backToTop" class="btn btn-primary rounded-circle shadow" style="display: none; position: fixed; bottom: 20px; right: 20px; z-index: 1000;">
+    <button id="backToTop" class="btn btn-primary rounded-circle shadow-lg" style="display: none; position: fixed; bottom: 20px; right: 20px; z-index: 1000;">
         <i class="bi bi-arrow-up"></i>
     </button>
-
-
-
+    
     <style>
         #backToTop {
-            width: 50px;
-            height: 50px;
+            width: 60px;
+            height: 60px;
             font-size: 1.5rem;
             display: flex;
             align-items: center;
@@ -43,12 +41,19 @@
             background-color: #007bff;
             color: white;
             border: none;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
         }
 
         #backToTop:hover {
             background-color: #0056b3;
+            transform: scale(1.2);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        #backToTop:active {
             transform: scale(1.1);
+            box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
         }
     </style>
 

@@ -4,12 +4,20 @@
 @section('content')
 <div class="container">
     <h1 class="mb-4">Kelola Berita</h1>
-    <a href="{{ route('admin.news.create') }}" class="btn btn-primary mb-3">Tambah Berita</a>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <!-- Tombol Tambah Berita -->
+        <a href="{{ route('admin.news.create') }}" class="btn btn-primary">Tambah Artikel</a>
+    
+        <!-- Tombol Kembali ke Dashboard -->
+        <a href="{{ route('admin.dashboard') }}" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Kembali ke Dashboard
+        </a>
+    </div>
     @if (session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
-    <table class="table table-bordered">
-        <thead>
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
             <tr>
                 <th>Judul</th>
                 <th>Sumber</th>

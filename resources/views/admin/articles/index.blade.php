@@ -6,7 +6,15 @@
 <div class="container py-5">
     <div class="text-center mb-4">
         <h1 class="fw-bold">Kelola Artikel</h1>
-        <a href="{{ route('admin.articles.create') }}" class="btn btn-primary">Tambah Artikel</a>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <!-- Tombol Tambah Artikel -->
+            <a href="{{ route('admin.articles.create') }}" class="btn btn-primary">Tambah Artikel</a>
+        
+            <!-- Tombol Kembali ke Dashboard -->
+            <a href="{{ route('admin.dashboard') }}" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Kembali ke Dashboard
+            </a>
+        </div>
     </div>
 
     @if (session('success'))

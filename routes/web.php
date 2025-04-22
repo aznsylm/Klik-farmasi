@@ -10,6 +10,7 @@ Route::get('/tanya-jawab', [PageController::class, 'tanyaJawab'])->name('tanya-j
 Route::get('/artikel', [PageController::class, 'artikel'])->name('artikel');
 Route::get('/unduhan', [PageController::class, 'unduhan'])->name('unduhan');
 Route::get('/pengingat', [PageController::class, 'pengingat'])->name('pengingat');
+Route::get('/berita', [PageController::class, 'berita'])->name('pages.berita');
 
 
 Route::get('/dashboard', function () {
@@ -38,6 +39,10 @@ Route::middleware(['auth', \App\Http\Middleware\RoleMiddleware::class . ':admin'
     Route::resource('articles', \App\Http\Controllers\Admin\ArticleController::class);
     // Kelola Berita
     Route::resource('news', \App\Http\Controllers\Admin\NewsController::class);
+    // Kelola Tanya Jawab
+    Route::resource('faqs', \App\Http\Controllers\Admin\FaqController::class);
+    // Kelola Unduhan
+    Route::resource('downloads', \App\Http\Controllers\Admin\DownloadController::class);
 });
 
 // Dashboard User

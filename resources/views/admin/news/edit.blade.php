@@ -23,7 +23,14 @@
             <label for="published_at" class="form-label">Waktu</label>
             <input type="datetime-local" name="published_at" id="published_at" class="form-control" value="{{ $news->published_at->format('Y-m-d\TH:i') }}" required>
         </div>
-        <button type="submit" class="btn btn-primary">Simpan</button>
+        <div class="d-flex justify-content-between">
+            <a href="{{ url()->previous() }}" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Kembali
+            </a>
+            <button type="submit" class="btn btn-success">
+                <i class="bi bi-save"></i> Simpan Perubahan
+            </button>
+        </div>
     </form>
 </div>
 @endsection

@@ -43,17 +43,17 @@
                     </div>
                 </div>
             </div>
-            <div class="row gx-5">
+            <div class="row gx-5 gy-4">
                 @forelse ($otherArticles as $article)
-                    <div class="col-lg-4 mb-5">
-                        <div class="card h-100 shadow border-0">
-
-                            <div class="card-body p-4">
-                                <div class="badge bg-primary bg-gradient rounded-pill mb-2">{{ $article->category }}</div>
-                                <a class="text-decoration-none link-dark stretched-link" href="{{ $article->link }}" target="_blank">
-                                    <div class="h5 card-title mb-3">{{ $article->title }}</div>
+                    <div class="col-lg-4">
+                        <div class="card h-100 shadow-sm border-0">
+                            <!-- Konten Artikel -->
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title fw-bold text-dark">{{ $article->title }}</h5>
+                                <p class="card-text text-muted mb-4">{{ Str::words($article->summary, 20, '...') }}</p>
+                                <a href="{{ $article->link }}" target="_blank" class="btn btn-outline-primary mt-auto">
+                                    Baca Selengkapnya <i class="bi bi-arrow-right"></i>
                                 </a>
-                                <p class="card-text mb-0">{{ Str::words($article->summary, 30, '...') }}</p>
                             </div>
                         </div>
                     </div>
@@ -83,7 +83,7 @@
                         <p class="text-muted">Belum ada berita yang tersedia.</p>
                     @endforelse
                     <div class="text-end mb-5 mb-xl-0">
-                        <a class="text-decoration-none" href="https://www.example.com/berita-hipertensi" target="_blank">
+                        <a class="text-decoration-none" href="{{ route('pages.berita') }}" target="_self">
                             Berita Lainnya
                             <i class="bi bi-arrow-right"></i>
                         </a>
@@ -119,28 +119,36 @@
             object-fit: cover; /* Gambar akan menyesuaikan tanpa distorsi */
             height: 100%; /* Tinggi gambar mengikuti tinggi container */
         }
-
         .card {
-            height: 100%; /* Pastikan card memiliki tinggi penuh */
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        .card-body {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between; P
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-img-top {
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        .badge {
+            font-size: 0.8rem;
+            font-weight: 600;
         }
 
         .card-title {
-            font-size: 1.25rem;
-            font-weight: bold;
-            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+            color: #333;
         }
 
         .card-text {
             font-size: 0.9rem;
             color: #6c757d;
             text-align: justify;
-            margin-bottom: 1rem;
         }
 
         .btn-sm {
@@ -154,15 +162,15 @@
             border-radius: 50%;
             padding: 10px;
         }
-
-        .btn-primary {
-            background-color: #007bff;
-            border: none;
+        .btn-outline-primary {
+            border-color: #007bff;
+            color: #007bff;
             transition: all 0.3s ease;
         }
 
-        .btn-primary:hover {
-            background-color: #0056b3;
+        .btn-outline-primary:hover {
+            background-color: #007bff;
+            color: #fff;
         }
 
         /* Responsiveness */

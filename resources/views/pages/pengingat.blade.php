@@ -234,10 +234,10 @@
             // Tambah obat
             tambahObat.addEventListener('click', function () {
                 const maxObat = parseInt(tambahObat.dataset.maxObat || 0);
-
+            
                 if (totalObat < maxObat) {
                     totalObat++;
-
+            
                     const obatDiv = document.createElement('div');
                     obatDiv.classList.add('mb-3');
                     obatDiv.innerHTML = `
@@ -252,17 +252,26 @@
                             <label for="jumlahObat${totalObat}" class="form-label">Jumlah Obat</label>
                             <select class="form-select" id="jumlahObat${totalObat}" name="jumlahObat[]" required>
                                 <option value="30 tablet/bulan">30 tablet/bulan</option>
+                                <option value="60 tablet/bulan">60 tablet/bulan</option>
                                 <option value="90 tablet/bulan">90 tablet/bulan</option>
                             </select>
                         </div>
                         <div class="mb-2">
                             <label for="waktuMinum${totalObat}" class="form-label">Waktu Minum Obat</label>
-                            <input type="time" class="form-control" id="waktuMinum${totalObat}" name="waktuMinum[]" required>
+                            <select class="form-select" id="waktuMinum${totalObat}" name="waktuMinum[]" required>
+                                <option value="">Pilih Waktu</option>
+                                <option value="06:00">06.00</option>
+                                <option value="07:00">07.00</option>
+                                <option value="15:00">15.00</option>
+                                <option value="18:00">18.00</option>
+                                <option value="19:00">19.00</option>
+                                <option value="21:00">21.00</option>
+                            </select>
                         </div>
                     `;
                     obatContainer.appendChild(obatDiv);
                 }
-
+            
                 if (totalObat === maxObat) {
                     tambahObat.disabled = true;
                 }

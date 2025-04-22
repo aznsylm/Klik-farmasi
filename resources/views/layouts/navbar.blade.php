@@ -112,12 +112,16 @@
     /* Mobile View Adjustments */
     @media (max-width: 991.98px) {
         .navbar-brand {
-            order: 2;
-            margin-left: auto;
+            order: 1; /* Logo berada di atas */
+            margin-left: 0;
         }
-
+    
         .navbar-toggler {
-            order: 1;
+            order: 2; /* Toggle berada di bawah logo */
+        }
+    
+        .navbar-collapse {
+            order: 3; /* Menu berada di bawah toggle */
         }
     }
 </style>

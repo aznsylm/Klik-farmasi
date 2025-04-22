@@ -10,58 +10,22 @@
                 <p class="lead text-muted">Dapatkan materi edukasi tentang hipertensi untuk meningkatkan kesadaran dan kesehatan Anda.</p>
             </div>
             <div class="row gx-5 gy-5">
-                {{-- File 1 --}}
-                <div class="col-lg-6">
-                    <div class="card shadow-sm border-0">
-                        <img class="card-img-top rounded-top" src="{{ asset('assets/sample-2.jpg') }}" alt="Panduan Hipertensi" style="height: 300px; object-fit: cover;" />
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold">Panduan Lengkap Hipertensi</h5>
-                            <p class="card-text text-muted">Pelajari panduan lengkap untuk memahami dan mengelola hipertensi.</p>
-                            <a href="https://drive.google.com/file/d/1-example-link/view" target="_blank" class="btn btn-primary">
-                                <i class="bi bi-download"></i> Unduh
-                            </a>
+                @forelse ($downloads as $download)
+                    <div class="col-lg-6">
+                        <div class="card shadow-sm border-0">
+                            <img class="card-img-top rounded-top" src="{{ asset('storage/' . $download->image) }}" alt="{{ $download->title }}" style="height: 300px; object-fit: cover;" />
+                            <div class="card-body">
+                                <h5 class="card-title fw-bold">{{ $download->title }}</h5>
+                                <p class="card-text text-muted">{{ $download->description }}</p>
+                                <a href="{{ $download->file_link }}" target="_blank" class="btn btn-primary">
+                                    <i class="bi bi-download"></i> Unduh
+                                </a>
+                            </div>
                         </div>
                     </div>
-                </div>
-                {{-- File 2 --}}
-                <div class="col-lg-6">
-                    <div class="card shadow-sm border-0">
-                        <img class="card-img-top rounded-top" src="{{ asset('assets/sample-4.jpg') }}" alt="Tips Pola Hidup Sehat" style="height: 300px; object-fit: cover;" />
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold">Tips Pola Hidup Sehat untuk Penderita Hipertensi</h5>
-                            <p class="card-text text-muted">Dapatkan tips pola hidup sehat untuk membantu mengelola hipertensi.</p>
-                            <a href="https://drive.google.com/file/d/2-example-link/view" target="_blank" class="btn btn-primary">
-                                <i class="bi bi-download"></i> Unduh
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                {{-- File 3 --}}
-                <div class="col-lg-6">
-                    <div class="card shadow-sm border-0">
-                        <img class="card-img-top rounded-top" src="{{ asset('assets/sample-3.jpg') }}" alt="Daftar Makanan Sehat" style="height: 300px; object-fit: cover;" />
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold">Daftar Makanan Sehat untuk Hipertensi</h5>
-                            <p class="card-text text-muted">Temukan daftar makanan sehat yang cocok untuk penderita hipertensi.</p>
-                            <a href="https://drive.google.com/file/d/3-example-link/view" target="_blank" class="btn btn-primary">
-                                <i class="bi bi-download"></i> Unduh
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                {{-- File 4 --}}
-                <div class="col-lg-6">
-                    <div class="card shadow-sm border-0">
-                        <img class="card-img-top rounded-top" src="{{ asset('assets/sample-5.jpg') }}" alt="Olahraga Aman" style="height: 300px; object-fit: cover;" />
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold">Panduan Olahraga Aman untuk Hipertensi</h5>
-                            <p class="card-text text-muted">Pelajari panduan olahraga aman untuk menjaga kesehatan penderita hipertensi.</p>
-                            <a href="https://drive.google.com/file/d/4-example-link/view" target="_blank" class="btn btn-primary">
-                                <i class="bi bi-download"></i> Unduh
-                            </a>
-                        </div>
-                    </div>
-                </div>
+                @empty
+                    <p class="text-center text-muted">Belum ada file unduhan yang tersedia.</p>
+                @endforelse
             </div>
         </div>
     </section>

@@ -10,19 +10,7 @@
         </div>
 
         <div class="row justify-content-center">
-            <!-- Card Kelola Artikel -->
-            <div class="col-12 col-md-6 col-lg-4 mb-4">
-                <div class="card shadow-sm border-0">
-                    <div class="card-body text-center">
-                        <h5 class="card-title fw-bold">Kelola Artikel</h5>
-                        <p class="card-text text-muted">Lihat, tambahkan, dan kelola artikel di sistem.</p>
-                        <a href="{{ route('admin.articles.index') }}" class="btn btn-success w-100">
-                            <i class="bi bi-file-earmark-text me-2"></i> Kelola Artikel
-                        </a>
-                    </div>
-                </div>
-            </div>
-
+    
             <!-- Card Kelola Data User -->
             <div class="col-12 col-md-6 col-lg-4 mb-4">
                 <div class="card shadow-sm border-0">
@@ -31,6 +19,19 @@
                         <p class="card-text text-muted">Lihat dan kelola data pengguna di sistem.</p>
                         <a href="{{ route('admin.users') }}" class="btn btn-primary w-100">
                             <i class="bi bi-people-fill me-2"></i> Kelola Data User
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card Kelola Artikel -->
+            <div class="col-12 col-md-6 col-lg-4 mb-4">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body text-center">
+                        <h5 class="card-title fw-bold">Kelola Artikel</h5>
+                        <p class="card-text text-muted">Lihat, tambahkan, dan kelola artikel di sistem.</p>
+                        <a href="{{ route('admin.articles.index') }}" class="btn btn-success w-100">
+                            <i class="bi bi-file-earmark-text me-2"></i> Kelola Artikel
                         </a>
                     </div>
                 </div>
@@ -49,12 +50,38 @@
                 </div>
             </div>
 
+            <!-- Card Kelola Tanya Jawab -->
+            <div class="col-12 col-md-6 col-lg-4 mb-4">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body text-center">
+                        <h5 class="card-title fw-bold">Kelola Tanya Jawab</h5>
+                        <p class="card-text text-muted">Lihat, tambahkan, dan kelola tanya jawab di sistem.</p>
+                        <a href="{{ route('admin.faqs.index') }}" class="btn btn-warning w-100">
+                            <i class="bi bi-question-circle me-2"></i> Kelola Tanya Jawab
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card Kelola Unduhan -->
+            <div class="col-12 col-md-6 col-lg-4 mb-4">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body text-center">
+                        <h5 class="card-title fw-bold">Kelola Unduhan</h5>
+                        <p class="card-text text-muted">Lihat, tambahkan, dan kelola file unduhan di sistem.</p>
+                        <a href="{{ route('admin.downloads.index') }}" class="btn btn-primary w-100">
+                            <i class="bi bi-cloud-arrow-down me-2"></i> Kelola Unduhan
+                        </a>
+                    </div>
+                </div>
+            </div>
+
             <!-- Card Logout -->
             <div class="col-12 col-md-6 col-lg-4 mb-4">
                 <div class="card shadow-sm border-0">
                     <div class="card-body text-center">
                         <h5 class="card-title fw-bold">Logout</h5>
-                        <p class="card-text text-muted">Keluar dari sistem dengan aman.</p>
+                        <p class="card-text text-muted">Keluar dari sistem dengan aman. Yakin ingin Keluar? </p>
                         <form action="{{ route('logout') }}" method="POST">
                             @csrf
                             <button type="submit" class="btn btn-danger w-100">
