@@ -43,7 +43,7 @@ class PageController extends Controller
     public function unduhan() {
         $downloads = Download::all();
 
-        return view('pages.unduhan', compact('downloads'));
+        return view('pages.unduhan', compact('downloads'));     
     }
 
     public function pengingat() {
