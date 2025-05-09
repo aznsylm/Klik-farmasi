@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm" style="font-family: 'Nunito', sans-serif;">
+<nav class="navbar fixed-top navbar-expand-lg shadow-sm" style="font-family: 'Nunito', sans-serif; background-color: #0B5E91  ;">
     <div class="container px-5 d-flex justify-content-between align-items-center">
         <!-- Toggler (Hamburger Menu) -->
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -6,13 +6,23 @@
         </button>
         <!-- Logo -->
         <a class="navbar-brand d-flex align-items-center" href="{{ url('/') }}">
-            <img src="{{ asset('assets/logo.png') }}" alt="Klik Farmasi" style="width: 200px; height: auto;">
+            <img src="{{ asset('assets/LOGO KLIKFARMASI VEKTOR MIRING.png') }}" alt="Klik Farmasi" style="width: 200px; height: auto;">
         </a>
         <!-- Navbar Links -->
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                 <li class="nav-item"><a class="nav-link" href="{{ url('/') }}">Beranda</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ url('/artikel') }}">Artikel</a></li>
+                <!-- Menu Informasi dengan Sub-menu -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle d-flex align-items-center" id="informasiDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Informasi
+                        <i class="bi bi-chevron-down ms-1"></i> <!-- Ikon panah dropdown -->
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="informasiDropdown">
+                        <li><a class="dropdown-item" href="{{ url('/artikel') }}">Artikel</a></li>
+                        <li><a class="dropdown-item" href="{{ url('/berita') }}">Berita</a></li>
+                    </ul>
+                </li>
                 <li class="nav-item"><a class="nav-link" href="{{ url('/tanya-jawab') }}">Tanya Jawab</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ url('/unduhan') }}">Unduhan</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ url('/pengingat') }}">Pengingat</a></li>
@@ -25,7 +35,7 @@
                         <a href="{{ route('login') }}" class="btn btn-outline-light me-2" style="border-radius: 30px; padding: 8px 20px; font-size: 0.9rem; transition: all 0.3s ease;">
                             <i class="bi bi-box-arrow-in-right me-2"></i> Login
                         </a>
-                        <a href="{{ route('register') }}" class="btn btn-primary" style="border-radius: 30px; padding: 8px 20px; font-size: 0.9rem; background-color: #007bff; border: none; transition: all 0.3s ease;">
+                        <a href="{{ route('register') }}" class="btn btn-primary" style="border-radius: 30px; padding: 8px 20px; font-size: 0.9rem; background-color: #baa971; border: none; transition: all 0.3s ease;">
                             <i class="bi bi-person-plus-fill me-2"></i> Register
                         </a>
                     </div>
@@ -72,7 +82,9 @@
 <style>
     /* Font Family */
     @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap');
-
+    body {
+        padding-top: 60px;
+    }
     /* Navbar Links Hover Effect */
     .navbar-nav .nav-link {
         position: relative;
@@ -111,6 +123,9 @@
 
     /* Mobile View Adjustments */
     @media (max-width: 991.98px) {
+        body {
+            padding-top: 50px; /* Sesuaikan dengan tinggi navbar */
+        }
         .navbar-brand {
             order: 1; /* Logo berada di atas */
             margin-left: 0;

@@ -11,57 +11,64 @@
             <p class="text-muted">Temukan berita terbaru dan informasi terkini seputar kesehatan dan hipertensi di sini.</p>
         </div>
 
-        <!-- Button Kembali -->
-        <div class="mb-4">
-            <a href="{{ route('artikel') }}" class="btn btn-secondary">
-                <i class="bi bi-arrow-left"></i> Kembali ke Artikel
-            </a>
-        </div>
-
         <!-- Daftar Berita -->
         <h2 class="fw-bolder fs-5 mb-4">Semua Berita</h2>
-        <div class="row gx-5">
-            <div class="col-12">
-                @forelse ($allNews as $berita)
-                    <div class="mb-4">
-                        <div class="small text-muted">{{ $berita->published_at->format('d M Y') }}</div>
-                        <a class="link-dark" href="{{ $berita->link }}" target="_blank">
-                            <h3>{{ $berita->title }}</h3>
-                        </a>
-                        <div class="small text-muted"><i>{{ $berita->source }}</i></div>
+        <div class="row gx-5 gy-4">
+            @forelse ($allNews as $berita)
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 shadow-sm border-0">
+                        <!-- Konten Berita -->
+                        <div class="card-body d-flex flex-column">
+                            <div class="small text-muted mb-2">{{ $berita->published_at->format('d M Y') }}</div>
+                            <h5 class="card-title fw-bold text-dark">{{ $berita->title }}</h5>
+                            <p class="card-text text-muted">{{ Str::words($berita->summary, 20, '...') }}</p>
+                            <a href="{{ $berita->link }}" target="_blank" class="btn btn-primary mt-auto">
+                                Baca Selengkapnya <i class="bi bi-arrow-right"></i>
+                            </a>
+                        </div>
                     </div>
-                @empty
-                    <p class="text-muted">Belum ada berita yang tersedia.</p>
-                @endforelse
-                <div class="mt-4">
-                    {{ $allNews->links() }} <!-- Pagination -->
                 </div>
-            </div>
+            @empty
+                <p class="text-muted text-center">Belum ada berita yang tersedia.</p>
+            @endforelse
+        </div>
+
+        <!-- Pagination -->
+        <div class="mt-4">
+            {{ $allNews->links() }}
         </div>
     </div>
 </section>
 
 <style>
-    /* Button Styling */
-    .btn-secondary {
-        background-color: #6c757d;
-        border: none;
-        transition: all 0.3s ease;
+    /* Card Styling */
+    .card {
+        border-radius: 10px;
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        background-color: #ffffff;
     }
 
-    .btn-secondary:hover {
-        background-color: #5a6268;
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
     }
 
-    /* Section Styling */
-    .text-center h1 {
-        font-size: 2.5rem;
+    .card-title {
+        font-size: 1.2rem;
         color: #333;
+        margin-bottom: 0.5rem;
     }
 
-    .text-center p {
-        font-size: 1rem;
+    .card-text {
+        font-size: 0.9rem;
         color: #6c757d;
+        text-align: justify;
+        margin-bottom: 1rem;
+    }
+
+    .card-body {
+        padding: 20px;
     }
 
     /* Pagination Styling */
@@ -75,6 +82,17 @@
 
     .pagination .page-link:hover {
         background-color: #f8f9fa;
+    }
+
+    /* Button Styling */
+    .btn-primary {
+        background-color: #0b5e91;
+        border: none;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        background-color: #084c75;
     }
 </style>
 @endsection

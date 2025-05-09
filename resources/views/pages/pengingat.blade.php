@@ -262,6 +262,9 @@
                                 <option value="">Pilih Waktu</option>
                                 <option value="06:00">06.00</option>
                                 <option value="07:00">07.00</option>
+                                <option value="09:00">09.00</option>
+                                <option value="12:00">12.00</option>
+                                <option value="13:00">13.00</option>
                                 <option value="15:00">15.00</option>
                                 <option value="18:00">18.00</option>
                                 <option value="19:00">19.00</option>

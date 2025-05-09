@@ -13,7 +13,7 @@ class PageController extends Controller
     public function beranda()
     {
         // Ambil semua artikel dari database
-        $articles = Article::latest()->get();
+        $articles = Article::latest()->take(3)->get();
 
         // Kirim data ke view
         return view('pages.beranda', compact('articles'));

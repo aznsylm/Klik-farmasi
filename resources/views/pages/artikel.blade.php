@@ -38,7 +38,7 @@
             <div class="row gx-5 justify-content-center">
                 <div class="col-lg-8 col-xl-6">
                     <div class="text-center">
-                        <h2 class="fw-bolder">Artikel Terbaru</h2>
+                        <h2 class="fw-bolder">Artikel Lainnya</h2>
                         <p class="lead fw-normal text-muted mb-5">Temukan informasi kesehatan terbaru dan tips bermanfaat untuk hidup sehat.</p>
                     </div>
                 </div>
@@ -60,56 +60,6 @@
                 @empty
                     <p class="text-muted">Belum ada artikel yang tersedia.</p>
                 @endforelse
-            </div>
-        </div>
-    </section>
-
-    <!-- News Section -->
-    <section class="py-5 bg-light">
-        <div class="container px-5">
-            <div class="row gx-5">
-                <div class="col-xl-8">
-                    <h2 class="fw-bolder fs-5 mb-4">Berita</h2>
-                    <!-- News Item -->
-                    @forelse ($news as $berita)
-                        <div class="mb-4">
-                            <div class="small text-muted">{{ $berita->published_at->format('d M Y') }}</div>
-                            <a class="link-dark" href="{{ $berita->link }}" target="_blank">
-                                <h3>{{ $berita->title }}</h3>
-                            </a>
-                            <div class="small text-muted"><i>{{ $berita->source }}</i></div>
-                        </div>
-                    @empty
-                        <p class="text-muted">Belum ada berita yang tersedia.</p>
-                    @endforelse
-                    <div class="text-end mb-5 mb-xl-0">
-                        <a class="text-decoration-none" href="{{ route('pages.berita') }}" target="_self">
-                            Berita Lainnya
-                            <i class="bi bi-arrow-right"></i>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-xl-4">
-                    <div class="card border-0 h-100">
-                        <div class="card-body p-4">
-                            <div class="d-flex h-100 align-items-center justify-content-center">
-                                <div class="text-center">
-                                    <div class="h6 fw-bolder">Kontak</div>
-                                    <p class="text-muted mb-4">
-                                        Untuk pertanyaan pers, email kami di
-                                        <br />
-                                        <a href="mailto:klikfarmasi@gmail.com">klikfarmasi@gmail.com</a>
-                                    </p>
-                                    <div class="h6 fw-bolder">Ikuti Kami</div>
-                                    <a class="fs-5 px-2 link-dark" href="#!"><i class="bi-twitter"></i></a>
-                                    <a class="fs-5 px-2 link-dark" href="#!"><i class="bi-facebook"></i></a>
-                                    <a class="fs-5 px-2 link-dark" href="#!"><i class="bi-linkedin"></i></a>
-                                    <a class="fs-5 px-2 link-dark" href="#!"><i class="bi-youtube"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </section>
