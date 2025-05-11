@@ -12,6 +12,8 @@
     <link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- CDN AOS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <!-- Core Theme CSS -->
     <link href="{{ asset('css/styles.css') }}" rel="stylesheet">
 </head>
@@ -56,6 +58,25 @@
             letter-spacing: 0.3px;
             color: #595959;
             margin-bottom: 10px;
+        }
+
+        .btn-khusus {
+            background-color: #0b5e91;
+            color: white;
+            font-family: 'Open Sans', sans-serif;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-khusus:hover {
+            background-color: #baa971;
+            color: #0b5e91;
         }
 
         /* Styling Button WhatsApp */
@@ -114,16 +135,10 @@
             box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
         }
 
-        /* Button Hover Effects */
-        .btn-primary:hover {
-            background-color: #baa971;
-            color: #ffffff;
-        }
-
-        .btn-outline-light:hover {
-            background-color: #baa971;
-            color: #ffffff;
-            border-color: #baa971;
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease-in-out;
         }
         </style>
 
@@ -147,6 +162,14 @@
         });
     </script>
 
+    <!-- CDN AOS -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+    AOS.init({
+        duration: 800,
+        once: true,
+    });
+    </script>
 
     <!-- Bootstrap Core JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>

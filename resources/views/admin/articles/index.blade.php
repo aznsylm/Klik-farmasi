@@ -26,10 +26,11 @@
             <thead class="table-dark">
                 <tr>
                     <th>ID</th>
+                    <th>Gambar</th> <!-- Kolom Gambar -->
                     <th>Kategori</th>
                     <th>Judul</th>
-                    <th>Link</th>
-                    <th>Waktu Ditambahkan</th>
+                    <th>Penulis</th>
+                    <th>Waktu Publish</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
@@ -37,10 +38,17 @@
                 @foreach ($articles as $article)
                     <tr>
                         <td>{{ $article->id }}</td>
+                        <td>
+                            @if ($article->image)
+                                <img src="{{ asset('storage/' . $article->image) }}" alt="{{ $article->title }}" class="img-thumbnail" style="max-width: 100px;">
+                            @else
+                                <span class="text-muted">Tidak ada gambar</span>
+                            @endif
+                        </td>
                         <td>{{ $article->category }}</td>
                         <td>{{ $article->title }}</td>
-                        <td><a href="{{ $article->link }}" target="_blank">Lihat Artikel</a></td>
-                        <td>{{ $article->created_at->format('d M Y, H:i') }}</td>
+                        <td>{{ $article->author }}</td>
+                        <td>{{ $article->published_at ? $article->published_at->format('d M Y, H:i') : 'Belum dipublish' }}</td>
                         <td>
                             <a href="{{ route('admin.articles.edit', $article->id) }}" class="btn btn-warning btn-sm">Edit</a>
                             <form action="{{ route('admin.articles.destroy', $article->id) }}" method="POST" style="display:inline;">
@@ -87,6 +95,12 @@
     .table td, .table th {
         vertical-align: middle;
         text-align: center;
+    }
+
+    /* Gambar */
+    .img-thumbnail {
+        border-radius: 5px;
+        object-fit: cover;
     }
 
     /* Tombol */

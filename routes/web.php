@@ -8,6 +8,7 @@ use App\Http\Controllers\ProfileController;
 Route::get('/', [PageController::class, 'beranda'])->name('beranda');
 Route::get('/tanya-jawab', [PageController::class, 'tanyaJawab'])->name('tanya-jawab');
 Route::get('/artikel', [PageController::class, 'artikel'])->name('artikel');
+Route::get('/artikel/{id}', [PageController::class, 'artikelDetail'])->name('artikel.detail');
 Route::get('/unduhan', [PageController::class, 'unduhan'])->name('unduhan');
 Route::get('/pengingat', [PageController::class, 'pengingat'])->name('pengingat');
 Route::get('/berita', [PageController::class, 'berita'])->name('pages.berita');

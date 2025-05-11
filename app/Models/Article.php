@@ -1,19 +1,24 @@
 <?php
-
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Article extends Model
 {
-    // Menentukan tabel yang digunakan (opsional jika nama tabel sesuai konvensi)
-    protected $table = 'articles';
+    use HasFactory;
 
-    // Kolom yang dapat diisi (mass assignable)
     protected $fillable = [
         'category',
         'title',
         'summary',
-        'link',
+        'content',
+        'author',
+        'published_at',
+        'image',
+    ];
+
+    protected $casts = [
+        'published_at' => 'datetime', // Konversi ke objek Carbon
     ];
 }

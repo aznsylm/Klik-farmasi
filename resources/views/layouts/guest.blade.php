@@ -13,12 +13,17 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        <style>
+                body {
+                background-color: #0b5e91;
+                }
+        </style>
     </head>
     <body class="font-sans text-gray-900 antialiased">
-        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
+        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 ">
             <div>
                 <a href="/">
-                    <img src="{{ asset('assets/logo.png') }}" alt="Klik Farmasi Logo" class="w-70 h-20">
+                    <img src="{{ asset('assets/LOGO KLIKFARMASI VEKTOR MIRING.png') }}" alt="Klik Farmasi Logo" class="w-70 h-20">
                 </a>
             </div>
 
@@ -26,5 +31,6 @@
                 {{ $slot }}
             </div>
         </div>
+        @stack('scripts')
     </body>
 </html>

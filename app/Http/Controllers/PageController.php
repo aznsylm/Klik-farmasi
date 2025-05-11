@@ -34,6 +34,15 @@ class PageController extends Controller
         return view('pages.artikel', compact('latestArticle', 'otherArticles', 'news'));
     }
 
+    public function artikelDetail($id)
+    {
+        // Ambil artikel berdasarkan ID
+        $article = Article::findOrFail($id);
+
+        // Kirim data ke view
+        return view('pages.artikel-detail', compact('article'));
+    }
+
     public function tanyaJawab() {
         $faqs = Faq::all();
 

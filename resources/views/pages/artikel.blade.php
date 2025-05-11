@@ -6,7 +6,7 @@
     <!-- Artikel Terbaru -->
     <section class="py-5">
         <div class="container px-5">
-            <h1 class="fw-bolder fs-5 mb-4">Artikel Terbaru</h1>
+            <h2 class="fw-bolder mb-5">Artikel Terbaru</h2>
             @if ($latestArticle)
                 <div class="card border-0 shadow rounded-3 overflow-hidden mb-4">
                     <div class="row gx-0">
@@ -15,14 +15,13 @@
                                 <div class="badge bg-primary bg-gradient rounded-pill mb-2">{{ $latestArticle->category }}</div>
                                 <div class="h2 fw-bolder">{{ $latestArticle->title }}</div>
                                 <p class="text-justify">{{ Str::words($latestArticle->summary, 20, '...') }}</p>
-                                <a class="stretched-link text-decoration-none" href="{{ $latestArticle->link }}" target="_blank">
-                                    Baca Selengkapnya
-                                    <i class="bi bi-arrow-right"></i>
+                                <a href="{{ route('artikel.detail', $latestArticle->id) }}" class="btn btn-primary mt-auto">
+                                    Baca Selengkapnya <i class="bi bi-arrow-right"></i>
                                 </a>
                             </div>
                         </div>
                         <div class="col-lg-6 col-xl-7">
-                            <img src="{{ asset('assets/sample-6.jpg') }}" alt="Gambar Artikel" class="img-fluid h-100 w-100 object-fit-cover">
+                            <img src="{{ asset('storage/' . $latestArticle->image) }}" alt="Gambar Artikel" class="img-fluid h-100 w-100 object-fit-cover">
                         </div>
                     </div>
                 </div>
@@ -32,27 +31,52 @@
         </div>
     </section>
 
-    <!-- Blog Preview Section (Slider) -->
-    <section class="py-5">
+    <!-- Blog Preview Section (Artikel Lainnya) -->
+    <section class="bg-light py-5">
         <div class="container px-5 my-5">
             <div class="row gx-5 justify-content-center">
-                <div class="col-lg-8 col-xl-6">
+                <div class="col-lg-8 col-xl-6 mb-5">
                     <div class="text-center">
                         <h2 class="fw-bolder">Artikel Lainnya</h2>
-                        <p class="lead fw-normal text-muted mb-5">Temukan informasi kesehatan terbaru dan tips bermanfaat untuk hidup sehat.</p>
+                        <h4 class="text-muted" style="font-family: 'Open Sans', sans-serif; font-size: 15px;">Temukan informasi kesehatan terbaru dan tips bermanfaat untuk hidup sehat.</h4>
                     </div>
                 </div>
             </div>
             <div class="row gx-5 gy-4">
                 @forelse ($otherArticles as $article)
-                    <div class="col-lg-4">
-                        <div class="card h-100 shadow-sm border-0">
-                            <!-- Konten Artikel -->
-                            <div class="card-body d-flex flex-column">
-                                <h5 class="card-title fw-bold text-dark">{{ $article->title }}</h5>
-                                <p class="card-text text-muted mb-4">{{ Str::words($article->summary, 20, '...') }}</p>
-                                <a href="{{ $article->link }}" target="_blank" class="btn btn-outline-primary mt-auto">
-                                    Baca Selengkapnya <i class="bi bi-arrow-right"></i>
+                    <div class="col-lg-4 mb-5">
+                        <div class="card h-100 shadow border-0 bg-light article-card">
+                            <!-- Gambar Artikel -->
+                            @if ($article->image)
+                                <img src="{{ asset('storage/' . $article->image) }}" alt="{{ $article->title }}" class="card-img-top" style="height: 200px; object-fit: cover;">
+                            @else
+                                <img src="{{ asset('assets/default-image.jpg') }}" alt="Default Image" class="card-img-top" style="height: 200px; object-fit: cover;">
+                            @endif
+
+                            <div class="card-body p-4">
+                                <!-- Kategori -->
+                                <div class="badge bg-secondary bg-gradient rounded-pill mb-2" style="font-family: 'Open Sans', sans-serif;">
+                                    {{ $article->category }}
+                                </div>
+
+                                <!-- Judul -->
+                                <h5 class="card-title mb-3" style="font-family: 'Open Sans', sans-serif; color: #0b5e91; font-weight: bold;">
+                                    {{ $article->title }}
+                                </h5>
+
+                                <!-- Narasi Singkat -->
+                                <p class="card-text mb-3" style="font-family: 'Open Sans', sans-serif; color: #6c757d;">
+                                    {{ Str::words($article->summary, 20, '...') }}
+                                </p>
+
+                                <!-- Penulis -->
+                                <p class="text-muted small mb-3" style="font-family: 'Open Sans', sans-serif; font-style: italic;">
+                                    Oleh {{ $article->author }} - {{ $article->published_at->format('d M Y') }}
+                                </p>
+
+                                <!-- Tombol Baca Selengkapnya -->
+                                <a href="{{ route('artikel.detail', $article->id) }}" class="btn btn-khusus baca-selengkapnya-btn">
+                                    Baca Selengkapnya
                                 </a>
                             </div>
                         </div>
@@ -80,11 +104,6 @@
             box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
         }
 
-        .card-img-top {
-            border-top-left-radius: 10px;
-            border-top-right-radius: 10px;
-        }
-
         .badge {
             font-size: 0.8rem;
             font-weight: 600;
@@ -101,17 +120,6 @@
             text-align: justify;
         }
 
-        .btn-sm {
-            align-self: flex-start; /* Pastikan tombol berada di bagian bawah */
-        }
-
-        /* Carousel Controls */
-        .carousel-control-prev-icon,
-        .carousel-control-next-icon {
-            background-color: #007bff; /* Warna tombol navigasi */
-            border-radius: 50%;
-            padding: 10px;
-        }
         .btn-outline-primary {
             border-color: #007bff;
             color: #007bff;
@@ -121,13 +129,6 @@
         .btn-outline-primary:hover {
             background-color: #007bff;
             color: #fff;
-        }
-
-        /* Responsiveness */
-        @media (max-width: 768px) {
-            .carousel-inner .row {
-                display: none; /* Sembunyikan grid untuk tampilan mobile */
-            }
         }
     </style>
 @endsection

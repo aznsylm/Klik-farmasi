@@ -22,14 +22,22 @@ class ArticleController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'category' => 'required|string|max:255',
             'title' => 'required|string|max:255',
             'summary' => 'required|string',
-            'link' => 'required|url',
+            'content' => 'required|string',
+            'author' => 'required|string|max:255',
+            'published_at' => 'nullable|date',
+            'image' => 'nullable|image|mimes:webp|max:2048', // Hanya menerima format .webp
         ]);
-
-        Article::create($request->all());
+    
+        if ($request->hasFile('image')) {
+            $validated['image'] = $request->file('image')->store('articles', 'public');
+        }
+    
+        Article::create($validated);
+    
         return redirect()->route('admin.articles.index')->with('success', 'Artikel berhasil ditambahkan.');
     }
 
@@ -40,14 +48,27 @@ class ArticleController extends Controller
 
     public function update(Request $request, Article $article)
     {
-        $request->validate([
+        $validated = $request->validate([
             'category' => 'required|string|max:255',
             'title' => 'required|string|max:255',
             'summary' => 'required|string',
-            'link' => 'required|url',
+            'content' => 'required|string',
+            'author' => 'required|string|max:255',
+            'published_at' => 'nullable|date',
+            'image' => 'nullable|image|mimes:webp|max:2048', // Hanya menerima format .webp
         ]);
-
-        $article->update($request->all());
+    
+        if ($request->hasFile('image')) {
+            // Hapus gambar lama jika ada
+            if ($article->image && \Storage::exists('public/' . $article->image)) {
+                \Storage::delete('public/' . $article->image);
+            }
+    
+            $validated['image'] = $request->file('image')->store('articles', 'public');
+        }
+    
+        $article->update($validated);
+    
         return redirect()->route('admin.articles.index')->with('success', 'Artikel berhasil diperbarui.');
     }
 
