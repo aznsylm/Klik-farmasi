@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Download;
 use Illuminate\Http\Request;
 use App\Models\Article;
+use App\Models\Testimonial;
 use App\Models\News;
 use App\Models\Faq;
 
@@ -14,9 +15,10 @@ class PageController extends Controller
     {
         // Ambil semua artikel dari database
         $articles = Article::latest()->take(3)->get();
+        $testimonials = Testimonial::latest()->take(3)->get();
 
         // Kirim data ke view
-        return view('pages.beranda', compact('articles'));
+        return view('pages.beranda', compact('articles', 'testimonials'));
     }
 
     public function artikel()

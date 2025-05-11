@@ -44,6 +44,8 @@ Route::middleware(['auth', \App\Http\Middleware\RoleMiddleware::class . ':admin'
     Route::resource('faqs', \App\Http\Controllers\Admin\FaqController::class);
     // Kelola Unduhan
     Route::resource('downloads', \App\Http\Controllers\Admin\DownloadController::class);
+    // Kelola Testimoni
+    Route::resource('testimonials', \App\Http\Controllers\Admin\TestimonialController::class);
 });
 
 // Dashboard User

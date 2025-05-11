@@ -99,19 +99,48 @@
     <div class="py-5 bg-light">
         <div class="container px-5 my-5">
             <div class="row gx-5 justify-content-center">
-                <div class="col-lg-10 col-xl-7">
+                <div class="col-lg-8 col-xl-6">
                     <div class="text-center">
-                        <div class="fs-4 mb-4 fst-italic">"Klik Farmasi telah membantu saya mengelola jadwal minum obat dengan mudah. Saya tidak pernah melewatkan waktu minum obat lagi!"</div>
-                        <div class="d-flex align-items-center justify-content-center">
-                            <img class="rounded-circle me-3" src="{{ asset('assets/ProfilePerson.png') }}" alt="..." style="width: 50px; height: 50px; object-fit: cover;" />
-                            <div class="fw-bold">
-                                Budi Santoso
-                                <span class="fw-bold text-primary mx-1">/</span>
-                                Pengguna Setia
-                            </div>
-                        </div>
+                        <h2 class="fw-bolder">Apa Kata Mereka?</h2>
+                        <p class="text-muted">Pendapat pengguna tentang Klik Farmasi.</p>
                     </div>
                 </div>
+            </div>
+    
+            <!-- Carousel -->
+            <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel">
+                <!-- Indicators -->
+                <div class="carousel-indicators">
+                    @foreach ($testimonials as $index => $testimonial)
+                        <button type="button" data-bs-target="#testimonialCarousel" data-bs-slide-to="{{ $index }}" class="{{ $index === 0 ? 'active' : '' }}" aria-current="{{ $index === 0 ? 'true' : '' }}" aria-label="Slide {{ $index + 1 }}"></button>
+                    @endforeach
+                </div>
+    
+                <!-- Slides -->
+                <div class="carousel-inner">
+                    @foreach ($testimonials as $index => $testimonial)
+                        <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
+                            <div class="d-flex justify-content-center">
+                                <div class="card border-0 shadow-sm my-3" style="max-width: 600px;">
+                                    <div class="card-body">
+                                        <p class="fs-5 fst-italic text-center">"{{ $testimonial->quote }}"</p>
+                                        <div class="text-end fw-bold" style="color: #0b5e91; font-family: 'Open Sans', sans-serif;">{{ $testimonial->name }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+    
+                <!-- Controls -->
+                <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
             </div>
         </div>
     </div>
@@ -180,3 +209,17 @@
         </div>
     </section>
 @endsection
+
+<style>
+    .carousel-indicators button {
+        background-color: #0b5e91;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        border: none;
+    }
+    
+    .carousel-indicators .active {
+        background-color: #baa971;
+    }
+</style>
