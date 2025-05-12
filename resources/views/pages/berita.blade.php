@@ -8,18 +8,21 @@
         <!-- Judul dan Narasi -->
         <div class="text-center mb-5">
             <h1 class="fw-bold">Halaman Berita</h1>
-            <p class="text-muted">Temukan berita terbaru dan informasi terkini seputar kesehatan dan hipertensi di sini.</p>
+            <p class="text-muted">Temukan berita terbaru dan informasi terkini seputar kesehatan dan hipertensi di sini berdasarkan sumber-sumber terpercaya.</p>
         </div>
 
         <!-- Daftar Berita -->
-        <h2 class="fw-bolder fs-5 mb-4">Semua Berita</h2>
+        <h2 class="fw-bold mb-4">Semua Berita</h2>
         <div class="row gx-5 gy-4">
             @forelse ($allNews as $berita)
                 <div class="col-md-6 col-lg-4">
                     <div class="card h-100 shadow-sm border-0">
                         <!-- Konten Berita -->
                         <div class="card-body d-flex flex-column">
-                            <div class="small text-muted mb-2">{{ $berita->published_at->format('d M Y') }}</div>
+                            <div class="small text-muted mb-1">{{ $berita->published_at->format('d M Y') }}</div>
+                            <div class="small fst-italic text-secondary mb-2">
+                                <i class="bi bi-link-45deg me-1"></i>{{ $berita->source }}
+                            </div>
                             <h5 class="card-title fw-bold text-dark">{{ $berita->title }}</h5>
                             <p class="card-text text-muted">{{ Str::words($berita->summary, 20, '...') }}</p>
                             <a href="{{ $berita->link }}" target="_blank" class="btn btn-primary mt-auto">

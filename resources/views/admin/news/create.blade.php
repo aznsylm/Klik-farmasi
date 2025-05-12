@@ -2,7 +2,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
+<div class="container py-5">
     <h1 class="mb-4">Tambah Berita</h1>
     <form action="{{ route('admin.news.store') }}" method="POST">
         @csrf

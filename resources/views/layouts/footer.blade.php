@@ -9,11 +9,11 @@
                 <p class="small mb-2">
                     Jl. Brawijaya No.99, Jadan, Tamantirto, Kasihan, Bantul, Yogyakarta 55183
                 </p>
-            <div class="d-flex gap-4">
-                <a href="https://wa.me/6281234567890" class="text-white fs-4 ms-3" target="_blank"><i class="bi bi-whatsapp"></i></a>
-                <a href="https://instagram.com/klikfarmasi" class="text-white fs-4 ms-3" target="_blank"><i class="bi bi-instagram"></i></a>
-                <a href="https://tiktok.com/@klikfarmasi" class="text-white fs-4 ms-3" target="_blank"><i class="bi bi-tiktok"></i></a>
-                <a href="mailto:klikfarmasi@almaata.ac.id" class="text-white fs-4 ms-3" target="_blank"><i class="bi bi-envelope-fill"></i></a>
+            <div class="d-flex gap-4 mt-4">
+                <a href="https://wa.me/6281234567890" class="fs-4 ms-3" target="_blank"><i class="bi bi-whatsapp"></i></a>
+                <a href="https://instagram.com/klikfarmasi" class="fs-4 ms-3" target="_blank"><i class="bi bi-instagram"></i></a>
+                <a href="https://tiktok.com/@klikfarmasi" class="fs-4 ms-3" target="_blank"><i class="bi bi-tiktok"></i></a>
+                <a href="mailto:klikfarmasi@almaata.ac.id" class="fs-4 ms-3" target="_blank"><i class="bi bi-envelope-fill"></i></a>
             </div>
             </div>
     
@@ -21,9 +21,9 @@
             <div class="col-md-3">
                 <h3 class="fw-bold fs-4">Tentang Kami</h3>
                 <ul class="list-unstyled small">
-                    <li><a href="#" class="text-white text-decoration-none">Petunjuk Penggunaan</a></li>
-                    <li><a href="#" class="text-white text-decoration-none">FAQ</a></li>
-                    <li><a href="#" class="text-white text-decoration-none">Hubungi Kami</a></li>
+                    <li><a href="#">Petunjuk Penggunaan</a></li>
+                    <li><a href="http://klik-farmasi.test/tanya-jawab">FAQ</a></li>
+                    <li><a href="https://wa.me/6281234567890">Hubungi Kami</a></li>
                 </ul>
             </div>
     
@@ -31,9 +31,9 @@
             <div class="col-md-3">
                 <h3 class="fw-bold fs-4">Layanan</h3>
                 <ul class="list-unstyled small">
-                    <li><a href="#" class="text-white text-decoration-none">Pengingat Minum Obat</a></li>
-                    <li><a href="#" class="text-white text-decoration-none">Artikel</a></li>
-                    <li><a href="#" class="text-white text-decoration-none">Berita</a></li>
+                    <li><a href="http://klik-farmasi.test/pengingat">Pengingat Minum Obat</a></li>
+                    <li><a href="http://klik-farmasi.test/artikel">Artikel</a></li>
+                    <li><a href="http://klik-farmasi.test/berita">Berita</a></li>
                 </ul>
             </div>
     
@@ -52,13 +52,13 @@
             <div class="col-md-4 text-center text-md-start mb-2 d-flex">
                 <p class="mb-0 small">Bagian dari: </p>
                 <img src="{{ asset('assets/mitra.png') }}" alt="Logo Bagian Dari" style="height: 50px;">
-                <img src="{{ asset('assets/Farmasi-LogoUAA_white.png') }}" alt="Logo Bagian Dari" style="height: 50px;">
+                <img src="{{ asset('assets/Farmasi-LogoUAA_white.png') }}" alt="Logo Farmasi" style="height: 50px;">
             </div>
             <div class="col-md-4 text-center mb-2">
                 <p class="mb-0 small">&copy; 2025 Klik Farmasi - Universitas Alma Ata</p>
             </div>
             <div class="col-md-4 text-center text-md-end mb-2">
-                <p class="mb-0 small">Dibuat oleh Tim Mahasiswa Farmasi UAA</p>
+                <p class="mb-0 small">Dikelola oleh Tim Mahasiswa Farmasi UAA</p>
             </div>
         </div>
     </div>  
@@ -67,11 +67,20 @@
 <style>
     footer {
         font-family: 'Open Sans', sans-serif;
-        color: #fff
     }
     footer h3 {
+        font-weight: 700; /* Bold */
+        font-size: 18px;
+        color: #f0f0f0;
         margin-top: 10px;
         margin-bottom: 20px;
+        transition: color 0.3s ease;
+    }
+
+    footer a {
+        color: #f0f0f0;
+        transition: color 0.3s ease;
+        text-decoration: none;
     }
 
     footer p {
@@ -81,6 +90,11 @@
         color: #f0f0f0;
         margin-bottom: 10px;
     }   
+
+    footer h3:hover,
+    footer a:hover {
+        color: #baa971;
+    }
 
     footer ul li {
         margin-bottom: 8px;

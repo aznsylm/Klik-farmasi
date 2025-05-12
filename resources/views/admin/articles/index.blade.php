@@ -62,13 +62,6 @@
             </tbody>
         </table>
     </div>
-
-    <!-- Tombol Kembali ke Halaman Sebelumnya -->
-    <div class="text-center mt-4">
-        <a href="{{ route('admin.dashboard') }}" class="btn btn-primary">
-            <i class="bi bi-arrow-left"></i> Kembali ke Dashboard
-        </a>
-    </div>
 </div>
 
 <style>

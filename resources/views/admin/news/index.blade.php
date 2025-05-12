@@ -1,50 +1,119 @@
-{{-- filepath: resources/views/admin/news/index.blade.php --}}
 @extends('layouts.app')
 
+@section('title', 'Kelola Berita')
+
 @section('content')
-<div class="container">
-    <h1 class="mb-4">Kelola Berita</h1>
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <!-- Tombol Tambah Berita -->
-        <a href="{{ route('admin.news.create') }}" class="btn btn-primary">Tambah Artikel</a>
-    
-        <!-- Tombol Kembali ke Dashboard -->
-        <a href="{{ route('admin.dashboard') }}" class="btn btn-secondary">
-            <i class="bi bi-arrow-left"></i> Kembali ke Dashboard
-        </a>
+<div class="container py-5">
+    <div class="text-center mb-4">
+        <h1 class="fw-bold">Kelola Berita</h1>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <!-- Tombol Tambah Berita -->
+            <a href="{{ route('admin.news.create') }}" class="btn btn-primary">Tambah Berita</a>
+
+            <!-- Tombol Kembali ke Dashboard -->
+            <a href="{{ route('admin.dashboard') }}" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Kembali ke Dashboard
+            </a>
+        </div>
     </div>
+
     @if (session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
-    <table class="table table-bordered table-hover">
-        <thead class="table-dark">
-            <tr>
-                <th>Judul</th>
-                <th>Sumber</th>
-                <th>Link</th>
-                <th>Waktu</th>
-                <th>Aksi</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($news as $item)
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+            <thead class="table-dark">
                 <tr>
-                    <td>{{ $item->title }}</td>
-                    <td>{{ $item->source }}</td>
-                    <td><a href="{{ $item->link }}" target="_blank">Lihat</a></td>
-                    <td>{{ $item->published_at }}</td>
-                    <td>
-                        <a href="{{ route('admin.news.edit', $item) }}" class="btn btn-warning btn-sm">Edit</a>
-                        <form action="{{ route('admin.news.destroy', $item) }}" method="POST" style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
-                        </form>
-                    </td>
+                    <th>ID</th>
+                    <th>Judul</th>
+                    <th>Sumber</th>
+                    <th>Link</th>
+                    <th>Waktu Publish</th>
+                    <th>Aksi</th>
                 </tr>
-            @endforeach
-        </tbody>
-    </table>
-    {{ $news->links() }}
+            </thead>
+            <tbody>
+                @foreach ($news as $item)
+                    <tr>
+                        <td>{{ $item->id }}</td>
+                        <td>{{ $item->title }}</td>
+                        <td>{{ $item->source }}</td>
+                        <td>
+                            <a href="{{ $item->link }}" target="_blank" class="text-decoration-underline">Lihat</a>
+                        </td>
+                        <td>{{ $item->published_at ? \Carbon\Carbon::parse($item->published_at)->format('d M Y, H:i') : 'Belum dipublish' }}</td>
+                        <td>
+                            <a href="{{ route('admin.news.edit', $item) }}" class="btn btn-warning btn-sm">Edit</a>
+                            <form action="{{ route('admin.news.destroy', $item) }}" method="POST" style="display:inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus berita ini?')">Hapus</button>
+                            </form>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+        {{ $news->links() }}
+    </div>
 </div>
+
+<style>
+    /* Font */
+    body {
+        font-family: 'Poppins', sans-serif;
+    }
+
+    /* Tabel */
+    .table {
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .table thead {
+        background-color: #343a40;
+        color: #fff;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: #f8f9fa;
+    }
+
+    .table td, .table th {
+        vertical-align: middle;
+        text-align: center;
+    }
+
+    /* Tombol */
+    .btn-primary {
+        background-color: #007bff;
+        border: none;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+
+    .btn-warning {
+        background-color: #ffc107;
+        border: none;
+        transition: all 0.3s ease;
+    }
+
+    .btn-warning:hover {
+        background-color: #e0a800;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        border: none;
+        transition: all 0.3s ease;
+    }
+
+    .btn-danger:hover {
+        background-color: #a71d2a;
+    }
+</style>
 @endsection
