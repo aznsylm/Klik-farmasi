@@ -14,8 +14,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- CDN AOS -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <!-- Core Theme CSS -->
-    <link href="{{ asset('css/styles.css') }}" rel="stylesheet">
+    <!-- Pages CSS -->
+    <link href="{{ asset('css/pages.css') }}" rel="stylesheet">
 </head>
 <body class="d-flex flex-column h-100">
     <!-- Navbar -->
@@ -140,27 +140,7 @@
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease-in-out;
         }
-        </style>
-
-    <script>
-        // Tampilkan tombol saat scroll ke bawah
-        const backToTopButton = document.getElementById('backToTop');
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 200) {
-                backToTopButton.style.display = 'block';
-            } else {
-                backToTopButton.style.display = 'none';
-            }
-        });
-
-        // Scroll ke atas saat tombol diklik
-        backToTopButton.addEventListener('click', () => {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        });
-    </script>
+    </style>
 
     <!-- CDN AOS -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
@@ -173,7 +153,7 @@
 
     <!-- Bootstrap Core JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Core Theme JS -->
-    <script src="{{ asset('js/scripts.js') }}"></script>
+    <!-- Pages JS -->
+    <script src="{{ asset('js/pages.js') }}"></script>
 </body>
 </html>
