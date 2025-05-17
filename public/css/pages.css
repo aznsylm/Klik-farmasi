@@ -70,7 +70,7 @@ body {
     background-color: #fff;
     border-radius: 16px;
     overflow: hidden;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
     height: 100%;
     transition: all 0.3s ease;
     display: flex;
@@ -79,7 +79,7 @@ body {
 
 .article-card:hover {
     transform: translateY(-8px);
-    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
 }
 
 .article-image {
@@ -114,7 +114,7 @@ body {
     font-size: 0.75rem;
     font-weight: 600;
     display: inline-block;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .article-content {
@@ -187,8 +187,10 @@ body {
 
 /* ===== ARTIKEL PAGE STYLES ===== */
 .object-fit-cover {
-    object-fit: cover; /* Gambar akan menyesuaikan tanpa distorsi */
-    height: 100%; /* Tinggi gambar mengikuti tinggi container */
+    object-fit: cover;
+    /* Gambar akan menyesuaikan tanpa distorsi */
+    height: 100%;
+    /* Tinggi gambar mengikuti tinggi container */
 }
 
 /* Styling untuk artikel terbaru */
@@ -260,7 +262,7 @@ body {
 }
 
 /* Breadcrumb Styling */
-.breadcrumb-item + .breadcrumb-item::before {
+.breadcrumb-item+.breadcrumb-item::before {
     content: "›";
     font-size: 1.2rem;
     line-height: 1;
@@ -280,7 +282,7 @@ body {
     background-color: #ffffff;
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
     height: 100%;
     transition: all 0.3s ease;
     display: flex;
@@ -290,7 +292,7 @@ body {
 
 .news-card:hover {
     transform: translateY(-8px);
-    box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
 }
 
 .news-card-header {
@@ -298,7 +300,7 @@ body {
     justify-content: space-between;
     padding: 1rem 1.5rem;
     background-color: #f8f9fa;
-    border-bottom: 1px solid rgba(0,0,0,0.05);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .news-source, .news-date {
@@ -343,7 +345,7 @@ body {
 
 .news-card-footer {
     padding: 1rem 1.5rem;
-    border-top: 1px solid rgba(0,0,0,0.05);
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
     background-color: #f8f9fa;
 }
 
@@ -385,7 +387,7 @@ body {
     border: none;
     padding: 0.5rem 0.75rem;
     font-weight: 500;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
 .page-link:hover {
@@ -398,7 +400,7 @@ body {
     background-color: #ffffff;
     border-radius: 12px;
     padding: 3rem;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
 }
 
 /* ===== PENGINGAT PAGE STYLES ===== */
@@ -434,10 +436,10 @@ body {
     align-items: center;
     justify-content: center;
     margin: 0 auto;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
     position: relative;
     z-index: 2;
-    border: 5px solid rgba(255,255,255,0.3);
+    border: 5px solid rgba(255, 255, 255, 0.3);
 }
 
 .header-icon i {
@@ -489,7 +491,7 @@ body {
     box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
 }
 
-.form-floating > label {
+.form-floating>label {
     padding: 0.75rem 1rem;
 }
 
@@ -605,6 +607,7 @@ body {
         opacity: 0;
         transform: translateY(20px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -635,7 +638,7 @@ body {
 
 /* Search Bar */
 .faq-search .input-group {
-    box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
     border-radius: 50px;
     overflow: hidden;
 }
@@ -685,7 +688,7 @@ body {
     background-color: white;
     border-radius: 12px;
     padding: 2rem;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
 }
 
 .faq-group-header {
@@ -793,7 +796,7 @@ body {
     background-color: white;
     padding: 0.75rem 1.25rem;
     border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
     margin-bottom: 0;
 }
 
@@ -811,7 +814,7 @@ body {
     color: #6c757d;
 }
 
-.custom-breadcrumb .breadcrumb-item + .breadcrumb-item::before {
+.custom-breadcrumb .breadcrumb-item+.breadcrumb-item::before {
     content: "›";
     color: #6c757d;
 }
@@ -821,14 +824,14 @@ body {
     background-color: white;
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
     height: 100%;
     transition: all 0.3s ease;
 }
 
 .download-card:hover {
     transform: translateY(-8px);
-    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
 }
 
 .download-card-image {
@@ -976,78 +979,89 @@ body {
 /* ===== RESPONSIVE STYLES ===== */
 /* Responsive Adjustments for all pages */
 @media (max-width: 768px) {
+
     /* Artikel Detail */
     .article-container {
         padding: 1.5rem !important;
     }
-    
+
     .article-header h1 {
         font-size: 1.75rem;
     }
-    
+
     /* Berita */
     .news-card-header {
         flex-direction: column;
         gap: 0.5rem;
     }
-    
+
     .news-title {
         font-size: 1.1rem;
     }
-    
+
     .news-summary {
         -webkit-line-clamp: 2;
     }
-    
+
     /* Pengingat */
     .card-header {
         padding: 2rem 1rem;
     }
-    
+
     .card-body {
         padding: 1.5rem;
     }
-    
+
     .popup-content {
         padding: 1.5rem;
     }
-    
+
     /* Tanya Jawab */
     .faq-group {
         padding: 1.5rem;
     }
-    
+
     .custom-accordion .accordion-button {
         padding: 1rem;
         font-size: 0.95rem;
     }
-    
+
     .custom-accordion .accordion-body {
         padding: 1rem;
     }
-    
+
     /* Unduhan */
     .download-card-image {
         height: 180px;
     }
-    
+
     .download-title {
         font-size: 1.1rem;
     }
-    
+
     .download-footer {
         flex-direction: column;
         align-items: flex-start;
         gap: 1rem;
     }
-    
+
     .btn-download {
         width: 100%;
         justify-content: center;
     }
-    
+
     /* Beranda */
     .article-image {
         height: 180px;
+    }
+}
+
+@media (max-width: 576px) {
+    #headerCarousel .carousel-inner {
+        height: 200px !important;
+    }
+
+    #headerCarousel img {
+        height: 200px !important;
     }
 }

@@ -23,17 +23,17 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-xl-5 col-xxl-6 d-none d-xl-block text-center">
+                <div class="col-12 col-xl-5 col-xxl-6 text-center mb-4 mb-xl-0">
                     <div id="headerCarousel" class="carousel slide shadow rounded-4 overflow-hidden" data-bs-ride="carousel" data-bs-interval="3000">
                         <div class="carousel-inner" style="height: 380px;">
                             <div class="carousel-item active">
-                                <img class="img-fluid w-100 h-100" src="{{ asset('assets/sample-1.jpg') }}" alt="Gambar 1" style="object-fit: cover;">
+                                <img class="img-fluid w-100 h-100" src="{{ asset('assets/sample-1.webp') }}" alt="Gambar 1" style="object-fit: cover;">
                             </div>
                             <div class="carousel-item">
-                                <img class="img-fluid w-100 h-100" src="{{ asset('assets/sample-2.jpg') }}" alt="Gambar 2" style="object-fit: cover;">
+                                <img class="img-fluid w-100 h-100" src="{{ asset('assets/sample-2.webp') }}" alt="Gambar 2" style="object-fit: cover;">
                             </div>
                             <div class="carousel-item">
-                                <img class="img-fluid w-100 h-100" src="{{ asset('assets/sample-3.jpg') }}" alt="Gambar 3" style="object-fit: cover;">
+                                <img class="img-fluid w-100 h-100" src="{{ asset('assets/sample-3.webp') }}" alt="Gambar 3" style="object-fit: cover;">
                             </div>
                         </div>
                         <button class="carousel-control-prev" type="button" data-bs-target="#headerCarousel" data-bs-slide="prev">
