@@ -23,18 +23,19 @@ class DownloadController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
+            'category' => 'required|in:modul,flayer', 
             'file_link' => 'required|url',
-            'image' => 'nullable|image|mimes:webp|max:2048', // Validasi gambar WebP
+            'image' => 'nullable|image|mimes:webp|max:2048',
         ]);
-
+    
         $data = $request->all();
-
+    
         if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('downloads', 'public'); // Simpan gambar di folder storage/app/public/downloads
+            $data['image'] = $request->file('image')->store('downloads', 'public');
         }
-
+    
         Download::create($data);
-
+    
         return redirect()->route('admin.downloads.index')->with('success', 'Unduhan berhasil ditambahkan. Silahkan Reload Halaman ini untuk menambahkan kembali !!!');
     }
 
@@ -48,18 +49,19 @@ class DownloadController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
+            'category' => 'required|in:modul,flayer', // Tambahkan validasi kategori
             'file_link' => 'required|url',
-            'image' => 'nullable|image|mimes:webp|max:2048', // Validasi gambar WebP
+            'image' => 'nullable|image|mimes:webp|max:2048',
         ]);
-
+    
         $data = $request->all();
-
+    
         if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('downloads', 'public'); // Simpan gambar baru
+            $data['image'] = $request->file('image')->store('downloads', 'public');
         }
-
+    
         $download->update($data);
-
+    
         return redirect()->route('admin.downloads.index')->with('success', 'Unduhan berhasil diperbarui.');
     }
 

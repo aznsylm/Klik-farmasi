@@ -28,6 +28,7 @@
                     <th>ID</th>
                     <th>Gambar</th> <!-- Kolom Gambar -->
                     <th>Kategori</th>
+                    <th>Slug</th>
                     <th>Judul</th>
                     <th>Penulis</th>
                     <th>Waktu Publish</th>
@@ -46,6 +47,7 @@
                             @endif
                         </td>
                         <td>{{ $article->category }}</td>
+                        <td>{{ $article->slug }}</td>
                         <td>{{ $article->title }}</td>
                         <td>{{ $article->author }}</td>
                         <td>{{ $article->published_at ? $article->published_at->format('d M Y, H:i') : 'Belum dipublish' }}</td>

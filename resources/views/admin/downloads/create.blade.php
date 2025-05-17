@@ -16,6 +16,14 @@
             <textarea name="description" id="description" class="form-control" rows="3" required></textarea>
         </div>
         <div class="mb-3">
+            <label for="category" class="form-label fw-bold">Kategori</label>
+            <select name="category" id="category" class="form-control" required>
+                <option value="" hidden>-- Pilih Kategori --</option>
+                <option value="modul">Modul</option>
+                <option value="flayer">Flayer</option>
+            </select>
+        </div>
+        <div class="mb-3">
             <label for="file_link" class="form-label fw-bold">Link File</label>
             <input type="url" name="file_link" id="file_link" class="form-control" required>
         </div>

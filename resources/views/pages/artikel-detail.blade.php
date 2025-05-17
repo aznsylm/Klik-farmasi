@@ -3,63 +3,193 @@
 @section('title', $article->title)
 
 @section('content')
-<section class="py-5">
-    <div class="container px-5">
-        <!-- Tombol Kembali -->
-        <div class="mb-4">
-            <a href="{{ url()->previous() }}" class="btn btn-outline-secondary">
-                <i class="bi bi-arrow-left"></i> Kembali
-            </a>
-        </div>
+<section class="py-5 article-section">
+    <div class="container px-4">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" class="mb-4">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ route('beranda') }}" class="text-decoration-none">Beranda</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('artikel') }}" class="text-decoration-none">Artikel</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ Str::limit($article->title, 30) }}</li>
+            </ol>
+        </nav>
 
         <div class="row gx-5">
             <!-- Konten Artikel -->
             <div class="col-lg-8">
-                <h1 class="fw-bolder mb-3" style="font-family: 'Open Sans', sans-serif; color: #0b5e91;">{{ $article->title }}</h1>
-                <p class="text-muted mb-2" style="font-family: 'Open Sans', sans-serif;">
-                    <span class="badge bg-secondary">{{ $article->category }}</span>
-                </p>
-                <p class="text-muted small mb-4" style="font-family: 'Open Sans', sans-serif; font-style: italic;">
-                    <i class="bi bi-person-circle"></i> Oleh {{ $article->author }} - 
-                    {{ $article->published_at ? $article->published_at->format('d M Y') : 'Tanggal tidak tersedia' }}
-                </p>
-                <img src="{{ asset('storage/' . $article->image) }}" alt="{{ $article->title }}" class="img-fluid rounded mb-4 shadow" data-aos="fade-out">
-                <p class="text-muted" style="font-family: 'Open Sans', sans-serif; line-height: 1.8;">
-                    {!! nl2br(e($article->content)) !!}
-                </p>
+                <div class="article-container bg-white p-4 p-md-5 rounded-4 shadow-sm mb-4">
+                    <!-- Article Header -->
+                    <div class="article-header mb-4">
+                        <span class="badge bg-secondary rounded-pill px-3 py-2 mb-2">{{ $article->category }}</span>
+                        <h1 class="fw-bold display-5 mb-3" style="color: #0b5e91">{{ $article->title }}</h1>
+                        
+                        <div class="d-flex flex-wrap align-items-center text-muted mb-4">
+                            <div class="me-4 d-flex align-items-center">
+                                <i class="bi bi-person-circle me-2"></i>
+                                <span>{{ $article->author }}</span>
+                            </div>
+                            <div class="me-4 d-flex align-items-center">
+                                <i class="bi bi-calendar3 me-2"></i>
+                                <span>{{ $article->published_at ? $article->published_at->format('d M Y') : 'Tanggal tidak tersedia' }}</span>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-clock me-2"></i>
+                                <span>{{ ceil(str_word_count($article->content) / 200) }} menit membaca</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Share Buttons -->
+                        <div class="article-share d-flex align-items-center mb-4">
+                            <span class="me-3 fw-medium">Bagikan:</span>
+                            <div class="d-flex gap-2">
+                                <a href="https://wa.me/?text={{ urlencode($article->title . ' - ' . url()->current()) }}" target="_blank" class="btn btn-sm btn-outline-success rounded-circle">
+                                    <i class="bi bi-whatsapp"></i>
+                                </a>
+                                <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(url()->current()) }}" target="_blank" class="btn btn-sm btn-outline-primary rounded-circle">
+                                    <i class="bi bi-facebook"></i>
+                                </a>
+                                <a href="https://twitter.com/intent/tweet?text={{ urlencode($article->title) }}&url={{ urlencode(url()->current()) }}" target="_blank" class="btn btn-sm btn-outline-secondary rounded-circle">
+                                    <i class="bi bi-twitter"></i>
+                                </a>
+                                <a href="https://www.instagram.com/klikfarmasi" target="_blank" class="btn btn-sm btn-outline-danger rounded-circle">
+                                    <i class="bi bi-instagram"></i>
+                                </a>                                
+                                <a href="mailto:?subject={{ $article->title }}&body={{ urlencode('Baca artikel ini: ' . url()->current()) }}" class="btn btn-sm btn-outline-secondary rounded-circle">
+                                    <i class="bi bi-envelope"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Featured Image with caption -->
+                    <figure class="figure mb-5 w-100">
+                        <img src="{{ asset('storage/' . $article->image) }}" alt="{{ $article->title }}" class="figure-img img-fluid rounded shadow-sm w-100" style="max-height: 500px; object-fit: cover;">
+                        <figcaption class="figure-caption text-center mt-2">{{ $article->title }}</figcaption>
+                    </figure>
+
+                    <!-- Article Content -->
+                    <div class="article-content">
+                        <div class="content-text fs-6" style="line-height: 1.8;">
+                            {!! nl2br(e($article->content)) !!}
+                        </div>
+                        
+                        <!-- Tags if available -->
+                        @if(isset($article->tags) && !empty($article->tags))
+                        <div class="article-tags mt-5">
+                            <h5 class="fw-bold mb-3">Tags</h5>
+                            <div class="d-flex flex-wrap gap-2">
+                                @foreach(explode(',', $article->tags) as $tag)
+                                    <a href="#" class="badge bg-light text-dark text-decoration-none px-3 py-2 rounded-pill">{{ trim($tag) }}</a>
+                                @endforeach
+                            </div>
+                        </div>
+                        @endif
+                    </div>
+                </div>
+                
+                <!-- Author Bio if available -->
+                @if(isset($article->author_bio))
+                <div class="author-bio bg-white p-4 rounded-4 shadow-sm mb-4">
+                    <div class="d-flex flex-wrap">
+                        <div class="author-image me-4">
+                            <img src="{{ isset($article->author_image) ? asset('storage/' . $article->author_image) : asset('img/default-avatar.png') }}" alt="{{ $article->author }}" class="rounded-circle" width="80" height="80">
+                        </div>
+                        <div class="author-info flex-grow-1">
+                            <h5 class="fw-bold mb-2">{{ $article->author }}</h5>
+                            <p class="text-muted mb-3">{{ $article->author_title ?? 'Penulis' }}</p>
+                            <p class="mb-0">{{ $article->author_bio }}</p>
+                        </div>
+                    </div>
+                </div>
+                @endif
+                
+                <!-- Navigation between articles -->
+                <div class="article-navigation d-flex justify-content-between mt-5">
+                    @if(isset($previousArticle))
+                    <a href="{{ route('artikel.detail', $previousArticle->slug) }}" class="btn btn-outline-primary d-flex align-items-center">
+                        <i class="bi bi-arrow-left me-2"></i> Artikel Sebelumnya
+                    </a>
+                    @else
+                    <div></div>
+                    @endif
+                    
+                    @if(isset($nextArticle))
+                    <a href="{{ route('artikel.detail', $nextArticle->slug) }}" class="btn btn-outline-primary d-flex align-items-center">
+                        Artikel Selanjutnya <i class="bi bi-arrow-right ms-2"></i>
+                    </a>
+                    @else
+                    <div></div>
+                    @endif
+                </div>
             </div>
 
             <!-- Sidebar -->
-            <div class="col-lg-4" data-aos="fade-up">
-                <div class="card border-0 bg-light mt-xl-5 shadow-sm">
-                    <div class="card-body p-4 py-lg-5">
-                        <div class="text-center">
-                            <!-- Hubungi Kami -->
-                            <div class="h5 fw-bold mb-3 text-primary">Punya Pertanyaan?</div>
-                            <p class="text-muted mb-4" style="font-size: 14px;">
-                                Jangan ragu untuk menghubungi kami jika Anda memiliki pertanyaan atau membutuhkan bantuan.
-                            </p>
-                            <a href="mailto:support@klikfarmasi.com" class="btn btn-primary w-100 mb-4" style="background-color: #0b5e91; border: none;">
-                                <i class="bi-envelope"></i> Email Kami
+            <div class="col-lg-4">
+                <div class="sticky-top" style="top: 2rem; z-index: 1000;">
+                    <!-- Artikel Terkait -->
+                    @if(isset($relatedArticles) && count($relatedArticles) > 0)
+                    <div class="card border-0 rounded-4 shadow-sm mb-4">
+                        <div class="card-header bg-primary text-white py-3 border-0">
+                            <h5 class="mb-0 fw-bold"><i class="bi bi-journals me-2"></i> Artikel Terkait</h5>
+                        </div>
+                        <div class="card-body p-0">
+                            <ul class="list-group list-group-flush">
+                                @foreach($relatedArticles as $relatedArticle)
+                                <li class="list-group-item border-0 py-3">
+                                    <a href="{{ route('artikel.detail', $relatedArticle->slug) }}" class="text-decoration-none">
+                                        <div class="d-flex">
+                                            <div class="flex-shrink-0">
+                                                <img src="{{ asset('storage/' . $relatedArticle->image) }}" alt="{{ $relatedArticle->title }}" class="rounded" width="60" height="60" style="object-fit: cover;">
+                                            </div>
+                                            <div class="flex-grow-1 ms-3">
+                                                <h6 class="mb-1 text-primary">{{ Str::limit($relatedArticle->title, 50) }}</h6>
+                                                <small class="text-muted">{{ $relatedArticle->published_at ? $relatedArticle->published_at->format('d M Y') : '' }}</small>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+                    @endif
+
+                    <!-- Contact Card -->
+                    <div class="card border-0 rounded-4 shadow-sm mb-4">
+                        <div class="card-body p-4">
+                            <div class="text-center mb-4">
+                                <div class="icon-circle bg-primary text-white mx-auto mb-3">
+                                    <i class="bi bi-chat-dots-fill"></i>
+                                </div>
+                                <h5 class="fw-bold">Punya Pertanyaan?</h5>
+                                <p class="text-muted mb-0">Jangan ragu untuk menghubungi kami jika Anda memiliki pertanyaan atau membutuhkan bantuan.</p>
+                            </div>
+                            <a href="mailto:support@klikfarmasi.com" class="btn btn-primary w-100 mb-3">
+                                <i class="bi bi-envelope me-2"></i> Email Kami
                             </a>
-            
-                            <!-- Ikuti Kami -->
-                            <div class="h5 fw-bold mb-3 text-primary">Ikuti Kami</div>
-                            <p class="text-muted mb-4" style="font-size: 14px;">
-                                Tetap terhubung dengan kami melalui media sosial untuk mendapatkan informasi terbaru.
-                            </p>
+                            <a href="https://wa.me/1234567890" class="btn btn-success w-100">
+                                <i class="bi bi-whatsapp me-2"></i> WhatsApp
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Social Media -->
+                    <div class="card border-0 rounded-4 shadow-sm">
+                        <div class="card-body p-4">
+                            <h5 class="fw-bold mb-3 text-center">Ikuti Kami</h5>
+                            <p class="text-muted text-center mb-4">Tetap terhubung dengan kami melalui media sosial untuk mendapatkan informasi terbaru.</p>
                             <div class="d-flex justify-content-center gap-3">
-                                <a class="fs-4 text-dark" href="https://wa.me/1234567890" target="_blank" style="text-decoration: none;">
-                                    <i class="bi-whatsapp"></i>
+                                <a class="social-icon" href="https://wa.me/1234567890" target="_blank">
+                                    <i class="bi bi-whatsapp"></i>
                                 </a>
-                                <a class="fs-4 text-dark" href="https://instagram.com/klikfarmasi" target="_blank" style="text-decoration: none;">
-                                    <i class="bi-instagram"></i>
+                                <a class="social-icon" href="https://instagram.com/klikfarmasi" target="_blank">
+                                    <i class="bi bi-instagram"></i>
                                 </a>
-                                <a class="fs-4 text-dark" href="https://tiktok.com/@klikfarmasi" target="_blank" style="text-decoration: none;">
-                                    <i class="bi-tiktok"></i>
+                                <a class="social-icon" href="https://tiktok.com/@klikfarmasi" target="_blank">
+                                    <i class="bi bi-tiktok"></i>
                                 </a>
-                                <a class="fs-4 text-dark" href="mailto:support@klikfarmasi.com" style="text-decoration: none;">
-                                    <i class="bi-envelope"></i>
+                                <a class="social-icon" href="mailto:support@klikfarmasi.com">
+                                    <i class="bi bi-envelope"></i>
                                 </a>
                             </div>
                         </div>
@@ -69,4 +199,75 @@
         </div>
     </div>
 </section>
+
+<style>
+    /* Article Styling */
+    .article-section {
+        background-color: #f8f9fa;
+        background-image: radial-gradient(#0d6efd10 1px, transparent 1px);
+        background-size: 20px 20px;
+    }
+    
+    .article-container {
+        border-left: 5px solid #0b5e91;
+    }
+    
+    .content-text {
+        color: #444;
+    }
+    
+    .content-text p {
+        margin-bottom: 1.5rem;
+    }
+    
+    /* Sidebar Styling */
+    .icon-circle {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+    }
+    
+    .social-icon {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        background-color: #f8f9fa;
+        color: #0b5e91;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+    
+    .social-icon:hover {
+        background-color: #0b5e91;
+        color: white;
+        transform: translateY(-3px);
+    }
+    
+    /* Breadcrumb Styling */
+    .breadcrumb-item + .breadcrumb-item::before {
+        content: "›";
+        font-size: 1.2rem;
+        line-height: 1;
+        vertical-align: middle;
+    }
+    
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+        .article-container {
+            padding: 1.5rem !important;
+        }
+        
+        .article-header h1 {
+            font-size: 1.75rem;
+        }
+    }
+</style>
 @endsection

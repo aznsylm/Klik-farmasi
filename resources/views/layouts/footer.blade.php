@@ -34,6 +34,7 @@
                     <li><a href="http://klik-farmasi.test/pengingat">Pengingat Minum Obat</a></li>
                     <li><a href="http://klik-farmasi.test/artikel">Artikel</a></li>
                     <li><a href="http://klik-farmasi.test/berita">Berita</a></li>
+                    <li><a href="http://klik-farmasi.test/unduhan">Unduhan</a></li>
                 </ul>
             </div>
     

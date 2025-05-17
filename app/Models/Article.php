@@ -1,8 +1,9 @@
 <?php
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Article extends Model
 {
@@ -16,9 +17,25 @@ class Article extends Model
         'author',
         'published_at',
         'image',
+        'slug',
     ];
 
     protected $casts = [
         'published_at' => 'datetime', // Konversi ke objek Carbon
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($article) {
+            $article->slug = Str::slug($article->title);
+        });
+
+        static::updating(function ($article) {
+            if ($article->isDirty('title')) {
+                $article->slug = Str::slug($article->title);
+            }
+        });
+    }
 }

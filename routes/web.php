@@ -8,11 +8,12 @@ use App\Http\Controllers\ProfileController;
 Route::get('/', [PageController::class, 'beranda'])->name('beranda');
 Route::get('/tanya-jawab', [PageController::class, 'tanyaJawab'])->name('tanya-jawab');
 Route::get('/artikel', [PageController::class, 'artikel'])->name('artikel');
-Route::get('/artikel/{id}', [PageController::class, 'artikelDetail'])->name('artikel.detail');
-Route::get('/unduhan', [PageController::class, 'unduhan'])->name('unduhan');
+Route::get('/artikel/{slug}', [PageController::class, 'artikelDetail'])->name('artikel.detail');
+Route::get('/unduhan/modul', [PageController::class, 'unduhanModul'])->name('unduhan.modul');
+Route::get('/unduhan/flayer', [PageController::class, 'unduhanFlayer'])->name('unduhan.flayer');
 Route::get('/pengingat', [PageController::class, 'pengingat'])->name('pengingat');
 Route::get('/berita', [PageController::class, 'berita'])->name('pages.berita');
-
+Route::get('/petunjuk', [PageController::class, 'petunjuk'])->name('petunjuk');
 
 Route::get('/dashboard', function () {
     if (auth()->user()->role === 'admin') {

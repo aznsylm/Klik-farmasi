@@ -13,6 +13,10 @@
             <input type="text" class="form-control" id="category" name="category" required>
         </div>
         <div class="mb-3">
+            <label for="slug" class="form-label">Slug</label>
+            <input type="text" class="form-control" id="slug" name="slug" required>
+        </div>
+        <div class="mb-3">
             <label for="title" class="form-label">Judul</label>
             <input type="text" class="form-control" id="title" name="title" required>
         </div>

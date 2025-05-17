@@ -36,12 +36,11 @@ class PageController extends Controller
         return view('pages.artikel', compact('latestArticle', 'otherArticles', 'news'));
     }
 
-    public function artikelDetail($id)
+    public function artikelDetail($slug)
     {
-        // Ambil artikel berdasarkan ID
-        $article = Article::findOrFail($id);
-
-        // Kirim data ke view
+        // Cari artikel berdasarkan slug
+        $article = Article::where('slug', $slug)->firstOrFail();
+    
         return view('pages.artikel-detail', compact('article'));
     }
 
@@ -51,10 +50,16 @@ class PageController extends Controller
         return view('pages.tanya-jawab', compact('faqs'));
     }
 
-    public function unduhan() {
-        $downloads = Download::all();
-
-        return view('pages.unduhan', compact('downloads'));     
+    public function unduhanModul()
+    {
+        $downloads = Download::where('category', 'modul')->get();
+        return view('pages.unduhan-modul', compact('downloads'));
+    }
+    
+    public function unduhanFlayer()
+    {
+        $downloads = Download::where('category', 'flayer')->get();
+        return view('pages.unduhan-flayer', compact('downloads'));
     }
 
     public function pengingat() {
@@ -68,5 +73,10 @@ class PageController extends Controller
     
         // Kirim data ke view
         return view('pages.berita', compact('allNews'));
+    }
+
+    public function petunjuk()
+    {
+        return view('pages.petunjuk');
     }
 }

@@ -11,12 +11,13 @@ class CreateArticlesTable extends Migration
         Schema::create('articles', function (Blueprint $table) {
             $table->id();
             $table->string('title');
+            $table->string('slug')->unique();
             $table->string('category');
             $table->text('summary');
             $table->text('content');
             $table->string('author');
             $table->timestamp('published_at')->nullable();
-            $table->string('image')->nullable(); // Path gambar
+            $table->string('image')->nullable(); 
             $table->timestamps();
         });
     }

@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('downloads', function (Blueprint $table) {
             $table->id();
-            $table->string('title'); // Judul file
-            $table->text('description'); // Deskripsi file
-            $table->string('image')->nullable(); // Gambar file
-            $table->string('file_link'); // Link file unduhan
+            $table->string('title'); 
+            $table->text('description'); 
+            $table->string('image')->nullable(); 
+            $table->string('file_link'); 
             $table->timestamps();
         });
     }
