@@ -16,6 +16,8 @@
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <!-- Pages CSS -->
     <link href="{{ asset('css/pages.css') }}" rel="stylesheet">
+    <!-- Footer CSS -->
+    <link href="{{ asset('css/footer.css') }}" rel="stylesheet">
 </head>
 <body class="d-flex flex-column h-100">
     <!-- Navbar -->
@@ -56,7 +58,7 @@
             font-size: 14px;
             line-height: 1.7;
             letter-spacing: 0.3px;
-            color: #595959;
+            color: #a4a4a4;
             margin-bottom: 10px;
         }
 

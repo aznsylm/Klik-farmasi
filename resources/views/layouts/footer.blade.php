@@ -1,104 +1,268 @@
-<footer style="background-color: #0b5e91; padding: 20px; font-family: 'Open Sans', sans-serif;">
+<footer class="footer">
     <div class="container">
         <div class="row">
-    
-            {{-- Kolom 1 --}}
-            <div class="col-md-3">
-                <img src="{{ asset('assets/LOGO KLIKFARMASI VEKTOR MIRING.png') }}" alt="Logo Farmasi Universitas Alma Ata" class="mb-3" style="max-width: 250px;">
-                <h3 class="fw-bold fs-4" >Universitas Alma Ata</h3>
-                <p class="small mb-2">
+            <!-- Kolom 1: Logo & Info -->
+            <div class="col-md-3 mb-4 mb-md-0">
+                <img src="{{ asset('assets/LOGO KLIKFARMASI VEKTOR MIRING.png') }}" alt="Logo Farmasi Universitas Alma Ata" class="footer-logo">
+                <h3>Universitas Alma Ata</h3>
+                <p class="footer-address">
                     Jl. Brawijaya No.99, Jadan, Tamantirto, Kasihan, Bantul, Yogyakarta 55183
                 </p>
-            <div class="d-flex gap-4 mt-4">
-                <a href="https://wa.me/6281234567890" class="fs-4 ms-3" target="_blank"><i class="bi bi-whatsapp"></i></a>
-                <a href="https://instagram.com/klikfarmasi" class="fs-4 ms-3" target="_blank"><i class="bi bi-instagram"></i></a>
-                <a href="https://tiktok.com/@klikfarmasi" class="fs-4 ms-3" target="_blank"><i class="bi bi-tiktok"></i></a>
-                <a href="mailto:klikfarmasi@almaata.ac.id" class="fs-4 ms-3" target="_blank"><i class="bi bi-envelope-fill"></i></a>
+                <div class="footer-social">
+                    <a href="https://wa.me/6281234567890" class="footer-social-icon" target="_blank">
+                        <i class="bi bi-whatsapp"></i>
+                    </a>
+                    <a href="https://instagram.com/klikfarmasi" class="footer-social-icon" target="_blank">
+                        <i class="bi bi-instagram"></i>
+                    </a>
+                    <a href="https://tiktok.com/@klikfarmasi" class="footer-social-icon" target="_blank">
+                        <i class="bi bi-tiktok"></i>
+                    </a>
+                    <a href="mailto:klikfarmasi@almaata.ac.id" class="footer-social-icon" target="_blank">
+                        <i class="bi bi-envelope-fill"></i>
+                    </a>
+                </div>
             </div>
-            </div>
-    
-            {{-- Kolom 2 --}}
-            <div class="col-md-3">
-                <h3 class="fw-bold fs-4">Tentang Kami</h3>
-                <ul class="list-unstyled small">
-                    <li><a href="#">Petunjuk Penggunaan</a></li>
-                    <li><a href="http://klik-farmasi.test/tanya-jawab">FAQ</a></li>
+
+            <!-- Kolom 2: Tentang Kami -->
+            <div class="col-md-3 mb-4 mb-md-0">
+                <h3>Tentang Kami</h3>
+                <ul class="footer-links">
+                    <li><a href="{{ route('petunjuk') }}">Petunjuk Penggunaan</a></li>
+                    <li><a href="{{ route('tanya-jawab') }}">FAQ</a></li>
                     <li><a href="https://wa.me/6281234567890">Hubungi Kami</a></li>
                 </ul>
             </div>
-    
-            {{-- Kolom 3 --}}
-            <div class="col-md-3">
-                <h3 class="fw-bold fs-4">Layanan</h3>
-                <ul class="list-unstyled small">
-                    <li><a href="http://klik-farmasi.test/pengingat">Pengingat Minum Obat</a></li>
-                    <li><a href="http://klik-farmasi.test/artikel">Artikel</a></li>
-                    <li><a href="http://klik-farmasi.test/berita">Berita</a></li>
-                    <li><a href="http://klik-farmasi.test/unduhan">Unduhan</a></li>
+
+            <!-- Kolom 3: Layanan -->
+            <div class="col-md-3 mb-4 mb-md-0">
+                <h3>Layanan</h3>
+                <ul class="footer-links">
+                    <li><a href="{{ route('pengingat') }}">Pengingat Minum Obat</a></li>
+                    <li><a href="{{ route('artikel') }}">Artikel</a></li>
+                    {{-- <li><a href="{{ route('berita') }}">Berita</a></li> --}}
+                    <li><a href="{{ route('unduhan.flayer') }}">Unduhan</a></li>
                 </ul>
             </div>
-    
-            {{-- Kolom 4 --}}
+
+            <!-- Kolom 4: Lokasi -->
             <div class="col-md-3">
-                <h3 class="fw-bold fs-4">Lokasi</h3>
-                <div class="ratio ratio-4x3">
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3818.9130339956882!2d110.32193207484461!3d-7.818441792202233!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7af7e2b2acea97%3A0xa3cb91d3e65407b2!2sUniversitas%20Alma%20Ata%20Yogyakarta!5e1!3m2!1sid!2sid!4v1746759433825!5m2!1sid!2sid" width="400" height="200" style=" border-radius: 12px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                <h3>Lokasi</h3>
+                <div class="footer-map ratio ratio-4x3">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3818.9130339956882!2d110.32193207484461!3d-7.818441792202233!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7af7e2b2acea97%3A0xa3cb91d3e65407b2!2sUniversitas%20Alma%20Ata%20Yogyakarta!5e1!3m2!1sid!2sid!4v1746759433825!5m2!1sid!2sid" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                 </div>
             </div>
-    
         </div>
-    
-        {{-- Footer Bottom --}}
-        <div class="row mt-4 pt-3 border-top border-white">
-            <div class="col-md-4 text-center text-md-start mb-2 d-flex">
-                <p class="mb-0 small">Bagian dari: </p>
-                <img src="{{ asset('assets/mitra.png') }}" alt="Logo Bagian Dari" style="height: 50px;">
-                <img src="{{ asset('assets/Farmasi-LogoUAA_white.png') }}" alt="Logo Farmasi" style="height: 50px;">
+
+        <!-- Footer Bottom -->
+        <div class="row footer-bottom">
+            <div class="col-md-4 mb-3 mb-md-0">
+                <div class="footer-partners">
+                    <p>Bagian dari:</p>
+                    <img src="{{ asset('assets/mitra.png') }}" alt="Logo Mitra">
+                    <img src="{{ asset('assets/Farmasi-LogoUAA_white.png') }}" alt="Logo Farmasi">
+                </div>
             </div>
-            <div class="col-md-4 text-center mb-2">
-                <p class="mb-0 small">&copy; 2025 Klik Farmasi - Universitas Alma Ata</p>
+            <div class="col-md-4 mb-3 mb-md-0 text-center">
+                <p class="footer-copyright">&copy; 2025 Klik Farmasi - Universitas Alma Ata</p>
             </div>
-            <div class="col-md-4 text-center text-md-end mb-2">
-                <p class="mb-0 small">Dikelola oleh Tim Mahasiswa Farmasi UAA</p>
+            <div class="col-md-4 text-md-end">
+                <p class="footer-copyright">Dikelola oleh Tim Mahasiswa Farmasi UAA</p>
             </div>
         </div>
-    </div>  
+    </div>
 </footer>
 
 <style>
-    footer {
-        font-family: 'Open Sans', sans-serif;
-    }
-    footer h3 {
-        font-weight: 700; /* Bold */
-        font-size: 18px;
-        color: #f0f0f0;
-        margin-top: 10px;
-        margin-bottom: 20px;
-        transition: color 0.3s ease;
-    }
+/* Footer Styles */
+.footer {
+    background-color: #0b5e91;
+    padding: 3rem 0 1.5rem;
+    font-family: 'Open Sans', sans-serif;
+    color: #f0f0f0;
+    position: relative;
+    overflow: hidden;
+}
 
-    footer a {
-        color: #f0f0f0;
-        transition: color 0.3s ease;
-        text-decoration: none;
+.footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+    border-radius: 50%;
+    transform: translate(30%, -30%);
+    pointer-events: none;
+}
+
+.footer-logo {
+    max-width: 220px;
+    margin-bottom: 1rem;
+    transition: transform 0.3s ease;
+}
+
+.footer-logo:hover {
+    transform: scale(1.05);
+}
+
+.footer h3 {
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: #f0f0f0;
+    margin-bottom: 1.5rem;
+    position: relative;
+    padding-bottom: 0.5rem;
+}
+
+.footer h3::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 40px;
+    height: 3px;
+    background-color: #baa971;
+    border-radius: 2px;
+}
+
+.footer p {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+    letter-spacing: 0.3px;
+    color: #e3e3e3;
+    margin-bottom: 10px;
+}
+
+.footer-address {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+.footer-social {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.footer-social-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    color: #f0f0f0;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+}
+
+.footer-social-icon:hover {
+    background-color: #baa971;
+    color: #0b5e91;
+    transform: translateY(-3px);
+}
+
+.footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-links li {
+    margin-bottom: 0.8rem;
+}
+
+.footer-links a {
+    color: #f0f0f0;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    display: inline-block;
+    position: relative;
+}
+
+.footer-links a::before {
+    content: '›';
+    margin-right: 0.5rem;
+    opacity: 0;
+    transform: translateX(-8px);
+    transition: all 0.2s ease;
+}
+
+.footer-links a:hover {
+    color: #baa971;
+    transform: translateX(5px);
+}
+
+.footer-links a:hover::before {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.footer-map {
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+}
+
+.footer-map:hover {
+    transform: translateY(-5px);
+}
+
+.footer-bottom {
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer-partners {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.footer-partners p {
+    margin-bottom: 0;
+    font-size: 0.85rem;
+    white-space: nowrap;
+}
+
+.footer-partners img {
+    height: 40px;
+    transition: transform 0.3s ease;
+}
+
+.footer-partners img:hover {
+    transform: scale(1.1);
+}
+
+.footer-copyright {
+    font-size: 0.85rem;
+    opacity: 0.8;
+}
+
+@media (max-width: 767.98px) {
+    .footer {
+        padding: 2rem 0 1rem;
     }
-
-    footer p {
-        font-size: 14px;
-        line-height: 1.7;
-        letter-spacing: 0.3px;
-        color: #f0f0f0;
-        margin-bottom: 10px;
-    }   
-
-    footer h3:hover,
-    footer a:hover {
-        color: #baa971;
+    
+    .footer h3 {
+        margin-top: 1.5rem;
     }
-
-    footer ul li {
-        margin-bottom: 8px;
+    
+    .footer-bottom {
+        text-align: center;
     }
-
+    
+    .footer-partners {
+        justify-content: center;
+        margin-bottom: 1rem;
+    }
+}
 </style>
