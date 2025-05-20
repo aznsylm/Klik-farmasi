@@ -4,9 +4,9 @@
 
 @section('content')
     <!-- Header-->
-    <header class="py-5 position-relative" style="background: linear-gradient(135deg, #0b5e91 0%, #084b75 100%);">
+    <header class="py-5 position-relative d-flex align-items-center justify-content-center" style="background: linear-gradient(135deg, #0b5e91 0%, #084b75 100%); height: 600px; ">
         <div class="container px-4 px-lg-5">
-            <div class="row gx-5 align-items-center justify-content-center">
+            <div class="row gx-5">
                 <div class="col-lg-8 col-xl-7 col-xxl-6">
                     <div class="my-5 text-center text-xl-start">
                         <h1 class="display-5 fw-bolder text-white mb-3">Selamat Datang di Klik Farmasi</h1>
