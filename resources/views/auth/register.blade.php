@@ -1,113 +1,168 @@
-@extends('layouts.app')
-@section('title', 'Registrasi')
+@extends('layouts.auth')
+
+@section('title', 'Register')
+
 @section('content')
-<div class="container py-5">
-    <h2 class="mb-4 text-center">Registrasi Akun Pasien</h2>
-    
-    {{-- Notifikasi sukses registrasi --}}
-    @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
-            <strong><i class="bi bi-check-circle-fill"></i> Berhasil!</strong> {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
-
-    <form method="POST" action="{{ route('register.process') }}" class="mx-auto" style="max-width:450px;">
-        @csrf
-
+    <!-- Register Form -->
+    <div id="registerForm">
+        <h2 class="form-title">Daftar Akun</h2>
+        <p class="form-subtitle">Buat akun baru untuk memulai perjalanan kesehatan Anda</p>
+        
         @if($errors->any())
             <div class="alert alert-danger">
-                <ul class="mb-0">
-                    @foreach($errors->all() as $err)
-                        <li>{{ $err }}</li>
-                    @endforeach
-                </ul>
+                <i class="fas fa-exclamation-triangle"></i>
+                <span>{{ $errors->first() }}</span>
             </div>
         @endif
-
-        <div class="mb-3">
-            <label for="name" class="form-label">Nama Lengkap</label>
-            <input type="text" class="form-control" id="name" name="name" value="{{ old('name') }}" required autofocus>
-        </div>
-        <div class="mb-3">
-            <label for="email" class="form-label">Email Aktif</label>
-            <input type="email" class="form-control" id="email" name="email" value="{{ old('email') }}" required>
-        </div>
-        <div class="mb-3">
-            <label for="nomor_hp" class="form-label">Nomor HP</label>
-            <input type="text" class="form-control" id="nomor_hp" name="nomor_hp" value="{{ old('nomor_hp') }}" required>
-        </div>
-        <div class="mb-3">
-            <label for="jenis_kelamin" class="form-label">Jenis Kelamin</label>
-            <select class="form-select" id="jenis_kelamin" name="jenis_kelamin" required>
-                <option value="" disabled selected>Pilih jenis kelamin</option>
-                <option value="Laki-laki" {{ old('jenis_kelamin')=='Laki-laki' ? 'selected' : '' }}>Laki-laki</option>
-                <option value="Perempuan" {{ old('jenis_kelamin')=='Perempuan' ? 'selected' : '' }}>Perempuan</option>
-            </select>
-        </div>
-        <div class="mb-3">
-            <label for="usia" class="form-label">Usia</label>
-            <input type="number" class="form-control" id="usia" name="usia" value="{{ old('usia') }}" min="1" max="120" required>
-        </div>
-        <div class="mb-3 position-relative">
-            <label for="password" class="form-label">Password</label>
-            <input type="password" class="form-control" id="password" name="password" required minlength="8">
-            <span class="position-absolute top-50 end-0 translate-middle-y me-3" style="cursor:pointer;" onclick="togglePassword('password', 'togglePasswordIcon')">
-                <i class="bi bi-eye-slash" id="togglePasswordIcon"></i>
-            </span>
-        </div>
-        <div class="mb-3 position-relative">
-            <label for="password_confirmation" class="form-label">Konfirmasi Password</label>
-            <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" required minlength="8">
-            <span class="position-absolute top-50 end-0 translate-middle-y me-3" style="cursor:pointer;" onclick="togglePassword('password_confirmation', 'togglePasswordIcon2')">
-                <i class="bi bi-eye-slash" id="togglePasswordIcon2"></i>
-            </span>
-        </div>
-        <button type="submit" class="btn btn-primary w-100">Daftar</button>
-        <div class="text-center mt-3">
-            <small>Sudah punya akun? <a href="{{ route('login') }}">Login di sini</a></small>
-        </div>
-    </form>
-
-    {{-- Modal Sukses Registrasi --}}
-    <div class="modal fade" id="modalRegisterSuccess" tabindex="-1" aria-labelledby="modalRegisterSuccessLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header bg-success text-white">
-            <h5 class="modal-title" id="modalRegisterSuccessLabel"><i class="bi bi-check-circle-fill"></i> Registrasi Berhasil</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body text-center">
-            <p class="mb-3">Akun Anda berhasil terdaftar.<br>Silakan login untuk melanjutkan.</p>
-            <a href="{{ route('login') }}" class="btn btn-primary w-100">Login</a>
-          </div>
-        </div>
-      </div>
+        
+        <form id="registerFormElement" method="POST" action="{{ route('register.process') }}">
+            @csrf
+            <div class="form-group">
+                <input type="text" class="form-control" name="name" id="registerName" placeholder="Nama Lengkap" required value="{{ old('name') }}">
+            </div>
+            <div class="form-group row">
+                <div>
+                    <input type="email" class="form-control" name="email" id="registerEmail" placeholder="Email Aktif" required value="{{ old('email') }}">
+                </div>
+                <div>
+                    <input type="tel" class="form-control" name="nomor_hp" id="registerPhone" placeholder="Nomor HP" required value="{{ old('nomor_hp') }}">
+                </div>
+            </div>
+            <div class="form-group row">
+                <div>
+                    <select class="form-select" name="jenis_kelamin" id="registerGender" required>
+                        <option value="" disabled {{ !old('jenis_kelamin') ? 'selected' : '' }}>Pilih Jenis Kelamin</option>
+                        <option value="Laki-laki" {{ old('jenis_kelamin') == 'Laki-laki' ? 'selected' : '' }}>Laki-laki</option>
+                        <option value="Perempuan" {{ old('jenis_kelamin') == 'Perempuan' ? 'selected' : '' }}>Perempuan</option>
+                    </select>
+                </div>
+                <div>
+                    <input type="number" class="form-control" name="usia" id="registerAge" placeholder="Usia" min="1" max="120" required value="{{ old('usia') }}">
+                </div>
+            </div>
+            <div class="form-group row">
+                <div>
+                    <div class="password-group">
+                        <input type="password" class="form-control" name="password" id="registerPassword" placeholder="Buat Password" required minlength="8">
+                        <i class="fas fa-eye-slash password-toggle" onclick="togglePassword('registerPassword', this)"></i>
+                    </div>
+                </div>
+                <div>
+                    <div class="password-group">
+                        <input type="password" class="form-control" name="password_confirmation" id="registerConfirmPassword" placeholder="Konfirmasi Password" required minlength="8">
+                        <i class="fas fa-eye-slash password-toggle" onclick="togglePassword('registerConfirmPassword', this)"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="checkbox-group">
+                <input type="checkbox" id="agreeTerms" required>
+                <label for="agreeTerms">Saya menyetujui semua syarat & ketentuan</label>
+            </div>
+            <button type="submit" class="btn-primary">
+                <i class="fas fa-user-plus"></i>
+                <span>Daftar Sekarang</span>
+            </button>
+            <div class="form-link">
+                Sudah punya akun? <a href="{{ route('login') }}">Login sekarang</a>
+            </div>
+        </form>
     </div>
-    
-    @if(session('register_success'))
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var modal = new bootstrap.Modal(document.getElementById('modalRegisterSuccess'));
-            modal.show();
-        });
-    </script>
-    @endif
 
-</div>
-<script>
-function togglePassword(inputId, iconId) {
-    const input = document.getElementById(inputId);
-    const icon = document.getElementById(iconId);
-    if (input.type === "password") {
-        input.type = "text";
-        icon.classList.remove('bi-eye-slash');
-        icon.classList.add('bi-eye');
-    } else {
-        input.type = "password";
-        icon.classList.remove('bi-eye');
-        icon.classList.add('bi-eye-slash');
+    <!-- Modal Sukses Register -->
+    <div class="modal-overlay {{ session('register_success') ? 'active' : '' }}" id="successModal">
+        <div class="modal-container">
+            <div class="modal-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h3>Pendaftaran Berhasil!</h3>
+            <p>Akun Anda telah berhasil dibuat. Silakan login untuk melanjutkan.</p>
+            <a href="{{ route('login') }}" class="btn-primary">
+                <i class="fas fa-sign-in-alt"></i>
+                <span>Login Sekarang</span>
+            </a>
+        </div>
+    </div>
+@endsection
+
+@section('hero_title', 'Daftar')
+@section('hero_subtitle', 'Bergabunglah dengan ribuan pengguna lainnya untuk pengalaman kesehatan yang lebih baik')
+
+@section('extra_styles')
+<style>
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
     }
-}
+    
+    .modal-overlay.active {
+        opacity: 1;
+        visibility: visible;
+    }
+    
+    .modal-container {
+        background-color: white;
+        padding: 30px;
+        border-radius: 15px;
+        width: 90%;
+        max-width: 400px;
+        text-align: center;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        transform: translateY(-20px);
+        transition: all 0.3s ease;
+    }
+    
+    .modal-overlay.active .modal-container {
+        transform: translateY(0);
+    }
+    
+    .modal-icon {
+        font-size: 4rem;
+        color: #38a169;
+        margin-bottom: 20px;
+    }
+    
+    .modal-container h3 {
+        font-family: 'Quicksand', sans-serif;
+        font-size: 1.5rem;
+        margin-bottom: 15px;
+        color: #2d3748;
+    }
+    
+    .modal-container p {
+        color: #4a5568;
+        margin-bottom: 25px;
+    }
+    
+    .modal-container .btn-primary {
+        margin-bottom: 0;
+    }
+</style>
+@endsection
+
+@section('extra_scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const modal = document.getElementById('successModal');
+        
+        if (modal.classList.contains('active')) {
+            // Jika modal aktif, tambahkan event listener untuk menutup modal saat klik di luar
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                }
+            });
+        }
+    });
 </script>
 @endsection
