@@ -12,9 +12,12 @@ return new class extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('role')->default('pasien'); // Default role adalah 'pasien'
+            $table->string('nomor_hp')->nullable()->after('email');
+            $table->enum('jenis_kelamin', ['Laki-laki', 'Perempuan'])->nullable()->after('nomor_hp');
+            $table->integer('usia')->nullable()->after('jenis_kelamin');
         });
     }
+    
 
     /**
      * Reverse the migrations.
@@ -22,7 +25,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('role');
+            $table->dropColumn(['nomor_hp', 'jenis_kelamin', 'usia']);
         });
     }
 };

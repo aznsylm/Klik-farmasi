@@ -86,11 +86,18 @@
                         <span class="text-white">{{ Auth::user()->name }}</span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end shadow border-0" aria-labelledby="dropdownUser">
-                        @if(Auth::user()->role === 'admin')
+                        @if(Auth::user()->role === 'super_admin')
+                            <!-- Opsi untuk Super Admin -->
+                            <li>
+                                <a class="dropdown-item py-2" href="{{ route('superadmin.dashboard') }}">
+                                    <i class="bi bi-speedometer2 me-2"></i> Dashboard Super Admin
+                                </a>
+                            </li>
+                        @elseif(Auth::user()->role === 'admin')
                             <!-- Opsi untuk Admin -->
                             <li>
                                 <a class="dropdown-item py-2" href="{{ route('admin.dashboard') }}">
-                                    <i class="bi bi-speedometer2 me-2"></i> Dashboard
+                                    <i class="bi bi-speedometer2 me-2"></i> Dashboard Admin
                                 </a>
                             </li>
                         @else

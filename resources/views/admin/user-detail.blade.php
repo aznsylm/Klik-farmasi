@@ -17,6 +17,10 @@
                         <h5 class="card-title fw-bold mb-3">Informasi Pengguna</h5>
                         <p class="mb-2"><strong>Nama:</strong> {{ $user->name }}</p>
                         <p class="mb-2"><strong>Email:</strong> {{ $user->email }}</p>
+                        <p class="mb-2"><strong>Nomor HP:</strong> {{ $user->nomor_hp }}</p>
+                        <p class="mb-2"><strong>Jenis Kelamin:</strong> {{ $user->jenis_kelamin }}</p>
+                        <p class="mb-2"><strong>Usia:</strong> {{ $user->usia }}</p>
+                        <p class="mb-2"><strong>Role:</strong> {{ $user->role }}</p>
                         <p class="mb-0"><strong>Dibuat pada:</strong> {{ $user->created_at->format('d M Y, H:i') }}</p>
                     </div>
                 </div>
