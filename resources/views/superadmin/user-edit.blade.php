@@ -2,6 +2,25 @@
 @section('title', 'Edit Pasien')
 @section('content')
 <div class="container py-5">
+
+    {{-- Notifikasi sukses --}}
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle-fill"></i>
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+    {{-- Notifikasi gagal --}}
+    @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-x-circle-fill"></i>
+            {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
     <h3>Edit Pasien</h3>
     <form action="{{ route('superadmin.userUpdate', $user->id) }}" method="POST">
         @csrf
@@ -28,6 +47,15 @@
         <div class="mb-3">
             <label>Usia</label>
             <input type="number" name="usia" class="form-control" value="{{ old('usia', $user->usia) }}" required>
+        </div>
+        {{-- Tambahkan ini untuk super admin --}}
+        <div class="mb-3">
+            <label>Role</label>
+            <select name="role" class="form-select" required>
+                <option value="pasien" {{ $user->role == 'pasien' ? 'selected' : '' }}>Pasien</option>
+                <option value="admin" {{ $user->role == 'admin' ? 'selected' : '' }}>Admin</option>
+                <option value="super_admin" {{ $user->role == 'super_admin' ? 'selected' : '' }}>Super Admin</option>
+            </select>
         </div>
         <div class="mb-3">
             <label>Password (kosongkan jika tidak ingin mengubah)</label>

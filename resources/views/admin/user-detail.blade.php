@@ -5,8 +5,8 @@
 @section('content')
     <div class="container py-5">
         <div class="text-center mb-4">
-            <h1 class="fw-bold">Detail User</h1>
-            <p class="text-muted">Informasi lengkap tentang pengguna.</p>
+            <h1 class="fw-bold">Detail Pasien</h1>
+            <p class="text-muted">Informasi lengkap tentang pasien.</p>
         </div>
 
         <!-- Card Detail User -->
@@ -14,7 +14,7 @@
             <div class="col-md-6">
                 <div class="card shadow-sm border-0">
                     <div class="card-body">
-                        <h5 class="card-title fw-bold mb-3">Informasi Pengguna</h5>
+                        <h5 class="card-title fw-bold mb-3">Informasi Pasien</h5>
                         <p class="mb-2"><strong>Nama:</strong> {{ $user->name }}</p>
                         <p class="mb-2"><strong>Email:</strong> {{ $user->email }}</p>
                         <p class="mb-2"><strong>Nomor HP:</strong> {{ $user->nomor_hp }}</p>
@@ -30,7 +30,7 @@
         <!-- Tombol Kembali -->
         <div class="text-center mt-4">
             <a href="{{ route('admin.users') }}" class="btn btn-primary">
-                <i class="bi bi-arrow-left"></i> Kembali ke Daftar User
+                <i class="bi bi-arrow-left"></i> Kembali ke Daftar Pasien
             </a>
         </div>
     </div>

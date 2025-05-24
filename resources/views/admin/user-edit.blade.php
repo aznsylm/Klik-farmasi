@@ -5,8 +5,8 @@
 @section('content')
 <div class="container py-5">
     <div class="text-center mb-4">
-        <h1 class="fw-bold">Edit User</h1>
-        <p class="text-muted">Perbarui informasi pengguna di sini.</p>
+        <h1 class="fw-bold">Edit Pasien</h1>
+        <p class="text-muted">Perbarui informasi pasien di sini.</p>
     </div>
 
     <div class="row justify-content-center">
@@ -50,16 +50,12 @@
                             <label for="usia" class="form-label">Usia:</label>
                             <input type="number" id="usia" name="usia" value="{{ old('usia', $user->usia) }}" class="form-control" min="1" max="120" required>
                         </div>
-                        <div class="mb-3">
-                            <label for="role" class="form-label">Role:</label>
-                            <input type="text" id="role" name="role" value="{{ $user->role }}" class="form-control" readonly>
-                        </div>
                         <div class="mb-3 position-relative">
                             <label for="password" class="form-label">Password (Kosongkan jika tidak ingin mengubah):</label>
                             <input type="password" id="passwordEdit" name="password" class="form-control" minlength="8" autocomplete="new-password">
-                            <span class="position-absolute top-50 end-0 translate-middle-y me-3" style="cursor:pointer;" onclick="togglePassword('passwordEdit', this)">
-                                <i class="bi bi-eye-slash" id="iconPasswordEdit"></i>
-                            </span>
+                            <i class="fas fa-eye-slash password-toggle"
+                            style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #6c757d;"
+                            onclick="togglePassword('passwordEdit', this)"></i>
                         </div>
                         <div class="text-center">
                             <button type="submit" class="btn btn-success">
@@ -76,25 +72,26 @@
     </div>
 </div>
 
+<style>
+    .card { border-radius: 15px; }
+    .btn { transition: all 0.3s ease; }
+    .btn:hover { transform: scale(1.05); }
+</style>
+
 <script>
-function togglePassword(inputId, iconSpan) {
-    const input = document.getElementById(inputId);
-    const icon = iconSpan.querySelector('i');
-    if (input.type === "password") {
-        input.type = "text";
-        icon.classList.remove('bi-eye-slash');
-        icon.classList.add('bi-eye');
-    } else {
-        input.type = "password";
-        icon.classList.remove('bi-eye');
-        icon.classList.add('bi-eye-slash');
+    function togglePassword(inputId, iconElement) {
+        const input = document.getElementById(inputId);
+        if (input.type === 'password') {
+            input.type = 'text';
+            iconElement.classList.remove('fa-eye-slash');
+            iconElement.classList.add('fa-eye');
+        } else {
+            input.type = 'password';
+            iconElement.classList.remove('fa-eye');
+            iconElement.classList.add('fa-eye-slash');
+        }
     }
-}
 </script>
 
-<style>
-.card { border-radius: 15px; }
-.btn { transition: all 0.3s ease; }
-.btn:hover { transform: scale(1.05); }
-</style>
+
 @endsection

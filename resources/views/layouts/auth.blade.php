@@ -225,27 +225,6 @@
             text-decoration: underline;
         }
 
-        .logo {
-            width: 80px;
-            height: 80px;
-            background: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        .logo img {
-            max-width: 60px;
-            max-height: 60px;
-        }
-
-        .hidden {
-            display: none;
-        }
-
         .alert {
             padding: 15px;
             border-radius: 12px;
@@ -334,7 +313,8 @@
     @yield('extra_styles')
 </head>
 <body>
-    <div class="container">
+    <div class="container" style="position: relative;">
+
         <!-- Form Section -->
         <div class="form-section">
             @yield('content')

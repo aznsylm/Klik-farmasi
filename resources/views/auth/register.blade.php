@@ -6,7 +6,6 @@
     <!-- Register Form -->
     <div id="registerForm">
         <h2 class="form-title">Daftar Akun</h2>
-        <p class="form-subtitle">Buat akun baru untuk memulai perjalanan kesehatan Anda</p>
         
         @if($errors->any())
             <div class="alert alert-danger">
@@ -85,7 +84,7 @@
 @endsection
 
 @section('hero_title', 'Daftar')
-@section('hero_subtitle', 'Bergabunglah dengan ribuan pengguna lainnya untuk pengalaman kesehatan yang lebih baik')
+@section('hero_subtitle', 'Bergabunglah dengan pengguna lainnya untuk pengalaman kesehatan yang lebih baik')
 
 @section('extra_styles')
 <style>

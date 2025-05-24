@@ -3,6 +3,13 @@
 @section('title', 'Login')
 
 @section('content')
+
+    <!-- Tombol Kembali -->
+    <a href="{{ url('/') }}" 
+    style="position: absolute; top: 24px; left: 24px; z-index: 10; display: flex; align-items: center; gap: 6px; text-decoration: none; color: #0b5e91; font-weight: 600; font-size: 1rem;">
+        <i class="fas fa-arrow-left"></i> Halaman Utama
+    </a>
+
     <!-- Login Form -->
     <div id="loginForm">
         

@@ -42,7 +42,6 @@ class AdminController extends Controller
         return view('admin.user-detail', compact('user'));
     }
     
-
     public function edit($id)
     {
         $user = User::findOrFail($id);
@@ -56,7 +55,7 @@ class AdminController extends Controller
     {
         $user = User::findOrFail($id);
     
-        $request->validate([
+        $rules = [
             'name' => 'required|string|max:100',
             'email' => 'required|email|max:255|unique:users,email,' . $id,
             'nomor_hp' => [
@@ -72,7 +71,14 @@ class AdminController extends Controller
                 'regex:/[a-zA-Z]/',
                 'regex:/[0-9]/'
             ],
-        ], [
+        ];
+    
+        // Hanya super admin yang bisa mengubah role
+        if (auth()->user()->role === 'super_admin') {
+            $rules['role'] = 'required|in:pasien,admin,super_admin';
+        }
+    
+        $request->validate($rules, [
             'nomor_hp.regex' => 'Nomor HP harus diawali 08 dan 10-13 digit, contoh: 081255693035',
         ]);
     
@@ -82,9 +88,13 @@ class AdminController extends Controller
             $data['password'] = \Hash::make($request->password);
         }
     
+        // Simpan role jika super admin
+        if (auth()->user()->role === 'super_admin' && $request->filled('role')) {
+            $data['role'] = $request->role;
+        }
+    
         $user->update($data);
     
-        // Redirect sesuai role
         if (auth()->user()->role === 'super_admin') {
             return redirect()->route('superadmin.users')->with('success', 'User berhasil diperbarui.');
         }
@@ -94,10 +104,12 @@ class AdminController extends Controller
     public function destroy($id)
     {
         $user = User::findOrFail($id);
+        $role = $user->role;
         $user->delete();
     
         if (auth()->user()->role === 'super_admin') {
-            return redirect()->route('superadmin.users')->with('success', 'User berhasil dihapus.');
+            $msg = $role === 'admin' ? 'Admin berhasil dihapus.' : 'Pasien berhasil dihapus.';
+            return redirect()->route('superadmin.users', ['role' => $role])->with('success', $msg);
         }
         return redirect()->route('admin.users')->with('success', 'User berhasil dihapus.');
     }

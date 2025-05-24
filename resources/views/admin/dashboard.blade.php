@@ -13,14 +13,14 @@
 
     <!-- Cards -->
     <div class="row justify-content-center g-4">
-        <!-- Card Kelola Data User -->
+        <!-- Card Kelola Data Pasien -->
         <div class="col-12 col-md-6 col-lg-4">
             <div class="card shadow border-0 h-100">
                 <div class="card-body text-center">
                     <div class="icon mb-3 text-primary">
                         <i class="bi bi-people-fill fs-1"></i>
                     </div>
-                    <h5 class="card-title fw-bold">Kelola Data User</h5>
+                    <h5 class="card-title fw-bold">Kelola Data Pasien</h5>
                     <p class="card-text text-muted">Lihat dan kelola data pengguna di sistem.</p>
                     <a href="{{ route('admin.users') }}" class="btn btn-primary w-100">
                         <i class="bi bi-people-fill me-2"></i> Kelola Data User
