@@ -3,8 +3,45 @@
 @section('title', 'Pengingat Minum Obat')
 
 @section('content')
+    <style>
+        .form-control:focus {
+            border-color: #0b5e91;
+            box-shadow: 0 0 0 0.2rem rgba(11, 94, 145, 0.25);
+        }
+        
+        .form-select:focus {
+            border-color: #0b5e91;
+            box-shadow: 0 0 0 0.2rem rgba(11, 94, 145, 0.25);
+        }
+        
+        .text-primary {
+            color: #0b5e91 !important;
+        }
+        
+        .btn-primary {
+            background-color: #0b5e91;
+            border-color: #0b5e91;
+        }
+        
+        .btn-primary:hover {
+            background-color: #094d7a;
+            border-color: #094d7a;
+        }
+        
+        .btn-outline-primary {
+            color: #0b5e91;
+            border-color: #0b5e91;
+        }
+        
+        .btn-outline-primary:hover {
+            background-color: #0b5e91;
+            border-color: #0b5e91;
+            color: white;
+        }
+    </style>
+
     {{-- Form Pengingat Minum Obat --}}
-    <section class="py-5 dotted-bg">
+    <section class="py-5" style="background-color: #0b5e91">
         <div class="container px-4">
             <!-- Form Pengingat -->
             <div class="card border-0 rounded-4 shadow-lg">
@@ -29,7 +66,7 @@
                                     <!-- Data Pasien Section -->
                                     <div class="col-12">
                                         <div class="d-flex align-items-center mb-3">
-                                            <div class="feature bg-primary text-white rounded-circle me-3">
+                                            <div class="feature text-white rounded-circle me-3" style="background-color: #0B5E91;">
                                                 <i class="bi bi-person"></i>
                                             </div>
                                             <h3 class="fw-bold mb-0">Data Pasien</h3>
@@ -81,7 +118,7 @@
                                     <!-- Data Medis Section -->
                                     <div class="col-12 mt-4">
                                         <div class="d-flex align-items-center mb-3">
-                                            <div class="feature bg-primary text-white rounded-circle me-3">
+                                            <div class="feature text-white rounded-circle me-3" style="background-color: #0B5E91;">
                                                 <i class="bi bi-heart-pulse"></i>
                                             </div>
                                             <h3 class="fw-bold mb-0">Data Medis</h3>
@@ -115,7 +152,7 @@
                                     <!-- Daftar Obat Section -->
                                     <div class="col-12 mt-4">
                                         <div class="d-flex align-items-center mb-3">
-                                            <div class="feature bg-primary text-white rounded-circle me-3">
+                                            <div class="feature text-white rounded-circle me-3" style="background-color: #0B5E91;">
                                                 <i class="bi bi-capsule"></i>
                                             </div>
                                             <h3 class="fw-bold mb-0">Daftar Obat</h3>
@@ -127,7 +164,7 @@
                                     <div class="col-12">
                                         <div id="obatContainer" class="mb-4"></div>
                                         <div class="d-grid gap-2 col-md-6 mx-auto mb-4">
-                                            <button type="button" class="btn btn-primary btn-lg" id="tambahObat">
+                                            <button type="button" class="btn btn-khusus btn-lg" id="tambahObat">
                                                 <i class="bi bi-plus-circle me-2"></i> Tambah Obat
                                             </button>
                                         </div>
@@ -136,7 +173,7 @@
                                     <!-- Button Submit -->
                                     <div class="col-12 mt-4">
                                         @guest
-                                            <button type="button" id="submitButton" class="btn btn-primary btn-lg btn-submit w-100 py-3">
+                                            <button type="button" id="submitButton" class="btn btn-khusus btn-lg btn-submit w-100 py-3">
                                                 <i class="bi bi-box-arrow-in-right me-2"></i> Submit
                                             </button>
                                         @endguest

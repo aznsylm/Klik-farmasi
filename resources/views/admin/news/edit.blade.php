@@ -1,8 +1,16 @@
-{{-- filepath: resources/views/admin/news/edit.blade.php --}}
-@extends('layouts.app')
+@extends('layouts.admin')
+
+@section('title', 'Edit Berita')
 
 @section('content')
-<div class="container">
+<div class="container py-5">
+    <!-- Tombol Kembali -->
+    <div class="back-button">
+        <a href="{{ route('admin.news.index') }}" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Kembali ke Daftar Berita
+        </a>
+    </div>
+
     <h1 class="mb-4">Edit Berita</h1>
     <form action="{{ route('admin.news.update', $news) }}" method="POST">
         @csrf
@@ -23,14 +31,9 @@
             <label for="published_at" class="form-label">Waktu</label>
             <input type="datetime-local" name="published_at" id="published_at" class="form-control" value="{{ $news->published_at->format('Y-m-d\TH:i') }}" required>
         </div>
-        <div class="d-flex justify-content-between">
-            <a href="{{ url()->previous() }}" class="btn btn-secondary">
-                <i class="bi bi-arrow-left"></i> Kembali
-            </a>
-            <button type="submit" class="btn btn-success">
-                <i class="bi bi-save"></i> Simpan Perubahan
-            </button>
-        </div>
+        <button type="submit" class="btn btn-success">
+            <i class="bi bi-save"></i> Simpan Perubahan
+        </button>
     </form>
 </div>
 @endsection

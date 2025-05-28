@@ -1,10 +1,16 @@
-<!-- filepath: resources/views/admin/testimonials/create.blade.php -->
-@extends('layouts.app')
+@extends('layouts.admin')
 
-@section('title', 'Tambah Testimonial')
+@section('title', 'Tambah Testimoni')
 
 @section('content')
 <div class="container py-5">
+    <!-- Tombol Kembali -->
+    <div class="back-button">
+        <a href="{{ route('admin.testimonials.index') }}" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Kembali ke Daftar Testimonial
+        </a>
+    </div>
+
     <h1 class="fw-bold mb-4">Tambah Testimonial</h1>
 
     <form action="{{ route('admin.testimonials.store') }}" method="POST">
@@ -18,7 +24,6 @@
             <input type="text" class="form-control" id="name" name="name" value="{{ old('name') }}" required>
         </div>
         <button type="submit" class="btn btn-primary">Simpan</button>
-        <a href="{{ route('admin.testimonials.index') }}" class="btn btn-secondary">Batal</a>
     </form>
 </div>
 @endsection

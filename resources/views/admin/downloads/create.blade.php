@@ -1,10 +1,17 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('title', 'Tambah Unduhan')
 
 @section('content')
 <div class="container py-5">
-    <h1 class="fw-bold mb-4 text-center">Tambah Unduhan</h1>
+    <!-- Tombol Kembali -->
+    <div class="back-button">
+        <a href="{{ route('admin.downloads.index') }}" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Kembali ke Daftar Unduhan
+        </a>
+    </div>
+
+    <h1 class="fw-bold mb-4">Tambah Unduhan</h1>
     <form action="{{ route('admin.downloads.store') }}" method="POST" enctype="multipart/form-data" class="shadow p-4 rounded bg-light">
         @csrf
         <div class="mb-3">
@@ -31,10 +38,7 @@
             <label for="image" class="form-label fw-bold">Gambar (Masukkan Gambar Dengan Format *WebP)</label>
             <input type="file" name="image" id="image" class="form-control" accept=".webp">
         </div>
-        <div class="d-flex justify-content-between">
-            <a href="{{ route('admin.downloads.index') }}" class="btn btn-secondary">
-                <i class="bi bi-arrow-left"></i> Kembali
-            </a>
+        <div class="text-start">
             <button type="submit" class="btn btn-success">
                 <i class="bi bi-save"></i> Simpan
             </button>

@@ -1,10 +1,17 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('title', 'Edit Unduhan')
 
 @section('content')
 <div class="container py-5">
-    <h1 class="fw-bold mb-4 text-center">Edit Unduhan</h1>
+    <!-- Tombol Kembali -->
+    <div class="back-button">
+        <a href="{{ route('admin.downloads.index') }}" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Kembali ke Daftar Unduhan
+        </a>
+    </div>
+
+    <h1 class="fw-bold mb-4">Edit Unduhan</h1>
     <form action="{{ route('admin.downloads.update', $download->id) }}" method="POST" enctype="multipart/form-data" class="shadow p-4 rounded bg-light">
         @csrf
         @method('PUT')
@@ -38,10 +45,7 @@
                 </div>
             @endif
         </div>
-        <div class="d-flex justify-content-between">
-            <a href="{{ route('admin.downloads.index') }}" class="btn btn-secondary">
-                <i class="bi bi-arrow-left"></i> Kembali
-            </a>
+        <div class="text-start">
             <button type="submit" class="btn btn-success">
                 <i class="bi bi-save"></i> Simpan Perubahan
             </button>

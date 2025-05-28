@@ -1,8 +1,16 @@
-{{-- filepath: resources/views/admin/news/create.blade.php --}}
-@extends('layouts.app')
+@extends('layouts.admin')
+
+@section('title', 'Tambah Berita')
 
 @section('content')
 <div class="container py-5">
+    <!-- Tombol Kembali -->
+    <div class="back-button">
+        <a href="{{ route('admin.news.index') }}" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Kembali ke Daftar Berita
+        </a>
+    </div>
+
     <h1 class="mb-4">Tambah Berita</h1>
     <form action="{{ route('admin.news.store') }}" method="POST">
         @csrf

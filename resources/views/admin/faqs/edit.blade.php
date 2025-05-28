@@ -1,8 +1,16 @@
-{{-- filepath: resources/views/admin/faqs/edit.blade.php --}}
-@extends('layouts.app')
+@extends('layouts.admin')
+
+@section('title', 'Edit FAQ')
 
 @section('content')
-<div class="container">
+<div class="container py-5">
+    <!-- Tombol Kembali -->
+    <div class="back-button">
+        <a href="{{ route('admin.faqs.index') }}" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Kembali ke Daftar FAQ
+        </a>
+    </div>
+
     <h1 class="mb-4">Edit FAQ</h1>
     <form action="{{ route('admin.faqs.update', $faq) }}" method="POST">
         @csrf
@@ -22,14 +30,9 @@
             <label for="answer" class="form-label">Jawaban</label>
             <textarea name="answer" id="answer" class="form-control" rows="5" required>{{ $faq->answer }}</textarea>
         </div>
-        <div class="d-flex justify-content-between">
-            <a href="{{ url()->previous() }}" class="btn btn-secondary">
-                <i class="bi bi-arrow-left"></i> Kembali
-            </a>
-            <button type="submit" class="btn btn-success">
-                <i class="bi bi-save"></i> Simpan Perubahan
-            </button>
-        </div>
+        <button type="submit" class="btn btn-success">
+            <i class="bi bi-save"></i> Simpan Perubahan
+        </button>
     </form>
 </div>
 @endsection

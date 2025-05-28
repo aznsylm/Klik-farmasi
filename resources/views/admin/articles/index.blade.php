@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('title', 'Kelola Artikel')
 
@@ -25,8 +25,8 @@
         <table class="table table-bordered table-hover">
             <thead class="table-dark">
                 <tr>
-                    <th>ID</th>
-                    <th>Gambar</th> <!-- Kolom Gambar -->
+                    <th>No</th>
+                    <th>Gambar</th>
                     <th>Kategori</th>
                     <th>Slug</th>
                     <th>Judul</th>
@@ -38,7 +38,7 @@
             <tbody>
                 @foreach ($articles as $article)
                     <tr>
-                        <td>{{ $article->id }}</td>
+                        <td>{{ ($articles->currentPage() - 1) * $articles->perPage() + $loop->iteration }}</td>
                         <td>
                             @if ($article->image)
                                 <img src="{{ asset('storage/' . $article->image) }}" alt="{{ $article->title }}" class="img-thumbnail" style="max-width: 100px;">
@@ -67,11 +67,6 @@
 </div>
 
 <style>
-    /* Font Family */
-    body {
-        font-family: 'Poppins', sans-serif;
-    }
-
     /* Tabel */
     .table {
         border-radius: 10px;
@@ -99,34 +94,20 @@
     }
 
     /* Tombol */
-    .btn-primary {
-        background-color: #007bff;
-        border: none;
+    .btn {
         transition: all 0.3s ease;
     }
 
-    .btn-primary:hover {
-        background-color: #0056b3;
-    }
-
-    .btn-warning {
-        background-color: #ffc107;
-        border: none;
-        transition: all 0.3s ease;
-    }
-
-    .btn-warning:hover {
-        background-color: #e0a800;
-    }
-
-    .btn-danger {
-        background-color: #dc3545;
-        border: none;
-        transition: all 0.3s ease;
+    .btn:hover {
+        transform: scale(1.05);
     }
 
     .btn-danger:hover {
         background-color: #a71d2a;
+    }
+
+    .btn-warning:hover {
+        background-color: #e0a800;
     }
 </style>
 @endsection

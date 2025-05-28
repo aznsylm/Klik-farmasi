@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('title', 'Kelola Berita')
 
@@ -25,7 +25,7 @@
         <table class="table table-bordered table-hover">
             <thead class="table-dark">
                 <tr>
-                    <th>ID</th>
+                    <th>No</th>
                     <th>Judul</th>
                     <th>Sumber</th>
                     <th>Link</th>
@@ -34,9 +34,9 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($news as $item)
+                @foreach ($news as $i => $item)
                     <tr>
-                        <td>{{ $item->id }}</td>
+                        <td>{{ ($news->currentPage() - 1) * $news->perPage() + $i + 1 }}</td>
                         <td>{{ $item->title }}</td>
                         <td>{{ $item->source }}</td>
                         <td>
@@ -60,11 +60,6 @@
 </div>
 
 <style>
-    /* Font */
-    body {
-        font-family: 'Poppins', sans-serif;
-    }
-
     /* Tabel */
     .table {
         border-radius: 10px;
@@ -83,37 +78,6 @@
     .table td, .table th {
         vertical-align: middle;
         text-align: center;
-    }
-
-    /* Tombol */
-    .btn-primary {
-        background-color: #007bff;
-        border: none;
-        transition: all 0.3s ease;
-    }
-
-    .btn-primary:hover {
-        background-color: #0056b3;
-    }
-
-    .btn-warning {
-        background-color: #ffc107;
-        border: none;
-        transition: all 0.3s ease;
-    }
-
-    .btn-warning:hover {
-        background-color: #e0a800;
-    }
-
-    .btn-danger {
-        background-color: #dc3545;
-        border: none;
-        transition: all 0.3s ease;
-    }
-
-    .btn-danger:hover {
-        background-color: #a71d2a;
     }
 </style>
 @endsection

@@ -79,8 +79,16 @@
         }
 
         .btn-khusus:hover {
-            background-color: #094b75;
-            color: #fff;
+            background-color: #094d7a;
+            border-color: #094d7a;
+            color: white;
+        }
+
+        .btn-khusus:focus {
+            background-color: #094d7a;
+            border-color: #094d7a;
+            color: white;
+            box-shadow: 0 0 0 0.2rem rgba(11, 94, 145, 0.25);
         }
 
         /* Styling Button WhatsApp */

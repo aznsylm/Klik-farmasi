@@ -47,6 +47,7 @@
                                     <i class="bi bi-download"></i>
                                 </a>
                             </div>
+                            <div class="download-badge">Modul</div>
                         </div>
                         <div class="download-card-content">
                             <h3 class="download-title">{{ $download->title }}</h3>

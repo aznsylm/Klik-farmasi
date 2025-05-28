@@ -1,9 +1,16 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('title', 'Tambah Artikel')
 
 @section('content')
 <div class="container py-5">
+    <!-- Tombol Kembali -->
+    <div class="back-button">
+        <a href="{{ route('admin.articles.index') }}" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Kembali ke Daftar Artikel
+        </a>
+    </div>
+
     <h1 class="fw-bold mb-4">Tambah Artikel</h1>
 
     <form action="{{ route('admin.articles.store') }}" method="POST" enctype="multipart/form-data">
@@ -42,7 +49,6 @@
             <small class="text-muted">Hanya file dengan format .webp yang diperbolehkan.</small>
         </div>
         <button type="submit" class="btn btn-primary">Simpan</button>
-        <a href="{{ route('admin.articles.index') }}" class="btn btn-secondary">Batal</a>
     </form>
 </div>
 @endsection

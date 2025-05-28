@@ -1,9 +1,16 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
-@section('title', 'Detail User')
+@section('title', 'Detail Pasien')
 
 @section('content')
     <div class="container py-5">
+        <!-- Tombol Kembali -->
+        <div class="back-button">
+            <a href="{{ route('admin.pasien') }}" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Kembali ke Daftar Pasien
+            </a>
+        </div>
+
         <div class="text-center mb-4">
             <h1 class="fw-bold">Detail Pasien</h1>
             <p class="text-muted">Informasi lengkap tentang pasien.</p>
@@ -25,13 +32,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-
-        <!-- Tombol Kembali -->
-        <div class="text-center mt-4">
-            <a href="{{ route('admin.users') }}" class="btn btn-primary">
-                <i class="bi bi-arrow-left"></i> Kembali ke Daftar Pasien
-            </a>
         </div>
     </div>
 

@@ -133,13 +133,13 @@
                         <div class="card border-0 rounded-4 shadow-sm">
                             <div class="card-body p-4">
                                 <div class="text-center mb-4">
-                                    <div class="icon-circle bg-primary text-white mx-auto mb-3">
+                                    <div class="icon-circle text-white mx-auto mb-3" style="background-color: #0b5e91">
                                         <i class="bi bi-chat-dots-fill"></i>
                                     </div>
                                     <h5 class="fw-bold">Punya Pertanyaan?</h5>
                                     <p class="text-muted mb-0">Jangan ragu untuk menghubungi kami jika Anda memiliki pertanyaan atau membutuhkan bantuan.</p>
                                 </div>
-                                <a href="mailto:support@klikfarmasi.com" class="btn btn-primary w-100 mb-3">
+                                <a href="mailto:support@klikfarmasi.com" class="btn btn-khusus w-100 mb-3">
                                     <i class="bi bi-envelope me-2"></i> Email Kami
                                 </a>
                                 <a href="https://wa.me/1234567890" class="btn btn-success w-100">

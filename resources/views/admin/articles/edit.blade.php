@@ -1,9 +1,16 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('title', 'Edit Artikel')
 
 @section('content')
 <div class="container py-5">
+    <!-- Tombol Kembali -->
+    <div class="back-button">
+        <a href="{{ route('admin.articles.index') }}" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Kembali ke Daftar Artikel
+        </a>
+    </div>
+
     <h1 class="fw-bold mb-4">Edit Artikel</h1>
 
     <form action="{{ route('admin.articles.update', $article->id) }}" method="POST" enctype="multipart/form-data">
@@ -35,7 +42,7 @@
         </div>
         <div class="mb-3">
             <label for="published_at" class="form-label">Waktu Publish</label>
-            <input type="datetime-local" class="form-control" id="published_at" name="published_at" value="{{ $article->published_at ? $article->published_at->format('Y-m-d\TH:i') : '' }}">
+            <input type="datetime-local" class="form-control" id="published_at" name="published_at" value="{{ $article->published_at ? $article->published_at->format('Y-m-d\\TH:i') : '' }}">
         </div>
         <div class="mb-3">
             <label for="image" class="form-label">Gambar</label>
@@ -45,7 +52,6 @@
             @endif
         </div>
         <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
-        <a href="{{ route('admin.articles.index') }}" class="btn btn-secondary">Batal</a>
     </form>
 </div>
 @endsection

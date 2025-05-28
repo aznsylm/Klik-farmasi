@@ -52,13 +52,14 @@ Route::middleware(['auth', \App\Http\Middleware\RoleMiddleware::class . ':admin'
         return view('admin.dashboard');
     })->name('dashboard');
 
-    // Kelola Data User
-    Route::get('/users', [AdminController::class, 'index'])->name('users');
-    Route::post('/users', [AdminController::class, 'addPasien'])->name('addPasien');
-    Route::get('/users/{id}', [AdminController::class, 'show'])->name('userDetail');
-    Route::get('/users/{id}/edit', [AdminController::class, 'edit'])->name('userEdit');
-    Route::put('/users/{id}', [AdminController::class, 'update'])->name('userUpdate');
-    Route::delete('/users/{id}', [AdminController::class, 'destroy'])->name('deleteUser');
+    // Kelola Data Pasien
+    Route::get('/pasien', [AdminController::class, 'index'])->name('pasien');
+    Route::get('/pasien/create', [AdminController::class, 'create'])->name('pasienCreate');
+    Route::post('/pasien', [AdminController::class, 'addPasien'])->name('addPasien');
+    Route::get('/pasien/{id}', [AdminController::class, 'show'])->name('pasienDetail');
+    Route::get('/pasien/{id}/edit', [AdminController::class, 'edit'])->name('pasienEdit');
+    Route::put('/pasien/{id}', [AdminController::class, 'update'])->name('pasienUpdate');
+    Route::delete('/pasien/{id}', [AdminController::class, 'destroy'])->name('deletePasien');
 
     // Kelola Artikel
     Route::resource('articles', \App\Http\Controllers\Admin\ArticleController::class);

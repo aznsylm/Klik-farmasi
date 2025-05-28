@@ -16,7 +16,7 @@
                 <li class="nav-item"><a class="nav-link px-3" href="{{ url('/') }}">Beranda</a></li>
                 <li class="nav-item"><a class="nav-link px-3" href="{{ url('/petunjuk') }}">Petunjuk Penggunaan</a></li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle d-flex align-items-center px-3" id="informasiDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link d-flex align-items-center px-3" id="informasiDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Informasi
                         <i class="bi bi-chevron-down ms-1 small"></i>
                     </a>
@@ -35,7 +35,7 @@
                 </li>
                 <li class="nav-item"><a class="nav-link px-3" href="{{ url('/tanya-jawab') }}">Tanya Jawab</a></li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle d-flex align-items-center px-3" id="unduhanDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link d-flex align-items-center px-3" id="unduhanDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Unduhan
                         <i class="bi bi-chevron-down ms-1 small"></i>
                     </a>

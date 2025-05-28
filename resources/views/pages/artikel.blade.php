@@ -12,16 +12,18 @@
                     <div class="row gx-0">
                         <div class="col-lg-6 col-xl-5 py-lg-5" data-aos="flip-left">
                             <div class="p-4 p-md-5">
-                                <div class="badge bg-primary bg-gradient rounded-pill mb-2">{{ $latestArticle->category }}</div>
-                                <div class="h2 fw-bolder">{{ $latestArticle->title }}</div>
-                                <p class="text-justify">{{ Str::words($latestArticle->summary, 20, '...') }}</p>
-                                <a href="{{ route('artikel.detail', $latestArticle->slug) }}" class="btn btn-primary mt-auto">
+                                <div class="article-category-new"><span>{{ $latestArticle->category }}</span></div>
+                                <h1 class="article-title fs-2">{{ $latestArticle->title }}</h1>
+                                <p class="article-excerpt">{{ Str::words($latestArticle->summary, 20, '...') }}</p>
+                                <a href="{{ route('artikel.detail', $latestArticle->slug) }}" class="read-more">
                                     Baca Selengkapnya <i class="bi bi-arrow-right"></i>
                                 </a>
                             </div>
                         </div>
                         <div class="col-lg-6 col-xl-7">
-                            <img src="{{ asset('storage/' . $latestArticle->image) }}" alt="Gambar Artikel" class="img-fluid h-100 w-100 object-fit-cover">
+                            <div class="article-image h-100">
+                                <img src="{{ asset('storage/' . $latestArticle->image) }}" alt="Gambar Artikel" class="img-fluid h-100 w-100 object-fit-cover">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -79,3 +81,29 @@
         </div>
     </section>
 @endsection
+
+<style>
+    .article-category-new {
+        padding-bottom: 10px;
+        z-index: 2;
+    }
+
+    .article-category-new span {
+        background-color: #0b5e91;
+        color: white;
+        padding: 6px 14px;
+        border-radius: 30px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        display: inline-block;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+ 
+    .article-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+        border-radius: 0;
+    }
+</style>

@@ -1,9 +1,16 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
-@section('title', 'Edit User')
+@section('title', 'Edit Pasien')
 
 @section('content')
 <div class="container py-5">
+    <!-- Tombol Kembali -->
+    <div class="back-button">
+        <a href="{{ route('admin.pasien') }}" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Kembali ke Daftar Pasien
+        </a>
+    </div>
+
     <div class="text-center mb-4">
         <h1 class="fw-bold">Edit Pasien</h1>
         <p class="text-muted">Perbarui informasi pasien di sini.</p>
@@ -23,7 +30,7 @@
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     @endif
-                    <form action="{{ route('admin.userUpdate', $user->id) }}" method="POST">
+                    <form action="{{ route('admin.pasienUpdate', $user->id) }}" method="POST">
                         @csrf
                         @method('PUT')
 
@@ -61,9 +68,6 @@
                             <button type="submit" class="btn btn-success">
                                 <i class="bi bi-save me-2"></i> Simpan Perubahan
                             </button>
-                            <a href="{{ route('admin.users') }}" class="btn btn-primary">
-                                <i class="bi bi-arrow-left me-2"></i> Kembali ke Daftar User
-                            </a>
                         </div>
                     </form>
                 </div>
@@ -92,6 +96,4 @@
         }
     }
 </script>
-
-
 @endsection

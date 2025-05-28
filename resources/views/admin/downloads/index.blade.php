@@ -1,18 +1,17 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
-@section('title', 'Daftar Unduhan')
+@section('title', 'Kelola Unduhan')
 
 @section('content')
 <div class="container py-5">
     <div class="text-center mb-4">
         <h1 class="fw-bold">Daftar Unduhan</h1>
-        <p class="text-muted">Kelola data unduhan dengan mudah di halaman ini.</p>
     </div>
 
     <div class="d-flex justify-content-between align-items-center mb-4">
         <!-- Tombol Tambah Unduhan -->
         <a href="{{ route('admin.downloads.create') }}" class="btn btn-primary">
-            <i class="bi bi-plus-circle"></i> Tambah Unduhan
+             Tambah Unduhan
         </a>
 
         <!-- Tombol Kembali ke Dashboard -->
@@ -34,7 +33,7 @@
         <table class="table table-bordered table-hover align-middle">
             <thead class="table-dark">
                 <tr>
-                    <th>ID</th>
+                    <th>No</th>
                     <th>Judul</th>
                     <th>Deskripsi</th>
                     <th>Kategori</th>
@@ -46,7 +45,7 @@
             <tbody>
                 @foreach ($downloads as $download)
                     <tr>
-                        <td>{{ $download->id }}</td>
+                        <td>{{ ($downloads->currentPage() - 1) * $downloads->perPage() + $loop->iteration }}</td>
                         <td>{{ $download->title }}</td>
                         <td>{{ $download->description }}</td>
                         <td>{{ $download->category }}</td>
@@ -99,41 +98,6 @@
     .table td, .table th {
         vertical-align: middle;
         text-align: center;
-    }
-
-    .btn-primary {
-        background-color: #007bff;
-        border: none;
-        transition: 0.3s ease;
-    }
-
-    .btn-primary:hover {
-        background-color: #0056b3;
-    }
-
-    .btn-warning {
-        background-color: #ffc107;
-        border: none;
-        transition: 0.3s ease;
-    }
-
-    .btn-warning:hover {
-        background-color: #e0a800;
-    }
-
-    .btn-danger {
-        background-color: #dc3545;
-        border: none;
-        transition: 0.3s ease;
-    }
-
-    .btn-danger:hover {
-        background-color: #a71d2a;
-    }
-
-    .btn-outline-primary:hover {
-        background-color: #0d6efd;
-        color: #fff;
     }
 </style>
 @endsection

@@ -1,7 +1,16 @@
-@extends('layouts.app')
+@extends('layouts.admin')
+
+@section('title', 'Tambah FAQ')
 
 @section('content')
 <div class="container py-5">
+    <!-- Tombol Kembali -->
+    <div class="back-button">
+        <a href="{{ route('admin.faqs.index') }}" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Kembali ke Daftar FAQ
+        </a>
+    </div>
+
     <h1 class="mb-4">Tambah FAQ</h1>
     <form action="{{ route('admin.faqs.store') }}" method="POST">
         @csrf

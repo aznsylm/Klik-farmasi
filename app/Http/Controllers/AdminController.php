@@ -30,7 +30,12 @@ class AdminController extends Controller
         if (auth()->user()->role === 'super_admin') {
             return view('superadmin.users', compact('users', 'role'));
         }
-        return view('admin.users', compact('users'));
+        return view('admin.pasien.index', compact('users'));
+    }
+
+    public function create()
+    {
+        return view('admin.pasien.create');
     }
 
     public function show($id)
@@ -39,7 +44,7 @@ class AdminController extends Controller
         if (auth()->user()->role === 'super_admin') {
             return view('superadmin.user-detail', compact('user'));
         }
-        return view('admin.user-detail', compact('user'));
+        return view('admin.pasien.detail', compact('user'));
     }
     
     public function edit($id)
@@ -48,7 +53,7 @@ class AdminController extends Controller
         if (auth()->user()->role === 'super_admin') {
             return view('superadmin.user-edit', compact('user'));
         }
-        return view('admin.user-edit', compact('user'));
+        return view('admin.pasien.edit', compact('user'));
     }
 
     public function update(Request $request, $id)
@@ -98,7 +103,7 @@ class AdminController extends Controller
         if (auth()->user()->role === 'super_admin') {
             return redirect()->route('superadmin.users')->with('success', 'User berhasil diperbarui.');
         }
-        return redirect()->route('admin.users')->with('success', 'User berhasil diperbarui.');
+        return redirect()->route('admin.pasien')->with('success', 'Pasien berhasil diperbarui.');
     }
 
     public function destroy($id)
@@ -111,7 +116,7 @@ class AdminController extends Controller
             $msg = $role === 'admin' ? 'Admin berhasil dihapus.' : 'Pasien berhasil dihapus.';
             return redirect()->route('superadmin.users', ['role' => $role])->with('success', $msg);
         }
-        return redirect()->route('admin.users')->with('success', 'User berhasil dihapus.');
+        return redirect()->route('admin.pasien')->with('success', 'Pasien berhasil dihapus.');
     }
 
     public function addAdmin(Request $request)
@@ -173,11 +178,6 @@ class AdminController extends Controller
             'role' => 'pasien',
         ]);
     
-        // Redirect sesuai asal request
-        if (auth()->user()->role === 'admin') {
-            return redirect()->route('admin.users')->with('success', 'Pasien berhasil ditambahkan!');
-        } else {
-            return back()->with('success', 'Pasien baru berhasil ditambahkan!');
-        }
+        return redirect()->route('admin.pasien')->with('success', 'Pasien berhasil ditambahkan!');
     } 
 }
