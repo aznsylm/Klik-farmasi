@@ -540,6 +540,22 @@
             color: white;
         }
 
+        .motivation-banner {
+            background: linear-gradient(90deg, #0b5e91 0%, #38b000 100%);
+            border-radius: 18px;
+            padding: 32px 24px;
+            color: #fff;
+            text-align: center;
+            margin-bottom: 32px;
+            box-shadow: 0 4px 24px rgba(11,94,145,0.08);
+        }
+        .motivation-text {
+            font-size: 1.25rem;
+            font-style: italic;
+            font-weight: 500;
+            margin: 0;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .header-info h1 {

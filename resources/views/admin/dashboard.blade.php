@@ -1,11 +1,35 @@
 @extends('layouts.admin')
 
 @section('content')
-    <!-- Motivation Banner -->
-    <div class="motivation-banner">
-        <p class="motivation-text">
-            "Semangat membantu pasien untuk hidup lebih sehat dan meningkatkan kualitas hidup mereka."
-        </p>
+    <!-- Motivation Banner Slider -->
+    <div id="motivationCarousel" class="carousel slide motivation-banner mb-4" data-bs-ride="carousel" data-bs-interval="3000">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <p class="motivation-text">
+                    "Menjadi tenaga kesehatan adalah panggilan hati untuk terus memberi harapan dan kehidupan bagi setiap pasien."
+                </p>
+            </div>
+            <div class="carousel-item">
+                <p class="motivation-text">
+                    "Setiap senyum pasien yang sembuh adalah hadiah terbesar bagi perjuangan kita di dunia kesehatan."
+                </p>
+            </div>
+            <div class="carousel-item">
+                <p class="motivation-text">
+                    "Kesembuhan pasien adalah hasil dari kerja keras, ketulusan, dan semangat pantang menyerah tenaga kesehatan."
+                </p>
+            </div>
+            <div class="carousel-item">
+                <p class="motivation-text">
+                    "Tenaga kesehatan bukan hanya profesi, tapi juga bentuk cinta kasih untuk membantu sesama."
+                </p>
+            </div>
+            <div class="carousel-item">
+                <p class="motivation-text">
+                    "Setiap tindakan kecil yang kita lakukan hari ini, bisa menjadi perubahan besar bagi kehidupan pasien esok hari."
+                </p>
+            </div>
+        </div>
     </div>
     <!-- Features Grid -->
     <div class="features-grid">
