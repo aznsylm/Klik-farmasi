@@ -6,7 +6,11 @@
     <!-- Artikel Terbaru -->
     <section class="py-5">
         <div class="container px-5">
-            <h1 class="fw-bolder mb-5">Artikel Terbaru</h1>
+            <h2 class="fw-bolder mb-3" style="color: #0b5e91;">Artikel Terbaru</h2>
+            <p class="lead text-muted mx-auto" style="font-family: 'Open Sans', sans-serif; margin: 0 auto;">Informasi kesehatan terkini untuk Anda</p>
+            <div class="d-flex mt-3 mb-5">
+                <div style="width: 80px; height: 4px; background: linear-gradient(90deg, #0b5e91, #baa971); border-radius: 2px;"></div>
+            </div>
             @if ($latestArticle)
                 <div class="card border-0 shadow rounded-3 overflow-hidden mb-4">
                     <div class="row gx-0">
@@ -39,8 +43,11 @@
             <div class="row gx-5 justify-content-center">
                 <div class="col-lg-8 col-xl-6 mb-5" data-aos="zoom-in-up">
                     <div class="text-center">
-                        <h2 class="fw-bolder">Artikel Lainnya</h2>
-                        <h4 class="text-muted" style="font-family: 'Open Sans', sans-serif; font-size: 15px;">Temukan informasi kesehatan terbaru dan tips bermanfaat untuk hidup sehat.</h4>
+                        <h2 class="fw-bolder mb-3" style="color: #0b5e91;">Artikel Lainnya</h2>
+                        <p class="lead text-muted mx-auto" style="font-family: 'Open Sans', sans-serif; max-width: 700px; margin: 0 auto;">Temukan informasi kesehatan terbaru dan tips bermanfaat untuk hidup sehat.</p>
+                        <div class="d-flex justify-content-center mt-3">
+                            <div style="width: 80px; height: 4px; background: linear-gradient(90deg, #0b5e91, #baa971); border-radius: 2px;"></div>
+                        </div>
                     </div>
                 </div>
             </div>

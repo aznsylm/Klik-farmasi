@@ -7,10 +7,13 @@
         <div class="container px-4">
             <!-- Header Section -->
             <div class="text-center mb-5">
-                <h1 class="fw-bolder">Pertanyaan yang Sering Diajukan</h1>
-                <p class="text-muted mx-auto" style="max-width: 700px;">
+                <h2 class="fw-bolder mb-3" style="color: #0b5e91;">Pertanyaan yang Sering Diajukan</h2>
+                <p class="lead text-muted mx-auto" style="font-family: 'Open Sans', sans-serif; max-width: 700px; margin: 0 auto;">
                     Temukan jawaban untuk pertanyaan umum tentang hipertensi dan pengobatannya
                 </p>
+                <div class="d-flex justify-content-center mt-3">
+                    <div style="width: 80px; height: 4px; background: linear-gradient(90deg, #0b5e91, #baa971); border-radius: 2px;"></div>
+                </div>
             </div>
 
             <div class="row gx-5">
@@ -96,7 +99,7 @@
                     <div class="still-have-questions text-center p-4 rounded-4">
                         <h3 class="fw-bold mb-3">Masih Punya Pertanyaan?</h3>
                         <p class="mb-4">Jika Anda tidak menemukan jawaban yang Anda cari, jangan ragu untuk menghubungi kami.</p>
-                        <a href="mailto:support@klikfarmasi.com" class="btn btn-khusus">
+                        <a href="mailto:klikfarmasi.official@gmail.com" class="btn btn-khusus">
                             <i class="bi bi-envelope me-2"></i> Hubungi Kami
                         </a>
                     </div>
@@ -139,7 +142,7 @@
                                     <h5 class="fw-bold">Punya Pertanyaan?</h5>
                                     <p class="text-muted mb-0">Jangan ragu untuk menghubungi kami jika Anda memiliki pertanyaan atau membutuhkan bantuan.</p>
                                 </div>
-                                <a href="mailto:support@klikfarmasi.com" class="btn btn-khusus w-100 mb-3">
+                                <a href="mailto:klikfarmasi.official@gmail.com" class="btn btn-khusus w-100 mb-3">
                                     <i class="bi bi-envelope me-2"></i> Email Kami
                                 </a>
                                 <a href="https://wa.me/1234567890" class="btn btn-success w-100">
@@ -153,13 +156,13 @@
                                     <a class="social-icon" href="https://wa.me/1234567890" target="_blank">
                                         <i class="bi bi-whatsapp"></i>
                                     </a>
-                                    <a class="social-icon" href="https://instagram.com/klikfarmasi" target="_blank">
+                                    <a class="social-icon" href="https://www.instagram.com/klikfarmasi.official/" target="_blank">
                                         <i class="bi bi-instagram"></i>
                                     </a>
-                                    <a class="social-icon" href="https://tiktok.com/@klikfarmasi" target="_blank">
+                                    <a class="social-icon" href="https://www.tiktok.com/@klikfarmasi.official" target="_blank">
                                         <i class="bi bi-tiktok"></i>
                                     </a>
-                                    <a class="social-icon" href="mailto:support@klikfarmasi.com">
+                                    <a class="social-icon" href="mailto:klikfarmasi.official@gmail.com">
                                         <i class="bi bi-envelope"></i>
                                     </a>
                                 </div>

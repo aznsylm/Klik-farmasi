@@ -46,9 +46,6 @@
             <!-- Form Pengingat -->
             <div class="card border-0 rounded-4 shadow-lg">
                 <div class="card-header text-white text-center border-0 rounded-top-4 py-5 position-relative header-custom">
-                    <div class="header-icon">
-                        <i class="bi bi-alarm"></i>
-                    </div>
                     <h1 class="display-5 fw-bold mb-2 mt-3">Pengingat Minum Obat</h1>
                     <p class="mb-0" style="font-family: 'Open Sans', sans-serif; font-size: 22px; color: #fff;">Isi formulir di bawah ini untuk membuat pengingat minum obat</p>
                     <div class="header-shapes">

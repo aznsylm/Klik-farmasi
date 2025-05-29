@@ -7,10 +7,13 @@
     <div class="container px-4">
         <!-- Header Section -->
         <div class="text-center mb-5">
-            <h1 class="fw-bolder" data-aos="fade-up">Semua Berita</h1>
-            <p class="text-muted mx-auto" style="max-width: 700px;" data-aos="fade-up" data-aos-delay="100">
+            <h2 class="fw-bolder mb-3" style="color: #0b5e91;" data-aos="fade-up">Semua Berita</h2>
+            <p class="lead text-muted mx-auto" style="font-family: 'Open Sans', sans-serif; max-width: 700px; margin: 0 auto;" data-aos="fade-up" data-aos-delay="100">
                 Temukan berita terbaru dan informasi terkini seputar kesehatan dan hipertensi di sini berdasarkan sumber-sumber terpercaya.
             </p>
+            <div class="d-flex justify-content-center mt-3" data-aos="fade-up" data-aos-delay="150">
+                <div style="width: 80px; height: 4px; background: linear-gradient(90deg, #0b5e91, #baa971); border-radius: 2px;"></div>
+            </div>
         </div>
 
         <!-- News Cards -->

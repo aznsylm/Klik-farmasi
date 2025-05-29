@@ -29,10 +29,13 @@
 
         <!-- Header Section -->
         <div class="text-center mb-5">
-            <h1 class="fw-bold">Modul Informasi Hipertensi</h1>
-            <p class="text-muted mx-auto" style="max-width: 700px;">
+            <h2 class="fw-bolder mb-3" style="color: #0b5e91;">Modul Informasi Hipertensi</h2>
+            <p class="lead text-muted mx-auto" style="font-family: 'Open Sans', sans-serif; max-width: 700px; margin: 0 auto;">
                 Dapatkan materi edukasi modul tentang hipertensi untuk meningkatkan kesadaran dan kesehatan Anda.
             </p>
+            <div class="d-flex justify-content-center mt-3">
+                <div style="width: 80px; height: 4px; background: linear-gradient(90deg, #0b5e91, #baa971); border-radius: 2px;"></div>
+            </div>
         </div>
 
         <!-- Download Cards -->

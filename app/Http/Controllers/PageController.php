@@ -15,7 +15,7 @@ class PageController extends Controller
     {
         // Ambil semua artikel dari database
         $articles = Article::latest()->take(3)->get();
-        $testimonials = Testimonial::latest()->take(3)->get();
+        $testimonials = Testimonial::latest()->get();
 
         // Kirim data ke view
         return view('pages.beranda', compact('articles', 'testimonials'));
@@ -40,8 +40,19 @@ class PageController extends Controller
     {
         // Cari artikel berdasarkan slug
         $article = Article::where('slug', $slug)->firstOrFail();
+        
+        // Ambil artikel terkait berdasarkan kategori yang sama
+        $relatedArticles = Article::where('category', $article->category)
+            ->where('id', '!=', $article->id)
+            ->latest()
+            ->take(3)
+            ->get();
+        
+        // Ambil artikel sebelumnya dan selanjutnya untuk navigasi
+        $previousArticle = Article::where('id', '<', $article->id)->orderBy('id', 'desc')->first();
+        $nextArticle = Article::where('id', '>', $article->id)->orderBy('id', 'asc')->first();
     
-        return view('pages.artikel-detail', compact('article'));
+        return view('pages.artikel-detail', compact('article', 'relatedArticles', 'previousArticle', 'nextArticle'));
     }
 
     public function tanyaJawab() {

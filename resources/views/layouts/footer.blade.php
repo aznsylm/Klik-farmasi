@@ -12,13 +12,13 @@
                     <a href="https://wa.me/6281234567890" class="footer-social-icon" target="_blank">
                         <i class="bi bi-whatsapp"></i>
                     </a>
-                    <a href="https://instagram.com/klikfarmasi" class="footer-social-icon" target="_blank">
+                    <a href="https://www.instagram.com/klikfarmasi.official/" class="footer-social-icon" target="_blank">
                         <i class="bi bi-instagram"></i>
                     </a>
-                    <a href="https://tiktok.com/@klikfarmasi" class="footer-social-icon" target="_blank">
+                    <a href="https://www.tiktok.com/@klikfarmasi.official" class="footer-social-icon" target="_blank">
                         <i class="bi bi-tiktok"></i>
                     </a>
-                    <a href="mailto:klikfarmasi@almaata.ac.id" class="footer-social-icon" target="_blank">
+                    <a href="mailto:klikfarmasi.official@gmail.com" class="footer-social-icon" target="_blank">
                         <i class="bi bi-envelope-fill"></i>
                     </a>
                 </div>

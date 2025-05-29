@@ -158,13 +158,13 @@
                     <div class="card border-0 rounded-4 shadow-sm mb-4">
                         <div class="card-body p-4">
                             <div class="text-center mb-4">
-                                <div class="icon-circle bg-primary text-white mx-auto mb-3">
+                                <div class="icon-circle text-white mx-auto mb-3" style="background-color: #0b5e91">
                                     <i class="bi bi-chat-dots-fill"></i>
                                 </div>
                                 <h5 class="fw-bold">Punya Pertanyaan?</h5>
                                 <p class="text-muted mb-0">Jangan ragu untuk menghubungi kami jika Anda memiliki pertanyaan atau membutuhkan bantuan.</p>
                             </div>
-                            <a href="mailto:support@klikfarmasi.com" class="btn btn-primary w-100 mb-3">
+                            <a href="mailto:klikfarmasi.official@gmail.com" class="btn btn-khusus w-100 mb-3">
                                 <i class="bi bi-envelope me-2"></i> Email Kami
                             </a>
                             <a href="https://wa.me/1234567890" class="btn btn-success w-100">
@@ -182,13 +182,13 @@
                                 <a class="social-icon" href="https://wa.me/1234567890" target="_blank">
                                     <i class="bi bi-whatsapp"></i>
                                 </a>
-                                <a class="social-icon" href="https://instagram.com/klikfarmasi" target="_blank">
+                                <a class="social-icon" href="https://www.instagram.com/klikfarmasi.official/" target="_blank">
                                     <i class="bi bi-instagram"></i>
                                 </a>
-                                <a class="social-icon" href="https://tiktok.com/@klikfarmasi" target="_blank">
+                                <a class="social-icon" href="https://www.tiktok.com/@klikfarmasi.official" target="_blank">
                                     <i class="bi bi-tiktok"></i>
                                 </a>
-                                <a class="social-icon" href="mailto:support@klikfarmasi.com">
+                                <a class="social-icon" href="mailto:klikfarmasi.official@gmail.com">
                                     <i class="bi bi-envelope"></i>
                                 </a>
                             </div>
