@@ -11,29 +11,55 @@
         </a>
     </div>
 
-    <h1 class="mb-4">Edit Berita</h1>
-    <form action="{{ route('admin.news.update', $news) }}" method="POST">
-        @csrf
-        @method('PUT')
-        <div class="mb-3">
-            <label for="title" class="form-label">Judul</label>
-            <input type="text" name="title" id="title" class="form-control" value="{{ $news->title }}" required>
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">Edit Berita</h5>
         </div>
-        <div class="mb-3">
-            <label for="source" class="form-label">Sumber</label>
-            <input type="text" name="source" id="source" class="form-control" value="{{ $news->source }}">
+        <div class="card-body">
+            @if ($errors->any())
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <ul class="mb-0">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+            
+            <form action="{{ route('admin.news.update', $news) }}" method="POST">
+                @csrf
+                @method('PUT')
+                
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="title" class="form-label">Judul</label>
+                        <input type="text" name="title" id="title" class="form-control" value="{{ old('title', $news->title) }}" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="source" class="form-label">Sumber</label>
+                        <input type="text" name="source" id="source" class="form-control" value="{{ old('source', $news->source) }}">
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="link" class="form-label">Link</label>
+                        <input type="url" name="link" id="link" class="form-control" value="{{ old('link', $news->link) }}" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="published_at" class="form-label">Waktu</label>
+                        <input type="datetime-local" name="published_at" id="published_at" class="form-control" value="{{ old('published_at', $news->published_at->format('Y-m-d\\TH:i')) }}" required>
+                    </div>
+                </div>
+                
+                <div class="text-end mt-4">
+                    <button type="submit" class="btn btn-success">
+                        <i class="bi bi-save me-1"></i> Simpan Perubahan
+                    </button>
+                </div>
+            </form>
         </div>
-        <div class="mb-3">
-            <label for="link" class="form-label">Link</label>
-            <input type="url" name="link" id="link" class="form-control" value="{{ $news->link }}" required>
-        </div>
-        <div class="mb-3">
-            <label for="published_at" class="form-label">Waktu</label>
-            <input type="datetime-local" name="published_at" id="published_at" class="form-control" value="{{ $news->published_at->format('Y-m-d\TH:i') }}" required>
-        </div>
-        <button type="submit" class="btn btn-success">
-            <i class="bi bi-save"></i> Simpan Perubahan
-        </button>
-    </form>
+    </div>
 </div>
 @endsection

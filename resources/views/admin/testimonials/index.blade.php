@@ -10,7 +10,7 @@
 
     <div class="d-flex justify-content-between align-items-center mb-4">
         <!-- Tombol Tambah Testimonial -->
-        <a href="{{ route('admin.testimonials.create') }}" class="btn btn-primary"> Tambah Testimonial
+        <a href="{{ route('admin.testimonials.create') }}" class="btn btn-primary"> Tambah Testimoni
         </a>
 
         <!-- Tombol Kembali ke Dashboard -->

@@ -30,7 +30,7 @@ Route::get('/dashboard', function () {
 // Dashboard Super Admin
 Route::middleware(['auth', \App\Http\Middleware\RoleMiddleware::class . ':super_admin'])->prefix('superadmin')->name('superadmin.')->group(function () {
     Route::get('/dashboard', function () {
-        return view('superadmin.dashboard');
+        return redirect()->route('superadmin.users', ['role' => 'admin']);
     })->name('dashboard');
 
     // Tambahkan route kelola admin & pasien
@@ -43,6 +43,7 @@ Route::middleware(['auth', \App\Http\Middleware\RoleMiddleware::class . ':super_
 
     // Tambahkan juga route khusus kelola admin jika ingin dipisah
     Route::post('/add-admin', [AdminController::class, 'addAdmin'])->name('addAdmin');
+    Route::post('/add-pasien', [AdminController::class, 'addPasien'])->name('addPasien');
 });
 
 // Dashboard Admin

@@ -112,7 +112,7 @@
         </div>
     </div>
     <!-- Logout Section -->
-    <div class="logout-section">
+    <div class="logout-section mt-5">
         <div class="logout-icon">
             <i class="bi bi-box-arrow-right"></i>
         </div>

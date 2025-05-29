@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Dashboard Admin')</title>
+    <title>@yield('title', 'Dashboard Super Admin')</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -384,160 +384,84 @@
             color: #0b5e91;
         }
 
-        /* Feature Cards */
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .feature-card {
-            background: white;
-            border-radius: 24px;
-            padding: 2.5rem;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            border: 1px solid rgba(255,255,255,0.3);
-            position: relative;
+        /* Modal Styles */
+        .modal-content {
+            border: none;
+            border-radius: 15px;
             overflow: hidden;
         }
 
-        .feature-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
+        .modal-header {
+            border-bottom: 1px solid #e9ecef;
+            padding: 1.25rem 1.5rem;
         }
 
-        .feature-card.users::before { background: #0b5e91; }
-        .feature-card.articles::before { background: #38b000; }
-        .feature-card.news::before { background: #00b4d8; }
-        .feature-card.faqs::before { background: #f093fb; }
-        .feature-card.downloads::before { background: #ffb703; }
-        .feature-card.testimonials::before { background: #a8edea; }
-
-        .feature-card:hover {
-            transform: translateY(-12px) scale(1.03);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        .modal-header.bg-primary {
+            background-color: #0b5e91 !important;
         }
 
-        .feature-header {
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .modal-footer {
+            border-top: 1px solid #e9ecef;
+            padding: 1.25rem 1.5rem;
+        }
+
+        .modal-dialog-centered {
             display: flex;
             align-items: center;
-            margin-bottom: 1.5rem;
+            min-height: calc(100% - 3.5rem);
         }
 
-        .feature-icon {
-            width: 60px;
-            height: 60px;
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 1rem;
-            font-size: 1.5rem;
-            color: white;
-        }
-
-        .feature-card.users .feature-icon { background: #0b5e91; }
-        .feature-card.articles .feature-icon { background: #38b000; }
-        .feature-card.news .feature-icon { background: #00b4d8; }
-        .feature-card.faqs .feature-icon { background: #f093fb; }
-        .feature-card.downloads .feature-icon { background: #ffb703; }
-        .feature-card.testimonials .feature-icon { background: #a8edea; }
-
-        .feature-title {
-            font-size: 1.4rem;
-            font-weight: 600;
-            color: #2d3748;
-            margin: 0;
-        }
-
-        .feature-description {
-            color: #718096;
-            line-height: 1.6;
-            margin-bottom: 2rem;
-            height: 80px;
+        /* User Detail Styles */
+        .user-detail-card {
+            border-radius: 15px;
             overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
         }
 
-        .feature-action {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 12px 24px;
-            border-radius: 12px;
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s ease;
+        .user-detail-header {
+            background: #0b5e91;
             color: white;
-        }
-
-        .feature-card.users .feature-action { background: #0b5e91; }
-        .feature-card.articles .feature-action { background: #38b000; }
-        .feature-card.news .feature-action { background: #00b4d8; }
-        .feature-card.faqs .feature-action { background: #f093fb; }
-        .feature-card.downloads .feature-action { background: #ffb703; }
-        .feature-card.testimonials .feature-action { background: #a8edea; }
-
-        .feature-action:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-            color: white;
-            text-decoration: none;
-        }
-
-        /* Logout Section */
-        .logout-section {
-            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
-            border-radius: 24px;
             padding: 2rem;
             text-align: center;
-            color: white;
-            box-shadow: 0 8px 32px rgba(238,90,36,0.3);
         }
 
-        .logout-icon {
-            width: 80px;
-            height: 80px;
+        .user-avatar {
+            width: 100px;
+            height: 100px;
+            background: white;
             border-radius: 50%;
-            background: rgba(255,255,255,0.2);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 1.5rem;
-            font-size: 2rem;
+            margin: 0 auto 1rem;
+            font-size: 2.5rem;
+            color: #0b5e91;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
 
-        .logout-title {
-            font-size: 1.5rem;
+        .user-detail-table {
+            margin-bottom: 0;
+        }
+
+        .user-detail-table th {
+            width: 30%;
             font-weight: 600;
-            margin-bottom: 1rem;
+            color: #343a40;
         }
 
-        .logout-description {
-            margin-bottom: 2rem;
-            opacity: 0.9;
+        .user-detail-table td {
+            color: #6c757d;
         }
 
-        .logout-btn {
-            background: rgba(255,255,255,0.2);
-            border: 2px solid rgba(255,255,255,0.3);
-            color: white;
-            padding: 12px 32px;
-            border-radius: 12px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .logout-btn:hover {
-            background: rgba(255,255,255,0.3);
-            transform: translateY(-2px);
-            color: white;
+        .user-detail-actions {
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-top: 1px solid #e9ecef;
+            text-align: center;
         }
 
         /* Responsive */
@@ -548,15 +472,6 @@
             
             .welcome-msg {
                 font-size: 1rem;
-            }
-            
-            .features-grid {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
-            }
-            
-            .feature-card {
-                padding: 2rem;
             }
             
             .dashboard-content {
@@ -604,6 +519,142 @@
         <!-- Dashboard Content -->
         <div class="dashboard-content">
             @yield('content')
+        </div>
+    </div>
+
+    <!-- Modal Tambah Admin -->
+    <div class="modal fade" id="modalTambahAdmin" tabindex="-1" aria-labelledby="modalTambahAdminLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <form method="POST" action="{{ route('superadmin.addAdmin') }}" class="modal-content">
+                @csrf
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="modalTambahAdminLabel">Tambah Admin Baru</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Nama Admin</label>
+                                <input type="text" class="form-control" name="name" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Email Admin</label>
+                                <input type="email" class="form-control" name="email" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Nomor HP</label>
+                                <input type="text" class="form-control" name="nomor_hp" 
+                                    pattern="^08[0-9]{8,11}$" 
+                                    title="Nomor HP harus diawali 08 dan 10-13 digit, contoh: 081255693035" 
+                                    required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Jenis Kelamin</label>
+                                <select class="form-select" name="jenis_kelamin" required>
+                                    <option value="" disabled selected>Pilih jenis kelamin</option>
+                                    <option value="Laki-laki">Laki-laki</option>
+                                    <option value="Perempuan">Perempuan</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Usia</label>
+                                <input type="number" class="form-control" name="usia" 
+                                    min="18" max="120" required>
+                            </div>
+                            <div class="mb-3 password-field">
+                                <label class="form-label">Password</label>
+                                <div class="input-group">
+                                    <input type="password" class="form-control" 
+                                        name="password" 
+                                        id="passwordAdminInput" 
+                                        required 
+                                        minlength="8">
+                                    <button type="button" class="btn btn-outline-primary password-toggle" onclick="togglePassword('passwordAdminInput')">
+                                        <i class="bi bi-eye-slash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-success">
+                        <i class="bi bi-save me-1"></i> Tambah
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Tambah Pasien -->
+    <div class="modal fade" id="modalTambahPasien" tabindex="-1" aria-labelledby="modalTambahPasienLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <form method="POST" action="{{ route('superadmin.addPasien') }}" class="modal-content">
+                @csrf
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="modalTambahPasienLabel">Tambah Pasien Baru</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Nama Pasien</label>
+                                <input type="text" class="form-control" name="name" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Email Pasien</label>
+                                <input type="email" class="form-control" name="email" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Nomor HP</label>
+                                <input type="text" class="form-control" name="nomor_hp" 
+                                    pattern="^08[0-9]{8,11}$" 
+                                    title="Nomor HP harus diawali 08 dan 10-13 digit, contoh: 081255693035" 
+                                    required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Jenis Kelamin</label>
+                                <select class="form-select" name="jenis_kelamin" required>
+                                    <option value="" disabled selected>Pilih jenis kelamin</option>
+                                    <option value="Laki-laki">Laki-laki</option>
+                                    <option value="Perempuan">Perempuan</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Usia</label>
+                                <input type="number" class="form-control" name="usia" 
+                                    min="1" max="120" required>
+                            </div>
+                            <div class="mb-3 password-field">
+                                <label class="form-label">Password</label>
+                                <div class="input-group">
+                                    <input type="password" class="form-control" 
+                                        name="password" 
+                                        id="passwordPasienInput" 
+                                        required 
+                                        minlength="8">
+                                    <button type="button" class="btn btn-outline-primary password-toggle" onclick="togglePassword('passwordPasienInput')">
+                                        <i class="bi bi-eye-slash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-success">
+                        <i class="bi bi-save me-1"></i> Tambah
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 

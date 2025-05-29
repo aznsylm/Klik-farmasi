@@ -11,38 +11,62 @@
         </a>
     </div>
 
-    <h1 class="fw-bold mb-4">Tambah Unduhan</h1>
-    <form action="{{ route('admin.downloads.store') }}" method="POST" enctype="multipart/form-data" class="shadow p-4 rounded bg-light">
-        @csrf
-        <div class="mb-3">
-            <label for="title" class="form-label fw-bold">Judul</label>
-            <input type="text" name="title" id="title" class="form-control" required>
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">Tambah Unduhan</h5>
         </div>
-        <div class="mb-3">
-            <label for="description" class="form-label fw-bold">Deskripsi</label>
-            <textarea name="description" id="description" class="form-control" rows="3" required></textarea>
+        <div class="card-body">
+            @if ($errors->any())
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <ul class="mb-0">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+            
+            <form action="{{ route('admin.downloads.store') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="title" class="form-label">Judul</label>
+                        <input type="text" name="title" id="title" class="form-control" value="{{ old('title') }}" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="category" class="form-label">Kategori</label>
+                        <select name="category" id="category" class="form-select" required>
+                            <option value="" selected disabled>-- Pilih Kategori --</option>
+                            <option value="modul" {{ old('category') == 'modul' ? 'selected' : '' }}>Modul</option>
+                            <option value="flayer" {{ old('category') == 'flayer' ? 'selected' : '' }}>Flayer</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="description" class="form-label">Deskripsi</label>
+                    <textarea name="description" id="description" class="form-control" rows="3" required>{{ old('description') }}</textarea>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="file_link" class="form-label">Link File</label>
+                    <input type="url" name="file_link" id="file_link" class="form-control" value="{{ old('file_link') }}" required>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="image" class="form-label">Gambar</label>
+                    <input type="file" name="image" id="image" class="form-control" accept=".webp">
+                    <small class="text-muted">Masukkan Gambar Dengan Format *WebP</small>
+                </div>
+                
+                <div class="text-end mt-4">
+                    <button type="submit" class="btn btn-success">
+                        <i class="bi bi-save me-1"></i> Simpan
+                    </button>
+                </div>
+            </form>
         </div>
-        <div class="mb-3">
-            <label for="category" class="form-label fw-bold">Kategori</label>
-            <select name="category" id="category" class="form-control" required>
-                <option value="" hidden>-- Pilih Kategori --</option>
-                <option value="modul">Modul</option>
-                <option value="flayer">Flayer</option>
-            </select>
-        </div>
-        <div class="mb-3">
-            <label for="file_link" class="form-label fw-bold">Link File</label>
-            <input type="url" name="file_link" id="file_link" class="form-control" required>
-        </div>
-        <div class="mb-3">
-            <label for="image" class="form-label fw-bold">Gambar (Masukkan Gambar Dengan Format *WebP)</label>
-            <input type="file" name="image" id="image" class="form-control" accept=".webp">
-        </div>
-        <div class="text-start">
-            <button type="submit" class="btn btn-success">
-                <i class="bi bi-save"></i> Simpan
-            </button>
-        </div>
-    </form>
+    </div>
 </div>
 @endsection

@@ -11,41 +11,65 @@
             </a>
         </div>
 
-        <div class="text-center mb-4">
-            <h1 class="fw-bold">Detail Pasien</h1>
-            <p class="text-muted">Informasi lengkap tentang pasien.</p>
-        </div>
-
-        <!-- Card Detail User -->
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="card shadow-sm border-0">
-                    <div class="card-body">
-                        <h5 class="card-title fw-bold mb-3">Informasi Pasien</h5>
-                        <p class="mb-2"><strong>Nama:</strong> {{ $user->name }}</p>
-                        <p class="mb-2"><strong>Email:</strong> {{ $user->email }}</p>
-                        <p class="mb-2"><strong>Nomor HP:</strong> {{ $user->nomor_hp }}</p>
-                        <p class="mb-2"><strong>Jenis Kelamin:</strong> {{ $user->jenis_kelamin }}</p>
-                        <p class="mb-2"><strong>Usia:</strong> {{ $user->usia }}</p>
-                        <p class="mb-2"><strong>Role:</strong> {{ $user->role }}</p>
-                        <p class="mb-0"><strong>Dibuat pada:</strong> {{ $user->created_at->format('d M Y, H:i') }}</p>
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Detail Pasien</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <table class="table table-borderless">
+                            <tr>
+                                <th width="35%">Nama</th>
+                                <td width="5%">:</td>
+                                <td>{{ $user->name }}</td>
+                            </tr>
+                            <tr>
+                                <th>Email</th>
+                                <td>:</td>
+                                <td>{{ $user->email }}</td>
+                            </tr>
+                            <tr>
+                                <th>Nomor HP</th>
+                                <td>:</td>
+                                <td>{{ $user->nomor_hp }}</td>
+                            </tr>
+                            <tr>
+                                <th>Jenis Kelamin</th>
+                                <td>:</td>
+                                <td>{{ $user->jenis_kelamin }}</td>
+                            </tr>
+                            <tr>
+                                <th>Usia</th>
+                                <td>:</td>
+                                <td>{{ $user->usia }} tahun</td>
+                            </tr>
+                            <tr>
+                                <th>Role</th>
+                                <td>:</td>
+                                <td>{{ ucfirst($user->role) }}</td>
+                            </tr>
+                            <tr>
+                                <th>Dibuat pada</th>
+                                <td>:</td>
+                                <td>{{ $user->created_at->format('d M Y, H:i') }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-md-6 d-flex align-items-center justify-content-center">
+                        <div class="text-center">
+                            <div style="width: 150px; height: 150px; background-color: #f8f9fa; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 60px; color: #6c757d;">
+                                {{ substr($user->name, 0, 1) }}
+                            </div>
+                            <div class="mt-3">
+                                <a href="{{ route('admin.pasienEdit', $user->id) }}" class="btn btn-warning">
+                                    <i class="bi bi-pencil me-2"></i> Edit Pasien
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <style>
-        .card {
-            border-radius: 15px;
-        }
-
-        .btn {
-            transition: all 0.3s ease;
-        }
-
-        .btn:hover {
-            transform: scale(1.05);
-        }
-    </style>
 @endsection

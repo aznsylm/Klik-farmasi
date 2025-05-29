@@ -19,8 +19,7 @@
 
         <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mb-4">
             <!-- Tombol Tambah Pasien -->
-            <a href="{{ route('admin.pasienCreate') }}" class="btn btn-primary mb-2">
-                <i class="bi bi-person-plus"></i> Tambah Pasien
+            <a href="{{ route('admin.pasienCreate') }}" class="btn btn-primary mb-2">Tambah Pasien
             </a>
             <!-- Fitur Pencarian -->
             <form method="GET" action="{{ route('admin.pasien') }}" class="d-flex gap-2 mb-2 flex-grow-1" style="max-width:400px;">

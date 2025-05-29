@@ -101,7 +101,7 @@ class AdminController extends Controller
         $user->update($data);
     
         if (auth()->user()->role === 'super_admin') {
-            return redirect()->route('superadmin.users')->with('success', 'User berhasil diperbarui.');
+            return redirect()->route('superadmin.users')->with('success', 'Akun berhasil diperbarui.');
         }
         return redirect()->route('admin.pasien')->with('success', 'Pasien berhasil diperbarui.');
     }
@@ -178,6 +178,11 @@ class AdminController extends Controller
             'role' => 'pasien',
         ]);
     
+        // Redirect sesuai dengan role pengguna
+        if (auth()->user()->role === 'super_admin') {
+            return redirect()->route('superadmin.users', ['role' => 'pasien'])->with('success', 'Pasien berhasil ditambahkan!');
+        }
+        
         return redirect()->route('admin.pasien')->with('success', 'Pasien berhasil ditambahkan!');
     } 
 }
