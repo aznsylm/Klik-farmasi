@@ -83,7 +83,6 @@
     font-family: 'Open Sans', sans-serif;
     color: #f0f0f0;
     position: relative;
-    overflow: hidden;
 }
 
 .footer::before {
