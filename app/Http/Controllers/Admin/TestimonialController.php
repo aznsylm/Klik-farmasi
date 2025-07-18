@@ -21,8 +21,10 @@ class TestimonialController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'quote' => 'required|string|max:500',
+            'quote' => 'required|string|max:500|unique:testimonials,quote',
             'name' => 'required|string|max:100',
+        ], [
+            'quote.unique' => 'Testimonial dengan kutipan yang sama sudah ada.'
         ]);
 
         Testimonial::create($request->all());
@@ -38,8 +40,10 @@ class TestimonialController extends Controller
     public function update(Request $request, Testimonial $testimonial)
     {
         $request->validate([
-            'quote' => 'required|string|max:500',
+            'quote' => 'required|string|max:500|unique:testimonials,quote,' . $testimonial->id,
             'name' => 'required|string|max:100',
+        ], [
+            'quote.unique' => 'Testimonial dengan kutipan yang sama sudah ada.'
         ]);
 
         $testimonial->update($request->all());

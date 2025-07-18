@@ -85,6 +85,8 @@ class AdminController extends Controller
     
         $request->validate($rules, [
             'nomor_hp.regex' => 'Nomor HP harus diawali 08 dan 10-13 digit, contoh: 081255693035',
+            'email.unique' => 'Email sudah terdaftar. Silakan gunakan email lain.',
+            'nomor_hp.unique' => 'Nomor HP sudah terdaftar. Silakan gunakan nomor lain.',
         ]);
     
         $data = $request->only(['name', 'email', 'nomor_hp', 'jenis_kelamin', 'usia']);
@@ -133,6 +135,9 @@ class AdminController extends Controller
                 'regex:/[a-zA-Z]/',
                 'regex:/[0-9]/'
             ],
+        ], [
+            'email.unique' => 'Email sudah terdaftar. Silakan gunakan email lain.',
+            'nomor_hp.unique' => 'Nomor HP sudah terdaftar. Silakan gunakan nomor lain.',
         ]);
         User::create([
             'name' => $request->name,
@@ -166,6 +171,8 @@ class AdminController extends Controller
             ],
         ], [
             'nomor_hp.regex' => 'Nomor HP harus diawali 08 dan 10-13 digit, contoh: 081255693035',
+            'email.unique' => 'Email sudah terdaftar. Silakan gunakan email lain.',
+            'nomor_hp.unique' => 'Nomor HP sudah terdaftar. Silakan gunakan nomor lain.',
         ]);
     
         User::create([

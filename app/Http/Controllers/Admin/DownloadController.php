@@ -21,10 +21,13 @@ class DownloadController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'title' => 'required|string|max:255',
+            'title' => 'required|string|max:255|unique:downloads,title',
             'description' => 'required|string',
             'file_link' => 'required|url',
             'image' => 'nullable|image|mimes:webp|max:2048',
+        ], [
+            'title.unique' => 'Judul unduhan sudah ada. Silakan gunakan judul yang berbeda.',
+            'image.mimes' => 'Format gambar harus webp.'
         ]);
     
         $data = $request->all();
@@ -46,10 +49,13 @@ class DownloadController extends Controller
     public function update(Request $request, Download $download)
     {
         $request->validate([
-            'title' => 'required|string|max:255',
+            'title' => 'required|string|max:255|unique:downloads,title,' . $download->id,
             'description' => 'required|string',
             'file_link' => 'required|url',
             'image' => 'nullable|image|mimes:webp|max:2048',
+        ], [
+            'title.unique' => 'Judul unduhan sudah ada. Silakan gunakan judul yang berbeda.',
+            'image.mimes' => 'Format gambar harus webp.'
         ]);
     
         $data = $request->all();

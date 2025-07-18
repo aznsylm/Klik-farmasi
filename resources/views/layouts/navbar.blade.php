@@ -110,21 +110,21 @@
                             <!-- Opsi untuk Super Admin -->
                             <li>
                                 <a class="dropdown-item py-2" href="{{ route('superadmin.dashboard') }}">
-                                    <i class="bi bi-speedometer2 me-2"></i> Dashboard Super Admin
+                                    Dashboard Super Admin
                                 </a>
                             </li>
                         @elseif(Auth::user()->role === 'admin')
                             <!-- Opsi untuk Admin -->
                             <li>
                                 <a class="dropdown-item py-2" href="{{ route('admin.dashboard') }}">
-                                    <i class="bi bi-speedometer2 me-2"></i> Dashboard Admin
+                                    Dashboard Admin
                                 </a>
                             </li>
                         @else
                             <!-- Opsi untuk User -->
                             <li>
                                 <a class="dropdown-item py-2" href="{{ route('user.dashboard') }}">
-                                    <i class="bi bi-speedometer2 me-2"></i> Dashboard
+                                    Dashboard
                                 </a>
                             </li>
                         @endif
@@ -132,7 +132,7 @@
                             <form action="{{ route('logout') }}" method="POST" style="display: inline;">
                                 @csrf
                                 <button type="submit" class="dropdown-item py-2">
-                                    <i class="bi bi-box-arrow-right me-2"></i> Logout
+                                    Logout
                                 </button>
                             </form>
                         </li>

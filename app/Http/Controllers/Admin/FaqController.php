@@ -22,8 +22,10 @@ class FaqController extends Controller
     {
         $request->validate([
             'category' => 'required|string|max:255',
-            'question' => 'required|string|max:255',
+            'question' => 'required|string|max:255|unique:faqs,question',
             'answer' => 'required|string',
+        ], [
+            'question.unique' => 'Pertanyaan ini sudah ada. Silakan gunakan pertanyaan yang berbeda.'
         ]);
 
         Faq::create($request->all());
@@ -39,8 +41,10 @@ class FaqController extends Controller
     {
         $request->validate([
             'category' => 'required|string|max:255',
-            'question' => 'required|string|max:255',
+            'question' => 'required|string|max:255|unique:faqs,question,' . $faq->id,
             'answer' => 'required|string',
+        ], [
+            'question.unique' => 'Pertanyaan ini sudah ada. Silakan gunakan pertanyaan yang berbeda.'
         ]);
 
         $faq->update($request->all());

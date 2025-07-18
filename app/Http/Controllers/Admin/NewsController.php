@@ -21,10 +21,12 @@ class NewsController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'title' => 'required|string|max:255',
+            'title' => 'required|string|max:255|unique:news,title',
             'source' => 'nullable|string|max:255',
             'link' => 'required|url',
             'published_at' => 'required|date',
+        ], [
+            'title.unique' => 'Judul berita sudah ada. Silakan gunakan judul yang berbeda.'
         ]);
 
         News::create($request->all());
@@ -39,10 +41,12 @@ class NewsController extends Controller
     public function update(Request $request, News $news)
     {
         $request->validate([
-            'title' => 'required|string|max:255',
+            'title' => 'required|string|max:255|unique:news,title,' . $news->id,
             'source' => 'nullable|string|max:255',
             'link' => 'required|url',
             'published_at' => 'required|date',
+        ], [
+            'title.unique' => 'Judul berita sudah ada. Silakan gunakan judul yang berbeda.'
         ]);
 
         $news->update($request->all());

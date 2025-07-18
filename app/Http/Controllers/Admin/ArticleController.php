@@ -1,5 +1,6 @@
 <?php
 // filepath: app/Http/Controllers/Admin/ArticleController.php
+// Dengan pesan error yang lebih ramah
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
@@ -19,6 +20,12 @@ class ArticleController extends Controller
     {
         return view('admin.articles.create');
     }
+    
+    // Helper untuk generate slug
+    private function generateSlug($title)
+    {
+        return \Illuminate\Support\Str::slug($title);
+    }
 
     public function store(Request $request)
     {
@@ -26,11 +33,14 @@ class ArticleController extends Controller
             'category' => 'required|string|max:255',
             'article_type' => 'required|string|in:kehamilan,non-kehamilan',
             'title' => 'required|string|max:255',
+            'slug' => 'required|string|max:255|unique:articles',
             'summary' => 'required|string',
             'content' => 'required|string',
             'author' => 'required|string|max:255',
             'published_at' => 'nullable|date',
             'image' => 'nullable|image|mimes:webp|max:2048', // Hanya menerima format .webp
+        ], [
+            'slug.unique' => 'Slug artikel sudah digunakan. Silakan gunakan slug yang berbeda.'
         ]);
     
         if ($request->hasFile('image')) {
@@ -53,11 +63,14 @@ class ArticleController extends Controller
             'category' => 'required|string|max:255',
             'article_type' => 'required|string|in:kehamilan,non-kehamilan',
             'title' => 'required|string|max:255',
+            'slug' => 'required|string|max:255|unique:articles,slug,' . $article->id,
             'summary' => 'required|string',
             'content' => 'required|string',
             'author' => 'required|string|max:255',
             'published_at' => 'nullable|date',
             'image' => 'nullable|image|mimes:webp|max:2048', // Hanya menerima format .webp
+        ], [
+            'slug.unique' => 'Slug artikel sudah digunakan. Silakan gunakan slug yang berbeda.'
         ]);
     
         if ($request->hasFile('image')) {
