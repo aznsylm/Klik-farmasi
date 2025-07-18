@@ -9,7 +9,7 @@
         <nav aria-label="breadcrumb" class="mb-4">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('beranda') }}" class="text-decoration-none">Beranda</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('artikel') }}" class="text-decoration-none">Artikel</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('artikel.non-kehamilan') }}" class="text-decoration-none">Artikel</a></li>
                 <li class="breadcrumb-item active" aria-current="page">{{ Str::limit($article->title, 30) }}</li>
             </ol>
         </nav>
@@ -69,7 +69,7 @@
 
                     <!-- Article Content -->
                     <div class="article-content">
-                        <div class="content-text fs-6" style="line-height: 1.8;">
+                        <div class="content-text fs-6" style="line-height: 1.8; text-align: justify;">
                             {!! nl2br(e($article->content)) !!}
                         </div>
                         
@@ -156,7 +156,7 @@
 
                     <!-- Contact Card -->
                     <div class="card border-0 rounded-4 shadow-sm mb-4">
-                        <div class="card-body p-4">
+                        <div class="card-body p-4 p-sm-3 p-md-4">
                             <div class="text-center mb-4">
                                 <div class="icon-circle text-white mx-auto mb-3" style="background-color: #0b5e91">
                                     <i class="bi bi-chat-dots-fill"></i>
@@ -167,7 +167,7 @@
                             <a href="mailto:klikfarmasi.official@gmail.com" class="btn btn-khusus w-100 mb-3">
                                 <i class="bi bi-envelope me-2"></i> Email Kami
                             </a>
-                            <a href="https://wa.me/1234567890" class="btn btn-success w-100">
+                            <a href="https://wa.me/+6285280909235" class="btn btn-success w-100">
                                 <i class="bi bi-whatsapp me-2"></i> WhatsApp
                             </a>
                         </div>
@@ -175,11 +175,11 @@
 
                     <!-- Social Media -->
                     <div class="card border-0 rounded-4 shadow-sm">
-                        <div class="card-body p-4">
+                        <div class="card-body p-4 p-sm-3 p-md-4">
                             <h5 class="fw-bold mb-3 text-center">Ikuti Kami</h5>
                             <p class="text-muted text-center mb-4">Tetap terhubung dengan kami melalui media sosial untuk mendapatkan informasi terbaru.</p>
                             <div class="d-flex justify-content-center gap-3">
-                                <a class="social-icon" href="https://wa.me/1234567890" target="_blank">
+                                <a class="social-icon" href="https://wa.me/+6285280909235" target="_blank">
                                     <i class="bi bi-whatsapp"></i>
                                 </a>
                                 <a class="social-icon" href="https://www.instagram.com/klikfarmasi.official/" target="_blank">
@@ -199,4 +199,43 @@
         </div>
     </div>
 </section>
+
+<style>
+    /* Social icon styling */
+    .social-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 45px;
+        height: 45px;
+        background-color: #f8f9fa;
+        border-radius: 50%;
+        color: #0b5e91;
+        font-size: 1.2rem;
+        transition: all 0.3s ease;
+        text-decoration: none;
+    }
+    
+    .social-icon:hover {
+        background-color: #0b5e91;
+        color: white;
+        transform: translateY(-3px);
+    }
+    
+    /* Responsive styles for article detail page */
+    @media (max-width: 767.98px) {
+        .article-container {
+            padding: 1.25rem !important;
+        }
+        
+        .article-navigation .btn {
+            padding: 0.5rem 0.75rem;
+            font-size: 0.9rem;
+        }
+        
+        .sticky-top {
+            margin-top: 1.5rem;
+        }
+    }
+</style>
 @endsection

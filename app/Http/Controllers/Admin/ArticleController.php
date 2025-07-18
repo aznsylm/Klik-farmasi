@@ -24,6 +24,7 @@ class ArticleController extends Controller
     {
         $validated = $request->validate([
             'category' => 'required|string|max:255',
+            'article_type' => 'required|string|in:kehamilan,non-kehamilan',
             'title' => 'required|string|max:255',
             'summary' => 'required|string',
             'content' => 'required|string',
@@ -50,6 +51,7 @@ class ArticleController extends Controller
     {
         $validated = $request->validate([
             'category' => 'required|string|max:255',
+            'article_type' => 'required|string|in:kehamilan,non-kehamilan',
             'title' => 'required|string|max:255',
             'summary' => 'required|string',
             'content' => 'required|string',

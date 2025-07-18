@@ -1,0 +1,66 @@
+/**
+ * Klik Farmasi - Performance CSS
+ * CSS untuk meningkatkan performa website
+ */
+
+/* Optimasi font loading */
+.fonts-loaded h1,
+.fonts-loaded h2,
+.fonts-loaded h3 {
+    font-family: 'El Messiri', sans-serif;
+}
+
+.fonts-loaded h4,
+.fonts-loaded h5,
+.fonts-loaded p,
+.fonts-loaded .btn-khusus {
+    font-family: 'Open Sans', sans-serif;
+}
+
+/* Placeholder untuk gambar lazy load */
+img.lazy {
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+img.lazy.loaded {
+    opacity: 1;
+}
+
+/* Optimasi animasi */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+    
+    .card:hover {
+        transform: none !important;
+        box-shadow: none !important;
+    }
+    
+    #backToTop:hover,
+    #whatsappButton:hover,
+    .footer-logo:hover,
+    .footer-map:hover,
+    .footer-partners img:hover,
+    .footer-social-icon:hover,
+    .footer-links a:hover {
+        transform: none !important;
+    }
+}
+
+/* Content-visibility untuk meningkatkan performa rendering */
+section:not(:first-of-type) {
+    content-visibility: auto;
+    contain-intrinsic-size: 1px 1000px;
+}
+
+/* Optimasi rendering */
+.card,
+.footer-map,
+.article-image img {
+    will-change: transform;
+}

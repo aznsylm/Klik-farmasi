@@ -5,16 +5,23 @@ use App\Http\Controllers\PageController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PengingatObatController;
 
 Route::get('/', [PageController::class, 'beranda'])->name('beranda');
-Route::get('/tanya-jawab', [PageController::class, 'tanyaJawab'])->name('tanya-jawab');
+Route::get('/tanya-jawab/hipertensi-kehamilan', [PageController::class, 'tanyaJawabKehamilan'])->name('tanya-jawab.kehamilan');
+Route::get('/tanya-jawab/hipertensi-non-kehamilan', [PageController::class, 'tanyaJawabNonKehamilan'])->name('tanya-jawab.non-kehamilan');
 Route::get('/artikel', [PageController::class, 'artikel'])->name('artikel');
+Route::get('/artikel/hipertensi-kehamilan', [PageController::class, 'artikelKehamilan'])->name('artikel.kehamilan');
+Route::get('/artikel/hipertensi-non-kehamilan', [PageController::class, 'artikelNonKehamilan'])->name('artikel.non-kehamilan');
 Route::get('/artikel/{slug}', [PageController::class, 'artikelDetail'])->name('artikel.detail');
-Route::get('/unduhan/modul', [PageController::class, 'unduhanModul'])->name('unduhan.modul');
-Route::get('/unduhan/flayer', [PageController::class, 'unduhanFlayer'])->name('unduhan.flayer');
-Route::get('/pengingat', [PageController::class, 'pengingat'])->name('pengingat');
+Route::get('/unduhan', [PageController::class, 'unduhan'])->name('unduhan');
+Route::get('/pengingat', function() {
+    return view('pages.pengingat-dev');
+})->name('pengingat');
 Route::get('/berita', [PageController::class, 'berita'])->name('pages.berita');
 Route::get('/petunjuk', [PageController::class, 'petunjuk'])->name('petunjuk');
+Route::get('/tim-pengelola', [PageController::class, 'timPengelola'])->name('tim-pengelola');
+Route::post('/pengingat', [PengingatObatController::class, 'store'])->name('pengingat.store');
 
 Route::get('/dashboard', function () {
     $role = auth()->user()->role;
@@ -76,9 +83,12 @@ Route::middleware(['auth', \App\Http\Middleware\RoleMiddleware::class . ':admin'
 
 // Dashboard User
 Route::middleware(['auth', \App\Http\Middleware\RoleMiddleware::class . ':pasien'])->group(function () {
-    Route::get('/user/dashboard', function () {
-        return view('user.dashboard'); 
-    })->name('user.dashboard');
+    // Dashboard
+    Route::get('/user/dashboard', [PengingatObatController::class, 'index'])->name('user.dashboard');
+    
+    // Pengingat routes 
+    Route::get('/pengingat/create', [PengingatObatController::class, 'create'])->name('pengingat.create');
+    Route::post('/pengingat', [PengingatObatController::class, 'store'])->name('pengingat.store');
 });
 
 Route::middleware('auth')->group(function () {

@@ -3,13 +3,13 @@
         <div class="row">
             <!-- Kolom 1: Logo & Info -->
             <div class="col-md-3 mb-4 mb-md-0">
-                <img src="{{ asset('assets/LOGO KLIKFARMASI VEKTOR MIRING.png') }}" alt="Logo Farmasi Universitas Alma Ata" class="footer-logo">
+                <img src="{{ asset('assets/LOGO KLIKFARMASI VEKTOR MIRING.png') }}" alt="Logo Farmasi Universitas Alma Ata" class="footer-logo" width="220" height="auto" loading="lazy" decoding="async">
                 <h3>Universitas Alma Ata</h3>
                 <p class="footer-address">
                     Jl. Brawijaya No.99, Jadan, Tamantirto, Kasihan, Bantul, Yogyakarta 55183
                 </p>
                 <div class="footer-social">
-                    <a href="https://wa.me/6281234567890" class="footer-social-icon" target="_blank">
+                    <a href="https://wa.me/+6285280909235" class="footer-social-icon" target="_blank">
                         <i class="bi bi-whatsapp"></i>
                     </a>
                     <a href="https://www.instagram.com/klikfarmasi.official/" class="footer-social-icon" target="_blank">
@@ -29,8 +29,9 @@
                 <h3>Tentang Kami</h3>
                 <ul class="footer-links">
                     <li><a href="{{ route('petunjuk') }}">Petunjuk Penggunaan</a></li>
-                    <li><a href="{{ route('tanya-jawab') }}">FAQ</a></li>
-                    <li><a href="https://wa.me/6281234567890">Hubungi Kami</a></li>
+                    <li><a href="{{ route('tim-pengelola') }}">Tim Pengelola</a></li>
+                    <li><a href="{{ route('tanya-jawab.kehamilan') }}">FAQ</a></li>
+                    <li><a href="https://wa.me/+6285280909235">Hubungi Kami</a></li>
                 </ul>
             </div>
 
@@ -39,9 +40,10 @@
                 <h3>Layanan</h3>
                 <ul class="footer-links">
                     <li><a href="{{ route('pengingat') }}">Pengingat Minum Obat</a></li>
-                    <li><a href="{{ route('artikel') }}">Artikel</a></li>
-                    {{-- <li><a href="{{ route('berita') }}">Berita</a></li> --}}
-                    <li><a href="{{ route('unduhan.flayer') }}">Unduhan</a></li>
+                    <li><a href="{{ route('artikel.kehamilan') }}">Artikel Hipertensi Kehamilan</a></li>
+                    <li><a href="{{ route('artikel.non-kehamilan') }}">Artikel Hipertensi Non-Kehamilan</a></li>
+                    <li><a href="{{ url('/berita') }}">Berita</a></li>
+                    <li><a href="{{ route('unduhan') }}">Unduhan</a></li>
                 </ul>
             </div>
 
@@ -49,7 +51,7 @@
             <div class="col-md-3">
                 <h3>Lokasi</h3>
                 <div class="footer-map ratio ratio-4x3">
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3818.9130339956882!2d110.32193207484461!3d-7.818441792202233!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7af7e2b2acea97%3A0xa3cb91d3e65407b2!2sUniversitas%20Alma%20Ata%20Yogyakarta!5e1!3m2!1sid!2sid!4v1746759433825!5m2!1sid!2sid" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3818.913!2d110.321932!3d-7.818442!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7af7e2b2acea97%3A0xa3cb91d3e65407b2!2sUniversitas%20Alma%20Ata%20Yogyakarta!5e1!3m2!1sid!2sid" width="300" height="225" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Lokasi Universitas Alma Ata"></iframe>
                 </div>
             </div>
         </div>
@@ -59,8 +61,8 @@
             <div class="col-md-4 mb-3 mb-md-0">
                 <div class="footer-partners">
                     <p>Bagian dari:</p>
-                    <img src="{{ asset('assets/mitra.png') }}" alt="Logo Mitra">
-                    <img src="{{ asset('assets/Farmasi-LogoUAA_white.png') }}" alt="Logo Farmasi">
+                    <img src="{{ asset('assets/mitra.png') }}" alt="Logo Mitra" width="40" height="40" loading="lazy" decoding="async">
+                    <img src="{{ asset('assets/Farmasi-LogoUAA_white.png') }}" alt="Logo Farmasi" width="40" height="40" loading="lazy" decoding="async">
                 </div>
             </div>
             <div class="col-md-4 mb-3 mb-md-0 text-center">
@@ -245,6 +247,56 @@
 .footer-copyright {
     font-size: 0.85rem;
     opacity: 0.8;
+}
+
+/* Tablet responsive styles */
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .footer {
+        padding: 2.5rem 0 1.5rem;
+    }
+    
+    .footer-logo {
+        max-width: 180px;
+    }
+    
+    .footer h3 {
+        font-size: 1.1rem;
+        margin-bottom: 1.2rem;
+    }
+    
+    .footer p {
+        font-size: 0.85rem;
+    }
+    
+    .footer-address {
+        font-size: 0.8rem;
+    }
+    
+    .footer-links a {
+        font-size: 0.85rem;
+    }
+    
+    .footer-social-icon {
+        width: 34px;
+        height: 34px;
+        font-size: 1rem;
+    }
+    
+    .footer-partners p {
+        font-size: 0.8rem;
+    }
+    
+    .footer-partners img {
+        height: 35px;
+    }
+    
+    .footer-copyright {
+        font-size: 0.8rem;
+    }
+    
+    .footer-map {
+        height: 200px;
+    }
 }
 
 @media (max-width: 767.98px) {

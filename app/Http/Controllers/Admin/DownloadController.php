@@ -23,7 +23,6 @@ class DownloadController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'category' => 'required|in:modul,flayer', 
             'file_link' => 'required|url',
             'image' => 'nullable|image|mimes:webp|max:2048',
         ]);
@@ -49,7 +48,6 @@ class DownloadController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'category' => 'required|in:modul,flayer', // Tambahkan validasi kategori
             'file_link' => 'required|url',
             'image' => 'nullable|image|mimes:webp|max:2048',
         ]);

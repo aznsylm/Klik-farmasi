@@ -14,44 +14,64 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
                 <li class="nav-item"><a class="nav-link px-3" href="{{ url('/') }}">Beranda</a></li>
-                <li class="nav-item"><a class="nav-link px-3" href="{{ url('/petunjuk') }}">Petunjuk Penggunaan</a></li>
+                
                 <li class="nav-item dropdown">
-                    <a class="nav-link d-flex align-items-center px-3" id="informasiDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Informasi
-                        <i class="bi bi-chevron-down ms-1 small"></i>
+                    <a class="nav-link d-flex align-items-center px-3" id="tentangDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Tentang
                     </a>
-                    <ul class="dropdown-menu shadow border-0" aria-labelledby="informasiDropdown">
+                    <ul class="dropdown-menu shadow border-0" aria-labelledby="tentangDropdown">
                         <li>
-                            <a class="dropdown-item py-2" href="{{ url('/artikel') }}">
-                                <i class="bi bi-journal-text me-2 text-primary"></i> Artikel
+                            <a class="dropdown-item py-2" href="{{ url('/petunjuk') }}">
+                                Petunjuk Penggunaan
                             </a>
                         </li>
                         <li>
-                            <a class="dropdown-item py-2" href="{{ url('/berita') }}">
-                                <i class="bi bi-newspaper me-2 text-success"></i> Berita
+                            <a class="dropdown-item py-2" href="{{ url('/tim-pengelola') }}">
+                                Tim Pengelola
                             </a>
                         </li>
                     </ul>
                 </li>
-                <li class="nav-item"><a class="nav-link px-3" href="{{ url('/tanya-jawab') }}">Tanya Jawab</a></li>
+                
                 <li class="nav-item dropdown">
-                    <a class="nav-link d-flex align-items-center px-3" id="unduhanDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Unduhan
-                        <i class="bi bi-chevron-down ms-1 small"></i>
+                    <a class="nav-link d-flex align-items-center px-3" id="artikelDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Artikel
                     </a>
-                    <ul class="dropdown-menu shadow border-0" aria-labelledby="unduhanDropdown">
+                    <ul class="dropdown-menu shadow border-0" aria-labelledby="artikelDropdown">
                         <li>
-                            <a class="dropdown-item py-2" href="{{ route('unduhan.modul') }}">
-                                <i class="bi bi-journal-bookmark me-2 text-primary"></i> Modul
+                            <a class="dropdown-item py-2" href="{{ route('artikel.kehamilan') }}">
+                                Hipertensi pada Kehamilan
                             </a>
                         </li>
                         <li>
-                            <a class="dropdown-item py-2" href="{{ route('unduhan.flayer') }}">
-                                <i class="bi bi-file-earmark-image me-2 text-success"></i> Flyer
+                            <a class="dropdown-item py-2" href="{{ route('artikel.non-kehamilan') }}">
+                                Hipertensi Non-Kehamilan
                             </a>
                         </li>
                     </ul>
                 </li>
+                
+                <li class="nav-item"><a class="nav-link px-3" href="{{ url('/berita') }}">Berita</a></li>
+                
+                <li class="nav-item dropdown">
+                    <a class="nav-link d-flex align-items-center px-3" id="tanyaJawabDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Tanya Jawab
+                    </a>
+                    <ul class="dropdown-menu shadow border-0" aria-labelledby="tanyaJawabDropdown">
+                        <li>
+                            <a class="dropdown-item py-2" href="{{ route('tanya-jawab.kehamilan') }}">
+                                Hipertensi Kehamilan
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item py-2" href="{{ route('tanya-jawab.non-kehamilan') }}">
+                                Hipertensi Non-Kehamilan
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                
+                <li class="nav-item"><a class="nav-link px-3" href="{{ route('unduhan') }}">Unduhan</a></li>
                 <li class="nav-item"><a class="nav-link px-3" href="{{ url('/pengingat') }}">Pengingat</a></li>
             </ul>
             

@@ -4,7 +4,7 @@
 
 @section('content')
     <!-- Header-->
-    <header class="py-5 position-relative d-flex align-items-center justify-content-center" style="background: linear-gradient(135deg, #0b5e91 0%, #084b75 100%); height: 600px; ">
+    <header class="py-5 position-relative d-flex align-items-center justify-content-center header-responsive" style="background: linear-gradient(135deg, #0b5e91 0%, #084b75 100%); height: 600px; ">
         <div class="container px-4 px-lg-5">
             <div class="row gx-5">
                 <div class="col-lg-8 col-xl-7 col-xxl-6">
@@ -12,7 +12,7 @@
                         <h1 class="display-5 fw-bolder text-white mb-3">Selamat Datang di Klik Farmasi</h1>
                         <p class="lead fw-normal text-white-80 mb-4" style="font-family: 'Open Sans', sans-serif;">Kami siap memberikan layanan informasi kesehatan dan pengingat obat yang terbaik untuk kebutuhan Anda</p>
                         <div class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xl-start">
-                            <a class="btn btn-lg px-4 me-sm-3 rounded-pill shadow-sm" href="{{ url('/artikel') }}" 
+                            <a class="btn btn-lg px-4 me-sm-3 rounded-pill shadow-sm" href="{{ route('artikel.non-kehamilan') }}" 
                                style="padding: 10px 25px; font-size: 16px; background-color: #baa971; border: none; transition: all 0.3s ease;">
                                 <i class="bi bi-journal-text me-2"></i> Lihat Artikel
                             </a>
@@ -27,13 +27,13 @@
                     <div id="headerCarousel" class="carousel slide shadow rounded-4 overflow-hidden" data-bs-ride="carousel" data-bs-interval="3000">
                         <div class="carousel-inner" style="height: 380px;">
                             <div class="carousel-item active">
-                                <img class="img-fluid w-100 h-100" src="{{ asset('assets/sample-1.webp') }}" alt="Gambar 1" style="object-fit: cover;">
+                                <img class="img-fluid w-100 h-100" src="{{ asset('assets/SlidePertama1.webp') }}" alt="Slide Informasi Hipertensi 1" style="object-fit: cover;" loading="eager" decoding="async">
                             </div>
                             <div class="carousel-item">
-                                <img class="img-fluid w-100 h-100" src="{{ asset('assets/sample-2.webp') }}" alt="Gambar 2" style="object-fit: cover;">
+                                <img class="img-fluid w-100 h-100" src="{{ asset('assets/Slidekedua.webp') }}" alt="Slide Informasi Hipertensi 2" style="object-fit: cover;" loading="lazy" decoding="async">
                             </div>
                             <div class="carousel-item">
-                                <img class="img-fluid w-100 h-100" src="{{ asset('assets/sample-3.webp') }}" alt="Gambar 3" style="object-fit: cover;">
+                                <img class="img-fluid w-100 h-100" src="{{ asset('assets/Slideketiga.webp') }}" alt="Slide Informasi Hipertensi 3" style="object-fit: cover;" loading="lazy" decoding="async">
                             </div>
                         </div>
                         <button class="carousel-control-prev" type="button" data-bs-target="#headerCarousel" data-bs-slide="prev">
@@ -301,19 +301,21 @@
                         @endforeach
                     </div>
 
-                    <!-- Controls -->
-                    <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarouselMobile" data-bs-slide="prev" style="width: 5%; left: -5%;">
-                        <div style="background-color: #0b5e91; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(11, 94, 145, 0.3);">
-                            <span class="carousel-control-prev-icon" aria-hidden="true" style="width: 20px; height: 20px;"></span>
-                        </div>
-                        <span class="visually-hidden">Previous</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#testimonialCarouselMobile" data-bs-slide="next" style="width: 5%; right: -5%;">
-                        <div style="background-color: #0b5e91; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(11, 94, 145, 0.3);">
-                            <span class="carousel-control-next-icon" aria-hidden="true" style="width: 20px; height: 20px;"></span>
-                        </div>
-                        <span class="visually-hidden">Next</span>
-                    </button>
+                    <!-- Mobile Controls positioned below card -->
+                    <div class="d-flex justify-content-center mt-4 mb-2">
+                        <button class="carousel-control-mobile me-3" type="button" data-bs-target="#testimonialCarouselMobile" data-bs-slide="prev">
+                            <div style="background-color: #0b5e91; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(11, 94, 145, 0.3);">
+                                <span class="carousel-control-prev-icon" aria-hidden="true" style="width: 20px; height: 20px;"></span>
+                            </div>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-mobile" type="button" data-bs-target="#testimonialCarouselMobile" data-bs-slide="next">
+                            <div style="background-color: #0b5e91; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(11, 94, 145, 0.3);">
+                                <span class="carousel-control-next-icon" aria-hidden="true" style="width: 20px; height: 20px;"></span>
+                            </div>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -339,9 +341,9 @@
                         <div class="article-card">
                             <div class="article-image">
                                 @if ($article->image)
-                                    <img src="{{ asset('storage/' . $article->image) }}" alt="{{ $article->title }}">
+                                    <img src="{{ asset('storage/' . $article->image) }}" alt="{{ $article->title }}" loading="lazy" decoding="async">
                                 @else
-                                    <img src="{{ asset('assets/sample-1.jpg') }}" alt="Default Image">
+                                    <img src="{{ asset('assets/sample-1.jpg') }}" alt="Default Image" loading="lazy" decoding="async">
                                 @endif
                                 <div class="article-category">
                                     <span>{{ $article->category }}</span>
@@ -380,7 +382,7 @@
     
             <!-- Link Artikel Lainnya -->
             <div class="text-center mt-5">
-                <a href="{{ route('artikel') }}" class="btn btn-khusus rounded-pill px-4 py-2" style="font-family: 'Open Sans', sans-serif;">
+                <a href="{{ route('artikel.non-kehamilan') }}" class="btn btn-khusus rounded-pill px-4 py-2" style="font-family: 'Open Sans', sans-serif;">
                     Lihat Semua Artikel <i class="bi bi-arrow-right ms-2"></i>
                 </a>
             </div>
@@ -446,18 +448,6 @@
             transition: transform 0.6s ease-in-out;
         }
         
-        @media (max-width: 767px) {
-            .carousel-control-prev,
-            .carousel-control-next {
-                opacity: 0.7;
-            }
-            
-            .carousel-control-prev:hover,
-            .carousel-control-next:hover {
-                opacity: 1;
-            }
-        }
-        
         /* Animation for carousel items */
         @keyframes slideInUp {
             from {
@@ -472,6 +462,267 @@
         
         .carousel-item.active .card {
             animation: slideInUp 0.6s ease-out;
+        }
+
+        /* COMPREHENSIVE RESPONSIVE DESIGN */
+        
+        /* Header responsive class */
+        .header-responsive {
+            overflow: hidden;
+        }
+        
+        /* Mobile First - Base styles for mobile (320px+) */
+        @media (max-width: 575.98px) {
+            /* Header adjustments */
+            .header-responsive {
+                height: auto !important;
+                min-height: 500px !important;
+                padding: 1.5rem 0 !important;
+            }
+            
+            .header-responsive .container {
+                padding-left: 1rem !important;
+                padding-right: 1rem !important;
+            }
+            
+            .header-responsive .row {
+                margin-left: 0 !important;
+                margin-right: 0 !important;
+            }
+            
+            .display-5 {
+                font-size: 1.8rem !important;
+                line-height: 1.3;
+            }
+            
+            .lead {
+                font-size: 1rem !important;
+                line-height: 1.5;
+            }
+            
+            /* Carousel adjustments */
+            #headerCarousel .carousel-inner {
+                height: 250px !important;
+            }
+            
+            /* Button adjustments */
+            .btn-lg {
+                font-size: 0.9rem !important;
+                padding: 8px 16px !important;
+            }
+            
+            /* Feature cards */
+            .feature-card {
+                padding: 1rem !important;
+                margin-bottom: 1rem;
+            }
+            
+            .feature-icon {
+                width: 50px !important;
+                height: 50px !important;
+            }
+            
+            .feature-card h4 {
+                font-size: 1.1rem !important;
+            }
+            
+            .feature-card p {
+                font-size: 0.9rem !important;
+            }
+            
+            /* Section titles */
+            h2.fw-bolder {
+                font-size: 1.5rem !important;
+            }
+            
+            /* Article cards */
+            .article-card {
+                margin-bottom: 1.5rem;
+            }
+            
+            .article-title {
+                font-size: 1.1rem !important;
+            }
+            
+            .article-excerpt {
+                font-size: 0.9rem !important;
+            }
+            
+            /* Testimonial adjustments */
+            .testimonial-card-mobile {
+                padding: 0 10px;
+            }
+            
+            /* Carousel controls */
+            .carousel-control-prev,
+            .carousel-control-next {
+                opacity: 0.7;
+                width: 8% !important;
+            }
+            
+            .carousel-control-prev:hover,
+            .carousel-control-next:hover {
+                opacity: 1;
+            }
+            
+            /* Mobile carousel controls */
+            .carousel-control-mobile {
+                background: none;
+                border: none;
+                padding: 0;
+                position: static;
+                transition: transform 0.3s ease;
+            }
+            
+            .carousel-control-mobile:hover div {
+                transform: scale(1.1);
+            }
+            
+            /* Container padding */
+            .container {
+                padding-left: 15px !important;
+                padding-right: 15px !important;
+            }
+        }
+        
+        /* Small tablets (576px - 767.98px) */
+        @media (min-width: 576px) and (max-width: 767.98px) {
+            .header-responsive {
+                height: auto !important;
+                min-height: 550px !important;
+                padding: 2rem 0 !important;
+            }
+            
+            .display-5 {
+                font-size: 2.2rem !important;
+            }
+            
+            .lead {
+                font-size: 1.1rem !important;
+            }
+            
+            #headerCarousel .carousel-inner {
+                height: 300px !important;
+            }
+            
+            .feature-card h4 {
+                font-size: 1.2rem !important;
+            }
+            
+            h2.fw-bolder {
+                font-size: 1.8rem !important;
+            }
+        }
+        
+        /* Large tablets (768px - 991.98px) */
+        @media (min-width: 768px) and (max-width: 991.98px) {
+            .header-responsive {
+                height: auto !important;
+                min-height: 600px !important;
+                padding: 2.5rem 0 !important;
+            }
+            
+            .display-5 {
+                font-size: 2.5rem !important;
+            }
+            
+            .lead {
+                font-size: 1.2rem !important;
+            }
+            
+            #headerCarousel .carousel-inner {
+                height: 350px !important;
+            }
+            
+            .feature-card {
+                padding: 1.5rem !important;
+            }
+            
+            .feature-card h4 {
+                font-size: 1.3rem !important;
+            }
+            
+            h2.fw-bolder {
+                font-size: 2rem !important;
+            }
+        }
+        
+        /* Small desktops (992px - 1199.98px) */
+        @media (min-width: 992px) and (max-width: 1199.98px) {
+            .header-responsive {
+                height: 600px !important;
+            }
+            
+            .display-5 {
+                font-size: 2.8rem !important;
+            }
+            
+            .lead {
+                font-size: 1.25rem !important;
+            }
+            
+            #headerCarousel .carousel-inner {
+                height: 380px !important;
+            }
+        }
+        
+        /* Large desktops (1200px+) */
+        @media (min-width: 1200px) {
+            .header-responsive {
+                height: 600px !important;
+            }
+            
+            .display-5 {
+                font-size: 3rem !important;
+            }
+            
+            .lead {
+                font-size: 1.25rem !important;
+            }
+        }
+        
+        /* Universal responsive improvements */
+        @media (max-width: 991.98px) {
+            /* Stack header content vertically on smaller screens */
+            .header-responsive .row {
+                flex-direction: column-reverse;
+            }
+            
+            .header-responsive .text-center.text-xl-start {
+                text-align: center !important;
+                margin-top: 2rem;
+            }
+            
+            /* Improve button spacing */
+            .d-grid.gap-3.d-sm-flex {
+                gap: 1rem !important;
+            }
+            
+            /* Feature cards full width on mobile */
+            .feature-card:hover {
+                transform: none;
+            }
+            
+            /* Testimonial spacing */
+            .testimonial-card-mobile .card {
+                margin-bottom: 2rem;
+            }
+        }
+        
+        /* Text readability improvements */
+        @media (max-width: 767.98px) {
+            p, .text-muted {
+                line-height: 1.6 !important;
+            }
+            
+            .card-body {
+                padding: 1rem !important;
+            }
+            
+            .py-5 {
+                padding-top: 2rem !important;
+                padding-bottom: 2rem !important;
+            }
         }
     </style>
     

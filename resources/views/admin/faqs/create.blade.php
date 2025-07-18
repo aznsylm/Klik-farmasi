@@ -33,8 +33,8 @@
                     <label for="category" class="form-label">Kategori</label>
                     <select name="category" id="category" class="form-select" required>
                         <option value="" selected disabled>Pilih Kategori</option>
-                        <option value="Tentang Hipertensi" {{ old('category') == 'Tentang Hipertensi' ? 'selected' : '' }}>Tentang Hipertensi</option>
-                        <option value="Pentingnya Minum Obat" {{ old('category') == 'Pentingnya Minum Obat' ? 'selected' : '' }}>Pentingnya Minum Obat</option>
+                        <option value="Hipertensi Kehamilan" {{ old('category') == 'Hipertensi Kehamilan' ? 'selected' : '' }}>Hipertensi Kehamilan</option>
+                        <option value="Hipertensi Non-Kehamilan" {{ old('category') == 'Hipertensi Non-Kehamilan' ? 'selected' : '' }}>Hipertensi Non-Kehamilan</option>
                     </select>
                 </div>
                 

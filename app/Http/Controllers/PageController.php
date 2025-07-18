@@ -23,17 +23,42 @@ class PageController extends Controller
 
     public function artikel()
     {
-        // Ambil artikel terbaru (artikel yang paling baru ditambahkan)
-        $latestArticle = Article::latest()->first();
+        // Redirect to non-kehamilan articles by default
+        return redirect()->route('artikel.non-kehamilan');
+    }
+    
+    public function artikelKehamilan()
+    {
+        // Ambil artikel terbaru untuk hipertensi kehamilan
+        $latestArticle = Article::where('article_type', 'kehamilan')->latest()->first();
 
-        // Ambil artikel lainnya (selain artikel terbaru)
-        $otherArticles = Article::latest()->skip(1)->take(PHP_INT_MAX)->get();
-
-        // Ambil 2 berita terbaru
-        $news = News::latest()->take(2)->get();
+        // Ambil artikel lainnya untuk hipertensi kehamilan
+        $otherArticles = Article::where('article_type', 'kehamilan')
+                        ->latest()
+                        ->when($latestArticle, function($query) use ($latestArticle) {
+                            return $query->where('id', '!=', $latestArticle->id);
+                        })
+                        ->get();
 
         // Kirim data ke view
-        return view('pages.artikel', compact('latestArticle', 'otherArticles', 'news'));
+        return view('pages.artikel-kehamilan', compact('latestArticle', 'otherArticles'));
+    }
+    
+    public function artikelNonKehamilan()
+    {
+        // Ambil artikel terbaru untuk hipertensi non-kehamilan
+        $latestArticle = Article::where('article_type', 'non-kehamilan')->latest()->first();
+
+        // Ambil artikel lainnya untuk hipertensi non-kehamilan
+        $otherArticles = Article::where('article_type', 'non-kehamilan')
+                        ->latest()
+                        ->when($latestArticle, function($query) use ($latestArticle) {
+                            return $query->where('id', '!=', $latestArticle->id);
+                        })
+                        ->get();
+
+        // Kirim data ke view
+        return view('pages.artikel-non-kehamilan', compact('latestArticle', 'otherArticles'));
     }
 
     public function artikelDetail($slug)
@@ -55,22 +80,20 @@ class PageController extends Controller
         return view('pages.artikel-detail', compact('article', 'relatedArticles', 'previousArticle', 'nextArticle'));
     }
 
-    public function tanyaJawab() {
-        $faqs = Faq::all();
-
-        return view('pages.tanya-jawab', compact('faqs'));
+    public function tanyaJawabKehamilan() {
+        $faqs = Faq::where('category', 'Hipertensi Kehamilan')->get();
+        return view('pages.tanya-jawab-kehamilan', compact('faqs'));
     }
 
-    public function unduhanModul()
-    {
-        $downloads = Download::where('category', 'modul')->get();
-        return view('pages.unduhan-modul', compact('downloads'));
+    public function tanyaJawabNonKehamilan() {
+        $faqs = Faq::where('category', 'Hipertensi Non-Kehamilan')->get();
+        return view('pages.tanya-jawab-non-kehamilan', compact('faqs'));
     }
-    
-    public function unduhanFlayer()
+
+    public function unduhan()
     {
-        $downloads = Download::where('category', 'flayer')->get();
-        return view('pages.unduhan-flayer', compact('downloads'));
+        $downloads = Download::latest()->get();
+        return view('pages.unduhan', compact('downloads'));
     }
 
     public function pengingat() {
@@ -89,5 +112,10 @@ class PageController extends Controller
     public function petunjuk()
     {
         return view('pages.petunjuk');
+    }
+
+    public function timPengelola()
+    {
+        return view('pages.tim-pengelola');
     }
 }

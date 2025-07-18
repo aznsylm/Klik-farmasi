@@ -36,7 +36,7 @@
                     <th>No</th>
                     <th>Judul</th>
                     <th>Deskripsi</th>
-                    <th>Kategori</th>
+
                     <th>Gambar</th>
                     <th>Link</th>
                     <th class="text-center">Aksi</th>
@@ -48,7 +48,7 @@
                         <td>{{ ($downloads->currentPage() - 1) * $downloads->perPage() + $loop->iteration }}</td>
                         <td>{{ $download->title }}</td>
                         <td>{{ $download->description }}</td>
-                        <td>{{ $download->category }}</td>
+
                         <td>
                             @if ($download->image)
                                 <img src="{{ asset('storage/' . $download->image) }}" alt="{{ $download->title }}" style="width: 100px; height: auto;">

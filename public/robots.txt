@@ -1,2 +1,9 @@
 User-agent: *
-Disallow:
+Allow: /
+
+# Disallow admin paths
+Disallow: /admin/
+Disallow: /superadmin/
+
+# Sitemap
+Sitemap: https://klikfarmasi.com/sitemap.xml

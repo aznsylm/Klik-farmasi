@@ -12,9 +12,9 @@ return new class extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('nomor_hp')->nullable()->after('email');
-            $table->enum('jenis_kelamin', ['Laki-laki', 'Perempuan'])->nullable()->after('nomor_hp');
-            $table->integer('usia')->nullable()->after('jenis_kelamin');
+            // $table->string('nomor_hp')->nullable()->after('email');
+            // $table->enum('jenis_kelamin', ['Laki-laki', 'Perempuan'])->nullable()->after('nomor_hp');
+            // $table->integer('usia')->nullable()->after('jenis_kelamin');
         });
     }
     

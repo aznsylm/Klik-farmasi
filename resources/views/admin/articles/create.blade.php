@@ -30,11 +30,19 @@
             <form action="{{ route('admin.articles.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="row">
-                    <div class="col-md-6 mb-3">
+                    <div class="col-md-4 mb-3">
                         <label for="category" class="form-label">Kategori</label>
                         <input type="text" class="form-control" id="category" name="category" value="{{ old('category') }}" required>
                     </div>
-                    <div class="col-md-6 mb-3">
+                    <div class="col-md-4 mb-3">
+                        <label for="article_type" class="form-label">Tipe Artikel</label>
+                        <select class="form-select" id="article_type" name="article_type" required>
+                            <option value="" disabled selected>Pilih Tipe Artikel</option>
+                            <option value="kehamilan" {{ old('article_type') == 'kehamilan' ? 'selected' : '' }}>Hipertensi Kehamilan</option>
+                            <option value="non-kehamilan" {{ old('article_type') == 'non-kehamilan' ? 'selected' : '' }}>Hipertensi Non-Kehamilan</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4 mb-3">
                         <label for="slug" class="form-label">Slug</label>
                         <input type="text" class="form-control" id="slug" name="slug" value="{{ old('slug') }}" required>
                     </div>

@@ -28,7 +28,7 @@
                     <th>No</th>
                     <th>Gambar</th>
                     <th>Kategori</th>
-                    <th>Slug</th>
+                    <th>Tipe Artikel</th>
                     <th>Judul</th>
                     <th>Penulis</th>
                     <th>Waktu Publish</th>
@@ -47,7 +47,13 @@
                             @endif
                         </td>
                         <td>{{ $article->category }}</td>
-                        <td>{{ $article->slug }}</td>
+                        <td>
+                            @if($article->article_type == 'kehamilan')
+                                <span class="badge bg-primary">Hipertensi Kehamilan</span>
+                            @else
+                                <span class="badge bg-success">Hipertensi Non-Kehamilan</span>
+                            @endif
+                        </td>
                         <td>{{ $article->title }}</td>
                         <td>{{ $article->author }}</td>
                         <td>{{ $article->published_at ? $article->published_at->format('d M Y, H:i') : 'Belum dipublish' }}</td>
