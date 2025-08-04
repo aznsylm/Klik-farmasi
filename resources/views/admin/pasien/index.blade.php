@@ -32,7 +32,7 @@
                         <i class="bi bi-x-circle"></i> Reset
                     </a>
                 </div>
-            </form>
+            </form> 
             <!-- Tombol Kembali ke Dashboard -->
             <a href="{{ route('admin.dashboard') }}" class="btn btn-secondary mb-2">
                 <i class="bi bi-arrow-left"></i> Kembali ke Dashboard
@@ -111,7 +111,7 @@
 
         .table td, .table th {
             vertical-align: middle;
-            text-align: center;
+            text-align: left;
         }
 
         /* Pagination Style */

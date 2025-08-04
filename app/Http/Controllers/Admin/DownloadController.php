@@ -9,7 +9,7 @@ class DownloadController extends Controller
 {
     public function index()
     {
-        $downloads = Download::orderBy('created_at', 'desc')->paginate(10); 
+        $downloads = Download::orderBy('created_at', 'desc')->get(); 
         return view('admin.downloads.index', compact('downloads'));
     }
 

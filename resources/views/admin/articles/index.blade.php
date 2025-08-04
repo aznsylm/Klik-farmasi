@@ -38,7 +38,7 @@
             <tbody>
                 @foreach ($articles as $article)
                     <tr>
-                        <td>{{ ($articles->currentPage() - 1) * $articles->perPage() + $loop->iteration }}</td>
+                        <td>{{ $loop->iteration }}</td>
                         <td>
                             @if ($article->image)
                                 <img src="{{ asset('storage/' . $article->image) }}" alt="{{ $article->title }}" class="img-thumbnail" style="max-width: 100px;">
@@ -90,7 +90,7 @@
 
     .table td, .table th {
         vertical-align: middle;
-        text-align: center;
+        text-align: left;
     }
 
     /* Gambar */

@@ -36,7 +36,7 @@
             <tbody>
                 @foreach ($news as $i => $item)
                     <tr>
-                        <td>{{ ($news->currentPage() - 1) * $news->perPage() + $i + 1 }}</td>
+                        <td>{{ $loop->iteration }}</td>
                         <td>{{ $item->title }}</td>
                         <td>{{ $item->source }}</td>
                         <td>
@@ -55,7 +55,6 @@
                 @endforeach
             </tbody>
         </table>
-        {{ $news->links() }}
     </div>
 </div>
 
@@ -77,7 +76,7 @@
 
     .table td, .table th {
         vertical-align: middle;
-        text-align: center;
+        text-align: left;
     }
 </style>
 @endsection

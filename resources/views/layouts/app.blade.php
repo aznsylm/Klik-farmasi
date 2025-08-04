@@ -81,6 +81,11 @@
     </a>
     
     <style>
+        html, body {
+            max-width: 100vw;
+            overflow-x: hidden;
+        }
+
         h1, h2, h3 {
             font-family: 'El Messiri', sans-serif;
             color: #baa971;

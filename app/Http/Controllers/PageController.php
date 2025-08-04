@@ -23,8 +23,8 @@ class PageController extends Controller
 
     public function artikel()
     {
-        // Redirect to non-kehamilan articles by default
-        return redirect()->route('artikel.non-kehamilan');
+        // Redirect to kehamilan articles by default
+        return redirect()->route('artikel.kehamilan');
     }
     
     public function artikelKehamilan()
@@ -32,51 +32,62 @@ class PageController extends Controller
         // Ambil artikel terbaru untuk hipertensi kehamilan
         $latestArticle = Article::where('article_type', 'kehamilan')->latest()->first();
 
-        // Ambil artikel lainnya untuk hipertensi kehamilan
+        // Ambil semua artikel lainnya untuk hipertensi kehamilan
         $otherArticles = Article::where('article_type', 'kehamilan')
                         ->latest()
                         ->when($latestArticle, function($query) use ($latestArticle) {
                             return $query->where('id', '!=', $latestArticle->id);
                         })
-                        ->get();
+                        ->get(); // Ambil semua artikel
 
         // Kirim data ke view
         return view('pages.artikel-kehamilan', compact('latestArticle', 'otherArticles'));
     }
-    
+
     public function artikelNonKehamilan()
     {
         // Ambil artikel terbaru untuk hipertensi non-kehamilan
         $latestArticle = Article::where('article_type', 'non-kehamilan')->latest()->first();
 
-        // Ambil artikel lainnya untuk hipertensi non-kehamilan
+        // Ambil artikel lainnya untuk hipertensi non-kehamilan dengan pagination
         $otherArticles = Article::where('article_type', 'non-kehamilan')
-                        ->latest()
-                        ->when($latestArticle, function($query) use ($latestArticle) {
-                            return $query->where('id', '!=', $latestArticle->id);
-                        })
-                        ->get();
+            ->latest()
+            ->when($latestArticle, function($query) use ($latestArticle) {
+                return $query->where('id', '!=', $latestArticle->id);
+            })
+            ->get(); 
 
-        // Kirim data ke view
         return view('pages.artikel-non-kehamilan', compact('latestArticle', 'otherArticles'));
     }
 
     public function artikelDetail($slug)
     {
-        // Cari artikel berdasarkan slug
-        $article = Article::where('slug', $slug)->firstOrFail();
-        
-        // Ambil artikel terkait berdasarkan kategori yang sama
-        $relatedArticles = Article::where('category', $article->category)
+        // Tentukan article_type berdasarkan URL
+        $currentRoute = request()->route()->getName();
+        $articleType = $currentRoute === 'artikel.detail.kehamilan' ? 'kehamilan' : 'non-kehamilan';
+
+        // Cari artikel berdasarkan slug dan article_type
+        $article = Article::where('slug', $slug)
+                         ->where('article_type', $articleType)
+                         ->firstOrFail();
+
+        // Ambil artikel terkait berdasarkan article_type yang sama
+        $relatedArticles = Article::where('article_type', $article->article_type)
             ->where('id', '!=', $article->id)
             ->latest()
             ->take(3)
             ->get();
-        
-        // Ambil artikel sebelumnya dan selanjutnya untuk navigasi
-        $previousArticle = Article::where('id', '<', $article->id)->orderBy('id', 'desc')->first();
-        $nextArticle = Article::where('id', '>', $article->id)->orderBy('id', 'asc')->first();
-    
+
+        // Ambil artikel sebelumnya dan selanjutnya untuk navigasi (dalam kategori yang sama)
+        $previousArticle = Article::where('article_type', $article->article_type)
+            ->where('id', '<', $article->id)
+            ->orderBy('id', 'desc')
+            ->first();
+        $nextArticle = Article::where('article_type', $article->article_type)
+            ->where('id', '>', $article->id)
+            ->orderBy('id', 'asc')
+            ->first();
+
         return view('pages.artikel-detail', compact('article', 'relatedArticles', 'previousArticle', 'nextArticle'));
     }
 
@@ -92,7 +103,7 @@ class PageController extends Controller
 
     public function unduhan()
     {
-        $downloads = Download::latest()->get();
+        $downloads = Download::latest()->paginate(9); // Pagination untuk 9 unduhan per halaman
         return view('pages.unduhan', compact('downloads'));
     }
 
@@ -103,7 +114,7 @@ class PageController extends Controller
     public function berita()
     {
         // Ambil semua berita, urutkan berdasarkan yang terbaru
-        $allNews = News::latest()->paginate(10); // Pagination untuk 10 berita per halaman
+        $allNews = News::latest()->paginate(9); 
     
         // Kirim data ke view
         return view('pages.berita', compact('allNews'));

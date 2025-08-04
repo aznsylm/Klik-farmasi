@@ -33,22 +33,22 @@
                 
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label for="title" class="form-label">Judul</label>
+                        <label for="title" class="form-label">Judul<span style="color: red">*</span></label>
                         <input type="text" name="title" id="title" class="form-control" value="{{ old('title', $news->title) }}" required>
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label for="source" class="form-label">Sumber</label>
+                        <label for="source" class="form-label">Sumber<span style="color: red">*</span></label>
                         <input type="text" name="source" id="source" class="form-control" value="{{ old('source', $news->source) }}">
                     </div>
                 </div>
                 
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label for="link" class="form-label">Link</label>
+                        <label for="link" class="form-label">Link<span style="color: red">*</span></label>
                         <input type="url" name="link" id="link" class="form-control" value="{{ old('link', $news->link) }}" required>
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label for="published_at" class="form-label">Waktu</label>
+                        <label for="published_at" class="form-label">Waktu<span style="color: red">*</span></label>
                         <input type="datetime-local" name="published_at" id="published_at" class="form-control" value="{{ old('published_at', $news->published_at->format('Y-m-d\\TH:i')) }}" required>
                     </div>
                 </div>

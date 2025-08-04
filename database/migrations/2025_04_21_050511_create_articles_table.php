@@ -13,7 +13,6 @@ class CreateArticlesTable extends Migration
             $table->string('title');
             $table->string('slug')->unique();
             $table->string('category');
-            $table->text('summary');
             $table->text('content');
             $table->string('author');
             $table->timestamp('published_at')->nullable();

@@ -32,12 +32,12 @@
                 @method('PUT')
                 
                 <div class="mb-3">
-                    <label for="quote" class="form-label">Quote</label>
+                    <label for="quote" class="form-label">Kalimat<span style="color: red">*</span></label>
                     <textarea class="form-control" id="quote" name="quote" rows="4" required>{{ old('quote', $testimonial->quote) }}</textarea>
                 </div>
                 
                 <div class="mb-3">
-                    <label for="name" class="form-label">Nama</label>
+                    <label for="name" class="form-label">Nama<span style="color: red">*</span></label>
                     <input type="text" class="form-control" id="name" name="name" value="{{ old('name', $testimonial->name) }}" required>
                 </div>
                 

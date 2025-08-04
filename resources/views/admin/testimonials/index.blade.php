@@ -33,7 +33,7 @@
             <thead class="table-dark">
                 <tr>
                     <th>No</th>
-                    <th>Quote</th>
+                    <th>Kalimat</th>
                     <th>Nama</th>
                     <th class="text-center">Aksi</th>
                 </tr>
@@ -41,7 +41,7 @@
             <tbody>
                 @foreach ($testimonials as $testimonial)
                     <tr>
-                        <td>{{ ($testimonials->currentPage() - 1) * $testimonials->perPage() + $loop->iteration }}</td>
+                        <td>{{ $loop->iteration }}</td>
                         <td>{{ $testimonial->quote }}</td>
                         <td>{{ $testimonial->name }}</td>
                         <td class="text-center">
@@ -80,7 +80,7 @@
 
     .table td, .table th {
         vertical-align: middle;
-        text-align: center;
+        text-align: left;
     }
 
 </style>

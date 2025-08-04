@@ -12,7 +12,7 @@ class ArticleController extends Controller
 {
     public function index()
     {
-        $articles = Article::orderBy('created_at', 'desc')->paginate(10);
+        $articles = Article::orderBy('created_at', 'desc')->get();
         return view('admin.articles.index', compact('articles'));
     }
 
@@ -33,15 +33,12 @@ class ArticleController extends Controller
             'category' => 'required|string|max:255',
             'article_type' => 'required|string|in:kehamilan,non-kehamilan',
             'title' => 'required|string|max:255',
-            'slug' => 'required|string|max:255|unique:articles',
-            'summary' => 'required|string',
             'content' => 'required|string',
             'author' => 'required|string|max:255',
             'published_at' => 'nullable|date',
-            'image' => 'nullable|image|mimes:webp|max:2048', // Hanya menerima format .webp
-        ], [
-            'slug.unique' => 'Slug artikel sudah digunakan. Silakan gunakan slug yang berbeda.'
+            'image' => 'nullable|image|mimes:webp|max:2048',
         ]);
+        $validated['slug'] = $this->generateSlug($validated['title']);
     
         if ($request->hasFile('image')) {
             $validated['image'] = $request->file('image')->store('articles', 'public');
@@ -63,15 +60,12 @@ class ArticleController extends Controller
             'category' => 'required|string|max:255',
             'article_type' => 'required|string|in:kehamilan,non-kehamilan',
             'title' => 'required|string|max:255',
-            'slug' => 'required|string|max:255|unique:articles,slug,' . $article->id,
-            'summary' => 'required|string',
             'content' => 'required|string',
             'author' => 'required|string|max:255',
             'published_at' => 'nullable|date',
-            'image' => 'nullable|image|mimes:webp|max:2048', // Hanya menerima format .webp
-        ], [
-            'slug.unique' => 'Slug artikel sudah digunakan. Silakan gunakan slug yang berbeda.'
+            'image' => 'nullable|image|mimes:webp|max:2048',
         ]);
+        $validated['slug'] = $this->generateSlug($validated['title']);
     
         if ($request->hasFile('image')) {
             // Hapus gambar lama jika ada

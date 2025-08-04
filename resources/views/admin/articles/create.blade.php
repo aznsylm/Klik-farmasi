@@ -31,51 +31,42 @@
                 @csrf
                 <div class="row">
                     <div class="col-md-4 mb-3">
-                        <label for="category" class="form-label">Kategori</label>
+                        <label for="category" class="form-label">Kategori<span style="color: red">*</span></label>
                         <input type="text" class="form-control" id="category" name="category" value="{{ old('category') }}" required>
                     </div>
                     <div class="col-md-4 mb-3">
-                        <label for="article_type" class="form-label">Tipe Artikel</label>
+                        <label for="article_type" class="form-label">Tipe Artikel<span style="color: red">*</span></label>
                         <select class="form-select" id="article_type" name="article_type" required>
                             <option value="" disabled selected>Pilih Tipe Artikel</option>
                             <option value="kehamilan" {{ old('article_type') == 'kehamilan' ? 'selected' : '' }}>Hipertensi Kehamilan</option>
                             <option value="non-kehamilan" {{ old('article_type') == 'non-kehamilan' ? 'selected' : '' }}>Hipertensi Non-Kehamilan</option>
                         </select>
                     </div>
-                    <div class="col-md-4 mb-3">
-                        <label for="slug" class="form-label">Slug</label>
-                        <input type="text" class="form-control" id="slug" name="slug" value="{{ old('slug') }}" required>
-                    </div>
                 </div>
                 
                 <div class="mb-3">
-                    <label for="title" class="form-label">Judul</label>
+                    <label for="title" class="form-label">Judul<span style="color: red">*</span></label>
                     <input type="text" class="form-control" id="title" name="title" value="{{ old('title') }}" required>
                 </div>
                 
                 <div class="mb-3">
-                    <label for="summary" class="form-label">Narasi Singkat</label>
-                    <textarea class="form-control" id="summary" name="summary" rows="3" required>{{ old('summary') }}</textarea>
-                </div>
-                
-                <div class="mb-3">
-                    <label for="content" class="form-label">Konten Lengkap</label>
+                    <label for="content" class="form-label">Narasi Lengkap<span style="color: red">*</span></label>
                     <textarea class="form-control" id="content" name="content" rows="6" required>{{ old('content') }}</textarea>
                 </div>
                 
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label for="author" class="form-label">Penulis</label>
+                        <label for="author" class="form-label">Penulis<span style="color: red">*</span></label>
                         <input type="text" class="form-control" id="author" name="author" value="{{ old('author') }}" required>
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label for="published_at" class="form-label">Waktu Publish</label>
+                        <label for="published_at" class="form-label">Waktu Publish<span style="color: red">*</span></label>
                         <input type="datetime-local" class="form-control" id="published_at" name="published_at" value="{{ old('published_at') }}">
                     </div>
                 </div>
                 
                 <div class="mb-3">
-                    <label for="image" class="form-label">Gambar</label>
+                    <label for="image" class="form-label">Gambar<span style="color: red">*</span></label>
                     <input type="file" class="form-control" id="image" name="image" accept=".webp">
                     <small class="text-muted">Hanya file dengan format .webp yang diperbolehkan.</small>
                 </div>

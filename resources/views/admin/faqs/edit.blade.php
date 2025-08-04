@@ -1,19 +1,19 @@
 @extends('layouts.admin')
 
-@section('title', 'Edit FAQ')
+@section('title', 'Edit Tanya Jawab')
 
 @section('content')
 <div class="container py-5">
     <!-- Tombol Kembali -->
     <div class="back-button">
         <a href="{{ route('admin.faqs.index') }}" class="btn btn-secondary">
-            <i class="bi bi-arrow-left"></i> Kembali ke Daftar FAQ
+            <i class="bi bi-arrow-left"></i> Kembali ke Daftar Tanya Jawab
         </a>
     </div>
 
     <div class="card">
         <div class="card-header">
-            <h5 class="mb-0">Edit FAQ</h5>
+            <h5 class="mb-0">Edit Tanya Jawab</h5>
         </div>
         <div class="card-body">
             @if ($errors->any())
@@ -32,21 +32,21 @@
                 @method('PUT')
                 
                 <div class="mb-3">
-                    <label for="category" class="form-label">Kategori</label>
+                    <label for="category" class="form-label">Kategori<span style="color: red">*</span></label>
                     <select name="category" id="category" class="form-select" required>
-                        <option value="" disabled>Pilih Kategori</option>
+                        <option value="" hidden>Pilih Kategori</option>
                         <option value="Hipertensi Kehamilan" {{ old('category', $faq->category) == 'Hipertensi Kehamilan' ? 'selected' : '' }}>Hipertensi Kehamilan</option>
                         <option value="Hipertensi Non-Kehamilan" {{ old('category', $faq->category) == 'Hipertensi Non-Kehamilan' ? 'selected' : '' }}>Hipertensi Non-Kehamilan</option>
                     </select>
                 </div>
                 
                 <div class="mb-3">
-                    <label for="question" class="form-label">Pertanyaan</label>
+                    <label for="question" class="form-label">Pertanyaan<span style="color: red">*</span></label>
                     <input type="text" name="question" id="question" class="form-control" value="{{ old('question', $faq->question) }}" required>
                 </div>
                 
                 <div class="mb-3">
-                    <label for="answer" class="form-label">Jawaban</label>
+                    <label for="answer" class="form-label">Jawaban<span style="color: red">*</span></label>
                     <textarea name="answer" id="answer" class="form-control" rows="5" required>{{ old('answer', $faq->answer) }}</textarea>
                 </div>
                 

@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Dashboard Admin')</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ asset('assets/Favicon.png') }}"> 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -413,7 +415,7 @@
         }
 
         .feature-card.users::before { background: #0b5e91; }
-        .feature-card.articles::before { background: #38b000; }
+        .feature-card.articles::before { background: #baa971; }
         .feature-card.news::before { background: #00b4d8; }
         .feature-card.faqs::before { background: #f093fb; }
         .feature-card.downloads::before { background: #ffb703; }
@@ -443,7 +445,7 @@
         }
 
         .feature-card.users .feature-icon { background: #0b5e91; }
-        .feature-card.articles .feature-icon { background: #38b000; }
+        .feature-card.articles .feature-icon { background: #baa971; }
         .feature-card.news .feature-icon { background: #00b4d8; }
         .feature-card.faqs .feature-icon { background: #f093fb; }
         .feature-card.downloads .feature-icon { background: #ffb703; }
@@ -477,7 +479,7 @@
         }
 
         .feature-card.users .feature-action { background: #0b5e91; }
-        .feature-card.articles .feature-action { background: #38b000; }
+        .feature-card.articles .feature-action { background: #baa971; }
         .feature-card.news .feature-action { background: #00b4d8; }
         .feature-card.faqs .feature-action { background: #f093fb; }
         .feature-card.downloads .feature-action { background: #ffb703; }
@@ -541,7 +543,7 @@
         }
 
         .motivation-banner {
-            background: linear-gradient(90deg, #0b5e91 0%, #38b000 100%);
+            background: linear-gradient(50deg, #0b5e91 0%, #baa971 100%);
             border-radius: 18px;
             padding: 32px 24px;
             color: #fff;

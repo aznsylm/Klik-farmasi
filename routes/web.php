@@ -13,7 +13,8 @@ Route::get('/tanya-jawab/hipertensi-non-kehamilan', [PageController::class, 'tan
 Route::get('/artikel', [PageController::class, 'artikel'])->name('artikel');
 Route::get('/artikel/hipertensi-kehamilan', [PageController::class, 'artikelKehamilan'])->name('artikel.kehamilan');
 Route::get('/artikel/hipertensi-non-kehamilan', [PageController::class, 'artikelNonKehamilan'])->name('artikel.non-kehamilan');
-Route::get('/artikel/{slug}', [PageController::class, 'artikelDetail'])->name('artikel.detail');
+Route::get('/artikel/hipertensi-kehamilan/{slug}', [PageController::class, 'artikelDetail'])->name('artikel.detail.kehamilan');
+Route::get('/artikel/hipertensi-non-kehamilan/{slug}', [PageController::class, 'artikelDetail'])->name('artikel.detail.non-kehamilan');
 Route::get('/unduhan', [PageController::class, 'unduhan'])->name('unduhan');
 Route::get('/pengingat', function() {
     return view('pages.pengingat-dev');

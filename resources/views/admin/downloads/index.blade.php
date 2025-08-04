@@ -45,7 +45,7 @@
             <tbody>
                 @foreach ($downloads as $download)
                     <tr>
-                        <td>{{ ($downloads->currentPage() - 1) * $downloads->perPage() + $loop->iteration }}</td>
+                        <td>{{ $loop->iteration }}</td>
                         <td>{{ $download->title }}</td>
                         <td>{{ $download->description }}</td>
 
@@ -97,7 +97,7 @@
 
     .table td, .table th {
         vertical-align: middle;
-        text-align: center;
+        text-align: left;
     }
 </style>
 @endsection

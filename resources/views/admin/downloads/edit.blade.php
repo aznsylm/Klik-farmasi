@@ -32,22 +32,22 @@
                 @method('PUT')
                 
                 <div class="mb-3">
-                    <label for="title" class="form-label">Judul</label>
+                    <label for="title" class="form-label">Judul<span style="color: red">*</span></label>
                     <input type="text" name="title" id="title" class="form-control" value="{{ old('title', $download->title) }}" required>
                 </div>
                 
                 <div class="mb-3">
-                    <label for="description" class="form-label">Deskripsi</label>
+                    <label for="description" class="form-label">Deskripsi<span style="color: red">*</span></label>
                     <textarea name="description" id="description" class="form-control" rows="3" required>{{ old('description', $download->description) }}</textarea>
                 </div>
                 
                 <div class="mb-3">
-                    <label for="file_link" class="form-label">Link File</label>
+                    <label for="file_link" class="form-label">Link File<span style="color: red">*</span></label>
                     <input type="url" name="file_link" id="file_link" class="form-control" value="{{ old('file_link', $download->file_link) }}" required>
                 </div>
                 
                 <div class="mb-3">
-                    <label for="image" class="form-label">Gambar</label>
+                    <label for="image" class="form-label">Gambar<span style="color: red">*</span></label>
                     <input type="file" name="image" id="image" class="form-control" accept=".webp">
                     @if ($download->image)
                         <div class="mt-2">

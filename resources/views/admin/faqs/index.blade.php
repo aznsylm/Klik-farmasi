@@ -1,14 +1,14 @@
 @extends('layouts.admin')
 
-@section('title', 'Kelola FAQ')
+@section('title', 'Kelola Tanya Jawab')
 
 @section('content')
 <div class="container py-5">
     <div class="text-center mb-4">
-        <h1 class="fw-bold">Kelola FAQ</h1>
+        <h1 class="fw-bold">Kelola Tanya Jawab</h1>
         <div class="d-flex justify-content-between align-items-center mb-4">
             <!-- Tombol Tambah FAQ -->
-            <a href="{{ route('admin.faqs.create') }}" class="btn btn-primary">Tambah FAQ</a>
+            <a href="{{ route('admin.faqs.create') }}" class="btn btn-primary">Tambah Tanya Jawab</a>
         
             <!-- Tombol Kembali ke Dashboard -->
             <a href="{{ route('admin.dashboard') }}" class="btn btn-secondary">
@@ -35,7 +35,7 @@
             <tbody>
                 @foreach ($faqs as $faq)
                     <tr>
-                        <td>{{ ($faqs->currentPage() - 1) * $faqs->perPage() + $loop->iteration }}</td>
+                        <td>{{ $loop->iteration }}</td>
                         <td>{{ $faq->category }}</td>
                         <td>{{ $faq->question }}</td>
                         <td>{{ $faq->answer }}</td>
@@ -66,7 +66,7 @@
 
     .table td, .table th {
         vertical-align: middle;
-        text-align: center;
+        text-align: left;
     }
 </style>
 @endsection

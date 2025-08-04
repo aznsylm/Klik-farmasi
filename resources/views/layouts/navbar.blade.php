@@ -40,7 +40,7 @@
                     <ul class="dropdown-menu shadow border-0" aria-labelledby="artikelDropdown">
                         <li>
                             <a class="dropdown-item py-2" href="{{ route('artikel.kehamilan') }}">
-                                Hipertensi pada Kehamilan
+                                Hipertensi Kehamilan
                             </a>
                         </li>
                         <li>
