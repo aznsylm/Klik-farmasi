@@ -1,6 +1,13 @@
 @extends('layouts.auth')
 
-@section('title', 'Register')
+@section('title', 'Register - Klik Farmasi')
+
+@push('head')
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Daftar akun Klik Farmasi gratis untuk mendapatkan pengingat obat, konsultasi kesehatan, dan akses ke artikel kesehatan terpercaya.">
+    <meta name="keywords" content="daftar klik farmasi, register akun, pengingat obat gratis, konsultasi kesehatan">
+    <meta name="author" content="Tim Farmasi Universitas Alma Ata">
+@endpush
 
 @section('content')
     <!-- Register Form -->

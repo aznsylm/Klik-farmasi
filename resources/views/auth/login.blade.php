@@ -1,6 +1,13 @@
 @extends('layouts.auth')
 
-@section('title', 'Login')
+@section('title', 'Login - Klik Farmasi')
+
+@push('head')
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Login ke akun Klik Farmasi untuk mengakses pengingat obat, konsultasi kesehatan, dan fitur eksklusif lainnya.">
+    <meta name="keywords" content="login klik farmasi, masuk akun, pengingat obat, konsultasi kesehatan">
+    <meta name="author" content="Tim Farmasi Universitas Alma Ata">
+@endpush
 
 @section('content')
 

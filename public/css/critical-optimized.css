@@ -1,0 +1,202 @@
+/* Critical CSS Optimized - Minified for Speed Index & LCP */
+.container-fluid {
+    width: 100%;
+    padding-right: var(--bs-gutter-x, .75rem);
+    padding-left: var(--bs-gutter-x, .75rem);
+    margin-right: auto;
+    margin-left: auto
+}
+
+.row {
+    --bs-gutter-x: 1.5rem;
+    --bs-gutter-y: 0;
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: calc(-1*var(--bs-gutter-y));
+    margin-right: calc(-.5*var(--bs-gutter-x));
+    margin-left: calc(-.5*var(--bs-gutter-x))
+}
+
+.col-12 {
+    flex: 0 0 auto;
+    width: 100%
+}
+
+.justify-content-center {
+    justify-content: center !important
+}
+
+.position-relative {
+    position: relative !important
+}
+
+.overflow-hidden {
+    overflow: hidden !important
+}
+
+.revolutionary-hero-section {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    position: relative;
+    will-change: transform
+}
+
+.hero-background-new {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, #0b5e91 0%, #1a6fa0 50%, #baa971 100%);
+    z-index: 1;
+    will-change: transform
+}
+
+.hero-overlay-new {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, .3);
+    z-index: 2
+}
+
+.hero-visual-section {
+    position: relative;
+    z-index: 3
+}
+
+.clean-carousel-wrapper {
+    position: relative;
+    max-width: 100%;
+    margin: 0 auto;
+    contain: layout style paint
+}
+
+.carousel {
+    position: relative
+}
+
+.carousel-inner {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    contain: layout style
+}
+
+.carousel-item {
+    position: relative;
+    display: none;
+    float: left;
+    width: 100%;
+    margin-right: -100%;
+    backface-visibility: hidden;
+    transition: transform .6s ease-in-out;
+    will-change: transform
+}
+
+.carousel-item.active {
+    display: block
+}
+
+.clean-slide-wrapper {
+    position: relative;
+    width: 100%;
+    height: 60vh;
+    min-height: 400px;
+    overflow: hidden;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, .3);
+    contain: layout style paint
+}
+
+.clean-slide-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 20px;
+    will-change: transform;
+    transform: translateZ(0)
+}
+
+.navbar {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: .5rem;
+    padding-bottom: .5rem
+}
+
+.navbar-brand {
+    padding-top: .3125rem;
+    padding-bottom: .3125rem;
+    margin-right: 1rem;
+    font-size: 1.25rem;
+    text-decoration: none;
+    white-space: nowrap
+}
+
+body {
+    margin: 0;
+    font-family: var(--bs-body-font-family);
+    font-size: var(--bs-body-font-size);
+    font-weight: var(--bs-body-font-weight);
+    line-height: var(--bs-body-line-height);
+    color: var(--bs-body-color);
+    text-align: var(--bs-body-text-align);
+    background-color: var(--bs-body-bg)
+}
+
+@media (min-width:992px) {
+    .col-lg-11 {
+        flex: 0 0 auto;
+        width: 91.66666667%
+    }
+
+    .col-xl-10 {
+        flex: 0 0 auto;
+        width: 83.33333333%
+    }
+
+    .px-lg-4 {
+        padding-right: 1.5rem !important;
+        padding-left: 1.5rem !important
+    }
+}
+
+@media (max-width:768px) {
+    .clean-slide-wrapper {
+        height: 50vh;
+        min-height: 300px
+    }
+
+    .revolutionary-hero-section {
+        min-height: 80vh
+    }
+}
+
+* {
+    box-sizing: border-box
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    vertical-align: middle
+}
+
+button {
+    border: none;
+    background: transparent;
+    cursor: pointer
+}
+
+a {
+    text-decoration: none;
+    color: inherit
+}

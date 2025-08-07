@@ -2,6 +2,13 @@
 
 @section('title', 'Artikel')
 
+@push('head')
+    @if (isset($latestArticle) && $latestArticle->image)
+        <!-- Preload featured article image for LCP optimization -->
+        <link rel="preload" as="image" href="{{ asset('storage/' . $latestArticle->image) }}" fetchpriority="high">
+    @endif
+@endpush
+
 @section('content')
     <!-- Artikel Terbaru -->
     <section class="py-5">
@@ -31,7 +38,8 @@
                         <div class="col-lg-6 col-xl-7">
                             <div class="article-image h-100">
                                 <img src="{{ asset('storage/' . $latestArticle->image) }}" alt="Gambar Artikel"
-                                    class="img-fluid h-100 w-100 object-fit-cover">
+                                    class="img-fluid h-100 w-100 object-fit-cover" loading="eager" fetchpriority="high"
+                                    decoding="async" width="800" height="600">
                             </div>
                         </div>
                     </div>
@@ -66,9 +74,11 @@
                         <div class="article-card">
                             <div class="article-image">
                                 @if ($article->image)
-                                    <img src="{{ asset('storage/' . $article->image) }}" alt="{{ $article->title }}">
+                                    <img src="{{ asset('storage/' . $article->image) }}" alt="{{ $article->title }}"
+                                        loading="lazy" decoding="async" width="400" height="250">
                                 @else
-                                    <img src="{{ asset('assets/default-image.jpg') }}" alt="Default Image">
+                                    <img src="{{ asset('assets/default-image.jpg') }}" alt="Default Image" loading="lazy"
+                                        decoding="async" width="400" height="250">
                                 @endif
                                 <div class="article-category">
                                     <span>{{ $article->category }}</span>
@@ -100,28 +110,4 @@
     </section>
 @endsection
 
-<style>
-    .article-category-new {
-        padding-bottom: 10px;
-        z-index: 2;
-    }
 
-    .article-category-new span {
-        background-color: #0b5e91;
-        color: white;
-        padding: 6px 14px;
-        border-radius: 30px;
-        font-size: 0.75rem;
-        font-weight: 600;
-        display: inline-block;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    }
-
-    .article-image img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        transition: transform 0.5s ease;
-        border-radius: 0;
-    }
-</style>

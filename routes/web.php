@@ -17,7 +17,7 @@ Route::get('/artikel/hipertensi-kehamilan/{slug}', [PageController::class, 'arti
 Route::get('/artikel/hipertensi-non-kehamilan/{slug}', [PageController::class, 'artikelDetail'])->name('artikel.detail.non-kehamilan');
 Route::get('/unduhan', [PageController::class, 'unduhan'])->name('unduhan');
 Route::get('/pengingat', function() {
-    return view('pages.pengingat-dev');
+    return view('pages.pengingat');
 })->name('pengingat');
 Route::get('/berita', [PageController::class, 'berita'])->name('pages.berita');
 Route::get('/petunjuk', [PageController::class, 'petunjuk'])->name('petunjuk');

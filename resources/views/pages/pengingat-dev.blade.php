@@ -1,5 +1,12 @@
 @extends('layouts.app')
-@section('title', 'Pengingat - Sedang Proses Pengembangan')
+@section('title', 'Pengingat Minum Obat - Klik Farmasi')
+
+@push('head')
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Fitur pengingat minum obat untuk penderita hipertensi sedang dalam tahap pengembangan. Dapatkan notifikasi jadwal minum obat yang tepat waktu.">
+    <meta name="keywords" content="pengingat minum obat, alarm obat hipertensi, jadwal minum obat, notifikasi obat, manajemen obat">
+    <meta name="author" content="Tim Farmasi Universitas Alma Ata">
+@endpush
 @section('content')
     <section class="py-5" style="background:linear-gradient(135deg, #0b5e91 0%, #1a7bb8 100%);min-height:100vh;">
         <div class="container px-4">
@@ -9,7 +16,7 @@
                         <div class="card-body p-5 text-center"><!-- Icon Animation -->
                             <div class="mb-4 position-relative">
                                 <div class="development-icon-bg"></div><i class="bi bi-gear-fill development-icon"
-                                    style="font-size:4rem;color:#0b5e91;"></i>
+                                    style="font-size:4rem;color:#0b5e91;" aria-hidden="true"></i>
                             </div>
                             <div class="alert alert-info border-0 mb-4"
                                 style="background:linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);">

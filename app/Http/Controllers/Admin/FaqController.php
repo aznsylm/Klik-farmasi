@@ -29,7 +29,7 @@ class FaqController extends Controller
         ]);
 
         Faq::create($request->all());
-        return redirect()->route('admin.faqs.index')->with('success', 'FAQ berhasil ditambahkan.');
+        return redirect()->route('admin.faqs.index')->with('success', 'Tanya Jawab berhasil ditambahkan.');
     }
 
     public function edit(Faq $faq)
@@ -48,12 +48,12 @@ class FaqController extends Controller
         ]);
 
         $faq->update($request->all());
-        return redirect()->route('admin.faqs.index')->with('success', 'FAQ berhasil diperbarui.');
+        return redirect()->route('admin.faqs.index')->with('success', 'Tanya Jawab berhasil diperbarui.');
     }
 
     public function destroy(Faq $faq)
     {
         $faq->delete();
-        return redirect()->route('admin.faqs.index')->with('success', 'FAQ berhasil dihapus.');
+        return redirect()->route('admin.faqs.index')->with('success', 'Tanya Jawab berhasil dihapus.');
     }
 }

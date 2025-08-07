@@ -1,12 +1,21 @@
 @extends('layouts.app')
 @section('title', $article->title)
+
+@push('head')
+    @if ($article->image)
+        <!-- Preload article featured image for LCP optimization -->
+        <link rel="preload" as="image" href="{{ asset('storage/' . $article->image) }}" fetchpriority="high">
+    @endif
+@endpush
+
 @section('content')
     <section class="py-5 article-section">
         <div class="container px-4">
             <!-- Breadcrumb -->
             <nav aria-label="breadcrumb" class="mb-4">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{ route('beranda') }}" class="text-decoration-none">Beranda</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('beranda') }}" class="text-decoration-none">Beranda</a>
+                    </li>
                     <li class="breadcrumb-item"><a
                             href="{{ route($article->article_type === 'kehamilan' ? 'artikel.kehamilan' : 'artikel.non-kehamilan') }}"
                             class="text-decoration-none">Artikel
@@ -16,10 +25,10 @@
                 </ol>
             </nav>
 
-            <div class="row gx-5">
+            <div class="row gx-3 gx-lg-5">
                 <!-- Konten Artikel -->
                 <div class="col-lg-8">
-                    <div class="article-container bg-white p-4 p-md-5 rounded-4 shadow-sm mb-4">
+                    <div class="article-container bg-white p-3 p-md-5 rounded-4 shadow-sm mb-4">
                         <!-- Article Header -->
                         <div class="article-header mb-4">
                             <span class="badge bg-secondary rounded-pill px-3 py-2 mb-2">{{ $article->category }}</span>
@@ -67,7 +76,8 @@
                         <!-- Featured Image with caption -->
                         <figure class="figure mb-5 w-100">
                             <img src="{{ asset('storage/' . $article->image) }}" alt="{{ $article->title }}"
-                                class="figure-img img-fluid rounded shadow-sm">
+                                class="figure-img img-fluid rounded shadow-sm" loading="eager" fetchpriority="high"
+                                decoding="async" width="800" height="500">
                             <figcaption class="figure-caption text-center mt-2">{{ $article->title }}</figcaption>
                         </figure>
 
@@ -98,7 +108,8 @@
                             <div class="d-flex flex-wrap">
                                 <div class="author-image me-4">
                                     <img src="{{ isset($article->author_image) ? asset('storage/' . $article->author_image) : asset('img/default-avatar.png') }}"
-                                        alt="{{ $article->author }}" class="rounded-circle" width="80" height="80">
+                                        alt="{{ $article->author }}" class="rounded-circle" width="80" height="80"
+                                        loading="lazy" decoding="async">
                                 </div>
                                 <div class="author-info flex-grow-1">
                                     <h5 class="fw-bold mb-2">{{ $article->author }}</h5>
@@ -151,7 +162,8 @@
                                                         <div class="flex-shrink-0">
                                                             <img src="{{ asset('storage/' . $relatedArticle->image) }}"
                                                                 alt="{{ $relatedArticle->title }}" class="rounded"
-                                                                width="60" height="60" style="object-fit: cover;">
+                                                                width="60" height="60" style="object-fit: cover;"
+                                                                loading="lazy" decoding="async">
                                                         </div>
                                                         <div class="flex-grow-1 ms-3">
                                                             <h6 class="mb-1" style="color: #0B5E91">
@@ -218,42 +230,5 @@
         </div>
     </section>
 
-    <style>
-        /* Social icon styling */
-        .social-icon {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 45px;
-            height: 45px;
-            background-color: #f8f9fa;
-            border-radius: 50%;
-            color: #0b5e91;
-            font-size: 1.2rem;
-            transition: all 0.3s ease;
-            text-decoration: none;
-        }
 
-        .social-icon:hover {
-            background-color: #0b5e91;
-            color: white;
-            transform: translateY(-3px);
-        }
-
-        /* Responsive styles for article detail page */
-        @media (max-width: 767.98px) {
-            .article-container {
-                padding: 1.25rem !important;
-            }
-
-            .article-navigation .btn {
-                padding: 0.5rem 0.75rem;
-                font-size: 0.9rem;
-            }
-
-            .sticky-top {
-                margin-top: 1.5rem;
-            }
-        }
-    </style>
 @endsection

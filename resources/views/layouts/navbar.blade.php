@@ -2,7 +2,7 @@
     <div class="container px-4">
         <!-- Logo -->
         <a class="navbar-brand d-flex align-items-center" href="{{ url('/') }}">
-            <img src="{{ asset('assets/LOGO KLIKFARMASI VEKTOR MIRING.png') }}" alt="Klik Farmasi" style="width: 180px; height: auto;">
+            <img src="{{ asset('assets/LOGO KLIKFARMASI VEKTOR MIRING.png') }}" alt="Klik Farmasi" class="navbar-logo">
         </a>
         
         <!-- Toggler (Hamburger Menu) -->
@@ -80,7 +80,7 @@
                 @guest
                     <!-- Tombol Login/Register Dropdown -->
                     <div class="dropdown">
-                        <button class="btn btn-primary dropdown-toggle" type="button" id="authDropdown" data-bs-toggle="dropdown" aria-expanded="false" 
+                        <button class="btn dropdown-toggle text-white" type="button" id="authDropdown" data-bs-toggle="dropdown" aria-expanded="false" 
                             style="border-radius: 30px; padding: 8px 20px; font-size: 0.9rem; background-color: #baa971; border: none; transition: all 0.3s ease;">
                             <i class="bi bi-person-circle me-1"></i> Akun
                         </button>
@@ -155,7 +155,7 @@
     /* Navbar Styling */
     .navbar {
         box-shadow: 0 2px 10px rgba(0,0,0,0.1) !important;
-        padding: 10px 0;
+        padding: 13px 0;
     }
     
     /* Navbar Links Hover Effect */
@@ -177,7 +177,7 @@
         bottom: -3px;
         width: 0;
         height: 2px;
-        background-color: #00d9ff; /* Warna garis hover */
+        background-color: #00d9ff;
         transition: width 0.3s ease;
     }
 
@@ -212,10 +212,59 @@
         background-color: #a08e5e !important;
     }
 
-    /* Mobile View Adjustments */
-    @media (max-width: 991.98px) {
+    /* Logo Responsive */
+    .navbar-logo {
+        height: auto;
+        max-width: 100%;
+        transition: width 0.3s ease;
+    }
+    
+    /* Desktop */
+    @media (min-width: 1200px) {
+        .navbar-logo {
+            width: 200px;
+        }
+    }
+    
+    /* Laptop */
+    @media (min-width: 992px) and (max-width: 1199.98px) {
+        .navbar-logo {
+            width: 180px;
+        }
+    }
+    
+    /* Tablet */
+    @media (min-width: 768px) and (max-width: 991.98px) {
         body {
-            padding-top: 56px;
+            padding-top: 70px;
+        }
+        
+        .navbar-logo {
+            width: 160px;
+        }
+        
+        .navbar {
+            padding: 12px 0;
+        }
+        
+        .container {
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+    }
+    
+    /* Mobile */
+    @media (max-width: 767.98px) {
+        body {
+            padding-top: 65px;
+        }
+        
+        .navbar-logo {
+            width: 140px;
+        }
+        
+        .navbar {
+            padding: 13px 0;
         }
         
         .navbar-brand {
@@ -223,19 +272,62 @@
         }
         
         .navbar-nav {
-            padding: 10px 0;
+            padding: 15px 0;
         }
         
         .navbar-collapse {
             background-color: #0B5E91;
-            padding: 10px;
+            padding: 15px;
             border-radius: 8px;
             margin-top: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
         
         .ms-lg-2 {
             margin-top: 15px;
             margin-bottom: 10px;
+        }
+        
+        .container {
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+        
+        .nav-link {
+            padding: 8px 15px !important;
+            border-radius: 5px;
+            margin: 2px 0;
+        }
+        
+        .nav-link:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+    }
+    
+    /* Small Mobile */
+    @media (max-width: 575.98px) {
+        .navbar-logo {
+            width: 120px;
+        }
+        
+        .container {
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+        
+        .navbar-collapse {
+            padding: 10px;
+        }
+    }
+    
+    /* Very Small Mobile */
+    @media (max-width: 374.98px) {
+        .navbar-logo {
+            width: 100px;
+        }
+        
+        .navbar {
+            padding: 5px 0;
         }
     }
 </style>

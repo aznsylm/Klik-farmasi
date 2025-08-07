@@ -1,5 +1,8 @@
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
+<h1 align="center">Klik Farmasi</h1>
+<p align="center">Platform Kesehatan Digital untuk Manajemen Hipertensi</p>
+
 <p align="center">
 <a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
@@ -59,3 +62,93 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+## Tentang Klik Farmasi
+
+**Klik Farmasi** adalah platform kesehatan digital yang dirancang khusus untuk manajemen hipertensi. Aplikasi ini menyediakan solusi komprehensif untuk penderita hipertensi dalam mengelola kesehatan mereka.
+
+### Fitur Utama
+
+#### 1. Pengingat Minum Obat
+- Sistem pengingat untuk penderita hipertensi
+- Mendukung 2 kategori: Hipertensi Kehamilan & Non-Kehamilan
+- Tracking tekanan darah dan jadwal obat
+- Status monitoring (aktif/tidak aktif/selesai)
+
+#### 2. Sistem Informasi Kesehatan
+- Artikel kesehatan terpercaya tentang hipertensi
+- Berita kesehatan terkini
+- FAQ (Tanya Jawab) untuk hipertensi kehamilan dan non-kehamilan
+- Download center untuk materi edukasi
+
+#### 3. Multi-Role Management
+- **Super Admin**: Kelola admin dan pasien
+- **Admin**: Kelola konten (artikel, berita, FAQ, unduhan, testimoni) dan data pasien
+- **Pasien**: Akses pengingat obat dan dashboard personal
+
+#### 4. Fitur Pendukung
+- Sistem autentikasi (login/register)
+- Profile management
+- Tim pengelola
+- Testimoni
+- Petunjuk penggunaan
+
+### Target Pengguna
+- Penderita hipertensi (kehamilan & non-kehamilan)
+- Tenaga kesehatan/admin
+- Masyarakat umum yang membutuhkan informasi kesehatan
+
+## Database Schema (ERD)
+
+### Entitas dan Atribut
+
+**USERS**
+- id (PK)
+- name, email (unique), password
+- role (default: 'pasien')
+- email_verified_at, remember_token
+- timestamps
+
+**PENGINGAT_OBAT**
+- id (PK)
+- user_id (FK → users.id)
+- diagnosa (enum: 'Hipertensi-Non-Kehamilan', 'Hipertensi-Kehamilan')
+- tekanan_darah, status, tanggal_mulai, catatan
+- timestamps
+
+**DETAIL_OBAT_PENGINGAT**
+- id (PK)
+- pengingat_obat_id (FK → pengingat_obat.id)
+- nama_obat, jumlah_obat, waktu_minum
+- suplemen, urutan, status_obat
+- timestamps
+
+**ARTICLES**
+- id (PK)
+- title, slug (unique), category, article_type
+- content, author, published_at, image
+- timestamps
+
+**NEWS**
+- id (PK)
+- title, source, link, published_at
+- timestamps
+
+**FAQS**
+- id (PK)
+- category, question, answer
+- timestamps
+
+**DOWNLOADS**
+- id (PK)
+- title, description, image, file_link
+- timestamps
+
+**TESTIMONIALS**
+- id (PK)
+- quote, name
+- timestamps
+
+### Relasi Database
+1. **USERS → PENGINGAT_OBAT** (One-to-Many)
+2. **PENGINGAT_OBAT → DETAIL_OBAT_PENGINGAT** (One-to-Many)

@@ -3,7 +3,7 @@
         <div class="row">
             <!-- Kolom 1: Logo & Info -->
             <div class="col-md-3 mb-4 mb-md-0">
-                <img src="{{ asset('assets/LOGO KLIKFARMASI VEKTOR MIRING.png') }}" alt="Logo Farmasi Universitas Alma Ata" class="footer-logo" width="220" height="auto" loading="lazy" decoding="async">
+                <img src="{{ url('assets/LOGO KLIKFARMASI VEKTOR MIRING.png') }}" alt="Logo Farmasi Universitas Alma Ata" class="footer-logo" width="220" height="auto" loading="lazy" decoding="async" onload="console.log('Logo loaded successfully')" onerror="console.log('Logo failed to load:', this.src); this.src='{{ url('assets/Favicon.png') }}'; this.style.width='60px'; this.style.height='60px';">
                 <h3>Universitas Alma Ata</h3>
                 <p class="footer-address">
                     Jl. Brawijaya No.99, Jadan, Tamantirto, Kasihan, Bantul, Yogyakarta 55183
@@ -61,8 +61,8 @@
             <div class="col-md-4 mb-3 mb-md-0">
                 <div class="footer-partners">
                     <p>Bagian dari:</p>
-                    <img src="{{ asset('assets/mitra.png') }}" alt="Logo Mitra" width="40" height="40" loading="lazy" decoding="async">
-                    <img src="{{ asset('assets/Farmasi-LogoUAA_white.png') }}" alt="Logo Farmasi" width="40" height="40" loading="lazy" decoding="async">
+                    <img src="{{ asset('assets/mitra.png') }}" alt="Logo Mitra" loading="lazy" decoding="async">
+                    <img src="{{ asset('assets/Farmasi-LogoUAA_white.png') }}" alt="Logo Farmasi" loading="lazy" decoding="async">
                 </div>
             </div>
             <div class="col-md-4 mb-3 mb-md-0 text-center">
@@ -100,8 +100,23 @@
 
 .footer-logo {
     max-width: 220px;
+    width: 220px;
+    height: auto;
     margin-bottom: 1rem;
     transition: transform 0.3s ease;
+    display: block !important;
+    object-fit: contain;
+    visibility: visible !important;
+    opacity: 1 !important;
+    z-index: 10;
+    position: relative;
+}
+
+/* Ensure footer logo is never hidden */
+.footer .footer-logo {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
 }
 
 .footer-logo:hover {
