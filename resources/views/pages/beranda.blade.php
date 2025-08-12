@@ -23,10 +23,10 @@
         </div>
         <div class="container-fluid px-0 position-relative">
             <div class="hero-visual-section" data-aos="fade-down">
-                <div class="container-fluid px-2 py-5 px-lg-4">
+                <div class="container-fluid px-2 py-3 py-md-5 px-lg-4">
                     <div class="row justify-content-center">
-                        <div class="col-12 text-center mb-4" data-aos="fade-up">
-                            <h1 class="display-4 text-white mb-3 fw-bold">Selamat Datang di Klik-Farmasi</h1>
+                        <div class="col-12 text-center mb-3 mb-md-4" data-aos="fade-up">
+                            <h1 class="display-4 text-white mb-2 mb-md-3 fw-bold">Selamat Datang di Klik-Farmasi</h1>
                             <p class="lead text-white">Kami siap memberikan layanan informasi kesehatan dan pengingat
                                 minum obat terbaik untuk kebutuhan anda</p>
                             <div class="section-divider mx-auto" style="background: white;"></div>
@@ -38,28 +38,28 @@
                                 <div id="cleanCarousel" class="carousel slide" data-bs-ride="carousel"
                                     data-bs-interval="6000">
                                     <div class="carousel-inner">
-                                        <div class="carousel-item active">
-                                            <div class="ratio ratio-21x9">
-                                                <img src="{{ asset('assets/pencegahan.webp') }}"
-                                                    alt="Infografis pencegahan hipertensi dan tips kesehatan jantung"
-                                                    class="object-fit-cover rounded" loading="eager" fetchpriority="high"
-                                                    decoding="async" width="1200" height="600">
-                                            </div>
-                                        </div>
                                         <div class="carousel-item">
-                                            <div class="ratio ratio-21x9">
+                                            <div class="ratio" style="--bs-aspect-ratio: 42.86%;">
                                                 <img src="{{ asset('assets/prevalensi.webp') }}"
                                                     alt="Data prevalensi hipertensi di Indonesia dan statistik kesehatan"
-                                                    class="object-fit-cover rounded" loading="lazy" decoding="async"
-                                                    width="1200" height="600">
+                                                    class="object-fit-cover rounded carousel-img" loading="lazy" decoding="async"
+                                                    width="1200" height="600" style="cursor: pointer;">
                                             </div>
                                         </div>
-                                        <div class="carousel-item">
-                                            <div class="ratio ratio-21x9">
+                                        <div class="carousel-item ">
+                                            <div class="ratio" style="--bs-aspect-ratio: 42.86%;">
+                                                <img src="{{ asset('assets/pencegahan.webp') }}"
+                                                    alt="Infografis pencegahan hipertensi dan tips kesehatan jantung"
+                                                    class="object-fit-cover rounded carousel-img" loading="eager" fetchpriority="high"
+                                                    decoding="async" width="1200" height="600" style="cursor: pointer;">
+                                            </div>
+                                        </div>
+                                        <div class="carousel-item active">
+                                            <div class="ratio" style="--bs-aspect-ratio: 42.86%;">
                                                 <img src="{{ asset('assets/welcome-hero.webp') }}"
                                                     alt="Selamat datang di platform Klik Farmasi untuk konsultasi kesehatan online"
-                                                    class="object-fit-cover rounded" loading="lazy" decoding="async"
-                                                    width="1200" height="600">
+                                                    class="object-fit-cover rounded carousel-img" loading="lazy" decoding="async"
+                                                    width="1200" height="600" style="cursor: pointer;">
                                             </div>
                                         </div>
                                     </div>
@@ -81,6 +81,18 @@
             </div>
         </div>
     </header>
+
+    <!-- Image Modal -->
+    <div class="modal fade" id="imageModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content bg-transparent border-0">
+                <div class="modal-body p-0 text-center">
+                    <button type="button" class="btn-close btn-close-white position-absolute top-0 end-0 m-3" data-bs-dismiss="modal" style="z-index: 1050;"></button>
+                    <img id="modalImage" src="" alt="" class="img-fluid rounded" style="max-height: 90vh;">
+                </div>
+            </div>
+        </div>
+    </div>
 
     <section class="features-section py-5" id="features">
         <div class="container px-4 px-lg-5">
@@ -381,4 +393,21 @@
 
 @endsection
 
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const carouselImages = document.querySelectorAll('.carousel-img');
+    const modal = new bootstrap.Modal(document.getElementById('imageModal'));
+    const modalImage = document.getElementById('modalImage');
+    
+    carouselImages.forEach(img => {
+        img.addEventListener('click', function() {
+            modalImage.src = this.src;
+            modalImage.alt = this.alt;
+            modal.show();
+        });
+    });
+});
+</script>
+@endpush
 

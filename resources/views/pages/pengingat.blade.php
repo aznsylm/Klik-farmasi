@@ -96,7 +96,8 @@
                                                 <i class="bi bi-activity me-2" style="color: #0B5E91;"></i>Tekanan Darah Terakhir:
                                             </label>
                                             <input class="form-control shadow-sm" id="tekananDarah" name="tekananDarah" type="text"
-                                                placeholder="Contoh: 140/90" required style="font-size: 1.2rem; padding: 1rem;" />
+                                                placeholder="Contoh: 140/90" required style="font-size: 1.2rem; padding: 1rem;" 
+                                                pattern="^[0-9]{2,3}\/[0-9]{2,3}$" maxlength="7" />
                                             <div class="form-text mt-2 fs-6 text-dark">
                                                 <strong>Cara mengisi:</strong> Angka atas/angka bawah (contoh: 140/90)<br>
                                                 <em>Lihat hasil cek tekanan darah terakhir Anda</em>
@@ -157,7 +158,8 @@
                                             <label for="tanggal_mulai" class="form-label fw-bold text-dark mb-3" style="font-size: 1.3rem;">
                                                 <i class="bi bi-calendar-event me-2" style="color: #0B5E91;"></i>Mulai Pengingat Tanggal:
                                             </label>
-                                            <input class="form-control shadow-sm" id="tanggal_mulai" name="tanggal_mulai" type="date" required style="font-size: 1.2rem; padding: 1rem;" />
+                                            <input class="form-control shadow-sm" id="tanggal_mulai" name="tanggal_mulai" type="date" required style="font-size: 1.2rem; padding: 1rem;" 
+                                                min="{{ date('Y-m-d') }}" max="{{ date('Y-m-d', strtotime('+1 year')) }}" />
                                             <div class="form-text mt-2 fs-6 text-dark">
                                                 <strong>Pilih tanggal:</strong> Kapan Anda ingin mulai mendapat pengingat minum obat<br>
                                                 <em>Biasanya dimulai dari besok</em>
@@ -171,7 +173,7 @@
                                                 <i class="bi bi-chat-left-text me-2" style="color: #0B5E91;"></i>Catatan Khusus (Boleh Dikosongkan):
                                             </label>
                                             <textarea class="form-control shadow-sm" id="catatan" name="catatan" style="height: 120px; font-size: 1.1rem; padding: 1rem;"
-                                                placeholder="Tulis catatan khusus jika ada..."></textarea>
+                                                placeholder="Tulis catatan khusus jika ada..." maxlength="500"></textarea>
                                             <div class="form-text mt-2 fs-6 text-dark">
                                                 <strong>Contoh catatan:</strong><br>
                                                 • Diminum setelah makan<br>
@@ -337,6 +339,48 @@
     box-shadow: 0 0 0 0.3rem rgba(186, 169, 113, 0.4);
 }
 </style>
+
+<script>
+// Security validation for form inputs
+document.addEventListener('DOMContentLoaded', function() {
+    // Sanitize tekanan darah input
+    const tekananDarahInput = document.getElementById('tekananDarah');
+    if (tekananDarahInput) {
+        tekananDarahInput.addEventListener('input', function(e) {
+            // Only allow numbers and slash
+            e.target.value = e.target.value.replace(/[^0-9\/]/g, '');
+            // Prevent multiple slashes
+            e.target.value = e.target.value.replace(/\/{2,}/g, '/');
+        });
+    }
+    
+    // Sanitize catatan input
+    const catatanInput = document.getElementById('catatan');
+    if (catatanInput) {
+        catatanInput.addEventListener('input', function(e) {
+            // Remove potentially dangerous characters
+            e.target.value = e.target.value.replace(/[<>"']/g, '');
+        });
+    }
+    
+    // Validate date input
+    const tanggalInput = document.getElementById('tanggal_mulai');
+    if (tanggalInput) {
+        tanggalInput.addEventListener('change', function(e) {
+            const selectedDate = new Date(e.target.value);
+            const today = new Date();
+            const maxDate = new Date();
+            maxDate.setFullYear(today.getFullYear() + 1);
+            
+            if (selectedDate < today || selectedDate > maxDate) {
+                e.target.setCustomValidity('Tanggal harus antara hari ini dan 1 tahun ke depan');
+            } else {
+                e.target.setCustomValidity('');
+            }
+        });
+    }
+});
+</script>
 
 
 @endpush

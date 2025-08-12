@@ -65,7 +65,7 @@
                             <div class="step-content">
                                 <h6 class="fw-bold mb-3">Cara Penggunaan:</h6>
                                 <ol class="step-list numbered">
-                                    <li>Klik menu "Informasi" di halaman utama.</li>
+                                    <li>Tekan menu "Informasi" di halaman utama.</li>
                                     <li>Pilih topik yang ingin kamu baca, misalnya tentang Hipertensi Kehamilan atau
                                         Hipertensi Non Kehamilan.</li>
                                     <li>Langsung baca artikelnya</li>
@@ -90,7 +90,7 @@
                             <div class="step-content">
                                 <h6 class="fw-bold mb-3">Cara Penggunaan:</h6>
                                 <ol class="step-list numbered">
-                                    <li>Klik menu "Tanya Jawab" di halaman utama.</li>
+                                    <li>Tekan menu "Tanya Jawab" di halaman utama.</li>
                                     <li>Pilih pertanyaan yang ingin kamu ketahui jawabannya.</li>
                                     <li>Temukan jawaban langsung dari ahlinya.</li>
                                     <li>Semua bisa dibuka gratis tanpa login!</li>
@@ -118,10 +118,11 @@
                             <div class="step-content">
                                 <h6 class="fw-bold mb-3">Cara Penggunaan:</h6>
                                 <ol class="step-list numbered">
-                                    <li>Klik menu "Unduhan"</li>
+                                    <li>Tekan menu "Unduhan"</li>
                                     <li>Pilih poster yang diinginkan.</li>
-                                    <li>Klik tombol "Unduh"</li>
-                                    <li>File akan otomatis tersimpan di perangkat Anda</li>
+                                    <li>Tekan tombol "Unduh"</li>
+                                    <li>Poster akan langsung diarahkan langsung ke Google Drive</li>
+                                    <li>Download poster tersebut, kemudian gambar tersimpan di perangkat anda</li>
                                     <li>Gratis dan tanpa perlu login</li>
                                 </ol>
                             </div>
@@ -151,7 +152,7 @@
                                     <li>Ketik pertanyaan kamu di kotak chat.</li>
                                     <li>Tekan "Kirim".</li>
                                     <li>Tunggu jawaban dari ahli maksimal dalam 1x24 jam.</li>
-                                    <li>Tanpa login (Contoh: "Bolehkah ibu hamil minum obat hipertensi ini?")</li>
+                                    <li>Tanpa login (Contoh: "Bolehkah ibu hamil minum obat hipertensi ini?")</li> <br>
                                 </ol>
                             </div>
                             <div class="text-center mt-3">
@@ -180,10 +181,10 @@
                             <div class="step-content">
                                 <h6 class="fw-bold mb-3">Cara Penggunaan:</h6>
                                 <ol class="step-list numbered">
-                                    <li>Klik tombol "Akun", lalu pilih "Register"</li>
+                                    <li>Tekan tombol "Akun", lalu pilih "Register"</li>
                                     <li>Isi data diri dengan lengkap</li>
                                     <li>Centang kotak “Saya menyetujui syarat & ketentuan”</li>
-                                    <li>Klik "Daftar Sekarang", lalu kamu akan diarahkan ke halaman login</li>
+                                    <li>Tekan "Daftar Sekarang", lalu kamu akan diarahkan ke halaman login</li>
                                 </ol>
                             </div>
                         </div>
@@ -205,9 +206,9 @@
                                 <h6 class="fw-bold mb-3">Cara Penggunaan:</h6>
                                 <ol class="step-list numbered">
                                     <li>Login ke akun pasien Anda</li>
-                                    <li>Klik menu "Pengingat"</li>
+                                    <li>Tekan menu "Pengingat"</li>
                                     <li>Isi data kesehatan, nama obat, dan atur waktu pengingat</li>
-                                    <li>Klik “Submit”, anda akan menerima informasi notifikasi sebagai pengingat minum obat.
+                                    <li>Tekan “Submit”, anda akan menerima informasi notifikasi sebagai pengingat minum obat.
                                     </li>
                                 </ol>
                             </div>
@@ -234,9 +235,9 @@
                                     <div class="step-content">
                                         <h6 class="fw-bold mb-3">Cara Penggunaan:</h6>
                                         <ol class="step-list numbered">
-                                            <li>Klik menu "Pengingat Obat" (akan muncul pada halaman login)</li>
+                                            <li>Tekan menu "Pengingat" (akan muncul pada halaman login)</li>
                                             <li>Masukkan email & password</li>
-                                            <li>Klik " Tombol (+) Tambah Pengingat"</li>
+                                            <li>Tekan " Tombol (+) Tambah Pengingat"</li>
                                             <li>Isi nama obat, jadwal minum, dan frekuensi minum obat</li>
                                             <li>Tekan "Simpan" → Informasi notifikasi akan dikirim ke HP/email
                                             </li>

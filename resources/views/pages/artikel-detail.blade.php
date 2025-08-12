@@ -84,7 +84,7 @@
                         <!-- Article Content -->
                         <div class="article-content">
                             <div class="content-text fs-6" style="line-height: 1.8; text-align: justify;">
-                                {!! nl2br(e($article->content)) !!}
+                                {{ nl2br($article->content) }}
                             </div>
 
                             <!-- Tags if available -->

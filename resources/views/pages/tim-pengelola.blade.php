@@ -130,6 +130,36 @@
                             </div>
                         </div>
                     </div>
+                    <div class="supervisor-card mt-4" data-aos="fade-up" data-aos-delay="300">
+                        <div class="card-body p-4">
+                            <div class="supervisor-badge"><span>Programmer</span></div>
+                            <div class="row align-items-center">
+                                <div class="col-md-3 text-center mb-4 mb-md-0">
+                                    <div class="supervisor-photo"><img
+                                            src="{{ asset('assets/tim/Aizan.jpg') }}"
+                                            alt="Aizan Syalim - Programmer Website Klik Farmasi" class="img-fluid lazy-image" loading="lazy" decoding="async" width="150" height="150" style="object-position: top">
+                                        <div class="photo-overlay"><i class="bi bi-code-slash"></i></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="supervisor-info">
+                                        <h4 class="supervisor-name">Aizan Syalim</h4>
+                                        <p class="supervisor-position">Mahasiswa Informatika Universitas Alma Ata</p>
+                                        <p class="supervisor-description">Programmer yang bertanggung jawab dalam pengembangan teknis website Klik Farmasi, mulai dari desain database, backend development, hingga implementasi fitur-fitur interaktif.</p>
+                                        <div class="supervisor-credentials"><span class="credential-badge"><i
+                                                    class="bi bi-code-slash me-1"></i>Programmer</span><span
+                                                class="credential-badge"><i class="bi bi-mortarboard me-1"></i>Mahasiswa</span>
+                                        </div>
+                                        <div class="supervisor-contact"><a
+                                                href="https://www.instagram.com/zansylm/"
+                                                class="social-btn instagram"><i class="bi bi-instagram"></i></a><a
+                                                href="mailto:223200231@almaata.ac.id" class="contact-btn email"><i
+                                                    class="bi bi-envelope"></i></a></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="row mb-5">
@@ -358,24 +388,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-4 col-md-6 mb-4">
-                            <div class="team-member-card" data-aos="fade-up" data-aos-delay="1300">
-                                <div class="member-photo-container"><img src="{{ asset('assets/tim/Aizan.jpg') }}"
-                                        alt="Aizan Syalim" class="member-photo"></div>
-                                <div class="member-info">
-                                    <div class="role-badge programmer"><i
-                                            class="bi bi-code-slash"></i><span>Programmer</span></div>
-                                    <h4 class="member-name">Aizan Syalim</h4>
-                                    <p class="member-id">223200231</p>
-                                    <p class="member-description">Mahasiswa Informatika Universitas Alma Ata</p>
-                                    <div class="member-social"><a href="https://www.instagram.com/zansylm/"
-                                            class="social-btn instagram" title="Instagram"><i
-                                                class="bi bi-instagram"></i></a><a href="mailto:223200231@almaata.ac.id"
-                                            class="social-btn email" title="Email"><i class="bi bi-envelope"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+
                     </div>
                 </div>
             </div>
