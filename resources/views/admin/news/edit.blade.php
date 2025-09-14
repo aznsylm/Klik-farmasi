@@ -6,7 +6,7 @@
 <div class="container py-5">
     <!-- Tombol Kembali -->
     <div class="back-button">
-        <a href="{{ route('admin.news.index') }}" class="btn btn-secondary">
+        <a href="{{ route('admin.berita.index') }}" class="btn btn-secondary">
             <i class="bi bi-arrow-left"></i> Kembali ke Daftar Berita
         </a>
     </div>
@@ -27,7 +27,7 @@
                 </div>
             @endif
             
-            <form action="{{ route('admin.news.update', $news) }}" method="POST">
+            <form action="{{ route('admin.berita.update', $news) }}" method="POST">
                 @csrf
                 @method('PUT')
                 

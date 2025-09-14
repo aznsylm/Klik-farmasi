@@ -6,11 +6,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
+    use \App\Traits\UseWIBTimezone;
 
     /**
      * The attributes that are mass assignable.
@@ -25,6 +27,7 @@ class User extends Authenticatable
         'jenis_kelamin',
         'usia',
         'role',
+        'puskesmas_id',
     ];
 
     /**
@@ -48,5 +51,41 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    // Relasi ke tabel baru
+    public function pengingatObat(): HasMany
+    {
+        return $this->hasMany(PengingatObat::class);
+    }
+
+    public function catatanTekananDarah(): HasMany
+    {
+        return $this->hasMany(CatatanTekananDarah::class);
+    }
+
+    public function logWhatsapp(): HasMany
+    {
+        return $this->hasMany(LogWhatsapp::class);
+    }
+
+    public function kodePendaftaranDibuat(): HasMany
+    {
+        return $this->hasMany(KodePendaftaran::class, 'dibuat_oleh');
+    }
+
+    public function kodePendaftaranDigunakan(): HasMany
+    {
+        return $this->hasMany(KodePendaftaran::class, 'digunakan_oleh');
+    }
+
+    public function catatanDariAdmin(): HasMany
+    {
+        return $this->hasMany(CatatanAdminPasien::class, 'user_id');
+    }
+
+    public function catatanUntukPasien(): HasMany
+    {
+        return $this->hasMany(CatatanAdminPasien::class, 'admin_id');
     }
 }

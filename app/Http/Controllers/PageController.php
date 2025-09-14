@@ -71,6 +71,11 @@ class PageController extends Controller
                          ->where('article_type', $articleType)
                          ->firstOrFail();
 
+        // Increment views counter hanya untuk guest dan pasien
+        if (!auth()->check() || auth()->user()->role === 'pasien') {
+            $article->increment('views');
+        }
+
         // Ambil artikel terkait berdasarkan article_type yang sama
         $relatedArticles = Article::where('article_type', $article->article_type)
             ->where('id', '!=', $article->id)
@@ -92,18 +97,18 @@ class PageController extends Controller
     }
 
     public function tanyaJawabKehamilan() {
-        $faqs = Faq::where('category', 'Hipertensi Kehamilan')->get();
+        $faqs = Faq::where('category', 'Hipertensi Kehamilan')->orderBy('updated_at', 'desc')->get();
         return view('pages.tanya-jawab-kehamilan', compact('faqs'));
     }
 
     public function tanyaJawabNonKehamilan() {
-        $faqs = Faq::where('category', 'Hipertensi Non-Kehamilan')->get();
+        $faqs = Faq::where('category', 'Hipertensi Non-Kehamilan')->orderBy('updated_at', 'desc')->get();
         return view('pages.tanya-jawab-non-kehamilan', compact('faqs'));
     }
 
     public function unduhan()
     {
-        $downloads = Download::latest()->paginate(9); // Pagination untuk 9 unduhan per halaman
+        $downloads = Download::orderBy('created_at', 'desc')->paginate(9); // Pagination untuk 9 unduhan per halaman
         return view('pages.unduhan', compact('downloads'));
     }
 
@@ -113,8 +118,8 @@ class PageController extends Controller
 
     public function berita()
     {
-        // Ambil semua berita, urutkan berdasarkan yang terbaru
-        $allNews = News::latest()->paginate(9); 
+        // Ambil semua berita, urutkan berdasarkan yang terbaru ditambahkan
+        $allNews = News::orderBy('created_at', 'desc')->paginate(9); 
     
         // Kirim data ke view
         return view('pages.berita', compact('allNews'));

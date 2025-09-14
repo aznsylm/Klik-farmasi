@@ -6,7 +6,7 @@
 <div class="container py-5">
     <!-- Tombol Kembali -->
     <div class="back-button">
-        <a href="{{ route('admin.articles.index') }}" class="btn btn-secondary">
+        <a href="{{ route('admin.artikel.index') }}" class="btn btn-secondary">
             <i class="bi bi-arrow-left"></i> Kembali ke Daftar Artikel
         </a>
     </div>
@@ -27,7 +27,7 @@
                 </div>
             @endif
             
-            <form action="{{ route('admin.articles.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('admin.artikel.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="row">
                     <div class="col-md-4 mb-3">
@@ -66,7 +66,7 @@
                 </div>
                 
                 <div class="mb-3">
-                    <label for="image" class="form-label">Gambar<span style="color: red">*</span></label>
+                    <label for="image" class="form-label">Gambar</label>
                     <input type="file" class="form-control" id="image" name="image" accept=".webp">
                     <small class="text-muted">Hanya file dengan format .webp yang diperbolehkan.</small>
                 </div>

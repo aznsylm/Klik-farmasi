@@ -136,15 +136,40 @@ document.addEventListener('DOMContentLoaded', function() {
         let obatItems = [];
 
         const daftarObat = [
-            'Verapamil tab 80 mg', 'Verapamil tab lepas lambat 240 mg', 'Valsartan tab 80 mg', 'Valsartan tab 160 mg',
-            'Telmisartan tab 40 mg', 'Telmisartan tab 80 mg', 'Ramipril tab 2,5 mg', 'Ramipril tab 5 mg',
-            'Amlodipin tab 5 mg', 'Amlodipin tab 10 mg', 'Atenolol tab 50 mg', 'Atenolol tab 100 mg',
-            'Bisoprolol tab 2,5 mg', 'Bisoprolol tab 5 mg', 'Bisoprolol tab 10 mg', 'Diltiazem kapsul lepas lambat 100 mg',
-            'Diltiazem kapsul lepas lambat 200 mg', 'Hidroklorotiazid tab 25 mg', 'Imidapril tab 5 mg', 'Imidapril tab 10 mg',
-            'Irbesartan tab 150 mg', 'Irbesartan tab 300 mg', 'Kandesartan tab 8 mg', 'Kandesartan tab 16 mg',
-            'Kaptopril tab 12,5 mg', 'Kaptopril tab 25 mg', 'Kaptopril tab 50 mg', 'Klonidin tab 0,15 mg',
-            'Lisinopril tab 5 mg', 'Lisinopril tab 10 mg', 'Metildopa tab 250 mg', 'Nifedipin tab 10 mg',
-            'Furosemid tab 20 mg', 'Furosemid tab 40 mg'
+            "Verapamil tab 80 mg",
+            "Verapamil tab lepas lambat 240 mg",
+            "Valsartan tab 80 mg",
+            "Valsartan tab 160 mg",
+            "Telmisartan tab 40 mg",
+            "Telmisartan tab 80 mg",
+            "Ramipril tab 2,5 mg",
+            "Ramipril tab 5 mg",
+            "Amlodipin tab 5 mg",
+            "Amlodipin tab 10 mg",
+            "Atenolol tab 50 mg",
+            "Atenolol tab 100 mg",
+            "Bisoprolol tab 2,5 mg",
+            "Bisoprolol tab 5 mg",
+            "Bisoprolol tab 10 mg",
+            "Diltiazem kapsul lepas lambat 100 mg",
+            "Diltiazem kapsul lepas lambat 200 mg",
+            "Hidroklorotiazid tab 25 mg",
+            "Imidapril tab 5 mg",
+            "Imidapril tab 10 mg",
+            "Irbesartan tab 150 mg",
+            "Irbesartan tab 300 mg",
+            "Kandesartan tab 8 mg",
+            "Kandesartan tab 16 mg",
+            "Kaptopril tab 12,5 mg",
+            "Kaptopril tab 25 mg",
+            "Kaptopril tab 50 mg",
+            "Klonidin tab 0,15 mg",
+            "Lisinopril tab 5 mg",
+            "Lisinopril tab 10 mg",
+            "Metildopa tab 250 mg",
+            "Nifedipin tab 10 mg",
+            "Furosemid tab 20 mg",
+            "Furosemid tab 40 mg",
         ];
 
         diagnosa.addEventListener('change', function() {
@@ -153,37 +178,37 @@ document.addEventListener('DOMContentLoaded', function() {
             obatContainer.innerHTML = '';
             tambahObat.disabled = false;
 
-            if (diagnosa.value === 'Hipertensi-Non-Kehamilan') {
-                tambahObat.dataset.maxObat = 2;
-                tambahObat.dataset.minObat = 1;
-            } else if (diagnosa.value === 'Hipertensi-Kehamilan') {
-                tambahObat.dataset.maxObat = 5;
-                tambahObat.dataset.minObat = 2;
-            }
+            // Semua kategori: minimal 1, maksimal 5
+            tambahObat.dataset.maxObat = 5;
+            tambahObat.dataset.minObat = 1;
+            tambahObat.dataset.isKehamilan = diagnosa.value === 'Kehamilan';
 
             const maxObat = parseInt(tambahObat.dataset.maxObat || 0);
             const minObat = parseInt(tambahObat.dataset.minObat || 0);
+            const isKehamilan = tambahObat.dataset.isKehamilan === 'true';
 
             if (maxObat > 0) {
                 const infoMsg = document.createElement('div');
                 infoMsg.className = 'alert alert-info d-flex align-items-center p-4 mb-4';
                 infoMsg.style.fontSize = '1.1rem';
+                const itemType = isKehamilan ? 'suplemen' : 'obat';
                 infoMsg.innerHTML = `
                     <i class="bi bi-info-circle-fill me-3" style="font-size: 1.5rem;"></i>
-                    <div><strong>Informasi:</strong> Untuk kondisi ini, Anda perlu menambahkan minimal ${minObat} obat dan maksimal ${maxObat} obat.</div>
+                    <div><strong>Informasi:</strong> Untuk kondisi ini, Anda perlu menambahkan minimal ${minObat} ${itemType} dan maksimal ${maxObat} ${itemType}.</div>
                 `;
                 obatContainer.appendChild(infoMsg);
                 
                 if (totalObat === 0) {
-                    tambahObat.innerHTML = '<i class="bi bi-plus-circle me-3"></i>TAMBAH OBAT PERTAMA';
+                    tambahObat.innerHTML = isKehamilan ? 'TAMBAH SUPLEMEN PERTAMA' : 'TAMBAH OBAT PERTAMA';
                 } else {
-                    tambahObat.innerHTML = `<i class="bi bi-plus-circle me-3"></i>TAMBAH OBAT KE-${totalObat + 1}`;
+                    tambahObat.innerHTML = isKehamilan ? `TAMBAH SUPLEMEN KE-${totalObat + 1}` : `TAMBAH OBAT KE-${totalObat + 1}`;
                 }
             }
         });
 
         tambahObat.addEventListener('click', function() {
             const maxObat = parseInt(tambahObat.dataset.maxObat || 0);
+            const isKehamilan = tambahObat.dataset.isKehamilan === 'true';
 
             if (totalObat < maxObat) {
                 totalObat++;
@@ -191,42 +216,71 @@ document.addEventListener('DOMContentLoaded', function() {
                 obatDiv.className = 'obat-card card border-2 shadow-lg mb-5';
                 obatDiv.dataset.obatId = totalObat;
                 obatDiv.style.borderRadius = '20px';
-                obatDiv.style.borderColor = '#baa971';
+                obatDiv.style.borderColor = '#0B5E91';
+                
+                const itemType = isKehamilan ? 'SUPLEMEN' : 'OBAT';
+                const namaObatSection = isKehamilan ? '' : `
+                    <div class="col-12">
+                        <label for="namaObat${totalObat}" class="form-label fw-bold text-dark mb-3" style="font-size: 1.3rem;">
+                            Nama Obat:
+                        </label>
+                        <select class="form-select shadow-sm" id="namaObat${totalObat}" name="namaObat[]" required style="font-size: 1.2rem; padding: 1rem; border-radius: 10px;">
+                            <option value="">-- Pilih nama obat --</option>
+                            ${daftarObat.map(obat => `<option value="${obat}">${obat}</option>`).join('')}
+                        </select>
+                    </div>`;
+                
+                const suplemenSection = isKehamilan ? `
+                    <div class="col-12">
+                        <label for="suplemen${totalObat}" class="form-label fw-bold text-dark mb-3" style="font-size: 1.3rem;">
+                            Jenis Suplemen:
+                        </label>
+                        <select class="form-select shadow-sm" id="suplemen${totalObat}" name="suplemen[]" required style="font-size: 1.2rem; padding: 1rem; border-radius: 10px;">
+                            <option value="">-- Pilih suplemen --</option>
+                            <option value="Asam folat">Asam Folat</option>
+                            <option value="Zat besi">Zat Besi</option>
+                            <option value="Kalsium">Kalsium</option>
+                            <option value="Suplemen Multivitamin">Multivitamin untuk Ibu Hamil</option>
+                        </select>
+                    </div>` : `
+                    <div class="col-12">
+                        <label for="suplemen${totalObat}" class="form-label fw-bold text-dark mb-3" style="font-size: 1.3rem;">
+                            Suplemen Tambahan (Boleh Dikosongkan):
+                        </label>
+                        <select class="form-select shadow-sm" id="suplemen${totalObat}" name="suplemen[]" style="font-size: 1.2rem; padding: 1rem; border-radius: 10px;">
+                            <option value="">-- Pilih suplemen jika ada --</option>
+                            <option value="Asam folat">Asam Folat</option>
+                            <option value="Zat besi">Zat Besi</option>
+                            <option value="Kalsium">Kalsium</option>
+                            <option value="Suplemen Multivitamin">Multivitamin untuk Ibu Hamil</option>
+                        </select>
+                    </div>`;
+                
                 obatDiv.innerHTML = `
-                    <div class="card-header text-white d-flex justify-content-between align-items-center py-4" style="border-radius: 20px 20px 0 0; background-color: #baa971;">
-                        <h4 class="mb-0 fw-bold" style="font-size: 1.8rem;">
-                            <i class="bi bi-capsule me-3"></i>OBAT KE-<span class="obat-number">${totalObat}</span>
+                    <div class="card-header text-white d-flex justify-content-between align-items-center py-4" style="border-radius: 20px 20px 0 0; background-color: #0B5E91;">
+                        <h4 class="mb-0 fw-bold text-white" style="font-size: 1.8rem; color: white !important;">
+                            ${itemType} KE-<span class="obat-number">${totalObat}</span>
                         </h4>
                         <button type="button" class="btn btn-outline-light btn-lg remove-obat" data-obat-id="${totalObat}" style="border-radius: 15px;">
-                            <i class="bi bi-trash me-2"></i>Hapus
+                            Hapus
                         </button>
                     </div>
                     <div class="card-body p-5">
                         <div class="row g-4">
-                            <div class="col-12">
-                                <label for="namaObat${totalObat}" class="form-label fw-bold text-dark mb-3" style="font-size: 1.3rem;">
-                                    <i class="bi bi-prescription2 me-2" style="color: #baa971;"></i>Nama Obat:
-                                </label>
-                                <select class="form-select shadow-sm" id="namaObat${totalObat}" name="namaObat[]" required style="font-size: 1.2rem; padding: 1rem; border-radius: 10px;">
-                                    <option value="">-- Pilih nama obat --</option>
-                                    ${daftarObat.map(obat => `<option value="${obat}">${obat}</option>`).join('')}
-                                </select>
-                                <div class="form-text mt-2 fs-6 text-dark">Pilih obat sesuai resep dokter</div>
-                            </div>
+                            ${namaObatSection}
                             <div class="col-md-6">
                                 <label for="jumlahObat${totalObat}" class="form-label fw-bold text-dark mb-3" style="font-size: 1.3rem;">
-                                    <i class="bi bi-123 me-2" style="color: #baa971;"></i>Jumlah Obat per Bulan:
+                                    Jumlah ${isKehamilan ? 'Suplemen' : 'Obat'}:
                                 </label>
                                 <select class="form-select shadow-sm" id="jumlahObat${totalObat}" name="jumlahObat[]" required style="font-size: 1.2rem; padding: 1rem; border-radius: 10px;">
                                     <option value="30 tablet/bulan">30 tablet (1 bulan)</option>
                                     <option value="60 tablet/bulan">60 tablet (2 bulan)</option>
                                     <option value="90 tablet/bulan">90 tablet (3 bulan)</option>
                                 </select>
-                                <div class="form-text mt-2 fs-6 text-dark">Berapa tablet yang Anda terima</div>
                             </div>
                             <div class="col-md-6">
                                 <label for="waktuMinum${totalObat}" class="form-label fw-bold text-dark mb-3" style="font-size: 1.3rem;">
-                                    <i class="bi bi-clock me-2" style="color: #baa971;"></i>Jam Minum Obat:
+                                    Jam Minum ${isKehamilan ? 'Suplemen' : 'Obat'}:
                                 </label>
                                 <select class="form-select shadow-sm" id="waktuMinum${totalObat}" name="waktuMinum[]" required style="font-size: 1.2rem; padding: 1rem; border-radius: 10px;">
                                     <option value="">-- Pilih jam --</option>
@@ -240,21 +294,8 @@ document.addEventListener('DOMContentLoaded', function() {
                                     <option value="19:00">19.00 (Malam)</option>
                                     <option value="21:00">21.00 (Malam)</option>
                                 </select>
-                                <div class="form-text mt-2 fs-6 text-dark">Pilih jam yang mudah diingat</div>
                             </div>
-                            <div class="col-12">
-                                <label for="suplemen${totalObat}" class="form-label fw-bold text-dark mb-3" style="font-size: 1.3rem;">
-                                    <i class="bi bi-capsule me-2" style="color: #baa971;"></i>Suplemen Tambahan (Boleh Dikosongkan):
-                                </label>
-                                <select class="form-select shadow-sm" id="suplemen${totalObat}" name="suplemen[]" style="font-size: 1.2rem; padding: 1rem; border-radius: 10px;">
-                                    <option value="">-- Pilih suplemen jika ada --</option>
-                                    <option value="Asam folat">Asam Folat</option>
-                                    <option value="Zat besi">Zat Besi</option>
-                                    <option value="Kalsium">Kalsium</option>
-                                    <option value="Suplemen Multivitamin">Multivitamin untuk Ibu Hamil</option>
-                                </select>
-                                <div class="form-text mt-2 fs-6 text-dark">Hanya isi jika dokter memberikan suplemen</div>
-                            </div>
+                            ${suplemenSection}
                         </div>
                     </div>
                 `;
@@ -270,12 +311,15 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             if (totalObat < maxObat) {
-                tambahObat.innerHTML = `<i class="bi bi-plus-circle me-3"></i>TAMBAH OBAT KE-${totalObat + 1}`;
+                const itemType = isKehamilan ? 'SUPLEMEN' : 'OBAT';
+                tambahObat.innerHTML = `TAMBAH ${itemType} KE-${totalObat + 1}`;
+                tambahObat.style.backgroundColor = '#0B5E91';
             }
             
             if (totalObat === maxObat) {
                 tambahObat.disabled = true;
-                tambahObat.innerHTML = '<i class="bi bi-check-circle me-3"></i>SEMUA OBAT SUDAH DITAMBAHKAN';
+                const itemType = isKehamilan ? 'SUPLEMEN' : 'OBAT';
+                tambahObat.innerHTML = `SEMUA ${itemType} SUDAH DITAMBAHKAN`;
             }
         });
 
@@ -303,8 +347,11 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             
             const maxObat = parseInt(tambahObat.dataset.maxObat || 0);
+            const isKehamilan = tambahObat.dataset.isKehamilan === 'true';
             if (totalObat < maxObat) {
-                tambahObat.innerHTML = `<i class="bi bi-plus-circle me-3"></i>TAMBAH OBAT KE-${totalObat + 1}`;
+                const itemType = isKehamilan ? 'SUPLEMEN' : 'OBAT';
+                tambahObat.innerHTML = `TAMBAH ${itemType} KE-${totalObat + 1}`;
+                tambahObat.style.backgroundColor = '#0B5E91';
             }
         }
 

@@ -8,7 +8,7 @@
         <h1 class="fw-bold">Kelola Berita</h1>
         <div class="d-flex justify-content-between align-items-center mb-4">
             <!-- Tombol Tambah Berita -->
-            <a href="{{ route('admin.news.create') }}" class="btn btn-primary">Tambah Berita</a>
+            <a href="{{ route('admin.berita.create') }}" class="btn btn-primary">Tambah Berita</a>
 
             <!-- Tombol Kembali ke Dashboard -->
             <a href="{{ route('admin.dashboard') }}" class="btn btn-secondary">
@@ -44,8 +44,8 @@
                         </td>
                         <td>{{ $item->published_at ? \Carbon\Carbon::parse($item->published_at)->format('d M Y, H:i') : 'Belum dipublish' }}</td>
                         <td>
-                            <a href="{{ route('admin.news.edit', $item) }}" class="btn btn-warning btn-sm">Edit</a>
-                            <form action="{{ route('admin.news.destroy', $item) }}" method="POST" style="display:inline;">
+                            <a href="{{ route('admin.berita.edit', $item) }}" class="btn btn-warning btn-sm">Edit</a>
+                            <form action="{{ route('admin.berita.destroy', $item) }}" method="POST" style="display:inline;">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus berita ini?')">Hapus</button>

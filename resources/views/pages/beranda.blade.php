@@ -40,26 +40,26 @@
                                     <div class="carousel-inner">
                                         <div class="carousel-item">
                                             <div class="ratio" style="--bs-aspect-ratio: 42.86%;">
-                                                <img src="{{ asset('assets/prevalensi.webp') }}"
+                                                <img data-src="{{ asset('assets/prevalensi.webp') }}"
                                                     alt="Data prevalensi hipertensi di Indonesia dan statistik kesehatan"
                                                     class="object-fit-cover rounded carousel-img" loading="lazy" decoding="async"
                                                     width="1200" height="600" style="cursor: pointer;">
                                             </div>
                                         </div>
-                                        <div class="carousel-item ">
+                                        <div class="carousel-item">
                                             <div class="ratio" style="--bs-aspect-ratio: 42.86%;">
-                                                <img src="{{ asset('assets/pencegahan.webp') }}"
+                                                <img data-src="{{ asset('assets/pencegahan.webp') }}"
                                                     alt="Infografis pencegahan hipertensi dan tips kesehatan jantung"
-                                                    class="object-fit-cover rounded carousel-img" loading="eager" fetchpriority="high"
-                                                    decoding="async" width="1200" height="600" style="cursor: pointer;">
+                                                    class="object-fit-cover rounded carousel-img" loading="lazy" decoding="async"
+                                                    width="1200" height="600" style="cursor: pointer;">
                                             </div>
                                         </div>
                                         <div class="carousel-item active">
                                             <div class="ratio" style="--bs-aspect-ratio: 42.86%;">
                                                 <img src="{{ asset('assets/welcome-hero.webp') }}"
                                                     alt="Selamat datang di platform Klik Farmasi untuk konsultasi kesehatan online"
-                                                    class="object-fit-cover rounded carousel-img" loading="lazy" decoding="async"
-                                                    width="1200" height="600" style="cursor: pointer;">
+                                                    class="object-fit-cover rounded carousel-img" loading="eager" fetchpriority="high"
+                                                    decoding="async" width="1200" height="600" style="cursor: pointer;">
                                             </div>
                                         </div>
                                     </div>
@@ -396,16 +396,31 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const carouselImages = document.querySelectorAll('.carousel-img');
+    const carousel = document.getElementById('cleanCarousel');
     const modal = new bootstrap.Modal(document.getElementById('imageModal'));
     const modalImage = document.getElementById('modalImage');
     
-    carouselImages.forEach(img => {
-        img.addEventListener('click', function() {
-            modalImage.src = this.src;
-            modalImage.alt = this.alt;
+    // Progressive image loading
+    function loadImage(img) {
+        if (img.dataset.src && !img.src) {
+            img.src = img.dataset.src;
+            img.removeAttribute('data-src');
+        }
+    }
+    
+    // Load images when carousel slides
+    carousel.addEventListener('slide.bs.carousel', function(e) {
+        const nextImg = e.relatedTarget.querySelector('img');
+        if (nextImg) loadImage(nextImg);
+    });
+    
+    // Image modal functionality
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('carousel-img') && e.target.src) {
+            modalImage.src = e.target.src;
+            modalImage.alt = e.target.alt;
             modal.show();
-        });
+        }
     });
 });
 </script>

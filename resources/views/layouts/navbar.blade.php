@@ -87,12 +87,12 @@
                         <ul class="dropdown-menu dropdown-menu-end shadow border-0" aria-labelledby="authDropdown">
                             <li>
                                 <a class="dropdown-item py-2" href="{{ route('login') }}">
-                                    <i class="bi bi-box-arrow-in-right me-2 text-primary"></i> Login
+                                    Login
                                 </a>
                             </li>
                             <li>
                                 <a class="dropdown-item py-2" href="{{ route('register') }}">
-                                    <i class="bi bi-person-plus-fill me-2 text-success"></i> Register
+                                    Register
                                 </a>
                             </li>
                         </ul>

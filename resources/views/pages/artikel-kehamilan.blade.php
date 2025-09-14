@@ -19,8 +19,6 @@
     <section class="py-5">
         <div class="container px-5">
             <h2 class="fw-bolder mb-3 text-primary">Artikel Hipertensi Kehamilan</h2>
-            <p class="lead text-muted mx-auto">Informasi
-                kesehatan terkini tentang hipertensi pada kehamilan</p>
             <div class="d-flex mt-3 mb-5">
                 <div class="section-divider"></div>
             </div>

@@ -43,9 +43,13 @@
                                     <i class="bi bi-calendar3 me-2"></i>
                                     <span>{{ $article->published_at ? $article->published_at->format('d M Y') : 'Tanggal tidak tersedia' }}</span>
                                 </div>
-                                <div class="d-flex align-items-center">
+                                <div class="me-4 d-flex align-items-center">
                                     <i class="bi bi-clock me-2"></i>
                                     <span>{{ ceil(str_word_count($article->content) / 200) }} menit membaca</span>
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-eye me-2"></i>
+                                    <span>{{ number_format($article->views) }} kali dilihat</span>
                                 </div>
                             </div>
 
@@ -83,8 +87,8 @@
 
                         <!-- Article Content -->
                         <div class="article-content">
-                            <div class="content-text fs-6" style="line-height: 1.8; text-align: justify;">
-                                {{ nl2br($article->content) }}
+                            <div class="content-text fs-5" style="line-height: 1.8; text-align: justify;">
+                                {!! nl2br(e($article->content)) !!}
                             </div>
 
                             <!-- Tags if available -->

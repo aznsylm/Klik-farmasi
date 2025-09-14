@@ -6,7 +6,7 @@
 <div class="container py-5">
     <!-- Tombol Kembali -->
     <div class="back-button">
-        <a href="{{ route('admin.testimonials.index') }}" class="btn btn-secondary">
+        <a href="{{ route('admin.testimoni.index') }}" class="btn btn-secondary">
             <i class="bi bi-arrow-left"></i> Kembali ke Daftar Testimonial
         </a>
     </div>
@@ -27,7 +27,7 @@
                 </div>
             @endif
             
-            <form action="{{ route('admin.testimonials.update', $testimonial->id) }}" method="POST">
+            <form action="{{ route('admin.testimoni.update', $testimonial->id) }}" method="POST">
                 @csrf
                 @method('PUT')
                 

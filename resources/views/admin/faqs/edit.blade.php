@@ -6,7 +6,7 @@
 <div class="container py-5">
     <!-- Tombol Kembali -->
     <div class="back-button">
-        <a href="{{ route('admin.faqs.index') }}" class="btn btn-secondary">
+        <a href="{{ route('admin.tanya-jawab.index') }}" class="btn btn-secondary">
             <i class="bi bi-arrow-left"></i> Kembali ke Daftar Tanya Jawab
         </a>
     </div>
@@ -27,7 +27,7 @@
                 </div>
             @endif
             
-            <form action="{{ route('admin.faqs.update', $faq) }}" method="POST">
+            <form action="{{ route('admin.tanya-jawab.update', $faq) }}" method="POST">
                 @csrf
                 @method('PUT')
                 

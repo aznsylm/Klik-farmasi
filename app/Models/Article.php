@@ -21,7 +21,7 @@ class Article extends Model
     ];
 
     protected $casts = [
-        'published_at' => 'datetime', // Konversi ke objek Carbon
+        'published_at' => 'datetime', 
     ];
 
     protected static function boot()

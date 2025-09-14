@@ -11,6 +11,7 @@
     <meta name="author" content="Klik Farmasi - Universitas Alma Ata">
     <meta name="robots" content="index, follow">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Klik Farmasi')</title>
 
     <!-- Open Graph Meta Tags -->

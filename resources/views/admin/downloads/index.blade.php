@@ -10,7 +10,7 @@
 
     <div class="d-flex justify-content-between align-items-center mb-4">
         <!-- Tombol Tambah Unduhan -->
-        <a href="{{ route('admin.downloads.create') }}" class="btn btn-primary">
+        <a href="{{ route('admin.unduhan.create') }}" class="btn btn-primary">
              Tambah Unduhan
         </a>
 
@@ -62,15 +62,15 @@
                             </a>
                         </td>
                         <td class="text-center">
-                            <a href="{{ route('admin.downloads.edit', $download->id) }}" class="btn btn-warning btn-sm me-1">
-                                <i class="bi bi-pencil"></i> Edit
+                            <a href="{{ route('admin.unduhan.edit', $download->id) }}" class="btn btn-warning btn-sm me-1">
+                                Edit
                             </a>
 
-                            <form action="{{ route('admin.downloads.destroy', $download->id) }}" method="POST" style="display: inline;">
+                            <form action="{{ route('admin.unduhan.destroy', $download->id) }}" method="POST" style="display: inline;">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus unduhan ini?')">
-                                    <i class="bi bi-trash"></i> Hapus
+                                    Hapus
                                 </button>
                             </form>
                         </td>

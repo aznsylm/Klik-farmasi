@@ -38,7 +38,7 @@ class DownloadController extends Controller
     
         Download::create($data);
     
-        return redirect()->route('admin.downloads.index')->with('success', 'Unduhan berhasil ditambahkan. Silahkan Reload Halaman ini untuk menambahkan kembali !!!');
+        return redirect()->route('admin.unduhan.index')->with('success', 'Unduhan berhasil ditambahkan. Silahkan Reload Halaman ini untuk menambahkan kembali !!!');
     }
 
     public function edit(Download $download)
@@ -66,7 +66,7 @@ class DownloadController extends Controller
     
         $download->update($data);
     
-        return redirect()->route('admin.downloads.index')->with('success', 'Unduhan berhasil diperbarui.');
+        return redirect()->route('admin.unduhan.index')->with('success', 'Unduhan berhasil diperbarui.');
     }
 
     public function destroy(Download $download)
@@ -77,6 +77,6 @@ class DownloadController extends Controller
 
         $download->delete();
 
-        return redirect()->route('admin.downloads.index')->with('success', 'Unduhan berhasil dihapus.');
+        return redirect()->route('admin.unduhan.index')->with('success', 'Unduhan berhasil dihapus.');
     }
 }

@@ -26,28 +26,24 @@
 
             <!-- News Cards -->
             <div class="row g-4">
-                @forelse ($allNews as $berita)
+                @forelse ($allNews as $news)
                     <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="100">
-                        <div class="news-card">
-                            <div class="news-card-header">
-                                <div class="news-source">
-                                    <i class="bi bi-newspaper"></i>
-                                    <span>{{ $berita->source }}</span>
+                        <div class="card h-100 shadow-sm border-0">
+                            <div class="card-body d-flex flex-column">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <small class="text-primary fw-semibold">
+                                        <i class="bi bi-newspaper me-1"></i>{{ $news->source }}
+                                    </small>
+                                    <small class="text-muted">
+                                        <i class="bi bi-calendar3 me-1"></i>{{ $news->published_at->format('d M Y') }}
+                                    </small>
                                 </div>
-                                <div class="news-date">
-                                    <i class="bi bi-calendar3"></i>
-                                    <span>{{ $berita->published_at->format('d M Y') }}</span>
+                                <h5 class="card-title mb-3 lh-base">{{ $news->title }}</h5>
+                                <div class="mt-auto">
+                                    <a href="{{ $news->link }}" target="_blank" class="btn btn-outline-primary btn-sm">
+                                        Baca Selengkapnya <i class="bi bi-arrow-right ms-1"></i>
+                                    </a>
                                 </div>
-                            </div>
-                            <div class="news-card-body">
-                                <h3 class="news-title">{{ $berita->title }}</h3>
-                                <p class="news-summary">{{ Str::words($berita->summary, 20, '...') }}</p>
-                            </div>
-                            <div class="news-card-footer">
-                                <a href="{{ $berita->link }}" target="_blank" class="news-link">
-                                    <span>Baca Selengkapnya</span>
-                                    <i class="bi bi-arrow-right"></i>
-                                </a>
                             </div>
                         </div>
                     </div>

@@ -10,7 +10,7 @@
 
     <div class="d-flex justify-content-between align-items-center mb-4">
         <!-- Tombol Tambah Testimonial -->
-        <a href="{{ route('admin.testimonials.create') }}" class="btn btn-primary"> Tambah Testimoni
+        <a href="{{ route('admin.testimoni.create') }}" class="btn btn-primary"> Tambah Testimoni
         </a>
 
         <!-- Tombol Kembali ke Dashboard -->
@@ -45,15 +45,15 @@
                         <td>{{ $testimonial->quote }}</td>
                         <td>{{ $testimonial->name }}</td>
                         <td class="text-center">
-                            <a href="{{ route('admin.testimonials.edit', $testimonial->id) }}" class="btn btn-warning btn-sm me-1">
-                                <i class="bi bi-pencil"></i> Edit
+                            <a href="{{ route('admin.testimoni.edit', $testimonial->id) }}" class="btn btn-warning btn-sm me-1">
+                                Edit
                             </a>
 
-                            <form action="{{ route('admin.testimonials.destroy', $testimonial->id) }}" method="POST" style="display:inline;">
+                            <form action="{{ route('admin.testimoni.destroy', $testimonial->id) }}" method="POST" style="display:inline;">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus testimonial ini?')">
-                                    <i class="bi bi-trash"></i> Hapus
+                                    Hapus
                                 </button>
                             </form>
                         </td>

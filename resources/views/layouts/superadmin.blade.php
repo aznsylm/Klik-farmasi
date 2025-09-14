@@ -225,7 +225,6 @@
 
         .table td, .table th {
             vertical-align: middle;
-            text-align: center;
         }
 
         /* Card Styles */

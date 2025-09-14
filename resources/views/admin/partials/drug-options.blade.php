@@ -1,0 +1,41 @@
+@php
+    $drugOptions = [
+        'Verapamil tab 80 mg',
+        'Verapamil tab lepas lambat 240 mg',
+        'Valsartan tab 80 mg',
+        'Valsartan tab 160 mg',
+        'Telmisartan tab 40 mg',
+        'Telmisartan tab 80 mg',
+        'Ramipril tab 2,5 mg',
+        'Ramipril tab 5 mg',
+        'Amlodipin tab 5 mg',
+        'Amlodipin tab 10 mg',
+        'Atenolol tab 50 mg',
+        'Atenolol tab 100 mg',
+        'Bisoprolol tab 2,5 mg',
+        'Bisoprolol tab 5 mg',
+        'Bisoprolol tab 10 mg',
+        'Diltiazem kapsul lepas lambat 100 mg',
+        'Diltiazem kapsul lepas lambat 200 mg',
+        'Hidroklorotiazid tab 25 mg',
+        'Imidapril tab 5 mg',
+        'Imidapril tab 10 mg',
+        'Irbesartan tab 150 mg',
+        'Irbesartan tab 300 mg',
+        'Kandesartan tab 8 mg',
+        'Kandesartan tab 16 mg',
+        'Kaptopril tab 12,5 mg',
+        'Kaptopril tab 25 mg',
+        'Kaptopril tab 50 mg',
+        'Klonidin tab 0,15 mg',
+        'Lisinopril tab 5 mg',
+        'Lisinopril tab 10 mg',
+        'Metildopa tab 250 mg',
+        'Nifedipin tab 10 mg',
+        'Furosemid tab 20 mg',
+        'Furosemid tab 40 mg',
+    ];
+@endphp
+@foreach ($drugOptions as $drug)
+    <option value="{{ $drug }}">{{ $drug }}</option>
+@endforeach

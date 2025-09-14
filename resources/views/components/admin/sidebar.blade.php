@@ -23,36 +23,45 @@
                 <a href="{{ route('admin.pasien') }}" class="nav-link {{ request()->routeIs('admin.pasien') || request()->routeIs('admin.pasienDetail') || request()->routeIs('admin.pasienEdit') || request()->routeIs('admin.pasienCreate') ? 'active' : '' }}">
                     <i class="bi bi-people-fill"></i>
                     <span>Data Pasien</span>
+                    @if($totalCatatanPasien > 0)
+                        <span class="badge bg-danger text-white ms-2" style="font-size: 0.7rem;">{{ $totalCatatanPasien }}</span>
+                    @endif
                 </a>
             </div>
 
             @if(auth()->user() && auth()->user()->role === 'admin')
                 <div class="nav-item">
-                    <a href="{{ route('admin.articles.index') }}" class="nav-link {{ request()->routeIs('admin.articles.*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.kode-pendaftaran.index') }}" class="nav-link {{ request()->routeIs('admin.kode-pendaftaran.*') ? 'active' : '' }}">
+                        <i class="bi bi-key-fill"></i>
+                        <span>Kode Pendaftaran</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="{{ route('admin.artikel.index') }}" class="nav-link {{ request()->routeIs('admin.artikel.*') ? 'active' : '' }}">
                         <i class="bi bi-file-earmark-text"></i>
                         <span>Artikel</span>
                     </a>
                 </div>
                 <div class="nav-item">
-                    <a href="{{ route('admin.news.index') }}" class="nav-link {{ request()->routeIs('admin.news.*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.berita.index') }}" class="nav-link {{ request()->routeIs('admin.berita.*') ? 'active' : '' }}">
                         <i class="bi bi-newspaper"></i>
                         <span>Berita</span>
                     </a>
                 </div>
                 <div class="nav-item">
-                    <a href="{{ route('admin.faqs.index') }}" class="nav-link {{ request()->routeIs('admin.faqs.*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.tanya-jawab.index') }}" class="nav-link {{ request()->routeIs('admin.tanya-jawab.*') ? 'active' : '' }}">
                         <i class="bi bi-question-circle"></i>
                         <span>Tanya Jawab</span>
                     </a>
                 </div>
                 <div class="nav-item">
-                    <a href="{{ route('admin.downloads.index') }}" class="nav-link {{ request()->routeIs('admin.downloads.*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.unduhan.index') }}" class="nav-link {{ request()->routeIs('admin.unduhan.*') ? 'active' : '' }}">
                         <i class="bi bi-cloud-arrow-down"></i>
                         <span>Unduhan</span>
                     </a>
                 </div>
                 <div class="nav-item">
-                    <a href="{{ route('admin.testimonials.index') }}" class="nav-link {{ request()->routeIs('admin.testimonials.*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.testimoni.index') }}" class="nav-link {{ request()->routeIs('admin.testimoni.*') ? 'active' : '' }}">
                         <i class="bi bi-chat-left-quote"></i>
                         <span>Testimoni</span>
                     </a>

@@ -6,7 +6,7 @@
 <div class="container py-5">
     <!-- Tombol Kembali -->
     <div class="back-button">
-        <a href="{{ route('admin.downloads.index') }}" class="btn btn-secondary">
+        <a href="{{ route('admin.unduhan.index') }}" class="btn btn-secondary">
             <i class="bi bi-arrow-left"></i> Kembali ke Daftar Unduhan
         </a>
     </div>
@@ -27,7 +27,7 @@
                 </div>
             @endif
             
-            <form action="{{ route('admin.downloads.update', $download->id) }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('admin.unduhan.update', $download->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 

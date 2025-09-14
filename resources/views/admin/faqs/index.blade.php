@@ -8,7 +8,7 @@
         <h1 class="fw-bold">Kelola Tanya Jawab</h1>
         <div class="d-flex justify-content-between align-items-center mb-4">
             <!-- Tombol Tambah FAQ -->
-            <a href="{{ route('admin.faqs.create') }}" class="btn btn-primary">Tambah Tanya Jawab</a>
+            <a href="{{ route('admin.tanya-jawab.create') }}" class="btn btn-primary">Tambah Tanya Jawab</a>
         
             <!-- Tombol Kembali ke Dashboard -->
             <a href="{{ route('admin.dashboard') }}" class="btn btn-secondary">
@@ -40,8 +40,8 @@
                         <td>{{ $faq->question }}</td>
                         <td>{{ $faq->answer }}</td>
                         <td>
-                            <a href="{{ route('admin.faqs.edit', $faq) }}" class="btn btn-warning btn-sm">Edit</a>
-                            <form action="{{ route('admin.faqs.destroy', $faq) }}" method="POST" style="display:inline;">
+                            <a href="{{ route('admin.tanya-jawab.edit', $faq) }}" class="btn btn-warning btn-sm">Edit</a>
+                            <form action="{{ route('admin.tanya-jawab.destroy', $faq) }}" method="POST" style="display:inline;">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus FAQ ini?')">Hapus</button>

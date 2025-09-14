@@ -13,7 +13,11 @@ class PengingatObat extends Model
         'tekanan_darah',
         'tanggal_mulai',
         'catatan',
-        'status', // aktif atau selesai
+        'status', 
+    ];
+
+    protected $attributes = [
+        'catatan' => '-',
     ];
 
     public function detailObat()
@@ -24,5 +28,10 @@ class PengingatObat extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function catatanTekananDarah()
+    {
+        return $this->hasMany(CatatanTekananDarah::class, 'pengingat_obat_id');
     }
 }

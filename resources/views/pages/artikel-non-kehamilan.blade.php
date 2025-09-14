@@ -19,8 +19,6 @@
     <section class="py-5">
         <div class="container px-5">
             <h2 class="fw-bolder mb-3 text-primary">Artikel Hipertensi Non-Kehamilan</h2>
-            <p class="lead text-muted mx-auto">Informasi
-                kesehatan terkini tentang hipertensi umum</p>
             <div class="d-flex mt-3 mb-5">
                 <div class="section-divider"></div>
             </div>
@@ -106,8 +104,8 @@
                         </div>
                     </div>
                 @empty
-                    <div class="col-12 text-center">
-                        <p class="text-muted">Belum ada artikel lainnya yang tersedia.</p>
+                    <div class="alert alert-info text-center">
+                        <i class="bi bi-info-circle me-2"></i> Belum ada artikel terbaru untuk hipertensi non-kehamilan.
                     </div>
                 @endforelse
             </div>

@@ -8,7 +8,7 @@
         <h1 class="fw-bold">Kelola Artikel</h1>
         <div class="d-flex justify-content-between align-items-center mb-4">
             <!-- Tombol Tambah Artikel -->
-            <a href="{{ route('admin.articles.create') }}" class="btn btn-primary">Tambah Artikel</a>
+            <a href="{{ route('admin.artikel.create') }}" class="btn btn-primary">Tambah Artikel</a>
         
             <!-- Tombol Kembali ke Dashboard -->
             <a href="{{ route('admin.dashboard') }}" class="btn btn-secondary">
@@ -31,6 +31,7 @@
                     <th>Tipe Artikel</th>
                     <th>Judul</th>
                     <th>Penulis</th>
+                    <th>Views</th>
                     <th>Waktu Publish</th>
                     <th>Aksi</th>
                 </tr>
@@ -56,10 +57,11 @@
                         </td>
                         <td>{{ $article->title }}</td>
                         <td>{{ $article->author }}</td>
+                        <td>{{ number_format($article->views) }}</td>
                         <td>{{ $article->published_at ? $article->published_at->format('d M Y, H:i') : 'Belum dipublish' }}</td>
                         <td>
-                            <a href="{{ route('admin.articles.edit', $article->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                            <form action="{{ route('admin.articles.destroy', $article->id) }}" method="POST" style="display:inline;">
+                            <a href="{{ route('admin.artikel.edit', $article->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                            <form action="{{ route('admin.artikel.destroy', $article->id) }}" method="POST" style="display:inline;">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus artikel ini?')">Hapus</button>

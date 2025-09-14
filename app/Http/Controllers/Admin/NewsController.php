@@ -21,8 +21,8 @@ class NewsController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'title' => 'required|string|max:255|unique:news,title',
-            'source' => 'nullable|string|max:255',
+            'title' => 'required|string|max:555|unique:news,title',
+            'source' => 'nullable|string|max:555',
             'link' => 'required|url',
             'published_at' => 'required|date',
         ], [
@@ -30,7 +30,7 @@ class NewsController extends Controller
         ]);
 
         News::create($request->all());
-        return redirect()->route('admin.news.index')->with('success', 'Berita berhasil ditambahkan.');
+        return redirect()->route('admin.berita.index')->with('success', 'Berita berhasil ditambahkan.');
     }
 
     public function edit(News $news)
@@ -41,8 +41,8 @@ class NewsController extends Controller
     public function update(Request $request, News $news)
     {
         $request->validate([
-            'title' => 'required|string|max:255|unique:news,title,' . $news->id,
-            'source' => 'nullable|string|max:255',
+            'title' => 'required|string|max:555|unique:news,title,' . $news->id,
+            'source' => 'nullable|string|max:555',
             'link' => 'required|url',
             'published_at' => 'required|date',
         ], [
@@ -50,12 +50,12 @@ class NewsController extends Controller
         ]);
 
         $news->update($request->all());
-        return redirect()->route('admin.news.index')->with('success', 'Berita berhasil diperbarui.');
+        return redirect()->route('admin.berita.index')->with('success', 'Berita berhasil diperbarui.');
     }
 
     public function destroy(News $news)
     {
         $news->delete();
-        return redirect()->route('admin.news.index')->with('success', 'Berita berhasil dihapus.');
+        return redirect()->route('admin.berita.index')->with('success', 'Berita berhasil dihapus.');
     }
 }

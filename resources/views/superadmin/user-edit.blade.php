@@ -1,97 +1,268 @@
-@extends('layouts.superadmin')
+@extends('layouts.app')
 
 @section('title', 'Edit User')
 
 @section('content')
-<div class="container py-5">
-    <!-- Tombol Kembali -->
-    <div class="back-button">
-        <a href="{{ route('superadmin.users', ['role' => $user->role]) }}" class="btn btn-secondary">
-            <i class="bi bi-arrow-left"></i> Kembali ke Daftar {{ $user->role === 'admin' ? 'Admin' : 'Pasien' }}
-        </a>
-    </div>
+    <div class="container-fluid py-4">
+        <div class="row mt-3">
+            <div class="col-12">
+                <div class="card border-0 shadow-lg">
+                    <div class="card-header bg-transparent py-3">
+                        <h5 class="mb-0 fw-bold">Edit User - {{ $user->name }}</h5>
+                    </div>
+                    <div class="card-body">
+                        @if($errors->any())
+                            <div class="alert alert-danger">
+                                {{ $errors->first() }}
+                            </div>
+                        @endif
 
-    <div class="row justify-content-center">
-        <div class="col-lg-8">
-            <div class="card">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">Edit {{ $user->role === 'admin' ? 'Admin' : 'Pasien' }}</h5>
-                </div>
-                <div class="card-body">
-                    @if ($errors->any())
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <ul class="mb-0">
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                    @endif
-                    
-                    <form action="{{ route('superadmin.userUpdate', $user->id) }}" method="POST">
-                        @csrf
-                        @method('PUT')
-                        
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="name" class="form-label">Nama</label>
-                                <input type="text" id="name" name="name" value="{{ old('name', $user->name) }}" class="form-control" required>
+                        <form action="{{ route('superadmin.userUpdate', $user->id) }}" method="POST">
+                            @csrf
+                            @method('PUT')
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Nama Lengkap<span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}"
+                                        name="name" value="{{ old('name', $user->name) }}" required autofocus>
+                                    @error('name')
+                                        <div class="error-message">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Email<span class="text-danger">*</span></label>
+                                    <input type="email" class="form-control {{ $errors->has('email') ? 'is-invalid' : '' }}"
+                                        name="email" value="{{ old('email', $user->email) }}" required>
+                                    @error('email')
+                                        <div class="error-message">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Password Baru</label>
+                                    <div class="password-group {{ $errors->has('password') ? 'is-invalid' : '' }}">
+                                        <input type="password" class="form-control" name="password" minlength="8" id="password">
+                                        <i class="fas fa-eye-slash password-toggle" onclick="togglePassword('password', this)"></i>
+                                    </div>
+                                    @error('password')
+                                        <div class="error-message">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Konfirmasi Password Baru</label>
+                                    <div class="password-group {{ $errors->has('password_confirmation') ? 'is-invalid' : '' }}">
+                                        <input type="password" class="form-control" name="password_confirmation" minlength="8" id="password_confirmation">
+                                        <i class="fas fa-eye-slash password-toggle" onclick="togglePassword('password_confirmation', this)"></i>
+                                    </div>
+                                    @error('password_confirmation')
+                                        <div class="error-message">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Puskesmas<span class="text-danger">*</span></label>
+                                    <select class="form-select {{ $errors->has('puskesmas_id') ? 'is-invalid' : '' }}"
+                                        name="puskesmas_id" required>
+                                        <option value="" disabled hidden>Pilih Puskesmas *</option>
+                                        <option value="kalasan" {{ old('puskesmas_id', $user->puskesmas_id) == 'kalasan' ? 'selected' : '' }}>Puskesmas Kalasan</option>
+                                        <option value="godean_2" {{ old('puskesmas_id', $user->puskesmas_id) == 'godean_2' ? 'selected' : '' }}>Puskesmas Godean 2</option>
+                                        <option value="umbulharjo" {{ old('puskesmas_id', $user->puskesmas_id) == 'umbulharjo' ? 'selected' : '' }}>Puskesmas Umbulharjo</option>
+                                    </select>
+                                    @error('puskesmas_id')
+                                        <div class="error-message">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Nomor HP<span class="text-danger">*</span></label>
+                                    <div class="phone-input-group {{ $errors->has('nomor_hp') ? 'is-invalid' : '' }}">
+                                        <input type="tel" class="form-control phone-input" name="nomor_hp_display" id="nomorHP" placeholder="8xxxxxxxxx" required value="{{ old('nomor_hp', $user->nomor_hp) }}" pattern="[0-9]{8,13}" maxlength="13" minlength="8">
+                                        <input type="hidden" name="nomor_hp" id="nomorHPHidden" value="{{ old('nomor_hp', $user->nomor_hp) }}">
+                                    </div>
+                                    @error('nomor_hp')
+                                        <div class="error-message">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Usia<span class="text-danger">*</span></label>
+                                    <input type="number" class="form-control {{ $errors->has('usia') ? 'is-invalid' : '' }}"
+                                        name="usia" value="{{ old('usia', $user->usia) }}" required min="1" max="120">
+                                    @error('usia')
+                                        <div class="error-message">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Jenis Kelamin<span class="text-danger">*</span></label>
+                                    <select class="form-select {{ $errors->has('jenis_kelamin') ? 'is-invalid' : '' }}"
+                                        name="jenis_kelamin" required>
+                                        <option value="" disabled hidden>Pilih Jenis Kelamin *</option>
+                                        <option value="Laki-laki" {{ old('jenis_kelamin', $user->jenis_kelamin) == 'Laki-laki' ? 'selected' : '' }}>Laki-laki</option>
+                                        <option value="Perempuan" {{ old('jenis_kelamin', $user->jenis_kelamin) == 'Perempuan' ? 'selected' : '' }}>Perempuan</option>
+                                    </select>
+                                    @error('jenis_kelamin')
+                                        <div class="error-message">{{ $message }}</div>
+                                    @enderror
+                                </div>
                             </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="email" class="form-label">Email</label>
-                                <input type="email" id="email" name="email" value="{{ old('email', $user->email) }}" class="form-control" required>
+
+                            <div class="mt-4">
+                                <button type="submit" class="btn btn-primary">Update</button>
+                                <a href="{{ route('superadmin.users', ['role' => $user->role]) }}" class="btn btn-secondary">Batal</a>
                             </div>
-                        </div>
-                        
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="nomor_hp" class="form-label">Nomor HP</label>
-                                <input type="text" id="nomor_hp" name="nomor_hp" value="{{ old('nomor_hp', $user->nomor_hp) }}" class="form-control" pattern="^08[0-9]{8,11}$" title="Nomor HP harus diawali 08 dan 10-13 digit, contoh: 081255693035" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="jenis_kelamin" class="form-label">Jenis Kelamin</label>
-                                <select id="jenis_kelamin" name="jenis_kelamin" class="form-select" required>
-                                    <option value="Laki-laki" {{ old('jenis_kelamin', $user->jenis_kelamin) == 'Laki-laki' ? 'selected' : '' }}>Laki-laki</option>
-                                    <option value="Perempuan" {{ old('jenis_kelamin', $user->jenis_kelamin) == 'Perempuan' ? 'selected' : '' }}>Perempuan</option>
-                                </select>
-                            </div>
-                        </div>
-                        
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="usia" class="form-label">Usia</label>
-                                <input type="number" id="usia" name="usia" value="{{ old('usia', $user->usia) }}" class="form-control" min="1" max="120" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="role" class="form-label">Role</label>
-                                <select id="role" name="role" class="form-select" required>
-                                    <option value="pasien" {{ old('role', $user->role) == 'pasien' ? 'selected' : '' }}>Pasien</option>
-                                    <option value="admin" {{ old('role', $user->role) == 'admin' ? 'selected' : '' }}>Admin</option>
-                                    <option value="super_admin" {{ old('role', $user->role) == 'super_admin' ? 'selected' : '' }}>Super Admin</option>
-                                </select>
-                            </div>
-                        </div>
-                        
-                        <div class="mb-3 password-field">
-                            <label for="password" class="form-label">Password (Kosongkan jika tidak ingin mengubah)</label>
-                            <div class="input-group">
-                                <input type="password" id="passwordEdit" name="password" class="form-control" minlength="8" autocomplete="new-password">
-                                <button type="button" class="btn btn-outline-primary password-toggle" onclick="togglePassword('passwordEdit')">
-                                    <i class="bi bi-eye-slash"></i>
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <div class="text-end mt-4">
-                            <button type="submit" class="btn btn-success">
-                                <i class="bi bi-save me-1"></i> Simpan Perubahan
-                            </button>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
+
+    @push('styles')
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+        
+        <style>
+            .error-message {
+                color: #dc3545;
+                font-size: 0.875rem;
+                margin-top: 5px;
+            }
+            
+            .phone-input-group {
+                display: flex;
+                border: 1px solid #ced4da;
+                border-radius: 0.375rem;
+                overflow: hidden;
+            }
+            
+            .phone-input-group.is-invalid {
+                border-color: #dc3545;
+            }
+            
+            .phone-prefix {
+                background: #f8f9fa;
+                padding: 0.375rem 0.75rem;
+                border-right: 1px solid #ced4da;
+                color: #495057;
+                font-weight: 500;
+            }
+            
+            .phone-input {
+                border: none !important;
+                flex: 1;
+            }
+            
+            .phone-input:focus {
+                outline: none;
+                box-shadow: none;
+            }
+            
+            .phone-input-group:focus-within {
+                border-color: #0B5E91;
+                box-shadow: 0 0 0 0.25rem rgba(11, 94, 145, 0.25);
+            }
+            
+            .password-group {
+                position: relative;
+            }
+            
+            .password-group .form-control {
+                padding-right: 45px;
+            }
+            
+            .password-group.is-invalid .form-control {
+                border-color: #dc3545;
+            }
+            
+            .password-toggle {
+                position: absolute;
+                right: 12px;
+                top: 50%;
+                transform: translateY(-50%);
+                background: none;
+                border: none;
+                color: #6c757d;
+                cursor: pointer;
+                font-size: 1rem;
+            }
+            
+            .password-toggle:hover {
+                color: #0B5E91;
+            }
+            
+            .btn-primary {
+                background-color: #0B5E91;
+                border-color: #0B5E91;
+            }
+            
+            .btn-primary:hover {
+                background-color: #094a73;
+                border-color: #094a73;
+            }
+        </style>
+    @endpush
+    
+    @push('scripts')
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Password toggle function
+                window.togglePassword = function(inputId, iconElement) {
+                    const input = document.getElementById(inputId);
+                    
+                    if (input.type === 'password') {
+                        input.type = 'text';
+                        iconElement.classList.remove('fa-eye-slash');
+                        iconElement.classList.add('fa-eye');
+                    } else {
+                        input.type = 'password';
+                        iconElement.classList.remove('fa-eye');
+                        iconElement.classList.add('fa-eye-slash');
+                    }
+                }
+
+                // Nomor HP validation
+                const phoneInput = document.getElementById('nomorHP');
+                const phoneHidden = document.getElementById('nomorHPHidden');
+                
+                if (phoneInput && phoneHidden) {
+                    function updatePhoneNumber() {
+                        let value = phoneInput.value.replace(/\D/g, '');
+                        
+                        // Hapus awalan 0 atau 62 jika ada
+                        if (value.startsWith('0')) {
+                            value = value.substring(1);
+                        }
+                        if (value.startsWith('62')) {
+                            value = value.substring(2);
+                        }
+                        
+                        // Batasi panjang maksimal 13 digit
+                        if (value.length > 13) {
+                            value = value.substring(0, 13);
+                        }
+                        
+                        phoneInput.value = value;
+                        
+                        // Update hidden field dengan value asli
+                        phoneHidden.value = value;
+                        
+                        // Validasi panjang
+                        if (value.length < 8) {
+                            phoneInput.setCustomValidity('Nomor HP minimal 8 digit');
+                        } else if (value.length > 13) {
+                            phoneInput.setCustomValidity('Nomor HP maksimal 13 digit');
+                        } else {
+                            phoneInput.setCustomValidity('');
+                        }
+                    }
+                    
+                    phoneInput.addEventListener('input', updatePhoneNumber);
+                    
+                    // Initialize on page load
+                    updatePhoneNumber();
+                }
+            });
+        </script>
+    @endpush
 @endsection
