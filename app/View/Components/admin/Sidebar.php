@@ -18,14 +18,9 @@ class Sidebar extends Component
     {
         $this->totalCatatanPasien = 0;
         
-        // Hanya hitung untuk admin biasa
+        // Catatan system removed - set to 0
         if (auth()->check() && auth()->user()->role === 'admin') {
-            $this->totalCatatanPasien = User::where('role', 'pasien')
-                ->where('puskesmas_id', auth()->user()->puskesmas_id)
-                ->whereHas('pengingatObat', function($query) {
-                    $query->whereNotNull('catatan')->where('catatan', '!=', '');
-                })
-                ->count();
+            $this->totalCatatanPasien = 0;
         }
     }
 

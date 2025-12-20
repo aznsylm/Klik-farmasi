@@ -231,7 +231,7 @@
     </button>
 
     <!-- Button WhatsApp -->
-    <a href="https://wa.me/+6285280909235" target="_blank" id="whatsappButton"
+    <a href="https://wa.me/+6281292936247" target="_blank" id="whatsappButton"
         class="btn btn-success rounded-circle shadow-lg">
         <i class="bi bi-whatsapp"></i>
     </a>

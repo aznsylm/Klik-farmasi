@@ -27,21 +27,29 @@
             <!-- News Cards -->
             <div class="row g-4">
                 @forelse ($allNews as $news)
-                    <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="100">
-                        <div class="card h-100 shadow-sm border-0">
-                            <div class="card-body d-flex flex-column">
-                                <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <small class="text-primary fw-semibold">
+                    <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
+                        <div class="news-card h-100">
+                            <!-- Card Header -->
+                            <div class="news-header">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="source-badge">
                                         <i class="bi bi-newspaper me-1"></i>{{ $news->source }}
-                                    </small>
-                                    <small class="text-muted">
-                                        <i class="bi bi-calendar3 me-1"></i>{{ $news->published_at->format('d M Y') }}
-                                    </small>
+                                    </span>
+                                    <span class="date-badge">
+                                        <i class="bi bi-clock me-1"></i>{{ $news->published_at->format('d M Y') }}
+                                    </span>
                                 </div>
-                                <h5 class="card-title mb-3 lh-base">{{ $news->title }}</h5>
-                                <div class="mt-auto">
-                                    <a href="{{ $news->link }}" target="_blank" class="btn btn-outline-primary btn-sm">
-                                        Baca Selengkapnya <i class="bi bi-arrow-right ms-1"></i>
+                            </div>
+                            
+                            <!-- Card Body -->
+                            <div class="news-body">
+                                <h5 class="news-title">{{ $news->title }}</h5>
+                                
+                                <!-- Read More Button -->
+                                <div class="news-footer">
+                                    <a href="{{ $news->link }}" target="_blank" class="read-more-btn">
+                                        <span>Baca Selengkapnya</span>
+                                        <i class="bi bi-arrow-right-circle-fill ms-2"></i>
                                     </a>
                                 </div>
                             </div>
@@ -56,6 +64,92 @@
                     </div>
                 @endforelse
             </div>
+            
+            <!-- Custom Styles -->
+            <style>
+            .news-card {
+                background: #ffffff;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+                transition: all 0.3s ease;
+                border: 1px solid #e9ecef;
+                cursor: pointer;
+            }
+            
+            .news-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            }
+            
+            .news-header {
+                padding: 20px 20px 15px;
+                background: #0B5E91;
+                color: white;
+            }
+            
+            .source-badge, .date-badge {
+                font-size: 0.8rem;
+                font-weight: 600;
+            }
+            
+            .news-body {
+                padding: 25px 20px 20px;
+                flex-grow: 1;
+                display: flex;
+                flex-direction: column;
+            }
+            
+            .news-title {
+                font-size: 1.1rem;
+                font-weight: 700;
+                line-height: 1.4;
+                color: #2c3e50;
+                margin-bottom: 20px;
+                flex-grow: 1;
+                display: -webkit-box;
+                -webkit-line-clamp: 3;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+            }
+            
+            .news-footer {
+                margin-top: auto;
+            }
+            
+            .read-more-btn {
+                display: inline-flex;
+                align-items: center;
+                color: #0B5E91;
+                text-decoration: none;
+                font-weight: 600;
+                font-size: 0.9rem;
+                transition: all 0.3s ease;
+                padding: 8px 0;
+            }
+            
+            .read-more-btn:hover {
+                color: #083d5c;
+                transform: translateX(5px);
+            }
+            
+            .read-more-btn i {
+                transition: transform 0.3s ease;
+            }
+            
+            .read-more-btn:hover i {
+                transform: translateX(3px);
+            }
+            
+            /* Responsive adjustments */
+            @media (max-width: 768px) {
+                .news-header {
+                    padding: 15px 15px 10px;
+                }
+                
+                .news-body {
+                    padding: 20px 15px 15px;
+                }
+            }
+            </style>
 
             <!-- Pagination -->
             <div class="mt-5 d-flex justify-content-center">

@@ -10,6 +10,12 @@
 @endpush
 
 @section('content')
+    <!-- Tombol Kembali -->
+    <a href="{{ route('login') }}" 
+    style="position: absolute; top: 24px; left: 24px; z-index: 10; display: flex; align-items: center; gap: 6px; text-decoration: none; color: #0b5e91; font-weight: 600; font-size: 1rem;">
+        <i class="fas fa-arrow-left"></i> Login
+    </a>
+
     <!-- Register Form -->
     <div id="registerForm">
         <h2 class="form-title">Daftar Akun</h2>
@@ -139,10 +145,6 @@
                     </div>
                 @enderror
             </div>
-            <div class="checkbox-group">
-                <input type="checkbox" id="agreeTerms" required>
-                <label for="agreeTerms">Saya menyetujui semua syarat & ketentuan</label>
-            </div>
             <button type="submit" class="btn-primary">
                 <span>Daftar Sekarang</span>
             </button>
@@ -168,8 +170,8 @@
     </div>
 @endsection
 
-@section('hero_title', 'Daftar')
-@section('hero_subtitle', 'Bergabunglah dengan pengguna lainnya untuk pengalaman kesehatan yang lebih baik')
+@section('hero_title', 'Mulai Hidup Sehat Tanpa Khawatir!')
+@section('hero_subtitle', 'Daftar gratis sekarang dan dapatkan pengingat minum obat otomatis, monitoring tekanan darah harian, plus konsultasi langsung dengan ahli kesehatan. Jangan biarkan hipertensi mengganggu aktivitas Anda!')
 
 @section('extra_styles')
 <style>
@@ -356,6 +358,59 @@
         border: 5px solid transparent;
         border-top-color: #333;
         z-index: 1000;
+    }
+    
+    /* Mobile responsive fixes */
+    @media (max-width: 768px) {
+        .form-title {
+            margin-top: 3rem !important;
+            font-size: 1.8rem;
+        }
+        
+        .auth-container .row {
+            margin: 0;
+        }
+        
+        .auth-form {
+            padding: 1.5rem 1rem;
+        }
+        
+        .auth-hero {
+            padding: 2rem 1rem;
+        }
+        
+        .hero-title {
+            font-size: 1.8rem;
+            line-height: 1.3;
+        }
+        
+        .hero-subtitle {
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+    }
+    
+    @media (max-width: 576px) {
+        .form-title {
+            margin-top: 3.5rem !important;
+            font-size: 1.6rem;
+        }
+        
+        .hero-title {
+            font-size: 1.6rem;
+        }
+        
+        .hero-subtitle {
+            font-size: 0.95rem;
+        }
+        
+        .auth-form {
+            padding: 1rem 0.75rem;
+        }
+        
+        .auth-hero {
+            padding: 1.5rem 0.75rem;
+        }
     }
 </style>
 @endsection

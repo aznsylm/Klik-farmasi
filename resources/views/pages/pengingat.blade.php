@@ -37,14 +37,20 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
     @endif
-    {{-- Form Pengingat Minum Obat --}}
-    <section class="py-5" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);">
+    <section class="py-5">
         <div class="container px-4">
-            
-            <div class="card border-0 shadow-lg" style="border-radius: 20px; overflow: hidden;">
-                <div class="card-header" >
-                    <h2>Form Pengingat Obat</h2>
+            <!-- Header Section -->
+            <div class="text-center mb-5">
+                <h2 class="fw-bolder mb-3 text-primary" data-aos="fade-up">Pengingat Minum Obat</h2>
+                <p class="lead text-muted mx-auto" data-aos="fade-up" data-aos-delay="100">
+                    Atur jadwal minum obat harian dengan mudah
+                </p>
+                <div class="d-flex justify-content-center mt-3" data-aos="fade-up" data-aos-delay="150">
+                    <div class="section-divider mx-auto"></div>
                 </div>
+            </div>
+            
+            <div class="card border-0 shadow-lg">
                 <div class="card-body p-4 p-md-5">
                     <div class="row justify-content-center">
                         <div class="col-lg-8">
@@ -54,30 +60,23 @@
                                 <div class="row g-4">
                                     <!-- Data Medis Section -->
                                     <div class="col-12">
-                                        <div class="bg-light p-4 rounded-4 border border-2 mb-4" style="border-color: #0B5E91 !important;">
-                                            <div class="text-center mb-3">
-                                                <h3 class="fw-bold mb-2" style="font-size: 2rem; color: #0B5E91;">LANGKAH 1</h3>
-                                                <h4 class="fw-bold text-dark mb-1" style="font-size: 1.5rem;">Kondisi Kesehatan Anda</h4>
-                                            </div>
+                                        <div class="step-header">
+                                            <div class="step-number">1</div>
+                                            <h4 class="step-title">Kondisi Kesehatan</h4>
                                         </div>
                                     </div>
                                     <div class="col-12">
                                         <div class="mb-4">
                                             <div class="input-wrapper">
-                                                <label for="diagnosa" class="form-label fw-bold text-dark mb-3" style="font-size: 1.3rem;">
-                                                    Jenis Hipertensi Anda:
+                                                <label for="diagnosa" class="form-label">
+                                                    Jenis Hipertensi:
                                                 </label>
-                                                <div class="input-with-tooltip">
-                                                    <select class="form-select shadow-sm {{ $errors->has('diagnosa') ? 'is-invalid' : '' }}" id="diagnosa" name="diagnosa" required style="font-size: 1.2rem; padding: 1rem;">
-                                                        <option value="" selected hidden>-- Pilih salah satu --</option>
-                                                        <option value="Hipertensi-Non-Kehamilan" {{ old('diagnosa') == 'Hipertensi-Non-Kehamilan' ? 'selected' : '' }}>Hipertensi Non-Kehamilan</option>
-                                                        <option value="Hipertensi-Kehamilan" {{ old('diagnosa') == 'Hipertensi-Kehamilan' ? 'selected' : '' }}>Hipertensi saat Hamil</option>
-                                                        <option value="Kehamilan" {{ old('diagnosa') == 'Kehamilan' ? 'selected' : '' }}>Kehamilan</option>
-                                                    </select>
-                                                    <div class="info-icon" data-tooltip="Aturan: Semua kategori minimal 1 dan maksimal 5 obat/suplemen">
-                                                        <i class="fas fa-question-circle"></i>
-                                                    </div>
-                                                </div>
+                                                <select class="form-select {{ $errors->has('diagnosa') ? 'is-invalid' : '' }}" id="diagnosa" name="diagnosa" required>
+                                                    <option value="" selected hidden>-- Pilih salah satu --</option>
+                                                    <option value="Hipertensi-Non-Kehamilan" {{ old('diagnosa') == 'Hipertensi-Non-Kehamilan' ? 'selected' : '' }}>Hipertensi Non-Kehamilan</option>
+                                                    <option value="Hipertensi-Kehamilan" {{ old('diagnosa') == 'Hipertensi-Kehamilan' ? 'selected' : '' }}>Hipertensi saat Hamil</option>
+                                                    <option value="Kehamilan" {{ old('diagnosa') == 'Kehamilan' ? 'selected' : '' }}>Kehamilan</option>
+                                                </select>
                                             </div>
                                             @error('diagnosa')
                                                 <div class="error-message">
@@ -90,19 +89,14 @@
                                     <div class="col-12">
                                         <div class="mb-4">
                                             <div class="input-wrapper">
-                                                <label class="form-label fw-bold text-dark mb-3" style="font-size: 1.3rem;">
+                                                <label class="form-label">
                                                     Tekanan Darah Terakhir:
                                                 </label>
-                                                <div class="input-with-tooltip">
-                                                    <div class="input-group shadow-sm {{ $errors->has('sistol') || $errors->has('diastol') || $errors->has('tekananDarah') ? 'is-invalid' : '' }}" style="font-size: 1.2rem;">
-                                                        <input type="number" class="form-control" id="sistolInput" name="sistol" placeholder="140" min="50" max="250" required style="font-size: 1.2rem; padding: 1rem;" value="{{ old('sistol') }}">
-                                                        <span class="input-group-text" style="font-size: 1.5rem; font-weight: bold;">/</span>
-                                                        <input type="number" class="form-control" id="diastolInput" name="diastol" placeholder="90" min="50" max="150" required style="font-size: 1.2rem; padding: 1rem;" value="{{ old('diastol') }}">
-                                                        <input type="hidden" id="tekananDarah" name="tekananDarah" value="{{ old('tekananDarah') }}">
-                                                    </div>
-                                                    <div class="info-icon" data-tooltip="Angka sistol (50-250) dan diastol (50-150)">
-                                                        <i class="fas fa-question-circle"></i>
-                                                    </div>
+                                                <div class="input-group {{ $errors->has('sistol') || $errors->has('diastol') || $errors->has('tekananDarah') ? 'is-invalid' : '' }}">
+                                                    <input type="number" class="form-control" id="sistolInput" name="sistol" placeholder="140" min="50" max="250" required value="{{ old('sistol') }}">
+                                                    <span class="input-group-text">/</span>
+                                                    <input type="number" class="form-control" id="diastolInput" name="diastol" placeholder="90" min="50" max="150" required value="{{ old('diastol') }}">
+                                                    <input type="hidden" id="tekananDarah" name="tekananDarah" value="{{ old('tekananDarah') }}">
                                                 </div>
                                             </div>
                                             @error('sistol')
@@ -127,46 +121,35 @@
                                     </div>
                                     <!-- Daftar Obat Section -->
                                     <div class="col-12 mt-5">
-                                        <div class="bg-light p-4 rounded-4 border border-2 mb-4" style="border-color: #0B5E91 !important;">
-                                            <div class="text-center mb-3">
-                                                <h3 class="fw-bold mb-2" style="font-size: 2rem; color: #0B5E91;">LANGKAH 2</h3>
-                                                <h4 class="fw-bold text-dark mb-1" style="font-size: 1.5rem;">Obat-Obat Anda</h4>
-                                            </div>
+                                        <div class="step-header">
+                                            <div class="step-number">2</div>
+                                            <h4 class="step-title">Daftar Obat</h4>
                                         </div>
                                     </div>
                                     <div class="col-12">
                                         <div id="obatContainer" class="mb-4"></div>
-                                        <div class="text-center  mb-4 p-5 rounded-4 border border-3" style="background: rgba(11, 94, 145, 0.1); border-color: #0B5E91 !important;">
-                                            <p class="fs-4 text-dark mb-4 fw-bold text-center">
-                                                Klik tombol di bawah untuk menambah obat pertama Anda
-                                            </p>
-                                            <button type="button" class="btn btn-lg px-5 py-4 text-center" id="tambahObat" style="font-size: 1.4rem; border-radius: 15px; min-height: 70px; background-color: #0B5E91; border: none; color: white;">
-                                                TAMBAH OBAT PERTAMA
+                                        <div class="add-drug-section">
+                                            <p class="add-drug-text">Tambahkan obat pertama Anda</p>
+                                            <button type="button" class="btn btn-primary btn-lg" id="tambahObat">
+                                                Tambah Obat
                                             </button>
                                         </div>
                                     </div>
                                     <!-- Pengaturan Pengingat Section -->
                                     <div class="col-12 mt-5">
-                                        <div class="bg-light p-4 rounded-4 border border-2 mb-4" style="border-color: #0B5E91 !important;">
-                                            <div class="text-center mb-3">
-                                                <h3 class="fw-bold mb-2" style="font-size: 2rem; color: #0B5E91;">LANGKAH 3</h3>
-                                                <h4 class="fw-bold text-dark mb-1" style="font-size: 1.5rem;">Atur Waktu Pengingat</h4>
-                                            </div>
+                                        <div class="step-header">
+                                            <div class="step-number">3</div>
+                                            <h4 class="step-title">Waktu Pengingat</h4>
                                         </div>
                                     </div>
                                     <div class="col-12">
                                         <div class="mb-4">
                                             <div class="input-wrapper">
-                                                <label for="tanggal_mulai" class="form-label fw-bold text-dark mb-3" style="font-size: 1.3rem;">
+                                                <label for="tanggal_mulai" class="form-label">
                                                     Mulai Pengingat:
                                                 </label>
-                                                <div class="input-with-tooltip">
-                                                    <input class="form-control shadow-sm {{ $errors->has('tanggal_mulai') ? 'is-invalid' : '' }}" id="tanggal_mulai" name="tanggal_mulai" type="date" style="font-size: 1.2rem; padding: 1rem;" 
-                                                        min="{{ date('Y-m-d') }}" max="{{ date('Y-m-d', strtotime('+1 year')) }}" value="{{ old('tanggal_mulai', date('Y-m-d', strtotime('+1 day'))) }}" required />
-                                                    <div class="info-icon" data-tooltip="Kapan Anda ingin mulai mendapat pengingat minum obat. Default: Besok (bisa diubah sesuai kebutuhan)">
-                                                        <i class="fas fa-question-circle"></i>
-                                                    </div>
-                                                </div>
+                                                <input class="form-control {{ $errors->has('tanggal_mulai') ? 'is-invalid' : '' }}" id="tanggal_mulai" name="tanggal_mulai" type="date" 
+                                                    min="{{ date('Y-m-d') }}" max="{{ date('Y-m-d', strtotime('+1 year')) }}" value="{{ old('tanggal_mulai', date('Y-m-d', strtotime('+1 day'))) }}" required />
                                             </div>
                                             @error('tanggal_mulai')
                                                 <div class="error-message">
@@ -176,56 +159,23 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    <div class="col-12">
-                                        <div class="mb-4">
-                                            <div class="input-wrapper">
-                                                <label for="catatan" class="form-label fw-bold text-dark mb-3" style="font-size: 1.3rem;">
-                                                    Catatan Khusus (Boleh Dikosongkan):
-                                                </label>
-                                                <div class="input-with-tooltip">
-                                                    <textarea class="form-control shadow-sm {{ $errors->has('catatan') ? 'is-invalid' : '' }}" id="catatan" name="catatan" style="height: 120px; font-size: 1.1rem; padding: 1rem;"
-                                                        placeholder="Tulis keluhan atau catatan khusus jika ada..." maxlength="500">{{ old('catatan') }}</textarea>
-                                                    <div class="info-icon" data-tooltip="Keluhan selama pengobatan, efek samping obat, atau catatan khusus lainnya">
-                                                        <i class="fas fa-question-circle"></i>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            @error('catatan')
-                                                <div class="error-message">
-                                                    <i class="fas fa-exclamation-circle"></i>
-                                                    <span>{{ $message }}</span>
-                                                </div>
-                                            @enderror
-                                        </div>
-                                    </div>
+
                                     <div class="col-12 mt-5">
-                                        <div class="text-center p-5 rounded-4 border border-2" style="background: rgba(11, 94, 145, 0.1); border-color: #0B5E91 !important;">
-                                            <h4 class="fw-bold text-dark mb-3" style="font-size: 1.8rem;">Siap Menyimpan Pengingat?</h4>
+                                        <div class="submit-section">
                                             @guest
-                                                <p class="fs-5 text-dark mb-4">
-                                                    Anda perlu masuk ke akun terlebih dahulu untuk menyimpan pengingat obat
-                                                </p>
-                                                <button type="button" class="btn btn-lg px-5 py-4 shadow-sm" data-bs-toggle="modal" data-bs-target="#loginModal" style="font-size: 1.4rem; border-radius: 15px; background-color: #0B5E91; border: none; color: white;">
-                                                    MASUK KE AKUN
+                                                <p class="submit-text text-center">Masuk ke akun untuk menyimpan pengingat</p>
+                                                <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#loginModal">
+                                                    Masuk ke Akun
                                                 </button>
-                                                <p class="text-muted mt-3 mb-0 fs-6">
-                                                    Gratis dan aman
-                                                </p>
                                             @endguest
                                             @auth
                                                 @if(auth()->user()->role === 'pasien')
-                                                    <p class="fs-5 text-dark mb-4">
-                                                        Klik tombol di bawah untuk menyimpan pengingat obat Anda
-                                                    </p>
-                                                    <button type="submit" class="btn btn-lg px-5 py-4 shadow-sm" style="font-size: 1.4rem; border-radius: 15px; background-color: #0B5E91; border: none; color: white;">
-                                                        SIMPAN PENGINGAT SAYA
+                                                    <button type="submit" class="btn btn-primary btn-lg">
+                                                        Simpan Pengingat
                                                     </button>
                                                 @else
-                                                    <p class="fs-5 text-dark mb-4">
-                                                        Anda login sebagai {{ auth()->user()->role === 'admin' ? 'Admin' : 'Super Admin' }}. Fitur ini hanya untuk pasien.
-                                                    </p>
                                                     <div class="alert alert-info">
-                                                        Hanya pasien yang dapat menyimpan pengingat obat. Anda dapat melihat form ini untuk keperluan administrasi.
+                                                        Fitur ini hanya untuk pasien. Anda login sebagai {{ auth()->user()->role === 'admin' ? 'Admin' : 'Super Admin' }}.
                                                     </div>
                                                 @endif
                                             @endauth
@@ -250,24 +200,21 @@
     <!-- Bootstrap Modal -->
     <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 shadow-lg" style="border-radius: 20px;">
+            <div class="modal-content border-0 shadow-lg">
                 <div class="modal-header border-0 pb-0">
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body text-center p-5">
+                <div class="modal-body text-center p-4">
                     <h4 class="fw-bold mb-3">Login Diperlukan</h4>
-                    <p class="text-muted mb-4">Anda harus login terlebih dahulu untuk menyimpan pengingat obat dan mengakses fitur eksklusif lainnya.</p>
+                    <p class="text-muted mb-4">Masuk untuk menyimpan pengingat obat Anda</p>
                     <div class="d-grid gap-3">
-                        <a href="{{ route('login') }}" class="btn btn-primary btn-lg rounded-pill shadow-sm">
+                        <a href="{{ route('login') }}" class="btn btn-primary btn-lg">
                              Masuk ke Akun
                         </a>
-                        <a href="{{ route('register') }}" class="btn btn-outline-primary btn-lg rounded-pill">
+                        <a href="{{ route('register') }}" class="btn btn-outline-primary btn-lg">
                              Daftar Gratis
                         </a>
                     </div>
-                    <p class="text-muted mt-4 mb-0">
-                        <small>Gratis dan hanya butuh 2 menit</small>
-                    </p>
                 </div>
             </div>
         </div>
@@ -285,7 +232,68 @@
 
 @push('scripts')
 <style>
-/* Optimized CSS - Mobile First Responsive */
+/* Step Headers */
+.step-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 30px;
+    padding: 20px;
+    background: #f8f9fa;
+    border: 2px solid #0B5E91;
+}
+
+.step-number {
+    background: #0B5E91;
+    color: white;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+.step-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin: 0;
+}
+
+/* Add Drug Section */
+.add-drug-section {
+    text-align: center;
+    padding: 40px 20px;
+    background: #f8f9fa;
+    border: 2px solid #0B5E91;
+    margin-bottom: 20px;
+}
+
+.add-drug-text {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 20px;
+}
+
+/* Submit Section */
+.submit-section {
+    text-align: center;
+    padding: 40px 20px;
+    background: #f8f9fa;
+    border: 2px solid #0B5E91;
+}
+
+.submit-text {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 20px;
+}
+
+/* Form Controls */
 .form-control:focus, .form-select:focus {
     border-color: #0B5E91;
     box-shadow: 0 0 0 0.2rem rgba(11, 94, 145, 0.25);
@@ -294,101 +302,27 @@
 .form-select, .form-control {
     min-height: 50px;
     font-weight: 500;
+    border: 2px solid #e9ecef;
 }
 
 .form-label {
-    font-weight: 700 !important;
-    margin-bottom: 0.8rem !important;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: #2c3e50;
+    font-size: 1.1rem;
 }
 
 .btn-lg {
     min-height: 50px;
     font-weight: 700;
+    padding: 12px 30px;
 }
 
-.card-header {
-    background-color: #0B5E91 !important;
-    color: white !important;
-    text-align: center !important;
-    padding: 2rem 1rem !important;
-}
-
-.card-header h2 {
-    font-size: 1.8rem !important;
-    font-weight: 700 !important;
-    margin-bottom: 0 !important;
-    color: white !important;
-}
-
-.card-header p {
-    font-size: 1rem !important;
-    margin-bottom: 0 !important;
-    margin-top: 0.5rem !important;
-    opacity: 0.9 !important;
-    color: white !important;
-}
-
-/* Mobile Responsive */
-@media (max-width: 768px) {
-    .container {
-        padding: 0.5rem;
-    }
-    
-    .card-body {
-        padding: 1rem !important;
-    }
-    
-    .form-select, .form-control {
-        font-size: 1rem !important;
-        padding: 0.75rem !important;
-    }
-    
-    .btn-lg {
-        font-size: 1.1rem !important;
-        padding: 0.75rem 1.5rem !important;
-    }
-    
-    .input-group-text {
-        font-size: 1.2rem !important;
-    }
-    
-    h3 {
-        font-size: 1.5rem !important;
-    }
-    
-    h4 {
-        font-size: 1.2rem !important;
-    }
-}
-
-/* Tablet Responsive */
-@media (min-width: 769px) and (max-width: 1024px) {
-    .form-select, .form-control {
-        min-height: 55px;
-    }
-    
-    .card-header {
-        padding: 2.5rem 1.5rem !important;
-    }
-    
-    .card-header h2 {
-        font-size: 2.2rem !important;
-    }
-}
-
-/* Desktop */
-@media (min-width: 1025px) {
-    .form-select, .form-control {
-        min-height: 60px;
-    }
-    
-    .card-header {
-        padding: 3rem 1.5rem !important;
-    }
-    
-    .card-header h2 {
-        font-size: 2.5rem !important;
-    }
+.input-group-text {
+    font-weight: 700;
+    font-size: 1.2rem;
+    background: #f8f9fa;
+    border: 2px solid #e9ecef;
 }
 
 /* Error styling */
@@ -411,67 +345,8 @@
     gap: 5px;
     color: #dc3545;
     font-size: 0.875rem;
-    margin-top: 5px;
+    margin-top: 8px;
     font-weight: 500;
-}
-
-.error-message i {
-    font-size: 0.8rem;
-}
-
-/* Input wrapper with tooltip */
-.input-with-tooltip {
-    position: relative;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    width: 100%;
-}
-
-.input-with-tooltip .form-select,
-.input-with-tooltip .form-control,
-.input-with-tooltip .input-group {
-    flex: 1;
-    min-width: 0;
-}
-
-.info-icon {
-    color: #6c757d;
-    cursor: help;
-    font-size: 0.9rem;
-}
-
-.info-icon:hover {
-    color: #0B5E91;
-}
-
-/* Tooltip */
-.info-icon[data-tooltip]:hover::after {
-    content: attr(data-tooltip);
-    position: absolute;
-    bottom: 125%;
-    right: 0;
-    background: #333;
-    color: white;
-    padding: 8px 12px;
-    border-radius: 6px;
-    font-size: 0.8rem;
-    white-space: nowrap;
-    z-index: 1000;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-    max-width: 300px;
-    white-space: normal;
-    text-align: center;
-}
-
-.info-icon[data-tooltip]:hover::before {
-    content: '';
-    position: absolute;
-    bottom: 115%;
-    right: 10px;
-    border: 5px solid transparent;
-    border-top-color: #333;
-    z-index: 1000;
 }
 
 /* Validation Popup */
@@ -495,7 +370,6 @@
 .validation-container {
     background-color: white;
     padding: 2rem;
-    border-radius: 15px;
     width: 90%;
     max-width: 400px;
     text-align: center;
@@ -503,14 +377,14 @@
 }
 
 .validation-title {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     font-weight: 700;
     color: #0B5E91;
     margin-bottom: 1rem;
 }
 
 .validation-message {
-    font-size: 1.1rem;
+    font-size: 1rem;
     color: #333;
     margin-bottom: 1.5rem;
     line-height: 1.5;
@@ -521,8 +395,7 @@
     color: white;
     border: none;
     padding: 0.75rem 2rem;
-    border-radius: 10px;
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
     transition: background-color 0.2s;
@@ -530,6 +403,47 @@
 
 .validation-btn:hover {
     background-color: #094a73;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .container {
+        padding: 0.5rem;
+    }
+    
+    .card-body {
+        padding: 1rem !important;
+    }
+    
+    .step-header {
+        padding: 15px;
+        gap: 10px;
+    }
+    
+    .step-number {
+        width: 35px;
+        height: 35px;
+        font-size: 1rem;
+    }
+    
+    .step-title {
+        font-size: 1.1rem;
+    }
+    
+    .add-drug-section, .submit-section {
+        padding: 25px 15px;
+    }
+    
+    .form-select, .form-control {
+        min-height: 45px;
+        font-size: 1rem;
+    }
+    
+    .btn-lg {
+        font-size: 1rem;
+        padding: 10px 20px;
+        min-height: 45px;
+    }
 }
 </style>
 
@@ -551,11 +465,6 @@ document.addEventListener('DOMContentLoaded', function() {
         sistol.oninput = diastol.oninput = update;
     }
     
-    // Input sanitization
-    const catatan = document.getElementById('catatan');
-    if (catatan) {
-        catatan.oninput = e => e.target.value = e.target.value.replace(/[<>"']/g, '');
-    }
     
     // Form validation with popup
     if (form) {

@@ -10,25 +10,26 @@ class KeluhanPasienController extends Controller
 {
     public function index()
     {
-        $adminPuskesmas = auth()->user()->puskesmas_id;
+        $adminPuskesmas = auth()->user()->puskesmas;
         
-        $keluhanPasien = PengingatObat::whereNotNull('catatan')
-            ->whereHas('user', function($query) use ($adminPuskesmas) {
-                $query->where('puskesmas_id', $adminPuskesmas);
-            })
-            ->with(['user', 'detailObat'])
-            ->orderBy('updated_at', 'desc')
-            ->paginate(10);
+        // Catatan system removed - return empty paginated collection
+        $keluhanPasien = new \Illuminate\Pagination\LengthAwarePaginator(
+            collect(),
+            0,
+            10,
+            1,
+            ['path' => request()->url()]
+        );
 
         return view('admin.keluhan-pasien.index', compact('keluhanPasien'));
     }
 
     public function show($id)
     {
-        $adminPuskesmas = auth()->user()->puskesmas_id;
+        $adminPuskesmas = auth()->user()->puskesmas;
         
         $pengingat = PengingatObat::whereHas('user', function($query) use ($adminPuskesmas) {
-                $query->where('puskesmas_id', $adminPuskesmas);
+                $query->where('puskesmas', $adminPuskesmas);
             })
             ->with(['user', 'detailObat'])
             ->findOrFail($id);

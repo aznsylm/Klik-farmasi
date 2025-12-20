@@ -25,7 +25,7 @@
                     <div class="card border-0 shadow-sm">
                         <div class="card-body p-4">
                             <h3 class="fw-bold mb-4 text-primary">Tentang Website Klik-Farmasi</h3>
-                            <p class="text-dark">Klik Farmasi merupakan platform asuhan kefarmasian yang dikembangkan oleh
+                            <p class="text-dark">Klik Farmasi merupakan platform asuhan kefarmasian yang kelola oleh
                                 Dosen dan mahasiswa Program Studi S1 Farmasi Universitas Alma Ata sebagai wujud kontribusi
                                 dalam bidang pendidikan, penelitian, dan pengabdian masyarakat. Saat ini Klik Farmasi fokus
                                 pada edukasi penyakit tidak menular, khususnya hipertensi, melalui penyediaan informasi dan
@@ -59,11 +59,11 @@
                                             <h5 class="fw-bold">Misi</h5>
                                             <p class="text-dark mb-0">1. Menyediakan informasi kesehatan berbasis bukti
                                                 (evidence-based) yang akurat, mudah dipahami, dan dapat diakses oleh semua
-                                                kalangan masyarakat.<br><br>2. Mengembangkan dan mengimplementasikan
+                                                kalangan masyarakat.<br>2. Mengembangkan dan mengimplementasikan
                                                 fitur-fitur inovatif untuk membantu pasien dalam pengelolaan hipertensi dan
-                                                penyakit tidak menular lainnya.<br><br>3. Mendorong kolaborasi antara
+                                                penyakit tidak menular lainnya.<br>3. Mendorong kolaborasi antara
                                                 sivitas akademika dan masyarakat guna menghasilkan solusi kesehatan yang
-                                                aplikatif dan responsif terhadap isu kesehatan nasional.<br><br>4. Mendukung
+                                                aplikatif dan responsif terhadap isu kesehatan nasional.<br>4. Mendukung
                                                 aktivitas pendidikan, penelitian, dan pengabdian Program Studi S1 Farmasi
                                                 Universitas Alma Ata untuk kebermanfaatan masyarakat luas.</p>
                                         </div>
@@ -76,111 +76,67 @@
             </div>
             <div class="row mb-5">
                 <div class="col-12">
-                    <div class="section-header text-center mb-4" data-aos="fade-up">
-                        <h3 class="section-title">Dosen Pembimbing</h3>
-                        <p class="section-subtitle" style="max-width: 1200px;">Dosen pembimbing dalam proyek prototipe
-                            website Klik Farmasi adalah akademisi dari Program Studi Sarjana (S1) Farmasi Universitas Alma
-                            Ata yang berperan memastikan kualitas dan akurasi konten edukasi kesehatan. Dengan pengetahuan
-                            dan pengalaman di bidang farmasi, dosen memberikan bimbingan dan arahan ilmiah kepada tim
-                            pengembang selama proses pengembangan platform website Klik Farmasi.</p>
+                    <div class="text-center mb-4" data-aos="fade-up">
+                        <h3 class="section-title">Tim Pembimbing</h3>
+                        <p class="section-subtitle">Dosen pembimbing dan programmer website Klik Farmasi</p>
                     </div>
-                    <div class="supervisor-card" data-aos="fade-up" data-aos-delay="100">
-                        <div class="card-body p-4">
-                            <div class="supervisor-badge"><span>Pembimbing I</span></div>
-                            <div class="row align-items-center">
-                                <div class="col-md-3 text-center mb-4 mb-md-0">
-                                    <div class="supervisor-photo"><img
-                                            src="{{ asset('assets/tim/Foto Dosen apt.Nurul Kusumawardani.jpg') }}"
-                                            alt="Apt. Nurul Kusumawardani, M.farm - Dosen Pembimbing I Program Studi Farmasi"
-                                            class="img-fluid lazy-image" loading="lazy" decoding="async" width="150"
-                                            height="150">
-                                        <div class="photo-overlay"><i class="bi bi-mortarboard"></i></div>
-                                    </div>
-                                </div>
-                                <div class="col-md-9">
-                                    <div class="supervisor-info">
-                                        <h4 class="supervisor-name">Apt. Nurul Kusumawardani, M.farm</h4>
-                                        <p class="supervisor-position">Dosen Program Studi Farmasi Universitas Alma Ata</p>
-                                        <p class="supervisor-description">Dosen pembimbing yang memberikan arahan dan
-                                            bimbingan dalam pengembangan platform Klik Farmasi sebagai media edukasi
-                                            hipertensi dan pengingat obat.</p>
-                                        <div class="supervisor-credentials"><span class="credential-badge"><i
-                                                    class="bi bi-award me-1"></i>Apoteker</span><span
-                                                class="credential-badge"><i class="bi bi-mortarboard me-1"></i>Dosen</span>
-                                        </div>
-                                        <div class="supervisor-contact"><a
-                                                href="https://www.linkedin.com/in/nurul-kusumawardani-3623b2135/"
-                                                class="contact-btn linkedin"><i class="bi bi-linkedin"></i></a><a
-                                                href="mailto:nurul.kusumawardani@almaata.ac.id" class="contact-btn email"><i
-                                                    class="bi bi-envelope"></i></a></div>
+                    
+                    <div class="row g-4">
+                        <div class="col-md-4">
+                            <div class="card border-0 shadow-sm h-100">
+                                <div class="card-body text-center p-4">
+                                    <img src="{{ asset('assets/tim/Foto Dosen apt.Nurul Kusumawardani.jpg') }}"
+                                        alt="Apt. Nurul Kusumawardani, M.farm" class="rounded-circle mb-3 carousel-img" 
+                                        width="80" height="80" style="object-fit: cover; cursor: pointer;">
+                                    <h5 class="fw-bold text-primary mb-2">Apt. Nurul Kusumawardani, M.farm</h5>
+                                    <p class="text-muted mb-3">Dosen Pembimbing I</p>
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <a href="https://www.linkedin.com/in/nurul-kusumawardani-3623b2135/" class="btn btn-sm btn-outline-primary">
+                                            <i class="bi bi-linkedin"></i>
+                                        </a>
+                                        <a href="mailto:nurul.kusumawardani@almaata.ac.id" class="btn btn-sm btn-outline-primary">
+                                            <i class="bi bi-envelope"></i>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="supervisor-card mt-4" data-aos="fade-up" data-aos-delay="200">
-                        <div class="card-body p-4">
-                            <div class="supervisor-badge"><span>Pembimbing II</span></div>
-                            <div class="row align-items-center">
-                                <div class="col-md-3 text-center mb-4 mb-md-0">
-                                    <div class="supervisor-photo"><img
-                                            src="{{ asset('assets/tim/Foto Dosen apt.Danang Prasetyaning Amukti.jpeg') }}"
-                                            alt="apt. Danang Prasetyaning Amukti, M.Farm - Dosen Pembimbing II Program Studi Farmasi"
-                                            class="img-fluid lazy-image" loading="lazy" decoding="async" width="150"
-                                            height="150" style="object-position:top">
-                                        <div class="photo-overlay"><i class="bi bi-mortarboard"></i></div>
-                                    </div>
-                                </div>
-                                <div class="col-md-9">
-                                    <div class="supervisor-info">
-                                        <h4 class="supervisor-name">apt. Danang Prasetyaning Amukti, M.Farm</h4>
-                                        <p class="supervisor-position">Dosen Program Studi Farmasi Universitas Alma Ata</p>
-                                        <p class="supervisor-description">Dosen pembimbing yang memberikan arahan dan
-                                            bimbingan dalam pengembangan platform Klik Farmasi sebagai media edukasi
-                                            hipertensi dan pengingat obat.</p>
-                                        <div class="supervisor-credentials"><span class="credential-badge"><i
-                                                    class="bi bi-award me-1"></i>Apoteker</span><span
-                                                class="credential-badge"><i
-                                                    class="bi bi-mortarboard me-1"></i>Dosen</span>
-                                        </div>
-                                        <div class="supervisor-contact"><a
-                                                href="https://www.linkedin.com/in/danang-prasetya-a48076173/"
-                                                class="contact-btn linkedin"><i class="bi bi-linkedin"></i></a><a
-                                                href="mailto:danangpa@almaata.ac.id" class="contact-btn email"><i
-                                                    class="bi bi-envelope"></i></a></div>
+                        
+                        <div class="col-md-4">
+                            <div class="card border-0 shadow-sm h-100">
+                                <div class="card-body text-center p-4">
+                                    <img src="{{ asset('assets/tim/Foto Dosen apt.Danang Prasetyaning Amukti.jpeg') }}"
+                                        alt="apt. Danang Prasetyaning Amukti, M.Farm" class="rounded-circle mb-3 carousel-img" 
+                                        width="80" height="80" style="object-fit: cover; object-position: top; cursor: pointer;">
+                                    <h5 class="fw-bold text-primary mb-2">apt. Danang Prasetyaning Amukti, M.Farm</h5>
+                                    <p class="text-muted mb-3">Dosen Pembimbing II</p>
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <a href="https://www.linkedin.com/in/danang-prasetya-a48076173/" class="btn btn-sm btn-outline-primary">
+                                            <i class="bi bi-linkedin"></i>
+                                        </a>
+                                        <a href="mailto:danangpa@almaata.ac.id" class="btn btn-sm btn-outline-primary">
+                                            <i class="bi bi-envelope"></i>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="supervisor-card mt-4" data-aos="fade-up" data-aos-delay="300">
-                        <div class="card-body p-4">
-                            <div class="supervisor-badge"><span>Programmer</span></div>
-                            <div class="row align-items-center">
-                                <div class="col-md-3 text-center mb-4 mb-md-0">
-                                    <div class="supervisor-photo"><img src="{{ asset('assets/tim/Aizan.jpg') }}"
-                                            alt="Aizan Syalim - Programmer Website Klik Farmasi"
-                                            class="img-fluid lazy-image" loading="lazy" decoding="async" width="150"
-                                            height="150" style="object-position: top">
-                                        <div class="photo-overlay"><i class="bi bi-code-slash"></i></div>
-                                    </div>
-                                </div>
-                                <div class="col-md-9">
-                                    <div class="supervisor-info">
-                                        <h4 class="supervisor-name">Aizan Syalim</h4>
-                                        <p class="supervisor-position">Mahasiswa Informatika Universitas Alma Ata</p>
-                                        <p class="supervisor-description">Programmer yang bertanggung jawab dalam
-                                            pengembangan teknis website Klik Farmasi, mulai dari desain database, backend
-                                            development, hingga implementasi fitur-fitur interaktif.</p>
-                                        <div class="supervisor-credentials"><span class="credential-badge"><i
-                                                    class="bi bi-code-slash me-1"></i>Programmer</span><span
-                                                class="credential-badge"><i
-                                                    class="bi bi-mortarboard me-1"></i>Mahasiswa</span>
-                                        </div>
-                                        <div class="supervisor-contact"><a href="https://www.instagram.com/zansylm/"
-                                                class="social-btn instagram"><i class="bi bi-instagram"></i></a><a
-                                                href="mailto:223200231@almaata.ac.id" class="contact-btn email"><i
-                                                    class="bi bi-envelope"></i></a></div>
+                        
+                        <div class="col-md-4">
+                            <div class="card border-0 shadow-sm h-100">
+                                <div class="card-body text-center p-4">
+                                    <img src="{{ asset('assets/tim/Aizan.jpg') }}"
+                                        alt="Aizan Syalim" class="rounded-circle mb-3 carousel-img" 
+                                        width="80" height="80" style="object-fit: cover; object-position: top; cursor: pointer;">
+                                    <h5 class="fw-bold text-primary mb-2">Aizan Syalim</h5>
+                                    <p class="text-muted mb-3">Programmer Website</p>
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <a href="https://www.instagram.com/zansylm/" class="btn btn-sm btn-outline-primary">
+                                            <i class="bi bi-instagram"></i>
+                                        </a>
+                                        <a href="mailto:223200231@almaata.ac.id" class="btn btn-sm btn-outline-primary">
+                                            <i class="bi bi-envelope"></i>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -191,270 +147,89 @@
             <div class="row mb-5">
                 <div class="col-12">
                     <div class="section-header text-center mb-5" data-aos="fade-up">
-                        <div class="team-icon mb-4"><i class="bi bi-people-fill"></i></div>
                         <h3 class="section-title">Tim Mahasiswa</h3>
-                        <p class="section-subtitle">Mahasiswa farmasi yang berdedikasi dalam pengembangan platform
-                            kesehatan</p>
-                        <div class="title-divider mx-auto"></div>
+                        <p class="section-subtitle">Mahasiswa farmasi yang aktif mengelola website Klik Farmasi</p>
                     </div>
-                    <div class="row g-4">
-                        <div class="col-lg-4 col-md-6 mb-4">
-                            <div class="team-member-card" data-aos="fade-up" data-aos-delay="100">
-                                <div class="member-photo-container"><img
-                                        src="{{ asset('assets/tim/Farmasi Abdi Sugeng P_BG merah.jpeg') }}"
-                                        alt="Abdi Sugeng Pangestu" class="member-photo lazy-image" loading="lazy"
-                                        decoding="async" width="120" height="120"></div>
-                                <div class="member-info">
-                                    <div class="role-badge leader"><i class="bi bi-star-fill"></i><span>Ketua Tim</span>
-                                    </div>
-                                    <h4 class="member-name">Abdi Sugeng Pangestu</h4>
-                                    <p class="member-id">220500396</p>
-                                    <p class="member-description">Mahasiswa Farmasi yang berkontribusi dalam platform
-                                        pengembangan website Klik farmasi dan informasi kesehatan</p>
-                                    <div class="member-social"><a
-                                            href="https://www.instagram.com/abdisugeng_01/?igsh=MThkaW5vNWo4ZnJtMw%3D%3D#"
-                                            class="social-btn instagram" title="Instagram"><i
-                                                class="bi bi-instagram"></i></a><a href="mailto:220500396@almaata.ac.id"
-                                            class="social-btn email" title="Email"><i class="bi bi-envelope"></i></a>
-                                    </div>
+                    
+                    <!-- Multi-Row Marquee Team Members -->
+                    <div class="testimonial-marquee-container">
+                        @php 
+                            $teamMembers = [
+                                ['name' => 'Abdi Sugeng Pangestu', 'id' => '220500396', 'photo' => 'assets/tim/Farmasi Abdi Sugeng P_BG merah.jpeg'],
+                                ['name' => 'Zona Aulia Nafaza', 'id' => '220500571', 'photo' => 'assets/tim/Farmasi_Zona Aulia Nafaza.jpg'],
+                                ['name' => 'Luri Pijria Diningsih', 'id' => '220500534', 'photo' => 'assets/tim/Farmasi_Luri pijria.JPG'],
+                                ['name' => 'Desti Nadia', 'id' => '220500420', 'photo' => 'assets/tim/Farmasi_Desti Nadia.JPG'],
+                                ['name' => 'Yulia Mita Widyaningrum', 'id' => '220500511', 'photo' => 'assets/tim/Farmasi_Yulia mita.jpg'],
+                                ['name' => 'Febby Trianingsih', 'id' => '220500526', 'photo' => 'assets/tim/Farmasi_Febby Trianingsih.JPG'],
+                                ['name' => 'Adinda Putri Ibdaniya', 'id' => '220500402', 'photo' => 'assets/tim/Farmasi_Adindaputriibdaniya.jpg'],
+                                ['name' => 'Enzelika', 'id' => '220500429', 'photo' => 'assets/tim/Farmasi_Enzelika.jpg'],
+                                ['name' => 'Nia Uswatun Khasanah', 'id' => '220500470', 'photo' => 'assets/tim/Farmasi_Nia Uswatun Khasanah.jpg'],
+                                ['name' => 'Camelia Rohayya C. Barus', 'id' => '210500345', 'photo' => 'assets/tim/Farmasi_Camelia.JPG'],
+                                ['name' => 'Deswita Vira Adzani', 'id' => '220500421', 'photo' => 'assets/tim/Farmasi_Deswita Vira Adzani PNG.png'],
+                                ['name' => 'Elda Samsudin', 'id' => '220500428', 'photo' => 'assets/tim/Farmasi_Elda Samsudin.png']
+                            ];
+                            $teamRows = collect($teamMembers)->chunk(4);
+                        @endphp
+                        
+                        @foreach ($teamRows as $rowIndex => $row)
+                            <div class="testimonial-marquee-row" data-direction="{{ $rowIndex % 2 === 0 ? 'left' : 'right' }}" data-speed="{{ 40 + ($rowIndex * 15) }}">
+                                <div class="testimonial-marquee-track">
+                                    @for ($i = 0; $i < 3; $i++)
+                                        @foreach ($row as $member)
+                                            <div class="testimonial-marquee-item">
+                                                <div class="team-member-bubble">
+                                                    <div class="member-photo-small">
+                                                        <img src="{{ asset($member['photo']) }}" alt="{{ $member['name'] }}" class="img-fluid carousel-img" style="cursor: pointer;">
+                                                    </div>
+                                                    <div class="member-info-small">
+                                                        <h5 class="member-name-small">{{ $member['name'] }}</h5>
+                                                        <p class="member-id-small">{{ $member['id'] }}</p>
+                                                        <div class="member-badge">
+                                                            <i class="bi bi-mortarboard me-1"></i>
+                                                            Mahasiswa Farmasi
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    @endfor
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-lg-4 col-md-6 mb-4">
-                            <div class="team-member-card" data-aos="fade-up" data-aos-delay="200">
-                                <div class="member-photo-container"><img
-                                        src="{{ asset('assets/tim/Farmasi_Zona Aulia Nafaza.jpg') }}"
-                                        alt="Zona Aulia Nafaza" class="member-photo"></div>
-                                <div class="member-info">
-                                    <div class="role-badge member"><i class="bi bi-person-fill"></i><span>Anggota
-                                            Tim</span></div>
-                                    <h4 class="member-name">Zona Aulia Nafaza</h4>
-                                    <p class="member-id">220500571</p>
-                                    <p class="member-description">Mahasiswa Farmasi yang berkontribusi dalam platform
-                                        pengembangan website Klik farmasi dan informasi kesehatan</p>
-                                    <div class="member-social"><a
-                                            href="https://www.instagram.com/zonaaulia_?igsh=c2NrMm8wdjVmYTJp"
-                                            class="social-btn instagram" title="Instagram"><i
-                                                class="bi bi-instagram"></i></a><a href="mailto:220500571@almaata.ac.id"
-                                            class="social-btn email" title="Email"><i class="bi bi-envelope"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-6 mb-4">
-                            <div class="team-member-card" data-aos="fade-up" data-aos-delay="300">
-                                <div class="member-photo-container"><img
-                                        src="{{ asset('assets/tim/Farmasi_Luri pijria.JPG') }}"
-                                        alt="Luri Pijria Diningsih" class="member-photo"></div>
-                                <div class="member-info">
-                                    <div class="role-badge member"><i class="bi bi-person-fill"></i><span>Anggota
-                                            Tim</span></div>
-                                    <h4 class="member-name">Luri Pijria Diningsih</h4>
-                                    <p class="member-id">220500534</p>
-                                    <p class="member-description">Mahasiswa Farmasi yang berkontribusi dalam platform
-                                        pengembangan website Klik farmasi dan informasi kesehatan</p>
-                                    <div class="member-social"><a
-                                            href="https://www.instagram.com/lurifjr_?igsh=enlmMGIxaWZ3OWN2"
-                                            class="social-btn instagram" title="Instagram"><i
-                                                class="bi bi-instagram"></i></a><a href="mailto:220500534@almaata.ac.id"
-                                            class="social-btn email" title="Email"><i class="bi bi-envelope"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-6 mb-4">
-                            <div class="team-member-card" data-aos="fade-up" data-aos-delay="400">
-                                <div class="member-photo-container"><img
-                                        src="{{ asset('assets/tim/Farmasi_Desti Nadia.JPG') }}" alt="Desti Nadia"
-                                        class="member-photo"></div>
-                                <div class="member-info">
-                                    <div class="role-badge member"><i class="bi bi-person-fill"></i><span>Anggota
-                                            Tim</span></div>
-                                    <h4 class="member-name">Desti Nadia</h4>
-                                    <p class="member-id">220500420</p>
-                                    <p class="member-description">Mahasiswa Farmasi yang berkontribusi dalam platform
-                                        pengembangan website Klik farmasi dan informasi kesehatan</p>
-                                    <div class="member-social"><a
-                                            href="https://www.instagram.com/_nadineee13?igsh=MWxucGl2NXk3eXN0ZA%3D%3D&utm_source=qr"
-                                            class="social-btn instagram" title="Instagram"><i
-                                                class="bi bi-instagram"></i></a><a href="mailto:220500420@almaata.ac.id"
-                                            class="social-btn email" title="Email"><i class="bi bi-envelope"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-6 mb-4">
-                            <div class="team-member-card" data-aos="fade-up" data-aos-delay="500">
-                                <div class="member-photo-container"><img
-                                        src="{{ asset('assets/tim/Farmasi_Yulia mita.jpg') }}"
-                                        alt="Yulia Mita Widyaningrum" class="member-photo"></div>
-                                <div class="member-info">
-                                    <div class="role-badge member"><i class="bi bi-person-fill"></i><span>Anggota
-                                            Tim</span></div>
-                                    <h4 class="member-name">Yulia Mita Widyaningrum</h4>
-                                    <p class="member-id">220500511</p>
-                                    <p class="member-description">Mahasiswa Farmasi yang berkontribusi dalam platform
-                                        pengembangan website Klik farmasi dan informasi kesehatan</p>
-                                    <div class="member-social"><a
-                                            href="https://www.instagram.com/_twilightrippl/profilecard/?igsh=MWE4ejVyZ252MDl1OQ%3D%3D"
-                                            class="social-btn instagram" title="Instagram"><i
-                                                class="bi bi-instagram"></i></a><a href="mailto:220500511@almaata.ac.id"
-                                            class="social-btn email" title="Email"><i class="bi bi-envelope"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-6 mb-4">
-                            <div class="team-member-card" data-aos="fade-up" data-aos-delay="600">
-                                <div class="member-photo-container"><img
-                                        src="{{ asset('assets/tim/Farmasi_Febby Trianingsih.JPG') }}"
-                                        alt="Febby Trianingsih" class="member-photo"></div>
-                                <div class="member-info">
-                                    <div class="role-badge member"><i class="bi bi-person-fill"></i><span>Anggota
-                                            Tim</span></div>
-                                    <h4 class="member-name">Febby Trianingsih</h4>
-                                    <p class="member-id">220500526</p>
-                                    <p class="member-description">Mahasiswa Farmasi yang berkontribusi dalam platform
-                                        pengembangan website Klik farmasi dan informasi kesehatan</p>
-                                    <div class="member-social"><a
-                                            href="https://www.instagram.com/fbbytrii_/?igsh=MTZiZ3FobTh2bmRwcw%3D%3D#"
-                                            class="social-btn instagram" title="Instagram"><i
-                                                class="bi bi-instagram"></i></a><a href="mailto:220500526@almaata.ac.id"
-                                            class="social-btn email" title="Email"><i class="bi bi-envelope"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-6 mb-4">
-                            <div class="team-member-card" data-aos="fade-up" data-aos-delay="700">
-                                <div class="member-photo-container"><img
-                                        src="{{ asset('assets/tim/Farmasi_Adindaputriibdaniya.jpg') }}"
-                                        alt="Adinda Putri Ibdaniya" class="member-photo"></div>
-                                <div class="member-info">
-                                    <div class="role-badge member"><i class="bi bi-person-fill"></i><span>Anggota
-                                            Tim</span></div>
-                                    <h4 class="member-name">Adinda Putri Ibdaniya</h4>
-                                    <p class="member-id">220500402</p>
-                                    <p class="member-description">Mahasiswa Farmasi yang berkontribusi dalam platform
-                                        pengembangan website Klik farmasi dan informasi kesehatan</p>
-                                    <div class="member-social"><a
-                                            href="https://www.instagram.com/adindaptribrhm/?igsh=enZnd2RuYmg2bWt0&utm_source=qr#"
-                                            class="social-btn instagram" title="Instagram"><i
-                                                class="bi bi-instagram"></i></a><a href="mailto:220500402@almaata.ac.id"
-                                            class="social-btn email" title="Email"><i class="bi bi-envelope"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-6 mb-4">
-                            <div class="team-member-card" data-aos="fade-up" data-aos-delay="800">
-                                <div class="member-photo-container"><img
-                                        src="{{ asset('assets/tim/Farmasi_Enzelika.jpg') }}" alt="Enzelika"
-                                        class="member-photo"></div>
-                                <div class="member-info">
-                                    <div class="role-badge member"><i class="bi bi-person-fill"></i><span>Anggota
-                                            Tim</span></div>
-                                    <h4 class="member-name">Enzelika</h4>
-                                    <p class="member-id">220500429</p>
-                                    <p class="member-description">Mahasiswa Farmasi yang berkontribusi dalam platform
-                                        pengembangan website Klik farmasi dan informasi kesehatan</p>
-                                    <div class="member-social"><a
-                                            href="https://www.instagram.com/_azzjell/?igsh=N3Y2amZwd29jN2dq&utm_source=qr#"
-                                            class="social-btn instagram" title="Instagram"><i
-                                                class="bi bi-instagram"></i></a><a href="mailto:220500429@almaata.ac.id"
-                                            class="social-btn email" title="Email"><i class="bi bi-envelope"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-6 mb-4">
-                            <div class="team-member-card" data-aos="fade-up" data-aos-delay="900">
-                                <div class="member-photo-container"><img
-                                        src="{{ asset('assets/tim/Farmasi_Nia Uswatun Khasanah.jpg') }}"
-                                        alt="Nia Uswatun Khasanah" class="member-photo"></div>
-                                <div class="member-info">
-                                    <div class="role-badge member"><i class="bi bi-person-fill"></i><span>Anggota
-                                            Tim</span></div>
-                                    <h4 class="member-name">Nia Uswatun Khasanah</h4>
-                                    <p class="member-id">220500470</p>
-                                    <p class="member-description">Mahasiswa Farmasi yang berkontribusi dalam platform
-                                        pengembangan website Klik farmasi dan informasi kesehatan</p>
-                                    <div class="member-social"><a
-                                            href="https://www.instagram.com/niauswa_/profilecard/?igsh=MWw4d2Jtamw1aWhpZA%3D%3D"
-                                            class="social-btn instagram" title="Instagram"><i
-                                                class="bi bi-instagram"></i></a><a href="mailto:220500470@almaata.ac.id"
-                                            class="social-btn email" title="Email"><i class="bi bi-envelope"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-6 mb-4">
-                            <div class="team-member-card" data-aos="fade-up" data-aos-delay="1000">
-                                <div class="member-photo-container"><img
-                                        src="{{ asset('assets/tim/Farmasi_Camelia.JPG') }}"
-                                        alt="Camelia Rohayya C. Barus" class="member-photo"></div>
-                                <div class="member-info">
-                                    <div class="role-badge member"><i class="bi bi-person-fill"></i><span>Anggota
-                                            Tim</span></div>
-                                    <h4 class="member-name">Camelia Rohayya C. Barus</h4>
-                                    <p class="member-id">210500345</p>
-                                    <p class="member-description">Mahasiswa Farmasi yang berkontribusi dalam platform
-                                        pengembangan website Klik farmasi dan informasi kesehatan</p>
-                                    <div class="member-social"><a
-                                            href="https://www.instagram.com/camelia.rohayya_/?igsh=dHo2Y3dqcDI3dHd0#"
-                                            class="social-btn instagram" title="Instagram"><i
-                                                class="bi bi-instagram"></i></a><a href="mailto:210500345@almaata.ac.id"
-                                            class="social-btn email" title="Email"><i class="bi bi-envelope"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-6 mb-4">
-                            <div class="team-member-card" data-aos="fade-up" data-aos-delay="1100">
-                                <div class="member-photo-container"><img
-                                        src="{{ asset('assets/tim/Farmasi_Deswita Vira Adzani PNG.png') }}"
-                                        alt="Deswita Vira Adzani" class="member-photo"></div>
-                                <div class="member-info">
-                                    <div class="role-badge member"><i class="bi bi-person-fill"></i><span>Anggota
-                                            Tim</span></div>
-                                    <h4 class="member-name">Deswita Vira Adzani</h4>
-                                    <p class="member-id">220500421</p>
-                                    <p class="member-description">Mahasiswa Farmasi yang berkontribusi dalam platform
-                                        pengembangan website Klik farmasi dan informasi kesehatan</p>
-                                    <div class="member-social"><a
-                                            href="https://www.instagram.com/deswitadzni_/?igsh=aXFlYmo5cmM0NmU5&utm_source=qr#"
-                                            class="social-btn instagram" title="Instagram"><i
-                                                class="bi bi-instagram"></i></a><a href="mailto:220500421@almaata.ac.id"
-                                            class="social-btn email" title="Email"><i class="bi bi-envelope"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-6 mb-4">
-                            <div class="team-member-card" data-aos="fade-up" data-aos-delay="1200">
-                                <div class="member-photo-container"><img
-                                        src="{{ asset('assets/tim/Farmasi_Elda Samsudin.png') }}" alt="Elda Samsudin"
-                                        class="member-photo"></div>
-                                <div class="member-info">
-                                    <div class="role-badge member"><i class="bi bi-person-fill"></i><span>Anggota
-                                            Tim</span></div>
-                                    <h4 class="member-name">Elda Samsudin</h4>
-                                    <p class="member-id">220500428</p>
-                                    <p class="member-description">Mahasiswa Farmasi yang berkontribusi dalam platform
-                                        pengembangan website Klik farmasi dan informasi kesehatan</p>
-                                    <div class="member-social"><a
-                                            href="https://www.instagram.com/starlight_783/?igsh=MWxpd25ycTRxajZ3dw%3D%3D#"
-                                            class="social-btn instagram" title="Instagram"><i
-                                                class="bi bi-instagram"></i></a><a href="mailto:220500428@almaata.ac.id"
-                                            class="social-btn email" title="Email"><i class="bi bi-envelope"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        @endforeach
+                    </div>
 
-                    </div>
                 </div>
             </div>
         </div>
     </section>
+    
+    <!-- Image Modal -->
+    <div class="modal fade" id="imageModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content bg-transparent border-0">
+                <div class="modal-body p-0 text-center">
+                    <button type="button" class="btn-close btn-close-white position-absolute top-0 end-0 m-3"
+                        data-bs-dismiss="modal" style="z-index: 1050;"></button>
+                    <img id="modalImage" src="" alt="" class="img-fluid rounded" style="max-height: 90vh;">
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
+
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = new bootstrap.Modal(document.getElementById('imageModal'));
+            const modalImage = document.getElementById('modalImage');
+
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('carousel-img') && e.target.src) {
+                    modalImage.src = e.target.src;
+                    modalImage.alt = e.target.alt;
+                    modal.show();
+                }
+            });
+        });
+    </script>
+@endpush

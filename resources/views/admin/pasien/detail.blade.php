@@ -25,24 +25,7 @@
             }
         @endphp
 
-        <!-- Sticky Alert untuk Catatan Keluhan Pasien -->
-        @if ($allPengingat->isNotEmpty() && $selectedPengingat && $selectedPengingat->catatan)
-            <div class="alert alert-warning alert-dismissible mb-4 shadow-sm">
-                <div class="d-flex align-items-center">
-                    <div class="me-3">
-                        <i class="bi bi-exclamation-triangle-fill fs-4"></i>
-                    </div>
-                    <div class="flex-grow-1">
-                        <strong>Catatan dari {{ $user->name }}:</strong>
-                        <span class="ms-2">{{ Str::limit($selectedPengingat->catatan, 120) }}</span>
-                        @if (strlen($selectedPengingat->catatan) > 120)
-                            <a href="#catatanKeluhan" class="text-decoration-none ms-2">[Lihat Selengkapnya]</a>
-                        @endif
-                    </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-            </div>
-        @endif
+
 
         @if (session('success'))
             <div class="alert alert-success alert-dismissible">
@@ -74,6 +57,72 @@
                 <h5 class="mb-0">Profil Pasien</h5>
             </div>
             <div class="card-body">
+                <!-- Alert Informatif -->
+                @php
+                    $alertMessage = '';
+                    $alertClass = '';
+                    
+                    $latestPengingat = $user->pengingatObat()->latest()->first();
+                    $latestTekananDarah = \App\Models\CatatanTekananDarah::where('user_id', $user->id)->latest()->first();
+                    $allTekananDarah = \App\Models\CatatanTekananDarah::where('user_id', $user->id)->orderBy('created_at', 'desc')->take(3)->get();
+                    
+                    // 1. Tekanan Darah Kritis
+                    if ($latestTekananDarah && ($latestTekananDarah->sistol >= 180 || $latestTekananDarah->diastol >= 120)) {
+                        $alertMessage = 'SEGERA KE IGD! Tekanan darah pasien sangat tinggi dan berbahaya';
+                        $alertClass = 'bg-danger text-white';
+                    }
+                    // 2. Hipertensi Kehamilan - Tekanan Tinggi
+                    elseif ($latestPengingat && $latestPengingat->diagnosa === 'Hipertensi-Kehamilan' && $latestTekananDarah && ($latestTekananDarah->sistol >= 140 || $latestTekananDarah->diastol >= 90)) {
+                        $alertMessage = 'Tekanan darah tinggi saat hamil berbahaya! Pasien perlu segera ke dokter kandungan';
+                        $alertClass = 'bg-danger text-white';
+                    }
+                    // 3. Tekanan Darah Sangat Tinggi
+                    elseif ($latestTekananDarah && (($latestTekananDarah->sistol >= 160 && $latestTekananDarah->sistol < 180) || ($latestTekananDarah->diastol >= 100 && $latestTekananDarah->diastol < 120))) {
+                        $alertMessage = 'Tekanan darah pasien sangat tinggi! Perlu segera dihubungi dokter';
+                        $alertClass = 'bg-warning text-dark';
+                    }
+                    // 4. Trend Naik Konsisten
+                    elseif ($allTekananDarah->count() >= 3) {
+                        $data = $allTekananDarah->reverse()->values();
+                        if ($data[0]->sistol < $data[1]->sistol && $data[1]->sistol < $data[2]->sistol) {
+                            $alertMessage = 'Tekanan darah pasien terus naik dalam 3 catatan terakhir. Perlu perhatian khusus';
+                            $alertClass = 'bg-warning text-dark';
+                        }
+                    }
+                    // 5. Tidak Input >3 Hari
+                    if (!$alertMessage && $latestPengingat && $latestPengingat->status === 'aktif') {
+                        $daysSinceLastInput = $latestTekananDarah ? \Carbon\Carbon::parse($latestTekananDarah->created_at)->diffInDays(now()) : 999;
+                        if ($daysSinceLastInput > 3) {
+                            $alertMessage = 'Pasien sudah ' . $daysSinceLastInput . ' hari tidak catat tekanan darah. Perlu diingatkan';
+                            $alertClass = 'bg-info text-white';
+                        }
+                    }
+                    // 6. Mendekati Batas 91 Hari
+                    if (!$alertMessage && $latestPengingat && $latestPengingat->status === 'aktif') {
+                        $daysSinceStart = \Carbon\Carbon::parse($latestPengingat->created_at)->diffInDays(now());
+                        $remainingDays = 91 - $daysSinceStart;
+                        if ($remainingDays > 0 && $remainingDays <= 7) {
+                            $alertMessage = 'Masa pantau akan berakhir dalam ' . $remainingDays . ' hari. Perlu tindak lanjut';
+                            $alertClass = 'bg-info text-white';
+                        }
+                    }
+                    // 7. Pengingat Obat Tidak Aktif
+                    if (!$alertMessage && (!$latestPengingat || $latestPengingat->status !== 'aktif')) {
+                        $alertMessage = 'Pengingat obat pasien tidak aktif. Perlu diaktifkan kembali';
+                        $alertClass = 'bg-secondary text-white';
+                    }
+                    // 8. Belum Ada Data
+                    if (!$alertMessage && !$latestTekananDarah) {
+                        $alertMessage = 'Pasien belum pernah input tekanan darah. Perlu panduan penggunaan';
+                        $alertClass = 'bg-success text-white';
+                    }
+                @endphp
+                
+                @if($alertMessage)
+                <div class="alert {{ $alertClass }} mb-3 fw-semibold" style="border: none; font-size: 14px;">
+                    {{ $alertMessage }}
+                </div>
+                @endif
                 <div class="row">
                     <div class="col-md-6">
                         <table class="table table-borderless">
@@ -132,7 +181,7 @@
                             <tr>
                                 <th>Puskesmas</th>
                                 <td>:</td>
-                                <td>{{ $user->puskesmas_id }}</td>
+                                <td>{{ $user->puskesmas }}</td>
                             </tr>
                         </table>
                     </div>
@@ -214,7 +263,7 @@
                     </h5>
                     <div>
                         <button type="button" class="btn btn-success btn-sm me-2" data-bs-toggle="modal"
-                            data-bs-target="#tambahObatModal">
+                            data-bs-target="#tambahObatModal" data-diagnosa="{{ $selectedPengingat->diagnosa }}">
                             Tambah Obat
                         </button>
                     </div>
@@ -323,11 +372,9 @@
                         <button type="button" class="btn btn-primary btn-sm me-2" onclick="showDataTable()">
                             Lihat Data
                         </button>
-                        @if ($selectedPengingat && ($selectedPengingat->status !== 'aktif' || $isOver91Days))
-                            <button type="button" class="btn btn-success btn-sm" onclick="showPDFModal()">
-                                <i class="bi bi-file-earmark-pdf me-1"></i> Download PDF
-                            </button>
-                        @endif
+                        <button type="button" class="btn btn-success btn-sm" onclick="showPDFModal()">
+                            <i class="bi bi-file-earmark-pdf me-1"></i> Download PDF
+                        </button>
                     </div>
                 </div>
                 <div class="card-body">
@@ -378,140 +425,14 @@
                 </div>
             </div>
 
-            <!-- Catatan Keluhan/Pengobatan -->
-            <div class="card mt-4" id="catatanKeluhan">
-                <div class="card-header">
-                    <h5 class="mb-0">
-                        Catatan Keluhan dari {{ $user->name }}
-                    </h5>
-                </div>
-                <div class="card-body">
-                    @if ($selectedPengingat->catatan)
-                        <div class="p-3 bg-light rounded">
-                            <p class="mb-0">{{ $selectedPengingat->catatan }}</p>
-                            <small class="text-muted mt-2 d-block">
-                                Terakhir diupdate:
-                                {{ \Carbon\Carbon::parse($selectedPengingat->updated_at)->format('d M Y, H:i') }} WIB
-                            </small>
-                        </div>
-                    @else
-                        <p class="text-muted mb-0 fst-italic">{{ $user->name }} belum menambahkan catatan keluhan atau
-                            pengobatan</p>
-                    @endif
-                </div>
-            </div>
+
 
         @endif
 
-        <!-- Catatan untuk Pasien -->
-        <div class="card mt-4">
-            <div class="card-header">
-                <h5 class="mb-0">Catatan untuk {{ $user->name }}</h5>
-            </div>
-            <div class="card-body">
-                <!-- Form Tambah/Edit Catatan -->
-                <div class="mb-4">
-                    <form id="formCatatan" action="{{ route('admin.catatan.simpan') }}" method="POST">
-                        @csrf
-                        <input type="hidden" name="user_id" value="{{ $user->id }}">
-                        <input type="hidden" name="catatan_id" id="catatanId">
 
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Isi Catatan</label>
-                            <textarea class="form-control" name="isi_catatan" id="isiCatatan" rows="4"
-                                placeholder="Tulis catatan untuk {{ $user->name }}..." required></textarea>
-                        </div>
-
-                        <div class="mt-3">
-                            <button type="submit" class="btn btn-primary" id="btnSimpan">
-                                Simpan Catatan
-                            </button>
-                            <button type="button" class="btn btn-secondary" id="btnBatal" onclick="batalEdit()"
-                                style="display: none;">
-                                Batal
-                            </button>
-                        </div>
-                    </form>
-                </div>
-
-                <!-- Daftar Catatan -->
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead class="table-light">
-                            <tr>
-                                <th width="5%">No</th>
-                                <th width="60%">Isi Catatan</th>
-                                <th width="20%">Status</th>
-                                <th width="15%">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse($user->catatanDariAdmin as $key => $catatan)
-                                <tr>
-                                    <td>{{ $key + 1 }}</td>
-                                    <td>{{ Str::limit($catatan->isi_catatan, 150) }}</td>
-                                    <td>
-                                        <span class="badge" style="background-color: #0b5e91; color: white;">
-                                            {{ $catatan->status_baca == 'sudah_dibaca' ? 'Sudah Dibaca' : 'Belum Dibaca' }}
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn btn-warning btn-sm"
-                                            data-id="{{ $catatan->id }}"
-                                            data-isi="{{ htmlspecialchars($catatan->isi_catatan, ENT_QUOTES) }}"
-                                            onclick="openEditModal(this.dataset.id, this.dataset.isi)">
-                                            Edit
-                                        </button>
-                                        <form action="{{ route('admin.catatan.hapus', $catatan->id) }}" method="POST"
-                                            class="d-inline"
-                                            onsubmit="return confirm('Yakin ingin menghapus catatan ini?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger btn-sm">
-                                                Hapus
-                                            </button>
-                                        </form>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="5" class="text-center text-muted py-4">
-                                        <i class="bi bi-journal-x fs-1 d-block mb-2"></i>
-                                        Belum ada catatan untuk pasien ini
-                                    </td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
     </div>
 
-    <!-- Modal Edit Catatan -->
-    <div class="modal fade" id="editModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Edit Catatan untuk {{ $user->name }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <form id="modalForm" method="POST">
-                    @csrf
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Isi Catatan</label>
-                            <textarea class="form-control" id="modalCatatan" name="isi_catatan" rows="5" required></textarea>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-primary">Update Catatan</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
+
 
     <!-- Modal Edit Pasien -->
     <div class="modal fade" id="editPasienModal" tabindex="-1">
@@ -560,12 +481,12 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Puskesmas</label>
-                            <select class="form-control" name="puskesmas_id" required>
-                                <option value="kalasan" {{ $user->puskesmas_id == 'kalasan' ? 'selected' : '' }}>Kalasan
+                            <select class="form-control" name="puskesmas" required>
+                                <option value="kalasan" {{ $user->puskesmas == 'kalasan' ? 'selected' : '' }}>Kalasan
                                 </option>
-                                <option value="godean_2" {{ $user->puskesmas_id == 'godean_2' ? 'selected' : '' }}>Godean
+                                <option value="godean_2" {{ $user->puskesmas == 'godean_2' ? 'selected' : '' }}>Godean
                                     2</option>
-                                <option value="umbulharjo" {{ $user->puskesmas_id == 'umbulharjo' ? 'selected' : '' }}>
+                                <option value="umbulharjo" {{ $user->puskesmas == 'umbulharjo' ? 'selected' : '' }}>
                                     Umbulharjo</option>
                             </select>
                         </div>
@@ -591,9 +512,9 @@
                     @csrf
                     <input type="hidden" name="pengingat_obat_id" value="{{ $selectedPengingat->id ?? '' }}">
                     <div class="modal-body">
-                        <div class="mb-3">
+                        <div class="mb-3 nama-obat-field">
                             <label class="form-label fw-bold">Nama Obat</label>
-                            <select class="form-select" name="nama_obat" required>
+                            <select class="form-select" name="nama_obat" id="tambahNamaObat">
                                 <option value="">-- Pilih nama obat --</option>
                                 @include('admin.partials.drug-options')
                             </select>
@@ -621,9 +542,9 @@
                                 <option value="21:00">21.00 (Malam)</option>
                             </select>
                         </div>
-                        <div class="mb-3">
+                        <div class="mb-3 suplemen-field">
                             <label class="form-label fw-bold">Suplemen Tambahan (Opsional)</label>
-                            <select class="form-select" name="suplemen">
+                            <select class="form-select" name="suplemen" id="tambahSuplemen">
                                 <option value="">-- Pilih suplemen jika ada --</option>
                                 <option value="Asam folat">Asam Folat</option>
                                 <option value="Zat besi">Zat Besi</option>
@@ -661,9 +582,9 @@
                     @csrf
                     @method('PUT')
                     <div class="modal-body">
-                        <div class="mb-3">
+                        <div class="mb-3 nama-obat-field">
                             <label class="form-label fw-bold">Nama Obat</label>
-                            <select class="form-select" name="nama_obat" id="editNamaObat" required>
+                            <select class="form-select" name="nama_obat" id="editNamaObat">
                                 <option value="">-- Pilih nama obat --</option>
                                 @include('admin.partials.drug-options')
                             </select>
@@ -691,7 +612,7 @@
                                 <option value="21:00">21.00 (Malam)</option>
                             </select>
                         </div>
-                        <div class="mb-3">
+                        <div class="mb-3 suplemen-field">
                             <label class="form-label fw-bold">Suplemen Tambahan (Opsional)</label>
                             <select class="form-select" name="suplemen" id="editSuplemen">
                                 <option value="">-- Pilih suplemen jika ada --</option>
@@ -736,12 +657,12 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-bold">Sistol (mmHg)</label>
-                                <input type="number" class="form-control" id="tambahSistol" min="50"
+                                <input type="number" class="form-control" id="tambahSistol" min="70"
                                     max="250" required>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-bold">Diastol (mmHg)</label>
-                                <input type="number" class="form-control" id="tambahDiastol" min="50"
+                                <input type="number" class="form-control" id="tambahDiastol" min="40"
                                     max="150" required>
                             </div>
                         </div>
@@ -768,12 +689,12 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-bold">Sistol (mmHg)</label>
-                                <input type="number" class="form-control" id="editSistol" min="50"
+                                <input type="number" class="form-control" id="editSistol" min="70"
                                     max="250" required>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-bold">Diastol (mmHg)</label>
-                                <input type="number" class="form-control" id="editDiastol" min="50"
+                                <input type="number" class="form-control" id="editDiastol" min="40"
                                     max="150" required>
                             </div>
                         </div>
@@ -790,31 +711,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
-        function openEditModal(id, isi) {
-            // Set modal form data
-            document.getElementById('modalCatatan').value = isi;
-            document.getElementById('modalForm').action = '{{ url('/admin/catatan') }}/' + id;
 
-            // Add method PUT
-            let methodInput = document.querySelector('#modalForm input[name="_method"]');
-            if (!methodInput) {
-                methodInput = document.createElement('input');
-                methodInput.type = 'hidden';
-                methodInput.name = '_method';
-                methodInput.value = 'PUT';
-                document.getElementById('modalForm').appendChild(methodInput);
-            }
-
-            // Show modal
-            new bootstrap.Modal(document.getElementById('editModal')).show();
-        }
-
-        // Handle modal form submission - form submit biasa dengan loading
-        document.getElementById('modalForm').addEventListener('submit', function(e) {
-            const submitBtn = this.querySelector('button[type="submit"]');
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = 'Menyimpan...';
-        });
 
         // Handle edit pasien form submission
         document.getElementById('editPasienForm').addEventListener('submit', function(e) {
@@ -941,14 +838,14 @@
             const diastolInputs = document.querySelectorAll('#tambahDiastol, #editDiastol');
             
             sistolInputs.forEach(input => {
-                input.addEventListener('input', function() {
+                input.addEventListener('blur', function() {
                     if (this.value < 50) this.value = 50;
                     if (this.value > 250) this.value = 250;
                 });
             });
             
             diastolInputs.forEach(input => {
-                input.addEventListener('input', function() {
+                input.addEventListener('blur', function() {
                     if (this.value < 50) this.value = 50;
                     if (this.value > 150) this.value = 150;
                 });
@@ -1169,12 +1066,29 @@
             });
         }
 
+        // Function to toggle modal fields based on diagnosa
+        function toggleModalFields(diagnosa) {
+            const isKehamilan = diagnosa === 'Kehamilan';
+            const namaObatFields = document.querySelectorAll('.nama-obat-field');
+            const suplemenFields = document.querySelectorAll('.suplemen-field');
+            
+            namaObatFields.forEach(field => {
+                field.style.display = isKehamilan ? 'none' : 'block';
+                const select = field.querySelector('select');
+                if (select) select.required = !isKehamilan;
+            });
+            
+            suplemenFields.forEach(field => {
+                const label = field.querySelector('label');
+                const select = field.querySelector('select');
+                if (label) label.textContent = isKehamilan ? 'Jenis Suplemen *' : 'Suplemen Tambahan (Opsional)';
+                if (select) select.required = isKehamilan;
+            });
+        }
+
         // Initialize form state dan notifikasi
         document.addEventListener('DOMContentLoaded', function() {
-            const btnBatal = document.getElementById('btnBatal');
-            if (btnBatal) {
-                btnBatal.style.display = 'none';
-            }
+
 
             // Initialize chart
             console.log('DOM loaded, initializing chart...');
@@ -1183,6 +1097,24 @@
             
             // Initialize validasi
             validateBloodPressure();
+            
+            // Setup modal event listeners
+            const tambahObatModal = document.getElementById('tambahObatModal');
+            if (tambahObatModal) {
+                tambahObatModal.addEventListener('show.bs.modal', function(e) {
+                    const button = e.relatedTarget;
+                    const diagnosa = button.getAttribute('data-diagnosa');
+                    toggleModalFields(diagnosa);
+                });
+            }
+            
+            const editObatModal = document.getElementById('editObatModal');
+            if (editObatModal) {
+                editObatModal.addEventListener('show.bs.modal', function() {
+                    const diagnosa = '{{ $selectedPengingat->diagnosa ?? '' }}';
+                    toggleModalFields(diagnosa);
+                });
+            }
 
             // Notifikasi dari session Laravel
             @if (session('success'))
@@ -1213,13 +1145,7 @@
             }
         }
 
-        // Function untuk batalkan edit catatan
-        function batalEdit() {
-            document.getElementById('isiCatatan').value = '';
-            document.getElementById('catatanId').value = '';
-            document.getElementById('btnSimpan').textContent = 'Simpan Catatan';
-            document.getElementById('btnBatal').style.display = 'none';
-        }
+
 
         // PDF Modal functions
         function showPDFModal() {
@@ -1237,7 +1163,6 @@
             });
         }
     </script>
-
 
 
     <!-- PDF Modal -->

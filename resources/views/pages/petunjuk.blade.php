@@ -4,8 +4,10 @@
 
 @push('head')
     <!-- SEO Meta Tags -->
-    <meta name="description" content="Panduan lengkap cara menggunakan website Klik Farmasi. Tutorial pengingat obat, akses artikel kesehatan, dan fitur konsultasi farmasi online.">
-    <meta name="keywords" content="panduan klik farmasi, tutorial pengingat obat, cara menggunakan, petunjuk website, bantuan pengguna">
+    <meta name="description"
+        content="Panduan lengkap cara menggunakan website Klik Farmasi. Tutorial pengingat obat, akses artikel kesehatan, dan fitur konsultasi farmasi online.">
+    <meta name="keywords"
+        content="panduan klik farmasi, tutorial pengingat obat, cara menggunakan, petunjuk website, bantuan pengguna">
     <meta name="author" content="Tim Farmasi Universitas Alma Ata">
 @endpush
 
@@ -25,7 +27,7 @@
             <!-- Navigation Guide -->
             <div class="row mb-5">
                 <div class="col-12">
-                    <div class="guide-card featured-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="guide-card" data-aos="fade-up" data-aos-delay="100">
                         <div class="card-body p-4">
                             <div class="d-flex align-items-center mb-3">
                                 <div class="step-number">
@@ -38,8 +40,8 @@
                             <div class="step-content">
                                 <h6 class="fw-bold mb-3">Cara Penggunaan:</h6>
                                 <ol class="step-list numbered">
-                                    <li>Buka halaman utama</li>
-                                    <li>Geser layer ke bawah untuk melihat menu utama dalam beranda</li>
+                                    <li>Buka halaman utama atau <a href="https://klikfarmasi.com/"> klik disini</a></li>
+                                    <li>Geser layer ke bawah untuk melihat artikel terbaru</li>
                                     <li>Tidak perlu login</li>
                                 </ol>
                             </div>
@@ -65,10 +67,10 @@
                             <div class="step-content">
                                 <h6 class="fw-bold mb-3">Cara Penggunaan:</h6>
                                 <ol class="step-list numbered">
-                                    <li>Tekan menu "Informasi" di halaman utama.</li>
-                                    <li>Pilih topik yang ingin kamu baca, misalnya tentang Hipertensi Kehamilan atau
-                                        Hipertensi Non Kehamilan.</li>
-                                    <li>Langsung baca artikelnya</li>
+                                    <li>Tekan menu <a href="{{ route('artikel.non-kehamilan') }}" class="text-primary">"Artikel"</a> di bagian atas halaman.</li>
+                                    <li>Pilih topik yang ingin kamu baca, misalnya tentang <a href="{{ route('artikel.kehamilan') }}" class="text-primary">Hipertensi Kehamilan</a> atau
+                                        <a href="{{ route('artikel.non-kehamilan') }}" class="text-primary">Hipertensi Non Kehamilan</a>.</li>
+                                    <li>Setelah masuk, pilih judul yang ingin dibaca dan klik "Baca Selengkapnya"</li>
                                     <li>Bisa diakses gratis, tanpa harus login dulu!</li> <br>
                                 </ol>
                             </div>
@@ -90,8 +92,9 @@
                             <div class="step-content">
                                 <h6 class="fw-bold mb-3">Cara Penggunaan:</h6>
                                 <ol class="step-list numbered">
-                                    <li>Tekan menu "Tanya Jawab" di halaman utama.</li>
-                                    <li>Pilih pertanyaan yang ingin kamu ketahui jawabannya.</li>
+                                    <li>Tekan menu <a href="{{ route('tanya-jawab.non-kehamilan') }}" class="text-primary">"Tanya Jawab"</a> di bagian atas halaman.</li>
+                                    <li>Pilih topik yang ingin kamu ketahui, misalnya tentang <a href="{{ route('tanya-jawab.kehamilan') }}" class="text-primary">Hipertensi Kehamilan</a> atau
+                                        <a href="{{ route('tanya-jawab.non-kehamilan') }}" class="text-primary">Hipertensi Non Kehamilan</a>.</li>
                                     <li>Temukan jawaban langsung dari ahlinya.</li>
                                     <li>Semua bisa dibuka gratis tanpa login!</li>
                                 </ol>
@@ -118,7 +121,7 @@
                             <div class="step-content">
                                 <h6 class="fw-bold mb-3">Cara Penggunaan:</h6>
                                 <ol class="step-list numbered">
-                                    <li>Tekan menu "Unduhan"</li>
+                                    <li>Tekan menu <a href="{{ route('unduhan') }}" class="text-primary">"Unduhan"</a></li>
                                     <li>Pilih poster yang diinginkan.</li>
                                     <li>Tekan tombol "Unduh"</li>
                                     <li>Poster akan langsung diarahkan langsung ke Google Drive</li>
@@ -148,18 +151,17 @@
                             <div class="step-content">
                                 <h6 class="fw-bold mb-3">Cara Penggunaan:</h6>
                                 <ol class="step-list numbered">
-                                    <li>Buka menu "Konsultasi"</li>
-                                    <li>Ketik pertanyaan kamu di kotak chat.</li>
+                                    <li>Tekan logo WhatsApp/lingkaran hijau bagian pojok kanan bawah pada layar anda</li>
+                                    <li>Gunakan fitur dibawah petunjuk ini, tekan bagian <a href="https://wa.me/+6281292936247" class="text-primary" target="_blank">"Konsultasi Via WhatsApp"</a></li>
+                                    <li>Tekan "Lanjutkan ke Chat", Secara langsung terhubung admin via WhatsApp</li>
+                                    <li>Ketik pertanyaan kamu di kotak chat. (Contoh: "Bolehkah ibu hamil minum obat
+                                        hipertensi ini?")</li>
                                     <li>Tekan "Kirim".</li>
-                                    <li>Tunggu jawaban dari ahli maksimal dalam 1x24 jam.</li>
-                                    <li>Tanpa login (Contoh: "Bolehkah ibu hamil minum obat hipertensi ini?")</li> <br>
+                                    <li>Tunggu jawaban dari ahli farmasi/apoteker maksimal dalam 1x24 jam.</li>
+                                    <li>Gratis dilakukan tanpa harus login</li>
                                 </ol>
                             </div>
-                            <div class="text-center mt-3">
-                                <a href="https://wa.me/+6285280909235" class="btn btn-primary btn-sm" target="_blank">
-                                    Konsultasi via WhatsApp
-                                </a>
-                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -177,14 +179,16 @@
                                 <h4 class="mb-0 step-title">Cara Mendaftar Akun Pasien</h4>
                             </div>
                             <p class="step-description mb-3">Akun pasien dibutuhkan untuk menggunakan fitur pengingat minum
-                                obat.</p> 
+                                obat.</p>
                             <div class="step-content">
                                 <h6 class="fw-bold mb-3">Cara Penggunaan:</h6>
                                 <ol class="step-list numbered">
                                     <li>Tekan tombol "Akun", lalu pilih "Register"</li>
                                     <li>Isi data diri dengan lengkap</li>
+                                    <li>Masukan Kode pendaftaran yang sudah diberikan oleh admin. Catatan: setiap 1 kode pendaftaran, hanya untuk 1 akun pasien</li>
                                     <li>Centang kotak “Saya menyetujui syarat & ketentuan”</li>
                                     <li>Tekan "Daftar Sekarang", lalu kamu akan diarahkan ke halaman login</li>
+                                    <li>Hubungi <a href="https://wa.me/+6281292936247" class="text-primary" target="_blank">Admin</a> jika memiliki kendala pendaftaran</li>
                                 </ol>
                             </div>
                         </div>
@@ -205,11 +209,14 @@
                             <div class="step-content">
                                 <h6 class="fw-bold mb-3">Cara Penggunaan:</h6>
                                 <ol class="step-list numbered">
-                                    <li>Login ke akun pasien Anda</li>
-                                    <li>Tekan menu "Pengingat"</li>
-                                    <li>Isi data kesehatan, nama obat, dan atur waktu pengingat</li>
-                                    <li>Tekan “Submit”, anda akan menerima informasi notifikasi sebagai pengingat minum obat.
-                                    </li>
+                                    <li>Login ke akun pasien yang sudah terdaftar</li>
+                                    <li>Masuk ke dashboard pasien</li>
+                                    <li>Tekan menu "Pengingat" atau "Buat Pengingat Baru"</li>
+                                    <li>Isi jenis kondisi kesehatan, tekanan darah, nama obat/suplemen minimal 1, jadwal minum, dan frekuensi minum obat</li>
+                                    <li>Berikan catatan untuk admin, bila perlu disampaikan dari anda</li>
+                                    <li>Tekan "Simpan Pengingat Saya" → Informasi Pengingat Minum Obat akan dikirim ke nomor WhatsApp yang sudah terdaftar</li>
+                                    <li>Notifikasi pengingat minum obat akan terkirim 5 menit sebelum waktu minum obat dan disesuaikan dari jumlah obat yang di masukan</li>
+                                    <li>Khusus untuk pengguna yang sudah daftar (Wajib login Website)</li>
                                 </ol>
                             </div>
                         </div>
@@ -218,7 +225,7 @@
             </div>
 
             <!-- FAQ Section -->
-            <div class="row mb-5">
+            {{-- <div class="row mb-5">
                 <div class="col-12">
                     <div class="guide-card featured-card" data-aos="fade-up" data-aos-delay="800">
                         <div class="card-body p-4">
@@ -245,24 +252,12 @@
                                         </ol>
                                     </div>
                                 </div>
-                                {{-- <div class="col-md-6">
-                                <div class="alert alert-primary">
-                                    <h6 class="mb-2"><i class="bi bi-shield-check me-1"></i>Informasi Terpercaya:</h6>
-                                    <small>
-                                        • Jawaban dari Tim Pengelola Website Klik-Farmasi<br>
-                                        • Sumber Berdasarkan Literatur Ilmiah<br>
-                                        • Konsultasi Lebih Lanjut dengan Apoteker dan Dokter
-                                    </small>
-                                </div>
-                            </div> --}}
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
 
         </div>
     </section>
 @endsection
-
-

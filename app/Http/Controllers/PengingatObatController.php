@@ -100,10 +100,8 @@ class PengingatObatController extends Controller
                 ->count();
         }
 
-        // Ambil catatan dari admin yang belum dibaca
-        $catatanBelumBaca = $user->catatanDariAdmin()
-            ->where('status_baca', 'belum_dibaca')
-            ->count();
+        // Catatan system removed - set to 0
+        $catatanBelumBaca = 0;
     
         return view('user.dashboard', compact(
             'user', 

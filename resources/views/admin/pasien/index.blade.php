@@ -9,11 +9,11 @@
             <h1 class="fw-bold">Daftar Pasien</h1>
             <p class="text-muted mb-0">
                 Puskesmas
-                @if (auth()->user()->puskesmas_id == 'kalasan')
+                @if (auth()->user()->puskesmas == 'kalasan')
                     Kalasan
-                @elseif(auth()->user()->puskesmas_id == 'godean_2')
+                @elseif(auth()->user()->puskesmas == 'godean_2')
                     Godean 2
-                @elseif(auth()->user()->puskesmas_id == 'umbulharjo')
+                @elseif(auth()->user()->puskesmas == 'umbulharjo')
                     Umbulharjo
                 @endif
             </p>
@@ -88,14 +88,7 @@
                     @forelse ($users as $i => $user)
                         <tr>
                             <td>{{ ($users->currentPage() - 1) * $users->perPage() + $i + 1 }}</td>
-                            <td>
-                                {{ $user->name }}
-                                @if (!empty($user->catatan_count) && $user->catatan_count !== '-' && $user->catatan_count !== '0')
-                                    <span class="badge bg-danger text-white ms-2" style="font-size: 0.7rem;">
-                                        {{ $user->catatan_count }}
-                                    </span>
-                                @endif
-                            </td>
+                            <td>{{ $user->name }}</td>
                             <td>{{ $user->email }}</td>
                             <td>{{ $user->nomor_hp }}</td>
                             <td>{{ $user->jenis_kelamin }}</td>
@@ -199,13 +192,13 @@
                                     <option value="godean_2">Puskesmas Godean 2</option>
                                     <option value="umbulharjo">Puskesmas Umbulharjo</option>
                                 @else
-                                    <option value="{{ auth()->user()->puskesmas_id }}" selected>
+                                    <option value="{{ auth()->user()->puskesmas }}" selected>
                                         Puskesmas
-                                        @if (auth()->user()->puskesmas_id == 'kalasan')
+                                        @if (auth()->user()->puskesmas == 'kalasan')
                                             Kalasan
-                                        @elseif(auth()->user()->puskesmas_id == 'godean_2')
+                                        @elseif(auth()->user()->puskesmas == 'godean_2')
                                             Godean 2
-                                        @elseif(auth()->user()->puskesmas_id == 'umbulharjo')
+                                        @elseif(auth()->user()->puskesmas == 'umbulharjo')
                                             Umbulharjo
                                         @endif
                                     </option>

@@ -80,7 +80,7 @@ class PageController extends Controller
         $relatedArticles = Article::where('article_type', $article->article_type)
             ->where('id', '!=', $article->id)
             ->latest()
-            ->take(3)
+            ->take(10)
             ->get();
 
         // Ambil artikel sebelumnya dan selanjutnya untuk navigasi (dalam kategori yang sama)

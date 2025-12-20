@@ -23,43 +23,50 @@
         </div>
         <div class="container-fluid px-0 position-relative">
             <div class="hero-visual-section" data-aos="fade-down">
-                <div class="container-fluid px-2 py-3 py-md-5 px-lg-4">
-                    <div class="row justify-content-center">
-                        <div class="col-12 text-center mb-3 mb-md-4" data-aos="fade-up">
-                            <h1 class="display-4 text-white mb-2 mb-md-3 fw-bold">Selamat Datang di Klik-Farmasi</h1>
-                            <p class="lead text-white">Kami siap memberikan layanan informasi kesehatan dan pengingat
-                                minum obat terbaik untuk kebutuhan anda</p>
-                            <div class="section-divider mx-auto" style="background: white;"></div>
+                <div class="container-fluid px-2 py-2 py-md-5 px-lg-4">
+                    <div class="row align-items-center">
+                        <div class="col-12 col-lg-6 mt-4 mt-lg-0" data-aos="fade-right">
+                            <div class="hero-content px-3">
+                                <h1 class="h2 fw-bold mb-3 text-white">Hipertensi Mengancam? Jangan Biarkan Obat Terlupakan!</h1>
+                                <p class="mb-4 text-light">Setiap 30 detik, seseorang meninggal karena hipertensi yang tidak terkontrol. Jangan jadi korban selanjutnya! Platform revolusioner ini akan memastikan Anda tidak pernah melewatkan obat lagi.</p>
+                                <div class="d-flex flex-column flex-sm-row gap-3">
+                                    <a href="{{ route('pengingat') }}" class="btn btn-warning px-4 py-2 rounded-pill fw-bold">
+                                        Mulai Pengingat Obat
+                                    </a>
+                                    <a href="{{ route('artikel.non-kehamilan') }}" class="btn btn-light px-4 py-2 rounded-pill fw-bold">
+                                        Baca Artikel
+                                    </a>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="row justify-content-center">
-                        <div class="col-12 col-lg-11 col-xl-10">
+                        <div class="col-12 col-lg-6">
                             <div class="clean-carousel-wrapper">
                                 <div id="cleanCarousel" class="carousel slide" data-bs-ride="carousel"
                                     data-bs-interval="6000">
                                     <div class="carousel-inner">
                                         <div class="carousel-item">
-                                            <div class="ratio" style="--bs-aspect-ratio: 42.86%;">
+                                            <div class="ratio" style="--bs-aspect-ratio: 66.67%;">
                                                 <img data-src="{{ asset('assets/prevalensi.webp') }}"
                                                     alt="Data prevalensi hipertensi di Indonesia dan statistik kesehatan"
-                                                    class="object-fit-cover rounded carousel-img" loading="lazy" decoding="async"
-                                                    width="1200" height="600" style="cursor: pointer;">
+                                                    class="object-fit-cover rounded carousel-img" loading="lazy"
+                                                    decoding="async" width="800" height="533" style="cursor: pointer;">
                                             </div>
                                         </div>
                                         <div class="carousel-item">
-                                            <div class="ratio" style="--bs-aspect-ratio: 42.86%;">
+                                            <div class="ratio" style="--bs-aspect-ratio: 66.67%;">
                                                 <img data-src="{{ asset('assets/pencegahan.webp') }}"
                                                     alt="Infografis pencegahan hipertensi dan tips kesehatan jantung"
-                                                    class="object-fit-cover rounded carousel-img" loading="lazy" decoding="async"
-                                                    width="1200" height="600" style="cursor: pointer;">
+                                                    class="object-fit-cover rounded carousel-img" loading="lazy"
+                                                    decoding="async" width="800" height="533" style="cursor: pointer;">
                                             </div>
                                         </div>
                                         <div class="carousel-item active">
-                                            <div class="ratio" style="--bs-aspect-ratio: 42.86%;">
+                                            <div class="ratio" style="--bs-aspect-ratio: 66.67%;">
                                                 <img src="{{ asset('assets/welcome-hero.webp') }}"
                                                     alt="Selamat datang di platform Klik Farmasi untuk konsultasi kesehatan online"
-                                                    class="object-fit-cover rounded carousel-img" loading="eager" fetchpriority="high"
-                                                    decoding="async" width="1200" height="600" style="cursor: pointer;">
+                                                    class="object-fit-cover rounded carousel-img" loading="eager"
+                                                    fetchpriority="high" decoding="async" width="800" height="533"
+                                                    style="cursor: pointer;">
                                             </div>
                                         </div>
                                     </div>
@@ -87,7 +94,8 @@
         <div class="modal-dialog modal-dialog-centered modal-xl">
             <div class="modal-content bg-transparent border-0">
                 <div class="modal-body p-0 text-center">
-                    <button type="button" class="btn-close btn-close-white position-absolute top-0 end-0 m-3" data-bs-dismiss="modal" style="z-index: 1050;"></button>
+                    <button type="button" class="btn-close btn-close-white position-absolute top-0 end-0 m-3"
+                        data-bs-dismiss="modal" style="z-index: 1050;"></button>
                     <img id="modalImage" src="" alt="" class="img-fluid rounded" style="max-height: 90vh;">
                 </div>
             </div>
@@ -97,9 +105,8 @@
     <section class="features-section py-5" id="features">
         <div class="container px-4 px-lg-5">
             <div class="features-header text-center mb-5" data-aos="fade-up">
-                <h2 class="fw-bolder mb-3 text-primary">Kenapa Memilih Kami?</h2>
-                <p class="lead text-muted mx-auto">Alasan utama mengapa platform ini bisa jadi pilihan terbaik Anda untuk
-                    kesehatan yang lebih baik</p>
+                <h2 class="fw-bolder mb-3 text-primary">Hidup Anda Berharga - Lindungi Sekarang!</h2>
+                <p class="lead text-muted mx-auto">Setiap penderita hipertensi berhak mendapat perawatan terbaik. Saatnya Anda mengambil kendali!</p>
                 <div class="section-divider mx-auto"></div>
             </div>
             <div class="features-grid">
@@ -110,17 +117,15 @@
                                 <div class="feature-icon-wrapper">
                                     <div
                                         class="feature-icon reminder-icon bg-success bg-gradient rounded-circle d-flex mb-3">
-                                        <i class="bi bi-alarm-fill"></i>
+                                        <i class="bi bi-phone text-white" style="font-size:28px;"></i>
                                     </div>
                                     <div class="icon-glow"></div>
                                 </div>
                             </div>
                             <div class="feature-card-body">
-                                <h4 class="feature-title">Pengingat Minum Obat (In Progress)</h4>
+                                <h4 class="feature-title">Akses Multi-Platform</h4>
                                 <p class="feature-description">
-                                    Fitur Pengingat Minum Obat ini dirancang khusus untuk membantu anda rutin dalam minum
-                                    obat, terutama bagi penderita hipertensi agar tidak melewatkan jadwal minum obat yang
-                                    penting untuk Kesehatan.
+                                    Website responsive untuk semua device dan bisa diinstall seperti aplikasi di smartphone Anda. Akses cepat dengan notifikasi WhatsApp yang praktis.
                                 </p>
                             </div>
                         </div>
@@ -130,16 +135,15 @@
                             <div>
                                 <div class="feature-icon-wrapper">
                                     <div class="feature-icon info-icon bg-success bg-gradient rounded-circle d-flex mb-3">
-                                        <i class="bi bi-journal-medical"></i>
+                                        <i class="bi bi-graph-up-arrow text-white" style="font-size:28px;"></i>
                                     </div>
                                     <div class="icon-glow"></div>
                                 </div>
                             </div>
                             <div class="feature-card-body">
-                                <h4 class="feature-title">Informasi Kesehatan Terpercaya</h4>
+                                <h4 class="feature-title">Monitoring Tekanan Darah</h4>
                                 <p class="feature-description">
-                                    Kami menyediakan artikel dan berita kesehatan terkini yang akurat serta informasi
-                                    langsung dari sumber terpercaya untuk membantu anda menjalani hidup lebih sehat.
+                                    Catat dan pantau riwayat tekanan darah harian Anda. Lihat perkembangan kesehatan dengan grafik yang mudah dipahami untuk kontrol yang lebih baik.
                                 </p>
                             </div>
                         </div>
@@ -149,17 +153,15 @@
                             <div>
                                 <div class="feature-icon-wrapper">
                                     <div class="feature-icon info-icon bg-success bg-gradient rounded-circle d-flex mb-3">
-                                        <i class="bi bi-calendar-check text-white" style="font-size:28px;"></i>
+                                        <i class="bi bi-question-circle text-white" style="font-size:28px;"></i>
                                     </div>
                                     <div class="icon-glow"></div>
                                 </div>
                             </div>
                             <div class="feature-card-body">
-                                <h4 class="feature-title">Jadwal pengingat minum obat</h4>
+                                <h4 class="feature-title">Tanya Jawab Hipertensi</h4>
                                 <p class="feature-description">
-                                    Kelola jadwal minum obat anda dengan mudah! Cukup input waktu minum obat sekali dan kami
-                                    akan mengingatkan anda secara otomatis. Dapatkan informasi pengingat tepat waktu dan
-                                    pantau semua jadwal obat anda, membuat hidup sehat jadi lebih mudah dan menyenangkan.
+                                    FAQ lengkap tentang hipertensi kehamilan & non-kehamilan. Dapatkan jawaban dari ahli kesehatan untuk semua pertanyaan Anda.
                                 </p>
                             </div>
                         </div>
@@ -169,18 +171,15 @@
                             <div>
                                 <div class="feature-icon-wrapper">
                                     <div class="feature-icon info-icon bg-success bg-gradient rounded-circle d-flex mb-3">
-                                        <i class="bi bi-people text-white" style="font-size:28px;"></i>
+                                        <i class="bi bi-download text-white" style="font-size:28px;"></i>
                                     </div>
                                     <div class="icon-glow"></div>
                                 </div>
                             </div>
                             <div class="feature-card-body">
-                                <h4 class="feature-title">Komunitas Pendukung</h4>
+                                <h4 class="feature-title">Materi Edukasi Gratis</h4>
                                 <p class="feature-description">
-                                    Tidak harus menghadapi semua sendiri. Bergabunglah dengan komunitas ini, Anda bisa
-                                    terhubung dengan sesama pengguna untuk saling berbagi pengalaman, motivasi, dan dukungan
-                                    positif selama menjalani pengobatan. Bersama, kita wujudkan hidup yang lebih sehat dan
-                                    penuh semangat.
+                                    Download panduan diet hipertensi, brosur olahraga aman, dan materi edukasi kesehatan lainnya yang bisa diakses kapan saja.
                                 </p>
                             </div>
                         </div>
@@ -189,141 +188,54 @@
             </div>
     </section>
 
-    <section class="py-5 testimonial-section">
+    <section class="py-5 testimonial-section overflow-hidden">
         <div class="container px-4 px-lg-5 my-5">
-            <div class="row gx-5 justify-content-center">
-                <div class="col-lg-8 col-xl-6" data-aos="zoom-in-up">
-                    <div class="text-center mb-5">
-                        <h2 class="fw-bolder mb-3 text-primary">Apa Kata Mereka?</h2>
-                        <p class="lead text-muted mx-auto">Pendapat pengguna tentang Klik Farmasi dari berbagai kalangan.</p>
-                        <div class="section-divider mx-auto"></div>
-                    </div>
+            <div class="row justify-content-center">
+                <div class="col-lg-8 text-center mb-5" data-aos="fade-up">
+                    <h2 class="fw-bolder mb-3 text-primary">Mereka Sudah Merasakan Manfaatnya!</h2>
+                    <p class="lead text-muted">Testimoni nyata dari sesama penderita hipertensi yang telah merasakan perubahan positif</p>
+                    <div class="section-divider mx-auto"></div>
                 </div>
             </div>
-            <div class="d-none d-lg-block">
-                <div id="testimonialCarouselDesktop" class="carousel slide" data-bs-ride="carousel"
-                    data-bs-interval="4000">
-                    <div class="carousel-indicators testimonial-indicators position-relative mb-4" style="position:relative;bottom:auto;margin-bottom:2rem;">
-                        @php
-                            $totalSlides = ceil($testimonials->count() / 3);
-                        @endphp
-                        @for ($i = 0; $i < $totalSlides; $i++)
-                            <button type="button" data-bs-target="#testimonialCarouselDesktop" data-bs-slide-to="{{ $i }}" 
-                                class="{{ $i === 0 ? 'active' : '' }}" aria-current="{{ $i === 0 ? 'true' : '' }}" 
-                                aria-label="Slide {{ $i + 1 }}"></button>
-                        @endfor
-                    </div>
-                    <div class="carousel-inner p-5">
-                        @php
-                            $chunkedTestimonials = $testimonials->chunk(3);
-                        @endphp
-                        @foreach ($chunkedTestimonials as $slideIndex => $testimonialChunk)
-                            <div class="carousel-item {{ $slideIndex === 0 ? 'active' : '' }}">
-                                <div class="row g-4">
-                                    @foreach ($testimonialChunk as $testimonial)
-                                        <div class="col-lg-4" data-aos="fade-up"
-                                            data-aos-delay="{{ $loop->index * 100 }}">
-                                            <div class="testimonial-card-desktop h-100">
-                                                <div class="card border-0 shadow-lg h-100"
-                                                    style="border-radius:20px;overflow:hidden;transition:all 0.3s ease;">
-                                                    <div class="card-body p-4 d-flex flex-column">
-                                                        <div class="text-center mb-3">
-                                                            <div class="quote-icon">
-                                                                <i class="bi bi-quote text-white fs-4"></i>
-                                                            </div>
-                                                        </div>
-                                                        <div class="flex-grow-1 d-flex flex-column">
-                                                            <p class="testimonial-text">"{{ $testimonial->quote }}"</p>
-                                                            <div class="text-center mt-auto">
-                                                                <h6 class="testimonial-author">{{ $testimonial->name }}</h6>
-                                                                <small class="testimonial-role">Pengguna Klik Farmasi</small>
-                                                                <div class="testimonial-stars">
-                                                                    @for ($i = 1; $i <= 5; $i++)
-                                                                        <i class="bi bi-star-fill"></i>
-                                                                    @endfor
-                                                                </div>
-                                                            </div>
-                                                        </div>
+            
+            <!-- Multi-Row Marquee Testimonials -->
+            <div class="testimonial-marquee-container">
+                @php 
+                    $testimonialRows = $testimonials->chunk(ceil($testimonials->count() / 3));
+                @endphp
+                
+                @foreach ($testimonialRows as $rowIndex => $row)
+                    <div class="testimonial-marquee-row" data-direction="{{ $rowIndex % 2 === 0 ? 'left' : 'right' }}" data-speed="{{ 30 + ($rowIndex * 10) }}">
+                        <div class="testimonial-marquee-track">
+                            @for ($i = 0; $i < 3; $i++)
+                                @foreach ($row as $testimonial)
+                                    <div class="testimonial-marquee-item">
+                                        <div class="testimonial-bubble">
+                                            <div class="testimonial-content">
+                                                <div class="testimonial-quote">"{{ $testimonial->quote }}"</div>
+                                                <div class="testimonial-author">
+                                                    <strong>{{ $testimonial->name }}</strong>
+                                                    <div class="testimonial-stars">
+                                                        @for ($j = 1; $j <= 5; $j++)
+                                                            <i class="bi bi-star-fill"></i>
+                                                        @endfor
                                                     </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                    @if ($testimonialChunk->count() < 3)
-                                        @for ($i = $testimonialChunk->count(); $i < 3; $i++)
-                                            <div class="col-lg-4"></div>
-                                        @endfor
-                                    @endif
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-                    <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarouselDesktop" data-bs-slide="prev" style="width:5%;left:-5%;">
-                        <div class="testimonial-carousel-controls">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        </div>
-                        <span class="visually-hidden">Previous</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#testimonialCarouselDesktop" data-bs-slide="next" style="width:5%;right:-5%;">
-                        <div class="testimonial-carousel-controls">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        </div>
-                        <span class="visually-hidden">Next</span>
-                    </button>
-                </div>
-            </div>
-            <div class="d-lg-none">
-                <div id="testimonialCarouselMobile" class="carousel slide" data-bs-ride="carousel"
-                    data-bs-interval="4000">
-                    <div class="carousel-indicators testimonial-indicators" style="bottom:-50px;">
-                        @foreach ($testimonials as $index => $testimonial)
-                            <button type="button" data-bs-target="#testimonialCarouselMobile" data-bs-slide-to="{{ $index }}" 
-                                class="{{ $index === 0 ? 'active' : '' }}" aria-current="{{ $index === 0 ? 'true' : '' }}" 
-                                aria-label="Slide {{ $index + 1 }}"></button>
-                        @endforeach
-                    </div>
-                    <div class="carousel-inner pb-5 pt-4">
-                        @foreach ($testimonials as $index => $testimonial)
-                            <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
-                                <div class="d-flex justify-content-center px-3">
-                                    <div class="testimonial-card-mobile" style="max-width:500px;width:100%;">
-                                        <div class="card border-0 shadow-lg">
-                                            <div class="card-body p-4 text-center">
-                                                <div class="mb-3">
-                                                    <div class="quote-icon">
-                                                        <i class="bi bi-quote text-white fs-4"></i>
-                                                    </div>
-                                                </div>
-                                                <p class="testimonial-text">"{{ $testimonial->quote }}"</p>
-                                                <h6 class="testimonial-author">{{ $testimonial->name }}</h6>
-                                                <small class="testimonial-role">Pengguna Klik Farmasi</small>
-                                                <div class="testimonial-stars">
-                                                    @for ($i = 1; $i <= 5; $i++)
-                                                        <i class="bi bi-star-fill"></i>
-                                                    @endfor
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        @endforeach
+                                @endforeach
+                            @endfor
+                        </div>
                     </div>
-                    <div class="d-flex justify-content-center mt-4 mb-2">
-                        <button class="carousel-control-mobile me-3" type="button" data-bs-target="#testimonialCarouselMobile" data-bs-slide="prev">
-                            <div class="testimonial-carousel-controls" style="width:40px;height:40px;">
-                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            </div>
-                            <span class="visually-hidden">Previous</span>
-                        </button>
-                        <button class="carousel-control-mobile" type="button" data-bs-target="#testimonialCarouselMobile" data-bs-slide="next">
-                            <div class="testimonial-carousel-controls" style="width:40px;height:40px;">
-                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            </div>
-                            <span class="visually-hidden">Next</span>
-                        </button>
-                    </div>
-                </div>
+                @endforeach
+            </div>
+            
+            <!-- Call to Action -->
+            <div class="text-center mt-5">
+                <a href="{{ route('pengingat') }}" class="btn btn-primary btn-lg px-5 py-3">
+                    Mulai Sekarang - GRATIS! <i class="bi bi-arrow-right ms-2"></i>
+                </a>
             </div>
         </div>
     </section>
@@ -333,10 +245,8 @@
             <div class="row gx-5 justify-content-center">
                 <div class="col-lg-8 col-xl-6 mb-5" data-aos="zoom-in-up">
                     <div class="text-center">
-                        <h2 class="fw-bolder mb-3 text-primary">Artikel Hipertensi</h2>
-                        <p class="lead text-muted mx-auto">Temukan
-                            informasi
-                            kesehatan terbaru dan tips bermanfaat untuk hidup sehat.</p>
+                        <h2 class="fw-bolder mb-3 text-primary">Rahasia Mengalahkan Hipertensi</h2>
+                        <p class="lead text-muted mx-auto">Artikel eksklusif dari ahli kesehatan terpercaya. Pelajari cara menurunkan tekanan darah tanpa efek samping!</p>
                         <div class="d-flex justify-content-center mt-4">
                             <div class="section-divider"></div>
                         </div>
@@ -394,35 +304,34 @@
 @endsection
 
 @push('scripts')
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const carousel = document.getElementById('cleanCarousel');
-    const modal = new bootstrap.Modal(document.getElementById('imageModal'));
-    const modalImage = document.getElementById('modalImage');
-    
-    // Progressive image loading
-    function loadImage(img) {
-        if (img.dataset.src && !img.src) {
-            img.src = img.dataset.src;
-            img.removeAttribute('data-src');
-        }
-    }
-    
-    // Load images when carousel slides
-    carousel.addEventListener('slide.bs.carousel', function(e) {
-        const nextImg = e.relatedTarget.querySelector('img');
-        if (nextImg) loadImage(nextImg);
-    });
-    
-    // Image modal functionality
-    document.addEventListener('click', function(e) {
-        if (e.target.classList.contains('carousel-img') && e.target.src) {
-            modalImage.src = e.target.src;
-            modalImage.alt = e.target.alt;
-            modal.show();
-        }
-    });
-});
-</script>
-@endpush
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const carousel = document.getElementById('cleanCarousel');
+            const modal = new bootstrap.Modal(document.getElementById('imageModal'));
+            const modalImage = document.getElementById('modalImage');
 
+            // Progressive image loading
+            function loadImage(img) {
+                if (img.dataset.src && !img.src) {
+                    img.src = img.dataset.src;
+                    img.removeAttribute('data-src');
+                }
+            }
+
+            // Load images when carousel slides
+            carousel.addEventListener('slide.bs.carousel', function(e) {
+                const nextImg = e.relatedTarget.querySelector('img');
+                if (nextImg) loadImage(nextImg);
+            });
+
+            // Image modal functionality
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('carousel-img') && e.target.src) {
+                    modalImage.src = e.target.src;
+                    modalImage.alt = e.target.alt;
+                    modal.show();
+                }
+            });
+        });
+    </script>
+@endpush

@@ -6,7 +6,7 @@
         </a>
         
         <!-- Toggler (Hamburger Menu) -->
-        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler bg-white   border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         
@@ -92,7 +92,7 @@
                             </li>
                             <li>
                                 <a class="dropdown-item py-2" href="{{ route('register') }}">
-                                    Register
+                                    Daftar
                                 </a>
                             </li>
                         </ul>
@@ -156,6 +156,19 @@
     .navbar {
         box-shadow: 0 2px 10px rgba(0,0,0,0.1) !important;
         padding: 13px 0;
+        transition: all 0.3s ease;
+    }
+    
+    /* Navbar Scrolled State */
+    .navbar.scrolled {
+        padding: 8px 0;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.15) !important;
+        background-color: rgba(11, 94, 145, 0.95) !important;
+        backdrop-filter: blur(10px);
+    }
+    
+    .navbar.scrolled .navbar-logo {
+        transform: scale(0.9);
     }
     
     /* Navbar Links Hover Effect */
@@ -187,18 +200,27 @@
 
     /* Dropdown Styling */
     .dropdown-menu {
-        border-radius: 8px;
-        overflow: hidden;
+        border-radius: 0;
+        border: none;
+        padding: 0;
+        min-width: 200px;
     }
     
     .dropdown-item {
+        padding: 12px 20px;
+        border-bottom: 1px solid #f0f0f0;
         transition: all 0.2s ease;
+        font-weight: 500;
+    }
+    
+    .dropdown-item:last-child {
+        border-bottom: none;
     }
     
     .dropdown-menu .dropdown-item:hover {
-        background-color: #f0f0f0;
-        color: #0B5E91;
-        transform: translateX(5px);
+        background-color: #0B5E91;
+        color: #ffffff;
+        transform: none;
     }
 
     /* Button Hover Effect */
@@ -331,3 +353,15 @@
         }
     }
 </style>
+
+<!-- Navbar Scroll Animation Script -->
+<script>
+    window.addEventListener('scroll', function() {
+        const navbar = document.querySelector('.navbar');
+        if (window.scrollY > 50) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
+    });
+</script>

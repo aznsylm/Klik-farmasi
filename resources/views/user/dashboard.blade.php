@@ -1,1176 +1,594 @@
-@extends('layouts.app')
+@extends('layouts.user')
 
 @section('title', 'Dashboard Pasien')
 
 @section('content')
-    <style>
-        .bg-primary-solid {
-            background-color: #0b5e91 !important;
+<div class="container-fluid p-3" style="height: 100vh; overflow: hidden;">
+    <!-- Header dengan Profile -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h3 class="mb-1 fw-bold text-dark">Halo, {{ Auth::user()->name }}!</h3>
+            <p class="text-muted mb-0 small">Jaga tekanan darah tetap terkontrol hari ini</p>
+        </div>
+        <button class="btn btn-primary rounded-circle shadow-sm" style="width: 45px; height: 45px; font-size: 1.2rem;" data-bs-toggle="modal" data-bs-target="#profileModal">
+            {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+        </button>
+    </div>
+
+    <!-- Alert Informatif -->
+    @php
+        $alertMessage = '';
+        $alertClass = '';
+        
+        $latestPengingat = \App\Models\PengingatObat::where('user_id', Auth::id())->latest()->first();
+        $latestTekananDarah = \App\Models\CatatanTekananDarah::where('user_id', Auth::id())->latest()->first();
+        $allTekananDarah = \App\Models\CatatanTekananDarah::where('user_id', Auth::id())->orderBy('created_at', 'desc')->take(3)->get();
+        
+        // 1. Tekanan Darah Kritis
+        if ($latestTekananDarah && ($latestTekananDarah->sistol >= 180 || $latestTekananDarah->diastol >= 120)) {
+            $alertMessage = 'SEGERA KE IGD! Tekanan darah Anda sangat tinggi dan berbahaya';
+            $alertClass = 'bg-danger text-white';
         }
-
-        .bg-gold-solid {
-            background-color: #baa971 !important;
+        // 2. Hipertensi Kehamilan - Tekanan Tinggi
+        elseif ($latestPengingat && $latestPengingat->diagnosa === 'Hipertensi-Kehamilan' && $latestTekananDarah && ($latestTekananDarah->sistol >= 140 || $latestTekananDarah->diastol >= 90)) {
+            $alertMessage = 'Tekanan darah tinggi saat hamil berbahaya! Segera ke dokter kandungan';
+            $alertClass = 'bg-danger text-white';
         }
-
-        .text-primary-custom {
-            color: #0b5e91 !important;
+        // 3. Tekanan Darah Sangat Tinggi
+        elseif ($latestTekananDarah && (($latestTekananDarah->sistol >= 160 && $latestTekananDarah->sistol < 180) || ($latestTekananDarah->diastol >= 100 && $latestTekananDarah->diastol < 120))) {
+            $alertMessage = 'Tekanan darah sangat tinggi! Segera hubungi dokter hari ini';
+            $alertClass = 'bg-warning text-dark';
         }
-
-        .text-gold-custom {
-            color: #baa971 !important;
-        }
-
-        .bg-primary-soft {
-            background-color: rgba(11, 94, 145, 0.1);
-        }
-
-        .bg-gold-soft {
-            background-color: rgba(186, 169, 113, 0.1);
-        }
-
-        .text-white-75 {
-            color: rgba(255, 255, 255, 0.75) !important;
-        }
-
-        body {
-            font-size: 16px !important;
-            line-height: 1.6;
-        }
-
-        .card {
-            border-radius: 15px;
-            transition: transform 0.2s ease;
-            border: 2px solid #e9ecef;
-        }
-
-        .card:hover {
-            transform: translateY(-2px);
-            border-color: #0b5e91;
-        }
-
-        .icon-circle {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-        }
-
-        .data-card {
-            background: #f8f9fa;
-            border-left: 5px solid #0b5e91;
-            padding: 1.5rem;
-        }
-
-        .display-number {
-            font-size: 1.8rem !important;
-            font-weight: 600 !important;
-            color: #0b5e91;
-        }
-
-        .status-badge {
-            font-size: 0.9rem;
-            padding: 0.5rem 1rem;
-            border-radius: 25px;
-        }
-
-        .admin-contact {
-            background: #0b5e91;
-            color: white;
-            padding: 1rem;
-            border-radius: 10px;
-            margin-top: 1rem;
-        }
-
-        .catatan-sidebar {
-            position: fixed;
-            top: 0;
-            right: -400px;
-            width: 400px;
-            height: 100vh;
-            background: white;
-            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
-            z-index: 1050;
-            transition: right 0.3s ease;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .catatan-sidebar.active {
-            right: 0;
-        }
-
-        .catatan-header {
-            background: #0b5e91;
-            padding: 1.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .btn-close-sidebar {
-            background: none;
-            border: none;
-            padding: 0.5rem;
-        }
-
-        .catatan-content {
-            flex: 1;
-            overflow-y: auto;
-            padding: 1rem;
-        }
-
-        .catatan-item {
-            background: #f8f9fa;
-            border-radius: 10px;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            border-left: 4px solid #0b5e91;
-            transition: all 0.2s ease;
-            cursor: pointer;
-        }
-
-        .catatan-item:hover {
-            background: #e9ecef;
-            transform: translateX(-2px);
-        }
-
-        .catatan-item.belum-dibaca {
-            border-left-color: #dc3545;
-            background: #fff5f5;
-        }
-
-        .floating-catatan-btn {
-            position: fixed;
-            top: 50%;
-            right: 0;
-            transform: translateY(-50%);
-            width: 50px;
-            height: 80px;
-            background: #0b5e91;
-            border-radius: 10px 0 0 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.3rem;
-            cursor: pointer;
-            box-shadow: -3px 0 10px rgba(11, 94, 145, 0.3);
-            z-index: 1000;
-            transition: all 0.3s ease;
-        }
-
-        .floating-catatan-btn:hover {
-            transform: translateY(-50%) translateX(-5px);
-            box-shadow: -5px 0 15px rgba(11, 94, 145, 0.4);
-        }
-
-        .badge-notif {
-            position: absolute;
-            top: -8px;
-            left: -8px;
-            background: #dc3545;
-            color: white;
-            border-radius: 50%;
-            width: 22px;
-            height: 22px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.7rem;
-            font-weight: bold;
-        }
-
-        .sidebar-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1040;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .sidebar-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .pesan-popup {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.7);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 2000;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-            padding: 20px;
-        }
-
-        .pesan-popup.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .pesan-content {
-            background: white;
-            border-radius: 15px;
-            padding: 2.5rem;
-            max-width: 600px;
-            width: 100%;
-            max-height: 80vh;
-            overflow-y: auto;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-            transform: scale(0.8);
-            transition: all 0.3s ease;
-        }
-
-        .pesan-popup.active .pesan-content {
-            transform: scale(1);
-        }
-
-        .pesan-text {
-            font-size: 20px;
-            line-height: 1.8;
-            color: #333;
-            margin-bottom: 2rem;
-            font-weight: 500;
-        }
-
-        .pesan-info {
-            border-top: 2px solid #f0f0f0;
-            padding-top: 1.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 16px;
-            color: #666;
-        }
-
-        .pesan-close {
-            background: #0b5e91;
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 25px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .pesan-close:hover {
-            background: #094a73;
-            transform: translateY(-1px);
-        }
-
-        @media (max-width: 768px) {
-            .container-fluid {
-                padding: 0.5rem;
-            }
-
-            .card-body {
-                padding: 0.75rem;
-            }
-
-            .card-body.p-5 {
-                padding: 1.5rem !important;
-            }
-
-            .display-number {
-                font-size: 1.4rem !important;
-            }
-
-            .icon-circle {
-                width: 45px;
-                height: 45px;
-                font-size: 1.1rem;
-            }
-
-            h1 {
-                font-size: 1.8rem !important;
-            }
-
-            .fs-5 {
-                font-size: 1rem !important;
-            }
-
-            .table-responsive {
-                font-size: 0.85rem;
-            }
-
-            .table th, .table td {
-                padding: 0.5rem 0.25rem;
-            }
-
-            .chart-container {
-                height: 250px;
-                margin-bottom: 1rem;
-            }
-
-            .catatan-sidebar {
-                width: 100%;
-                right: -100%;
-            }
-
-            .floating-catatan-btn {
-                width: 45px;
-                height: 70px;
-                font-size: 1.1rem;
-                right: 10px;
-            }
-
-            .pesan-content {
-                padding: 1.5rem;
-                margin: 10px;
-                max-height: 90vh;
-            }
-
-            .pesan-text {
-                font-size: 18px;
-                line-height: 1.6;
-            }
-
-            .pesan-info {
-                flex-direction: column;
-                gap: 1rem;
-                text-align: center;
-            }
-
-            .input-group .form-control {
-                min-width: 0;
-            }
-
-            .admin-contact {
-                padding: 0.75rem;
-                font-size: 0.9rem;
-            }
-
-            .bg-primary-soft, .bg-gold-soft {
-                padding: 0.75rem !important;
-            }
-
-            .btn, .form-control, .catatan-item {
-                min-height: 44px;
+        // 4. Trend Naik Konsisten
+        elseif ($allTekananDarah->count() >= 3) {
+            $data = $allTekananDarah->reverse()->values();
+            if ($data[0]->sistol < $data[1]->sistol && $data[1]->sistol < $data[2]->sistol) {
+                $alertMessage = 'Tekanan darah terus naik dalam 3 catatan terakhir. Waspada dan hubungi dokter';
+                $alertClass = 'bg-warning text-dark';
             }
         }
-
-        @media (max-width: 576px) {
-            .container-fluid {
-                padding: 0.25rem;
-            }
-
-            .card-body {
-                padding: 0.5rem;
-            }
-
-            .card-body.p-5 {
-                padding: 1rem !important;
-            }
-
-            .display-number {
-                font-size: 1.2rem !important;
-            }
-
-            h1 {
-                font-size: 1.5rem !important;
-            }
-
-            .table-responsive {
-                font-size: 0.75rem;
-            }
-
-            .table th, .table td {
-                padding: 0.25rem;
-            }
-
-            .chart-container {
-                height: 200px;
-            }
-
-            .pesan-content {
-                padding: 1rem;
-                margin: 5px;
-            }
-
-            .pesan-text {
-                font-size: 16px;
-            }
-
-            .floating-catatan-btn {
-                right: 5px;
-                width: 40px;
-                height: 60px;
-                font-size: 1rem;
-            }
-
-            .row .col-md-8, .row .col-md-4 {
-                margin-bottom: 1rem;
-            }
-
-            .btn {
-                padding: 0.375rem 0.75rem;
-                font-size: 0.875rem;
-            }
-
-            .form-control {
-                padding: 0.375rem 0.75rem;
-                font-size: 0.875rem;
-            }
-
-            .status-badge {
-                font-size: 0.75rem;
-                padding: 0.25rem 0.5rem;
+        // 5. Tidak Input >3 Hari
+        if (!$alertMessage && $latestPengingat && $latestPengingat->status === 'aktif') {
+            $daysSinceLastInput = $latestTekananDarah ? \Carbon\Carbon::parse($latestTekananDarah->created_at)->diffInDays(now()) : 999;
+            if ($daysSinceLastInput > 3) {
+                $alertMessage = 'Sudah ' . $daysSinceLastInput . ' hari tidak catat tekanan darah. Jangan lupa pantau rutin!';
+                $alertClass = 'bg-info text-white';
             }
         }
-
-        @media (max-width: 768px) and (orientation: landscape) {
-            .chart-container {
-                height: 180px;
-            }
-
-            .card-body.p-5 {
-                padding: 1rem !important;
+        // 6. Mendekati Batas 91 Hari
+        if (!$alertMessage && $latestPengingat && $latestPengingat->status === 'aktif') {
+            $daysSinceStart = \Carbon\Carbon::parse($latestPengingat->created_at)->diffInDays(now());
+            $remainingDays = 91 - $daysSinceStart;
+            if ($remainingDays > 0 && $remainingDays <= 7) {
+                $alertMessage = 'Masa pantau akan berakhir dalam ' . $remainingDays . ' hari. Hubungi admin untuk bantuan lanjutan';
+                $alertClass = 'bg-info text-white';
             }
         }
-    </style>
+        // 7. Pengingat Obat Tidak Aktif
+        if (!$alertMessage && (!$latestPengingat || $latestPengingat->status !== 'aktif')) {
+            $alertMessage = 'Pengingat obat tidak aktif. Hubungi admin untuk bantuan';
+            $alertClass = 'bg-secondary text-white';
+        }
+        // 8. Belum Ada Data
+        if (!$alertMessage && !$latestTekananDarah) {
+            $alertMessage = 'Selamat datang! Mulai catat tekanan darah untuk pantau kesehatan Anda';
+            $alertClass = 'bg-success text-white';
+        }
+    @endphp
+    
+    @if($alertMessage)
+    <div class="alert {{ $alertClass }} mb-3 fw-semibold" style="border: none; font-size: 14px;">
+        {{ $alertMessage }}
+    </div>
+    @endif
 
-    <div class="container-fluid py-4">
-        <!-- Header Section -->
-        <div class="row mb-4">
-            <div class="col-12">
-                <div class="card border-0 shadow-lg" style="border-radius: 25px; overflow: hidden;">
-                    <div class="card-body p-5 bg-primary-solid text-white"
-                        style="background: linear-gradient(135deg, #0b5e91 0%, #1a7bb8 50%, #0b5e91 100%);">
-                        <div class="row align-items-center">
-                            <div class="col-md-8">
-                                <div class="mb-4">
-                                    <h1 class="mb-3 fw-bold text-white" style="font-size: 2.2rem;">Selamat datang,
-                                        {{ Auth::user()->name }}!</h1>
-                                    <p class="mb-2 fs-5 text-white opacity-90">Pantau kesehatan Anda hari ini dan jaga
-                                        tekanan darah tetap terkontrol</p>
-                                </div>
-                            </div>
-                            <div class="col-md-4 text-end">
-                                <div class="d-flex justify-content-end align-items-center flex-column flex-md-row">
-                                    <div class="me-md-3 mb-3 mb-md-0 text-center text-md-end">
-                                        <div>
-                                            <h6 class="mb-2 text-white fw-bold">Status Akun</h6>
-                                            <span class="status-badge bg-success text-white shadow-sm">✓ Aktif</span>
-                                        </div>
-                                    </div>
-                                    <div class="icon-circle bg-gold-solid shadow-lg">
-                                        <i class="bi bi-person-check text-white"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+    <div class="row h-75">
+        <!-- Grafik Tekanan Darah -->
+        <div class="col-lg-6 col-12 mb-3">
+            <div class="card border-0 shadow-lg h-100">
+                <div class="card-body p-3">
+                    <h6 class="fw-bold mb-2">Grafik Tekanan Darah</h6>
+                    <div style="position: relative; height: calc(100% - 80px); min-height: 200px;">
+                        <canvas id="bloodPressureChart"></canvas>
+                    </div>
+                    <div class="mt-2">
+                        <a href="{{ route('user.tekanan-darah.pdf') }}" class="btn btn-danger btn-sm" style="border-radius: 4px;">
+                            <i class="fas fa-file-pdf me-1"></i> Unduh Laporan
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Quick Stats Cards -->
-        <div class="row mb-4">
-            <!-- Tekanan Darah Card -->
-            <div class="col-lg-3 col-md-6 mb-3">
-                <div class="card border-0 shadow-sm h-100">
-                    <div class="card-body p-3 text-center">
-                        <h6 class="text-muted mb-2 fw-bold">Tekanan Darah Terakhir</h6>
-                        <div class="display-number mb-2">
+        <!-- Input & Obat -->
+        <div class="col-lg-6 col-12 mb-3">
+            <div class="row h-100">
+                <!-- Input Tekanan Darah -->
+                <div class="col-12 mb-3" style="height: 60%;">
+                    <div class="card border-0 shadow-lg h-100">
+                        <div class="card-body p-3">
+                            <h6 class="fw-bold mb-2">Catat Tekanan Darah</h6>
                             @php
-                                // Show blood pressure data for any pengingat
-                                $latestTekananDarah = null;
+                                $latestPengingat = \App\Models\PengingatObat::where('user_id', Auth::id())->latest()->first();
+                                $canInput = false;
+                                $message = '';
+                                
                                 if ($latestPengingat) {
-                                    $latestTekananDarah = \App\Models\CatatanTekananDarah::where('user_id', $user->id)
-                                        ->latest()
-                                        ->first();
-                                }
-
-                                if ($latestTekananDarah) {
-                                    $sistol = $latestTekananDarah->sistol;
-                                    $diastol = $latestTekananDarah->diastol;
-                                    echo "$sistol/$diastol mmHg";
-                                } else {
-                                    echo 'Belum ada';
-                                }
-                            @endphp
-                        </div>
-                        <span class="status-badge bg-gold-solid text-white">
-                            @php
-                                if ($latestTekananDarah) {
-                                    $sistol = $latestTekananDarah->sistol;
-                                    $diastol = $latestTekananDarah->diastol;
-                                    if ($sistol < 90 || $diastol < 60) {
-                                        echo 'Hipotensi';
-                                    } elseif ($sistol <= 120 && $diastol < 80) {
-                                        echo 'Normal';
-                                    } elseif (
-                                        ($sistol >= 121 && $sistol <= 139) ||
-                                        ($diastol >= 80 && $diastol <= 90)
-                                    ) {
-                                        echo 'Pre Hipertensi';
-                                    } else {
-                                        echo 'Hipertensi';
+                                    $daysSinceStart = \Carbon\Carbon::parse($latestPengingat->created_at)->diffInDays(now());
+                                    $canInput = ($latestPengingat->status === 'aktif') && ($daysSinceStart < 91);
+                                    
+                                    if (!$canInput) {
+                                        if ($latestPengingat->status !== 'aktif') {
+                                            $message = 'Pengingat obat sudah tidak aktif. Hubungi admin jika ada kendala.';
+                                        } else {
+                                            $message = 'Masa input tekanan darah sudah berakhir (91 hari). Hubungi admin jika ada kendala.';
+                                        }
                                     }
                                 } else {
-                                    echo 'Belum diukur';
+                                    $message = 'Belum ada pengingat obat yang diatur.';
                                 }
                             @endphp
-                        </span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Total Obat -->
-            <div class="col-lg-3 col-md-6 mb-3">
-                <div class="card border-0 shadow-sm h-100">
-                    <div class="card-body p-3 text-center">
-                        <h6 class="text-muted mb-2 fw-bold">Total Jenis Obat</h6>
-                        @php
-                            $totalObat = $latestPengingat ? $latestPengingat->detailObat->count() : 0;
-                        @endphp
-                        <div class="display-number mb-2">{{ $totalObat }}</div>
-                        <span class="status-badge bg-gold-solid text-white">Jenis obat berbeda</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Status Pengingat -->
-            <div class="col-lg-3 col-md-6 mb-3">
-                <div class="card border-0 shadow-sm h-100">
-                    <div class="card-body p-3 text-center">
-                        <h6 class="text-muted mb-2 fw-bold">Status Pengingat</h6>
-                        <div class="display-number mb-2">
-                            {{ $latestPengingat ? ucfirst($latestPengingat->status) : 'Belum Ada' }}</div>
-                        <span
-                            class="status-badge {{ $latestPengingat ? ($latestPengingat->status == 'aktif' ? 'bg-gold-solid' : 'bg-secondary') : 'bg-secondary' }} text-white">
-                            {{ $latestPengingat ? ($latestPengingat->status == 'aktif' ? 'Pengingat berjalan' : 'Pengobatan dihentikan') : 'Belum ada pengingat' }}
-                        </span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Diagnosa Card -->
-            <div class="col-lg-3 col-md-6 mb-3">
-                <div class="card border-0 shadow-sm h-100">
-                    <div class="card-body p-3 text-center">
-                        <h6 class="text-muted mb-2 fw-bold">Diagnosa</h6>
-                        <div class="display-number mb-2" style="font-size: 1.5rem !important;">
-                            {{ $latestPengingat ? str_replace('-', ' ', $latestPengingat->diagnosa) : 'Belum ada' }}
-                        </div>
-                        <span class="status-badge bg-gold-solid text-white">
-                            Saat ini
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Main Content -->
-        <div class="row">
-            <!-- Left Column -->
-            <div class="col-lg-8">
-
-                <!-- Data Pengingat Obat -->
-                <div class="card border-0 shadow-sm mb-4">
-                    <div class="card-header bg-transparent border-0 py-3">
-                        <h5 class="mb-0 fw-bold text-primary-custom">
-                            Data Pengingat Obat
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                        @if ($latestPengingat)
-                            <div class="p-3 data-card rounded">
-                                <!-- Header Pengingat -->
-                                <div class="row mb-3">
-                                    <div class="col-md-6">
-                                        <h6 class="mb-1 fw-bold text-primary">
-                                            Pengingat Obat Aktif
-                                        </h6>
-                                        <small class="text-muted">
-                                            @if ($latestPengingat->updated_at->ne($latestPengingat->created_at))
-                                                Terakhir diupdate: {{ $latestPengingat->updated_at->format('d M Y, H:i') }}
-                                                WIB
-                                                <br>
-                                                <span class="text-muted">(Dibuat:
-                                                    {{ $latestPengingat->created_at->format('d M Y, H:i') }} WIB)</span>
-                                            @else
-                                                Dibuat: {{ $latestPengingat->created_at->format('d M Y, H:i') }} WIB
-                                            @endif
-                                        </small>
+                            
+                            @if($canInput)
+                                <form id="bloodPressureForm">
+                                    @csrf
+                                    <div class="row">
+                                        <div class="col-6 mb-2">
+                                            <label class="form-label small fw-semibold">Sistol</label>
+                                            <input type="number" class="form-control shadow-sm" id="sistol" min="70" max="250" required style="border-radius: 8px;">
+                                        </div>
+                                        <div class="col-6 mb-2">
+                                            <label class="form-label small fw-semibold">Diastol</label>
+                                            <input type="number" class="form-control shadow-sm" id="diastol" min="40" max="150" required style="border-radius: 8px;">
+                                        </div>
                                     </div>
-                                    <div class="col-md-6 text-md-end">
-                                        <span
-                                            class="badge bg-{{ $latestPengingat->status == 'aktif' ? 'success' : 'secondary' }}">
-                                            {{ ucfirst($latestPengingat->status) }}
-                                        </span>
+                                    <button type="submit" class="btn btn-primary w-100 mb-2 shadow-sm" style="border-radius: 8px; font-weight: 600;">Simpan Data</button>
+                                </form>
+                            @else
+                                <div class="text-center py-3">
+                                    <div class="mb-3">
+                                        <div class="text-muted mb-2">🚫</div>
+                                        <p class="text-muted mb-2 small">{{ $message }}</p>
                                     </div>
+                                    <button class="btn btn-secondary w-100 mb-2 shadow-sm" disabled style="border-radius: 8px; font-weight: 600;">Input Tidak Tersedia</button>
                                 </div>
+                            @endif
+                            
+                            @php
+                                $latestTekananDarah = \App\Models\CatatanTekananDarah::where('user_id', Auth::id())->latest()->first();
+                            @endphp
+                            @if($latestTekananDarah)
+                            <div class="p-2 bg-light rounded shadow-sm">
+                                <small class="text-success fw-semibold">Terakhir: {{ $latestTekananDarah->sistol }}/{{ $latestTekananDarah->diastol }} mmHg</small>
+                            </div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
 
-                                <!-- Daftar Obat -->
-                                <div class="mb-3">
-                                    <h6 class="mb-3 fw-bold">
-                                        Daftar Obat ({{ $latestPengingat->detailObat->count() }} jenis)
-                                    </h6>
+                <!-- Obat -->
+                <div class="col-12" style="height: 40%;">
+                    <div class="card border-0 shadow-lg h-100">
+                        <div class="card-body p-3">
+                            <h6 class="fw-bold mb-2">Obat Anda</h6>
+                            @php
+                                $latestPengingat = \App\Models\PengingatObat::where('user_id', Auth::id())->latest()->first();
+                            @endphp
+                            
+                            <div style="max-height: calc(100% - 50px); overflow-y: auto;">
+                                @if($latestPengingat && $latestPengingat->detailObat->count() > 0)
                                     <div class="table-responsive">
-                                        <table class="table table-hover">
-                                            <thead class="table-light">
+                                        <table class="table table-sm mb-0" style="border-radius: 8px;">
+                                            <thead>
                                                 <tr>
-                                                    <th width="5%">No</th>
-                                                    <th width="30%">Nama Obat</th>
-                                                    <th width="15%">Jumlah</th>
-                                                    <th width="20%">Waktu Minum</th>
-                                                    <th width="20%">Suplemen</th>
-                                                    <th width="10%">Status</th>
+                                                    <th class="small fw-bold">Nama Obat</th>
+                                                    <th class="small fw-bold">Jumlah</th>
+                                                    <th class="small fw-bold">Waktu</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach ($latestPengingat->detailObat as $key => $obat)
-                                                    <tr>
-                                                        <td>{{ $key + 1 }}</td>
-                                                        <td class="fw-medium">{{ $obat->nama_obat }}</td>
-                                                        <td>
-                                                            {{ $obat->jumlah_obat }}
-                                                        </td>
-                                                        <td>
-                                                            {{ \Carbon\Carbon::parse($obat->waktu_minum)->format('H:i') }}
-                                                            WIB
-                                                        </td>
-                                                        <td>
-                                                            @if ($obat->suplemen)
-                                                                {{ $obat->suplemen }}
-                                                            @else
-                                                                -
-                                                            @endif
-                                                        </td>
-                                                        <td>
-                                                            {{ ucfirst($obat->status_obat) }}
-                                                        </td>
-                                                    </tr>
+                                                @foreach($latestPengingat->detailObat as $obat)
+                                                <tr>
+                                                    <td class="small fw-semibold">{{ $obat->nama_obat }}</td>
+                                                    <td class="small">{{ $obat->jumlah_obat }} tablet</td>
+                                                    <td class="small">{{ $obat->waktu_minum }}</td>
+                                                </tr>
                                                 @endforeach
                                             </tbody>
                                         </table>
                                     </div>
-
-                                    <!-- Keterangan Admin -->
-                                    <div class="admin-contact text-center">
-                                        <h6 class="text-white mb-2">
-                                            Informasi Penting
-                                        </h6>
-                                        <p class="mb-0 text-white">
-                                            <strong>Untuk mengubah data obat, silakan hubungi:</strong><br>
-                                            Admin Klik Farmasi: <strong>+62 852-8090-9235</strong>
-                                        </p>
+                                @else
+                                    <div class="text-center py-2">
+                                        <p class="text-muted mb-2 small">Belum ada obat yang diatur</p>
+                                        <a href="{{ route('pengingat') }}" class="btn btn-primary btn-sm shadow-sm" style="border-radius: 8px; font-weight: 600;">Atur Obat</a>
                                     </div>
-                                </div>
-                            </div>
-                        @else
-                            <div class="alert alert-info text-center p-4">
-                                <i class="bi bi-info-circle-fill me-2 fs-4"></i>
-                                <h5 class="mt-2">Belum ada data pengingat obat</h5>
-                                <p class="mb-3 text-center">Mulai perjalanan kesehatan Anda dengan membuat pengingat obat
-                                    pertama, Pengingat ini akan aktif selama 91 hari (13 minggu)</p>
-                                <a href="{{ route('pengingat') }}" class="btn btn-primary btn-lg">
-                                    Buat Pengingat
-                                </a>
-                            </div>
-                        @endif
-                    </div>
-                </div>
-
-                <!-- Grafik Tekanan Darah -->
-                @if ($latestPengingat)
-                    <div class="card border-0 shadow-sm mb-4">
-                        <div class="card-header bg-transparent border-0 py-3">
-                            <h5 class="mb-0 fw-bold text-primary-custom">
-                                <i class="bi bi-graph-up me-2"></i>
-                                Grafik Tekanan Darah
-                            </h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <div class="chart-container">
-                                        <canvas id="tekananDarahChart" width="400" height="300"></canvas>
-                                        <div id="chartPlaceholder" class="text-center py-5" style="display: none;">
-                                            <i class="bi bi-graph-up text-muted" style="font-size: 3rem;"></i>
-                                            <p class="text-muted mt-3">Belum ada data untuk ditampilkan</p>
-                                            <small class="text-muted">Grafik akan muncul setelah ada input tekanan
-                                                darah</small>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="bg-light p-3 rounded">
-                                        <h6 class="text-primary-custom mb-3">Input Tekanan Darah</h6>
-                                        @php
-                                            try {
-                                                $tanggalMulai = \Carbon\Carbon::parse(
-                                                    $latestPengingat->tanggal_mulai ?? $latestPengingat->created_at,
-                                                )->startOfDay();
-                                                $now = \Carbon\Carbon::now('Asia/Jakarta')->startOfDay();
-                                                $daysDiff = $tanggalMulai->diffInDays($now);
-                                                $currentWeek = min(floor($daysDiff / 7) + 1, 13);
-                                                $isOver91Days = $daysDiff >= 91;
-                                                $canInput = $latestPengingat->status == 'aktif' && !$isOver91Days;
-                                                
-                                                if ($canInput) {
-                                                    $weekStart = $tanggalMulai->copy()->addWeeks($currentWeek - 1);
-                                                    $weekEnd = $weekStart->copy()->addDays(6);
-                                                    $hasInputThisWeek = \App\Models\CatatanTekananDarah::where(
-                                                        'user_id',
-                                                        auth()->id(),
-                                                    )
-                                                        ->whereBetween('tanggal_input', [
-                                                            $weekStart->toDateString(),
-                                                            $weekEnd->toDateString(),
-                                                        ])
-                                                        ->where('sumber', 'input_harian')
-                                                        ->exists();
-                                                } else {
-                                                    $weekStart = $weekEnd = $hasInputThisWeek = null;
-                                                }
-                                            } catch (Exception $e) {
-                                                $canInput = false;
-                                                $currentWeek = 1;
-                                                $isOver91Days = true;
-                                                $weekStart = $weekEnd = $hasInputThisWeek = null;
-                                            }
-                                        @endphp
-
-                                        @if ($canInput)
-                                            <div class="mb-3 p-2 rounded" style="background: rgba(11, 94, 145, 0.1);">
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <small class="fw-bold text-primary-custom">Minggu
-                                                        ke-{{ $currentWeek }}/13</small>
-                                                    @if ($hasInputThisWeek)
-                                                        <span class="badge bg-success">Sudah input</span>
-                                                    @else
-                                                        <span class="badge bg-warning">Belum input</span>
-                                                    @endif
-                                                </div>
-                                                <small class="text-muted">{{ $weekStart->format('d M') }} -
-                                                    {{ $weekEnd->format('d M Y') }}</small>
-                                            </div>
-                                            <form id="inputTekananDarahForm">
-                                                @csrf
-                                                <div class="mb-3">
-                                                    <label class="form-label fw-bold">Sistol/Diastol</label>
-                                                    <div class="input-group">
-                                                        <input type="number" class="form-control" id="sistolInput"
-                                                            placeholder="140" min="50" max="250" required>
-                                                        <span class="input-group-text">/</span>
-                                                        <input type="number" class="form-control" id="diastolInput"
-                                                            placeholder="90" min="50" max="150" required>
-                                                    </div>
-                                                    <small class="text-muted">mmHg</small>
-                                                </div>
-                                                <button type="submit" class="btn btn-primary w-100"
-                                                    id="simpanTekananBtn">
-                                                    Simpan
-                                                </button>
-                                            </form>
-                                        @else
-                                            <div class="text-center py-4">
-                                                <i class="bi bi-check-circle text-success" style="font-size: 2rem;"></i>
-                                                <p class="text-muted mt-2 mb-1 text-center">
-                                                    @if ($latestPengingat->status == 'aktif' && $isOver91Days)
-                                                        Masa pengingat telah berakhir (91 hari / 13 minggu)
-                                                    @else
-                                                        Pengobatan telah selesai
-                                                    @endif
-                                                </p>
-                                                <small class="text-muted">Tidak perlu input tekanan darah lagi</small>
-                                                @if ($latestPengingat->status == 'aktif' && $isOver91Days)
-                                                    <br><small class="text-muted">Berakhir:
-                                                        {{ $tanggalMulai->copy()->addDays(91)->format('d M Y') }}</small>
-                                                @else
-                                                    <br><small class="text-muted">Dihentikan:
-                                                        {{ $latestPengingat->updated_at->format('d M Y, H:i') }}</small>
-                                                @endif
-                                                <div class="mt-3">
-                                                    <a href="{{ route('user.tekanan-darah.pdf') }}"
-                                                        class="btn btn-success btn-sm">
-                                                        Download Laporan PDF
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        @endif
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Catatan Keluhan/Pengobatan -->
-                            <div class="mt-4 p-3 bg-light rounded">
-                                <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <h6 class="text-primary-custom mb-0">
-                                        Catatan Keluhan/Pengobatan
-                                    </h6>
-                                    <div>
-                                        @if ($latestPengingat->catatan)
-                                            <button class="btn btn-warning btn-sm me-2" onclick="editCatatan()">
-                                                Edit
-                                            </button>
-                                            <button class="btn btn-danger btn-sm me-2" onclick="hapusCatatan()">
-                                                Hapus
-                                            </button>
-                                        @else
-                                            <button class="btn btn-sm btn-primary" onclick="tambahCatatan()">
-                                                Tambah Catatan
-                                            </button>
-                                        @endif
-                                    </div>
-                                </div>
-
-                                <div id="catatanDisplay">
-                                    @if ($latestPengingat->catatan)
-                                        <p class="mb-0 text-muted">{{ $latestPengingat->catatan }}</p>
-                                    @else
-                                        <p class="mb-0 text-muted fst-italic">Belum ada catatan keluhan atau pengobatan</p>
-                                    @endif
-                                </div>
-
-                                <div id="catatanForm" style="display: none;">
-                                    <textarea class="form-control mb-2" id="catatanTextarea" rows="3"
-                                        placeholder="Tulis catatan keluhan atau pengobatan Anda...">{{ $latestPengingat->catatan }}</textarea>
-                                    <div class="text-end">
-                                        <button class="btn btn-sm btn-secondary me-2"
-                                            onclick="batalCatatan()">Batal</button>
-                                        <button class="btn btn-sm btn-primary" onclick="simpanCatatan()">Simpan</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @endif
-
-            </div>
-
-            <!-- Right Column -->
-            <div class="col-lg-4">
-                <!-- Data Pasien -->
-                <div class="card border-0 shadow-sm mb-4">
-                    <div class="card-header bg-transparent border-0 py-3">
-                        <h5 class="mb-0 fw-bold text-primary-custom">
-                            Profil Pasien
-                        </h5>
-                    </div>
-                    <div class="card-body">
-
-                        <div class="row g-3">
-                            <div class="col-12">
-                                <div class="d-flex justify-content-between align-items-center py-3 border-bottom">
-                                    <span class="text-dark fw-bold">
-                                        Nama :
-                                    </span>
-                                    <span class="fw-bold text-dark">{{ $user->name }}</span>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="d-flex justify-content-between align-items-center py-3 border-bottom">
-                                    <span class="text-dark fw-bold">
-                                        Usia :
-                                    </span>
-                                    <span class="fw-bold text-dark">{{ $user->usia }} tahun</span>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="d-flex justify-content-between align-items-center py-3 border-bottom">
-                                    <span class="text-dark fw-bold">
-                                        Jenis Kelamin :
-                                    </span>
-                                    <span class="fw-bold text-dark">{{ $user->jenis_kelamin }}</span>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="d-flex justify-content-between align-items-center py-3 border-bottom">
-                                    <span class="text-dark fw-bold">
-                                        WhatsApp :
-                                    </span>
-                                    <span class="fw-bold text-dark">+{{ $user->nomor_hp }}</span>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="d-flex justify-content-between align-items-center py-3 border-bottom">
-                                    <span class="text-dark fw-bold">
-                                        Email :
-                                    </span>
-                                    <span class="fw-bold text-dark">{{ $user->email }}</span>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="d-flex justify-content-between align-items-center py-3">
-                                    <span class="text-dark fw-bold">
-                                        Dibuat pada :
-                                    </span>
-                                    <span class="fw-bold text-dark">{{ $user->created_at->format('d M Y, H:i') }}</span>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="d-flex justify-content-between align-items-center py-3 border-bottom">
-                                    <span class="text-dark fw-bold">
-                                        Puskesmas :
-                                    </span>
-                                    <span class="fw-bold text-dark">{{ $user->puskesmas_id }}</span>
-                                </div>
+                                @endif
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <!-- Tips Kesehatan -->
-                <div class="card border-0 shadow-sm mb-4">
-                    <div class="card-header bg-transparent border-0 py-3">
-                        <h5 class="mb-0 fw-bold text-gold-custom">
-                            Tips Kesehatan Harian
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="mb-3 p-3 bg-primary-soft rounded">
-                            <h6 class="text-primary-custom mb-2 fw-bold">
-                                Batasi Konsumsi Garam Berlebih
-                            </h6>
-                            <p class="mb-0 fs-6">Konsumsi garam berlebih dapat meningkatkan tekanan darah, WHO
-                                merekomendasikan untuk orang dewasa membatasi konsumsi garam maksimal 5 gram per hari atau
-                                setara dengan 2 gram atau ½ sendok per hari.</p>
-                        </div>
-                        <div class="bg-gold-soft rounded p-3">
-                            <h6 class="text-primary-custom mb-3 fw-bold">
-                                Minum Air yang Cukup
-                            </h6>
-                            <p class="mb-0 fs-6">Konsumsi <strong>8-10 gelas air putih</strong> setiap hari untuk menjaga
-                                tekanan darah stabil dan mendukung fungsi ginjal yang optimal.</p>
-                        </div>
-                        <div class="mt-3 p-3 bg-primary-soft rounded">
-                            <h6 class="text-primary-custom mb-2 fw-bold">
-                                Olahraga Ringan
-                            </h6>
-                            <p class="mb-0 fs-6">Lakukan jalan kaki <strong>30 menit setiap hari</strong> untuk menjaga
-                                kesehatan jantung dan mengontrol tekanan darah.</p>
-                        </div>
-                    </div>
-                </div>
-
             </div>
         </div>
     </div>
 
-    <!-- Sidebar Catatan Admin -->
-    <div class="catatan-sidebar" id="catatanSidebar">
-        <div class="catatan-header">
-            <h5 class="mb-0 fw-bold text-white">
-                Pesan dari Admin
-            </h5>
-            <button class="btn-close-sidebar" onclick="tutupSidebar()">
-                <i class="bi bi-x-lg text-white"></i>
-            </button>
-        </div>
-        <div class="catatan-content" id="catatanContent">
-            <div class="text-center py-4">
-                <div class="spinner-border text-primary" role="status">
-                    <span class="visually-hidden">Loading...</span>
-                </div>
-                <p class="mt-2 text-muted">Memuat pesan...</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Button Floating Catatan -->
-    <div class="floating-catatan-btn" onclick="bukaSidebar()">
-        <i class="bi bi-chat-dots-fill"></i>
-        @php
-            $catatanBelumBaca = auth()->user()->catatanDariAdmin()->where('status_baca', 'belum_dibaca')->count();
-        @endphp
-        @if ($catatanBelumBaca > 0)
-            <span class="badge-notif">{{ $catatanBelumBaca }}</span>
-        @endif
-    </div>
-
-    <!-- Overlay -->
-    <div class="sidebar-overlay" id="sidebarOverlay" onclick="tutupSidebar()"></div>
-
-    <!-- Pop-up Detail Pesan -->
-    <div class="pesan-popup" id="pesanPopup" onclick="tutupPopupPesan(event)">
-        <div class="pesan-content" onclick="event.stopPropagation()">
-            <div class="pesan-text fs-5 fw-bold" id="pesanText">
-                <!-- Isi pesan akan dimuat di sini -->
-            </div>
-            <div class="pesan-info">
-                <div>
-                    <div class="fw-bold" id="pesanAdmin">Admin</div>
-                    <div class="text-muted" id="pesanTanggal">Tanggal</div>
-                </div>
-                <button class="pesan-close" onclick="tutupPopupPesan()">Tutup</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Chart.js CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
-
-    <script>
-        // Catatan Functions
-        function tambahCatatan() {
-            document.getElementById('catatanDisplay').style.display = 'none';
-            document.getElementById('catatanForm').style.display = 'block';
-            document.getElementById('catatanTextarea').value = '';
-            document.getElementById('catatanTextarea').focus();
-        }
-
-        function editCatatan() {
-            document.getElementById('catatanDisplay').style.display = 'none';
-            document.getElementById('catatanForm').style.display = 'block';
-            document.getElementById('catatanTextarea').focus();
-        }
-
-        function batalCatatan() {
-            document.getElementById('catatanDisplay').style.display = 'block';
-            document.getElementById('catatanForm').style.display = 'none';
-        }
-
-        function simpanCatatan() {
-            const catatan = document.getElementById('catatanTextarea').value.trim();
-            fetch('{{ route('catatan.update') }}', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                    },
-                    body: JSON.stringify({
-                        catatan: catatan
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    alert(data.message);
-                    if (data.success) location.reload();
-                })
-                .catch(() => alert('Terjadi kesalahan saat menyimpan catatan'));
-        }
-
-        function hapusCatatan() {
-            if (confirm('Apakah Anda yakin ingin menghapus catatan ini?')) {
-                fetch('{{ route('catatan.update') }}', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                        },
-                        body: JSON.stringify({
-                            catatan: ''
-                        })
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        alert(data.success ? 'Catatan berhasil dihapus' : data.message);
-                        if (data.success) location.reload();
-                    })
-                    .catch(() => alert('Terjadi kesalahan saat menghapus catatan'));
+    <!-- Mobile Layout -->
+    <style>
+        @media (max-width: 991px) {
+            .container-fluid {
+                height: auto !important;
+                overflow: visible !important;
+            }
+            
+            .row.h-75 {
+                height: auto !important;
+            }
+            
+            .col-12 .card {
+                height: auto !important;
+                min-height: 250px;
+            }
+            
+            .col-12:first-child .card {
+                min-height: 300px;
+            }
+            
+            .col-12[style*="height: 60%"] {
+                height: auto !important;
+                margin-bottom: 1rem;
+            }
+            
+            .col-12[style*="height: 40%"] {
+                height: auto !important;
             }
         }
+    </style>
+</div>
 
-        // Sidebar Functions
-        function bukaSidebar() {
-            document.getElementById('catatanSidebar').classList.add('active');
-            document.getElementById('sidebarOverlay').classList.add('active');
-            document.body.style.overflow = 'hidden';
-            muatCatatanAdmin();
-        }
+<!-- Floating FAQ Button -->
+<button class="btn btn-primary shadow" data-bs-toggle="modal" data-bs-target="#faqModal" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000; border-radius: 25px; padding: 8px 15px; font-size: 12px; font-weight: 600;">
+    Memiliki Kendala?
+</button>
 
-        function tutupSidebar() {
-            document.getElementById('catatanSidebar').classList.remove('active');
-            document.getElementById('sidebarOverlay').classList.remove('active');
-            document.body.style.overflow = 'auto';
-        }
+<!-- Modal Profile -->
+<div class="modal fade" id="profileModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold">Profil Saya</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center mb-4">
+                    <div class="rounded-circle bg-primary text-white d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px; font-size: 2rem;">
+                        {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                    </div>
+                </div>
+                <table class="table table-borderless">
+                    <tr>
+                        <td class="fw-semibold">Nama:</td>
+                        <td>{{ Auth::user()->name }}</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-semibold">Email:</td>
+                        <td>{{ Auth::user()->email }}</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-semibold">Jenis Kelamin:</td>
+                        <td>{{ Auth::user()->jenis_kelamin ?? '-' }}</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-semibold">Usia:</td>
+                        <td>{{ Auth::user()->usia ?? '-' }} tahun</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-semibold">No. HP:</td>
+                        <td>
+                            @if(Auth::user()->nomor_hp)
+                                @if(str_starts_with(Auth::user()->nomor_hp, '62'))
+                                    +{{ Auth::user()->nomor_hp }}
+                                @else
+                                    +62{{ Auth::user()->nomor_hp }}
+                                @endif
+                            @else
+                                -
+                            @endif
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fw-semibold">Puskesmas:</td>
+                        <td>{{ ucwords(str_replace('_', ' ', Auth::user()->puskesmas_id ?? '-')) }}</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <a href="{{ route('logout') }}" class="btn btn-danger" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                    Keluar
+                </a>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                    @csrf
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
-        function muatCatatanAdmin() {
-            const content = document.getElementById('catatanContent');
-            fetch('/catatan-admin')
-                .then(response => response.json())
-                .then(data => {
-                    if (data.length === 0) {
-                        content.innerHTML =
-                            '<div class="text-center py-5"><i class="bi bi-chat-dots fs-1 text-muted mb-3"></i><h6 class="text-muted">Belum ada pesan dari admin</h6></div>';
-                    } else {
-                        let html = '';
-                        data.forEach(catatan => {
-                            const statusClass = catatan.status_baca === 'belum_dibaca' ? 'belum-dibaca' : '';
-                            const tanggal = new Date(catatan.created_at).toLocaleDateString('id-ID', {
-                                day: 'numeric',
-                                month: 'short',
-                                year: 'numeric',
-                                hour: '2-digit',
-                                minute: '2-digit'
-                            });
-                            html += `<div class="catatan-item ${statusClass}" onclick="tampilkanDetailPesan('${catatan.isi_catatan.replace(/'/g, "\\'")}', '${catatan.admin.name}', '${tanggal}', ${catatan.id})">
-                                <div class="d-flex justify-content-between align-items-start mb-2">
-                                    <small class="text-muted">${tanggal}</small>
-                                    ${catatan.status_baca === 'belum_dibaca' ? '<span class="badge bg-danger">Baru</span>' : ''}
+<!-- Modal FAQ -->
+<div class="modal fade" id="faqModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold">Bantuan & FAQ</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
+                <div class="accordion" id="faqAccordion">
+                    <!-- Login & Akun -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                                Masalah Login & Akun
+                            </button>
+                        </h2>
+                        <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                <div class="border-bottom pb-3 mb-3">
+                                    <p class="fw-bold mb-1">Saya lupa kata sandi, bagaimana cara menggantinya?</p>
+                                    <p class="mb-0 text-muted">Hubungi Admin untuk mengganti kata sandi Anda</p>
                                 </div>
-                                <p class="mb-0 text-dark fw-medium">${catatan.isi_catatan.length > 100 ? catatan.isi_catatan.substring(0, 100) + '...' : catatan.isi_catatan}</p>
-                            </div>`;
-                        });
-                        content.innerHTML = html;
-                    }
-                })
-                .catch(() => {
-                    content.innerHTML = '<div class="text-center py-5 text-danger"><i class="bi bi-exclamation-triangle fs-1 mb-3"></i><h6>Gagal memuat pesan</h6></div>';
-                });
-        }
+                                <div class="border-bottom pb-3 mb-3">
+                                    <p class="fw-bold mb-1">Kenapa saya tidak bisa masuk ke akun?</p>
+                                    <p class="mb-0 text-muted">Hubungi Admin untuk membantu masalah login Anda</p>
+                                </div>
+                                <div class="border-bottom pb-3 mb-3">
+                                    <p class="fw-bold mb-1">Bagaimana cara mengubah data diri saya?</p>
+                                    <p class="mb-0 text-muted">Hubungi Admin untuk mengubah data profil Anda</p>
+                                </div>
+                                <div>
+                                    <p class="fw-bold mb-1">Bisa ganti nomor HP yang sudah terdaftar?</p>
+                                    <p class="mb-0 text-muted">Bisa, hubungi Admin untuk mengganti nomor HP</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Input Tekanan Darah -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                                Masalah Input Tekanan Darah
+                            </button>
+                        </h2>
+                        <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                <div class="border-bottom pb-3 mb-3">
+                                    <p class="fw-bold mb-1">Kenapa saya tidak bisa catat tekanan darah hari ini?</p>
+                                    <p class="mb-0 text-muted">Sehari hanya boleh catat 1 kali saja</p>
+                                </div>
+                                <div class="border-bottom pb-3 mb-3">
+                                    <p class="fw-bold mb-1">Muncul pesan "sudah catat hari ini" padahal belum</p>
+                                    <p class="mb-0 text-muted">Silahkan hubungi Admin untuk bantuan</p>
+                                </div>
+                                <div class="border-bottom pb-3 mb-3">
+                                    <p class="fw-bold mb-1">Angka tekanan darah saya salah tulis, bisa diubah?</p>
+                                    <p class="mb-0 text-muted">Bisa, silahkan hubungi Admin untuk mengubahnya</p>
+                                </div>
+                                <div class="border-bottom pb-3 mb-3">
+                                    <p class="fw-bold mb-1">Tombol "Simpan Data" tidak bisa diklik</p>
+                                    <p class="mb-0 text-muted">Hubungi Admin jika ada masalah seperti ini</p>
+                                </div>
+                                <div>
+                                    <p class="fw-bold mb-1">Berapa angka tekanan darah yang boleh diisi?</p>
+                                    <p class="mb-0 text-muted">Angka atas (sistol): 70-250. Angka bawah (diastol): 40-150. Tekanan darah normal biasanya di bawah 120/80</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Grafik & Data -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                                Masalah Grafik & Data
+                            </button>
+                        </h2>
+                        <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                <div class="border-bottom pb-3 mb-3">
+                                    <p class="fw-bold mb-1">Grafik tekanan darah saya kosong/tidak muncul</p>
+                                    <p class="mb-0 text-muted">Pastikan internet lancar. Jika masih bermasalah, hubungi Admin</p>
+                                </div>
+                                <div class="border-bottom pb-3 mb-3">
+                                    <p class="fw-bold mb-1">Data tekanan darah saya hilang</p>
+                                    <p class="mb-0 text-muted">Coba muat ulang halaman atau keluar masuk lagi. Jika masih hilang, hubungi Admin</p>
+                                </div>
+                                <div class="border-bottom pb-3 mb-3">
+                                    <p class="fw-bold mb-1">Bagaimana cara membaca grafik tekanan darah?</p>
+                                    <p class="mb-0 text-muted">Garis merah = angka atas (sistol). Garis biru = angka bawah (diastol). Grafik menunjukkan naik turunnya tekanan darah dari hari ke hari</p>
+                                </div>
+                                <div>
+                                    <p class="fw-bold mb-1">Data lama tidak tampil di grafik</p>
+                                    <p class="mb-0 text-muted">Hubungi Admin untuk bantuan</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- PDF & Laporan -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
+                                Masalah PDF & Laporan
+                            </button>
+                        </h2>
+                        <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                <div class="border-bottom pb-3 mb-3">
+                                    <p class="fw-bold mb-1">PDF tidak bisa diunduh/error saat download</p>
+                                    <p class="mb-0 text-muted">Pastikan internet lancar. Jika masih bermasalah, hubungi Admin</p>
+                                </div>
+                                <div class="border-bottom pb-3 mb-3">
+                                    <p class="fw-bold mb-1">File PDF kosong atau tidak ada datanya</p>
+                                    <p class="mb-0 text-muted">Pastikan internet lancar. Jika masih bermasalah, hubungi Admin</p>
+                                </div>
+                                <div class="border-bottom pb-3 mb-3">
+                                    <p class="fw-bold mb-1">Bagaimana cara menyimpan PDF di HP?</p>
+                                    <p class="mb-0 text-muted">Setelah klik tombol merah "Unduh Laporan PDF", file akan tersimpan di folder Download HP Anda</p>
+                                </div>
+                                <div>
+                                    <p class="fw-bold mb-1">PDF tidak bisa dibuka di HP saya</p>
+                                    <p class="mb-0 text-muted">HP Anda perlu aplikasi pembaca PDF seperti Adobe Reader atau bisa buka lewat browser</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Pengingat Obat -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5">
+                                Masalah Pengingat Obat
+                            </button>
+                        </h2>
+                        <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                <div class="border-bottom pb-3 mb-3">
+                                    <p class="fw-bold mb-1">Bagaimana cara mengatur pengingat obat?</p>
+                                    <p class="mb-0 text-muted">Klik tombol "Atur Obat" di halaman utama, lalu isi semua data yang diminta dengan lengkap</p>
+                                </div>
+                                <div class="border-bottom pb-3 mb-3">
+                                    <p class="fw-bold mb-1">Pengingat obat saya sudah mati, bagaimana menghidupkan lagi?</p>
+                                    <p class="mb-0 text-muted">Hubungi Admin untuk bantuan</p>
+                                </div>
+                                <div class="border-bottom pb-3 mb-3">
+                                    <p class="fw-bold mb-1">Bisa ubah jadwal minum obat yang sudah diatur?</p>
+                                    <p class="mb-0 text-muted">Bisa, hubungi Admin untuk mengubahnya</p>
+                                </div>
+                                <div>
+                                    <p class="fw-bold mb-1">Kenapa tidak bisa catat tekanan darah setelah 3 bulan?</p>
+                                    <p class="mb-0 text-muted">Karena sudah mencapai batas waktu maksimal (91 hari). Hubungi Admin jika masih perlu bantuan</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Teknis Umum -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq6">
+                                Masalah Teknis Umum
+                            </button>
+                        </h2>
+                        <div id="faq6" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                <div class="border-bottom pb-3 mb-3">
+                                    <p class="fw-bold mb-1">Website lambat atau tidak bisa dibuka</p>
+                                    <p class="mb-0 text-muted">Pastikan internet HP Anda lancar</p>
+                                </div>
+                                <div class="border-bottom pb-3 mb-3">
+                                    <p class="fw-bold mb-1">Tombol tidak bisa diklik</p>
+                                    <p class="mb-0 text-muted">Muat ulang halaman dan pastikan internet lancar</p>
+                                </div>
+                                <div class="border-bottom pb-3 mb-3">
+                                    <p class="fw-bold mb-1">Tampilan website berantakan di HP</p>
+                                    <p class="mb-0 text-muted">Coba muat ulang halaman atau bersihkan riwayat browser. Pastikan pakai browser terbaru</p>
+                                </div>
+                                <div class="border-bottom pb-3 mb-3">
+                                    <p class="fw-bold mb-1">Bagaimana cara keluar dari akun?</p>
+                                    <p class="mb-0 text-muted">Klik foto profil di pojok kanan atas, lalu klik tombol merah "Keluar"</p>
+                                </div>
+                                <div>
+                                    <p class="fw-bold mb-1">Apakah data saya aman di website ini?</p>
+                                    <p class="mb-0 text-muted">Aman, kami menjaga kerahasiaan data pribadi dan rekam medis Anda</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Kontak & Bantuan -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq7">
+                                Kontak & Bantuan
+                            </button>
+                        </h2>
+                        <div id="faq7" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                <div class="border-bottom pb-3 mb-3">
+                                    <p class="fw-bold mb-1">Bagaimana cara menghubungi Admin/Farmasis?</p>
+                                    <p class="mb-0 text-muted">Pilih salah satu nomor WhatsApp yang ada di bagian bawah halaman utama. Konsultasi gratis</p>
+                                </div>
+                                <div class="border-bottom pb-3 mb-3">
+                                    <p class="fw-bold mb-1">Berapa lama Tim Farmasi membalas pesan?</p>
+                                    <p class="mb-0 text-muted">Kami selalu siap membantu Anda</p>
+                                </div>
+                                <div class="border-bottom pb-3 mb-3">
+                                    <p class="fw-bold mb-1">Bisa konsultasi gratis lewat WhatsApp?</p>
+                                    <p class="mb-0 text-muted">Bisa, konsultasi gratis untuk semua pasien</p>
+                                </div>
+                                <div>
+                                    <p class="fw-bold mb-1">Jam berapa saja bisa hubungi Tim Farmasi?</p>
+                                    <p class="mb-0 text-muted">Kami selalu siap membantu Anda kapan saja</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Pemahaman Fitur -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq8">
+                                Pemahaman Fitur
+                            </button>
+                        </h2>
+                        <div id="faq8" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                <div class="border-bottom pb-3 mb-3">
+                                    <p class="fw-bold mb-1">Apa bedanya hipertensi kehamilan dan biasa?</p>
+                                    <p class="mb-0 text-muted">Hipertensi kehamilan terjadi saat hamil dan berbahaya untuk ibu dan bayi. Hipertensi biasa adalah tekanan darah tinggi pada kondisi normal</p>
+                                </div>
+                                <div class="border-bottom pb-3 mb-3">
+                                    <p class="fw-bold mb-1">Bagaimana cara membaca hasil pantauan saya?</p>
+                                    <p class="mb-0 text-muted">Lihat grafik untuk melihat naik turunnya tekanan darah. Jika terus di atas 140/90 atau naik mendadak, segera ke dokter</p>
+                                </div>
+                                <div class="border-bottom pb-3 mb-3">
+                                    <p class="fw-bold mb-1">Kapan saya harus ke dokter berdasarkan data tekanan darah?</p>
+                                    <p class="mb-0 text-muted">Segera ke dokter jika tekanan darah lebih dari 180/120, sakit kepala berat, sesak napas, atau nyeri dada</p>
+                                </div>
+                                <div>
+                                    <p class="fw-bold mb-1">Apakah website ini bisa ganti konsultasi dokter?</p>
+                                    <p class="mb-0 text-muted">Tidak bisa. Website ini hanya alat bantu pantau dan belajar. Tetap harus kontrol rutin ke dokter</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-        function tampilkanDetailPesan(isi, admin, tanggal, id) {
-            document.getElementById('pesanText').textContent = isi;
-            document.getElementById('pesanAdmin').textContent = admin;
-            document.getElementById('pesanTanggal').textContent = tanggal;
-            document.getElementById('pesanPopup').classList.add('active');
-            
-            // Tandai sebagai sudah dibaca
-            fetch(`/catatan-admin/${id}/baca`, {
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                }
-            });
-        }
-
-        function tutupPopupPesan(event) {
-            if (event && event.target !== event.currentTarget) return;
-            document.getElementById('pesanPopup').classList.remove('active');
-        }
-
-        // Chart and Blood Pressure Functions
-        let tekananDarahChart = null;
-
-        function initChart() {
-            const canvas = document.getElementById('tekananDarahChart');
-            if (!canvas) return;
-            
-            const ctx = canvas.getContext('2d');
-            tekananDarahChart = new Chart(ctx, {
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const ctx = document.getElementById('bloodPressureChart');
+    if (!ctx) return;
+    
+    fetch('/api/blood-pressure-data')
+        .then(response => response.json())
+        .then(data => {
+            new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: [],
+                    labels: data.labels,
                     datasets: [{
                         label: 'Sistol',
-                        data: [],
+                        data: data.sistol,
                         borderColor: '#dc3545',
                         backgroundColor: 'rgba(220, 53, 69, 0.1)',
                         tension: 0.4
                     }, {
                         label: 'Diastol',
-                        data: [],
+                        data: data.diastol,
                         borderColor: '#0b5e91',
                         backgroundColor: 'rgba(11, 94, 145, 0.1)',
                         tension: 0.4
@@ -1179,86 +597,57 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: {
-                        legend: { position: 'top' },
-                        title: { display: true, text: 'Riwayat Tekanan Darah (mmHg)' }
+                    animation: {
+                        duration: 0
                     },
                     scales: {
-                        y: { beginAtZero: false, min: 40, max: 260 }
+                        y: {
+                            beginAtZero: false,
+                            min: 60,
+                            max: 200
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top'
+                        }
                     }
                 }
             });
-        }
+        })
+        .catch(err => console.error('Error loading chart:', err));
 
-        function loadChartData() {
-            fetch('{{ route('tekanan-darah.chart') }}')
-                .then(response => response.json())
-                .then(data => {
-                    if (data.labels && data.labels.length > 0) {
-                        tekananDarahChart.data.labels = data.labels;
-                        tekananDarahChart.data.datasets[0].data = data.sistol;
-                        tekananDarahChart.data.datasets[1].data = data.diastol;
-                        tekananDarahChart.update();
-                        document.getElementById('tekananDarahChart').style.display = 'block';
-                        document.getElementById('chartPlaceholder').style.display = 'none';
-                    } else {
-                        document.getElementById('tekananDarahChart').style.display = 'none';
-                        document.getElementById('chartPlaceholder').style.display = 'block';
-                    }
-                })
-                .catch(error => {
-                    console.error('Chart loading error:', error);
-                    document.getElementById('tekananDarahChart').style.display = 'none';
-                    document.getElementById('chartPlaceholder').style.display = 'block';
-                });
-        }
-
-        // Form submission for blood pressure
-        document.addEventListener('DOMContentLoaded', function() {
-            initChart();
-            loadChartData();
-
-            const form = document.getElementById('inputTekananDarahForm');
-            if (form) {
-                form.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    const submitBtn = document.getElementById('simpanTekananBtn');
-                    submitBtn.disabled = true;
-                    submitBtn.innerHTML = 'Menyimpan...';
-
-                    const formData = {
-                        sistol: document.getElementById('sistolInput').value,
-                        diastol: document.getElementById('diastolInput').value,
-                        _token: '{{ csrf_token() }}'
-                    };
-
-                    fetch('{{ route('tekanan-darah.store') }}', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                        },
-                        body: JSON.stringify(formData)
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            alert('Data berhasil disimpan');
-                            location.reload();
-                        } else {
-                            alert('Error: ' + data.message);
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        alert('Terjadi kesalahan saat menyimpan data');
-                    })
-                    .finally(() => {
-                        submitBtn.disabled = false;
-                        submitBtn.innerHTML = 'Simpan';
-                    });
-                });
-            }
+    const form = document.getElementById('bloodPressureForm');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const sistol = document.getElementById('sistol').value;
+            const diastol = document.getElementById('diastol').value;
+            const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            
+            fetch('/api/save-blood-pressure', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': token
+                },
+                body: JSON.stringify({ sistol, diastol })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert(data.message || 'Gagal menyimpan data');
+                }
+            })
+            .catch(err => {
+                console.error('Error:', err);
+                alert('Terjadi kesalahan');
+            });
         });
-    </script>
+    }
+});
+</script>
 @endsection

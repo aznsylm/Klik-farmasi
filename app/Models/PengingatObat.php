@@ -12,12 +12,7 @@ class PengingatObat extends Model
         'diagnosa',
         'tekanan_darah',
         'tanggal_mulai',
-        'catatan',
         'status', 
-    ];
-
-    protected $attributes = [
-        'catatan' => '-',
     ];
 
     public function detailObat()

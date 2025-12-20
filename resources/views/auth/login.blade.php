@@ -59,7 +59,7 @@
                         <input type="password" class="form-control" name="password" id="loginPassword" placeholder="Password" required autocomplete="current-password">
                         <i class="fas fa-eye-slash password-toggle" onclick="togglePassword('loginPassword', this)"></i>
                     </div>
-                    <div class="password-info-icon" data-tooltip="Lupa password? Hubungi admin puskesmas Anda untuk reset password: 0852-8090-9235">
+                    <div class="password-info-icon" data-tooltip="Lupa password? Hubungi admin puskesmas Anda untuk reset password: +62 812-9293-6247">
                         <i class="fas fa-question-circle"></i>
                     </div>
                 </div>
@@ -132,8 +132,8 @@
     }
     </script>
 @endsection
-@section('hero_title', 'Klik Farmasi')
-@section('hero_subtitle', 'Masuk untuk menikmati kemudahan konsultasi kesehatan, pengingat minum obat, dan akses informasi obat terpercaya.')
+@section('hero_title', 'Jangan Sampai Lupa Minum Obat Lagi!')
+@section('hero_subtitle', 'Tekanan darah tinggi bisa berbahaya jika tidak terkontrol. Masuk sekarang dan dapatkan pengingat otomatis untuk minum obat tepat waktu, pantau tekanan darah, dan konsultasi langsung dengan ahli kesehatan.')
 
 @section('extra_styles')
 <style>
@@ -263,6 +263,59 @@
         color: #495057;
         cursor: pointer;
         user-select: none;
+    }
+    
+    /* Mobile responsive fixes */
+    @media (max-width: 768px) {
+        .form-title {
+            margin-top: 3rem !important;
+            font-size: 1.8rem;
+        }
+        
+        .auth-container .row {
+            margin: 0;
+        }
+        
+        .auth-form {
+            padding: 1.5rem 1rem;
+        }
+        
+        .auth-hero {
+            padding: 2rem 1rem;
+        }
+        
+        .hero-title {
+            font-size: 1.8rem;
+            line-height: 1.3;
+        }
+        
+        .hero-subtitle {
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+    }
+    
+    @media (max-width: 576px) {
+        .form-title {
+            margin-top: 3.5rem !important;
+            font-size: 1.6rem;
+        }
+        
+        .hero-title {
+            font-size: 1.6rem;
+        }
+        
+        .hero-subtitle {
+            font-size: 0.95rem;
+        }
+        
+        .auth-form {
+            padding: 1rem 0.75rem;
+        }
+        
+        .auth-hero {
+            padding: 1.5rem 0.75rem;
+        }
     }
 </style>
 @endsection

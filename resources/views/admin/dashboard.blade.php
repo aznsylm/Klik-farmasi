@@ -1,36 +1,56 @@
 @extends('layouts.admin')
 
 @section('content')
-    <!-- Motivation Banner Slider -->
-    <div id="motivationCarousel" class="carousel slide motivation-banner mb-4" data-bs-ride="carousel" data-bs-interval="3000">
-        <div class="carousel-inner">
-            <div class="carousel-item active">
-                <p class="motivation-text">
-                    "Menjadi tenaga kesehatan adalah panggilan hati untuk terus memberi harapan dan kehidupan bagi setiap pasien."
-                </p>
+    
+    <!-- Dashboard Statistics -->
+    <div class="row mb-4">
+        <!-- Statistik Tekanan Darah -->
+        <div class="col-lg-8">
+            <h5 class="mb-3">Statistik Tekanan Darah Pasien</h5>
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <div class="card bg-primary text-white h-100" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#modalNormal">
+                        <div class="card-body text-center">
+                            <h3 class="mb-1">{{ $tdStats['normal']['count'] ?? 0 }}</h3>
+                            <p class="mb-0">TD Normal</p>
+                            <small>&lt; 140/90 mmHg</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="card bg-info text-white h-100" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#modalTinggi">
+                        <div class="card-body text-center">
+                            <h3 class="mb-1">{{ $tdStats['tinggi']['count'] ?? 0 }}</h3>
+                            <p class="mb-0">TD Tinggi</p>
+                            <small>140-179/90-109 mmHg</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="card text-white h-100" style="background-color: #0d6efd; cursor: pointer;" data-bs-toggle="modal" data-bs-target="#modalSangatTinggi">
+                        <div class="card-body text-center">
+                            <h3 class="mb-1">{{ $tdStats['sangat_tinggi']['count'] ?? 0 }}</h3>
+                            <p class="mb-0">TD Sangat Tinggi</p>
+                            <small>≥ 180/110 mmHg</small>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="carousel-item">
-                <p class="motivation-text">
-                    "Setiap senyum pasien yang sembuh adalah hadiah terbesar bagi perjuangan kita di dunia kesehatan."
-                </p>
-            </div>
-            <div class="carousel-item">
-                <p class="motivation-text">
-                    "Kesembuhan pasien adalah hasil dari kerja keras, ketulusan, dan semangat pantang menyerah tenaga kesehatan."
-                </p>
-            </div>
-            <div class="carousel-item">
-                <p class="motivation-text">
-                    "Tenaga kesehatan bukan hanya profesi, tapi juga bentuk cinta kasih untuk membantu sesama."
-                </p>
-            </div>
-            <div class="carousel-item">
-                <p class="motivation-text">
-                    "Setiap tindakan kecil yang kita lakukan hari ini, bisa menjadi perubahan besar bagi kehidupan pasien esok hari."
-                </p>
+        </div>
+        
+        <!-- Chart -->
+        <div class="col-lg-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h6 class="card-title">Distribusi TD</h6>
+                    <div style="height: 250px; position: relative;">
+                        <canvas id="tdChart"></canvas>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+
     <!-- Features Grid -->
     <div class="features-grid">
         <!-- Kelola Data Pasien -->
@@ -145,4 +165,120 @@
             </a>
         </div>
     </div>
+
+    <!-- Modals -->
+<!-- Modal TD Normal -->
+<div class="modal fade" id="modalNormal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">Pasien dengan TD Normal</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                @if(isset($tdStats['normal']['patients']) && count($tdStats['normal']['patients']) > 0)
+                    @foreach($tdStats['normal']['patients'] as $patient)
+                    <div class="d-flex justify-content-between align-items-center border-bottom py-2">
+                        <span>{{ $patient['name'] }}</span>
+                        <span class="badge bg-success">{{ $patient['sistol'] }}/{{ $patient['diastol'] }} mmHg</span>
+                    </div>
+                    @endforeach
+                @else
+                    <p class="text-muted text-center">Tidak ada data</p>
+                @endif
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal TD Tinggi -->
+<div class="modal fade" id="modalTinggi" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-info text-white">
+                <h5 class="modal-title">Pasien dengan TD Tinggi</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                @if(isset($tdStats['tinggi']['patients']) && count($tdStats['tinggi']['patients']) > 0)
+                    @foreach($tdStats['tinggi']['patients'] as $patient)
+                    <div class="d-flex justify-content-between align-items-center border-bottom py-2">
+                        <span>{{ $patient['name'] }}</span>
+                        <span class="badge bg-warning">{{ $patient['sistol'] }}/{{ $patient['diastol'] }} mmHg</span>
+                    </div>
+                    @endforeach
+                @else
+                    <p class="text-muted text-center">Tidak ada data</p>
+                @endif
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal TD Sangat Tinggi -->
+<div class="modal fade" id="modalSangatTinggi" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header text-white" style="background-color: #0d6efd;">
+                <h5 class="modal-title">Pasien dengan TD Sangat Tinggi</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                @if(isset($tdStats['sangat_tinggi']['patients']) && count($tdStats['sangat_tinggi']['patients']) > 0)
+                    @foreach($tdStats['sangat_tinggi']['patients'] as $patient)
+                    <div class="d-flex justify-content-between align-items-center border-bottom py-2">
+                        <span>{{ $patient['name'] }}</span>
+                        <span class="badge bg-danger">{{ $patient['sistol'] }}/{{ $patient['diastol'] }} mmHg</span>
+                    </div>
+                    @endforeach
+                @else
+                    <p class="text-muted text-center">Tidak ada data</p>
+                @endif
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const ctx = document.getElementById('tdChart');
+    if (ctx) {
+        const data = {
+            labels: ['Normal', 'Tinggi', 'Sangat Tinggi'],
+            datasets: [{
+                data: [
+                    {{ $tdStats['normal']['count'] ?? 0 }},
+                    {{ $tdStats['tinggi']['count'] ?? 0 }},
+                    {{ $tdStats['sangat_tinggi']['count'] ?? 0 }}
+                ],
+                backgroundColor: [
+                    '#007bff',
+                    '#17a2b8', 
+                    '#0d6efd'
+                ],
+                borderWidth: 0
+            }]
+        };
+        
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: data,
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 10,
+                            usePointStyle: true
+                        }
+                    }
+                }
+            }
+        });
+    }
+});
+</script>
 @endsection

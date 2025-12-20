@@ -17,9 +17,38 @@ class TekananDarahController extends Controller
             'diastol' => 'required|integer|min:50|max:150'
         ]);
 
+        // Get latest pengingat obat
+        $latestPengingat = \App\Models\PengingatObat::where('user_id', auth()->id())
+            ->latest()
+            ->first();
+
+        if (!$latestPengingat) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Belum ada pengingat obat yang diatur'
+            ]);
+        }
+
+        // Check if pengingat is still active
+        if ($latestPengingat->status !== 'aktif') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Pengingat obat sudah tidak aktif. Hubungi admin jika ada kendala.'
+            ]);
+        }
+
+        // Check 91-day limit
+        $daysSinceStart = Carbon::parse($latestPengingat->created_at)->diffInDays(Carbon::now('Asia/Jakarta'));
+        if ($daysSinceStart >= 91) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Masa input tekanan darah sudah berakhir (91 hari). Hubungi admin jika ada kendala.'
+            ]);
+        }
+
         $today = Carbon::now('Asia/Jakarta')->toDateString();
         
-        // Cek apakah sudah input tekanan darah hari ini (semua sumber)
+        // Check if already input today
         $existing = CatatanTekananDarah::where('user_id', auth()->id())
             ->where('tanggal_input', $today)
             ->first();
@@ -31,22 +60,9 @@ class TekananDarahController extends Controller
             ]);
         }
 
-        // Get active pengingat obat
-        $activePengingat = \App\Models\PengingatObat::where('user_id', auth()->id())
-            ->where('status', 'aktif')
-            ->latest()
-            ->first();
-
-        if (!$activePengingat) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Pengingat obat tidak aktif. Input tekanan darah tidak diizinkan.'
-            ]);
-        }
-
         CatatanTekananDarah::create([
             'user_id' => auth()->id(),
-            'pengingat_obat_id' => $activePengingat ? $activePengingat->id : null,
+            'pengingat_obat_id' => $latestPengingat->id,
             'sistol' => $request->sistol,
             'diastol' => $request->diastol,
             'tanggal_input' => $today,
@@ -63,31 +79,10 @@ class TekananDarahController extends Controller
     public function getChartData()
     {
         try {
-            // Ambil pengingat terbaru (aktif atau tidak aktif)
-            $latestPengingat = \App\Models\PengingatObat::where('user_id', auth()->id())
-                ->latest()
-                ->first();
-
-            if (!$latestPengingat) {
-                return response()->json([
-                    'labels' => [],
-                    'sistol' => [],
-                    'diastol' => []
-                ]);
-            }
-
-            // Ambil data tekanan darah untuk pengingat ini saja
+            // Ambil semua data tekanan darah user, urutkan berdasarkan tanggal
             $tekananDarah = CatatanTekananDarah::where('user_id', auth()->id())
-                ->where('pengingat_obat_id', $latestPengingat->id)
                 ->orderBy('tanggal_input', 'asc')
                 ->get();
-
-            // Log untuk debugging
-            \Log::info('Tekanan Darah Data:', [
-                'user_id' => auth()->id(),
-                'count' => $tekananDarah->count(),
-                'data' => $tekananDarah
-            ]);
 
             // Siapkan data untuk chart
             $chartData = [
@@ -117,31 +112,6 @@ class TekananDarahController extends Controller
                 'diastol' => []
             ], 500);
         }
-    }
-
-    public function updateCatatan(Request $request)
-    {
-        $request->validate([
-            'catatan' => 'nullable|string|max:3000'
-        ]);
-
-        $pengingat = auth()->user()->pengingatObat()->where('status', 'aktif')->first();
-        
-        if (!$pengingat) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Tidak ada pengingat aktif'
-            ]);
-        }
-
-        $pengingat->update([
-            'catatan' => $request->catatan ?: '-'
-        ]);
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Catatan berhasil diperbarui'
-        ]);
     }
 
     public function getAdminChartData($userId)
@@ -308,25 +278,9 @@ class TekananDarahController extends Controller
     public function generateUserPDFReport()
     {
         $user = auth()->user();
-        $pengingat = $user->pengingatObat()->latest()->first();
-        
-        if (!$pengingat) {
-            return redirect()->back()->with('error', 'Tidak ada data pengingat obat');
-        }
-        
-        // Check if 91 days have passed
-        $tanggalMulai = Carbon::parse($pengingat->created_at)->startOfDay();
-        $now = Carbon::now('Asia/Jakarta');
-        $daysDiff = $tanggalMulai->diffInDays($now);
-        $isOver91Days = $daysDiff >= 91;
-        
-        // Allow PDF download if status is not 'aktif' OR if over 91 days
-        if ($pengingat->status == 'aktif' && !$isOver91Days) {
-            return redirect()->back()->with('error', 'PDF hanya tersedia setelah pengobatan selesai atau masa pengingat berakhir');
-        }
+        $pengingat = $user->pengingatObat()->with('detailObat')->latest()->first();
         
         $data = CatatanTekananDarah::where('user_id', $user->id)
-            ->where('pengingat_obat_id', $pengingat->id)
             ->orderBy('tanggal_input')
             ->get();
         
@@ -335,8 +289,7 @@ class TekananDarahController extends Controller
             $chartData[] = [
                 'tanggal' => Carbon::parse($item->tanggal_input)->format('d/m/Y'),
                 'sistol' => $item->sistol,
-                'diastol' => $item->diastol,
-                'sumber' => $item->sumber
+                'diastol' => $item->diastol
             ];
         }
         

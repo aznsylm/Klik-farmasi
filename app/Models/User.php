@@ -27,7 +27,7 @@ class User extends Authenticatable
         'jenis_kelamin',
         'usia',
         'role',
-        'puskesmas_id',
+        'puskesmas',
     ];
 
     /**
@@ -79,13 +79,5 @@ class User extends Authenticatable
         return $this->hasMany(KodePendaftaran::class, 'digunakan_oleh');
     }
 
-    public function catatanDariAdmin(): HasMany
-    {
-        return $this->hasMany(CatatanAdminPasien::class, 'user_id');
-    }
 
-    public function catatanUntukPasien(): HasMany
-    {
-        return $this->hasMany(CatatanAdminPasien::class, 'admin_id');
-    }
 }

@@ -64,7 +64,7 @@ class AuthController extends Controller
             'nomor_hp'      => 'required|digits_between:8,15|unique:users,nomor_hp',
             'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
             'usia'          => 'required|integer|min:1|max:120',
-            'puskesmas_id'  => 'required|in:kalasan,godean_2,umbulharjo',
+            'puskesmas'  => 'required|in:kalasan,godean_2,umbulharjo',
             'kode_pendaftaran' => 'required|string',
             'password'      => [
                 'required',
@@ -87,8 +87,8 @@ class AuthController extends Controller
             'usia.integer' => 'Usia harus berupa angka.',
             'usia.min' => 'Usia minimal 1 tahun.',
             'usia.max' => 'Usia maksimal 120 tahun.',
-            'puskesmas_id.required' => 'Puskesmas wajib dipilih.',
-            'puskesmas_id.in' => 'Pilihan puskesmas tidak valid.',
+            'puskesmas.required' => 'Puskesmas wajib dipilih.',
+            'puskesmas.in' => 'Pilihan puskesmas tidak valid.',
             'kode_pendaftaran.required' => 'Kode pendaftaran wajib diisi.',
             'password.required' => 'Password wajib diisi.',
             'password.min' => 'Password minimal 8 karakter.',
@@ -113,7 +113,7 @@ class AuthController extends Controller
             'nomor_hp'      => '62' . $request->nomor_hp, // Tambah prefix 62
             'jenis_kelamin' => $request->jenis_kelamin,
             'usia'          => $request->usia,
-            'puskesmas_id'  => $request->puskesmas_id,
+            'puskesmas'  => $request->puskesmas,
             'password'      => Hash::make($request->password),
             'role'          => 'pasien',
         ]);

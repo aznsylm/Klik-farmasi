@@ -207,24 +207,29 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         tambahObat.addEventListener('click', function() {
+            // Validasi: pastikan diagnosa sudah dipilih
+            if (!diagnosa.value) {
+                showValidationPopup('Silakan pilih jenis hipertensi terlebih dahulu sebelum menambah obat.');
+                return;
+            }
+
             const maxObat = parseInt(tambahObat.dataset.maxObat || 0);
             const isKehamilan = tambahObat.dataset.isKehamilan === 'true';
 
             if (totalObat < maxObat) {
                 totalObat++;
                 const obatDiv = document.createElement('div');
-                obatDiv.className = 'obat-card card border-2 shadow-lg mb-5';
+                obatDiv.className = 'obat-card card border-2 shadow-lg mb-4';
                 obatDiv.dataset.obatId = totalObat;
-                obatDiv.style.borderRadius = '20px';
                 obatDiv.style.borderColor = '#0B5E91';
                 
                 const itemType = isKehamilan ? 'SUPLEMEN' : 'OBAT';
                 const namaObatSection = isKehamilan ? '' : `
                     <div class="col-12">
-                        <label for="namaObat${totalObat}" class="form-label fw-bold text-dark mb-3" style="font-size: 1.3rem;">
+                        <label for="namaObat${totalObat}" class="form-label">
                             Nama Obat:
                         </label>
-                        <select class="form-select shadow-sm" id="namaObat${totalObat}" name="namaObat[]" required style="font-size: 1.2rem; padding: 1rem; border-radius: 10px;">
+                        <select class="form-select" id="namaObat${totalObat}" name="namaObat[]" required>
                             <option value="">-- Pilih nama obat --</option>
                             ${daftarObat.map(obat => `<option value="${obat}">${obat}</option>`).join('')}
                         </select>
@@ -232,10 +237,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 const suplemenSection = isKehamilan ? `
                     <div class="col-12">
-                        <label for="suplemen${totalObat}" class="form-label fw-bold text-dark mb-3" style="font-size: 1.3rem;">
+                        <label for="suplemen${totalObat}" class="form-label">
                             Jenis Suplemen:
                         </label>
-                        <select class="form-select shadow-sm" id="suplemen${totalObat}" name="suplemen[]" required style="font-size: 1.2rem; padding: 1rem; border-radius: 10px;">
+                        <select class="form-select" id="suplemen${totalObat}" name="suplemen[]" required>
                             <option value="">-- Pilih suplemen --</option>
                             <option value="Asam folat">Asam Folat</option>
                             <option value="Zat besi">Zat Besi</option>
@@ -244,10 +249,10 @@ document.addEventListener('DOMContentLoaded', function() {
                         </select>
                     </div>` : `
                     <div class="col-12">
-                        <label for="suplemen${totalObat}" class="form-label fw-bold text-dark mb-3" style="font-size: 1.3rem;">
-                            Suplemen Tambahan (Boleh Dikosongkan):
+                        <label for="suplemen${totalObat}" class="form-label">
+                            Suplemen Tambahan (Opsional):
                         </label>
-                        <select class="form-select shadow-sm" id="suplemen${totalObat}" name="suplemen[]" style="font-size: 1.2rem; padding: 1rem; border-radius: 10px;">
+                        <select class="form-select" id="suplemen${totalObat}" name="suplemen[]">
                             <option value="">-- Pilih suplemen jika ada --</option>
                             <option value="Asam folat">Asam Folat</option>
                             <option value="Zat besi">Zat Besi</option>
@@ -257,32 +262,32 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>`;
                 
                 obatDiv.innerHTML = `
-                    <div class="card-header text-white d-flex justify-content-between align-items-center py-4" style="border-radius: 20px 20px 0 0; background-color: #0B5E91;">
-                        <h4 class="mb-0 fw-bold text-white" style="font-size: 1.8rem; color: white !important;">
+                    <div class="card-header text-white d-flex justify-content-between align-items-center py-3" style="background-color: #0B5E91;">
+                        <h5 class="mb-0 fw-bold text-white">
                             ${itemType} KE-<span class="obat-number">${totalObat}</span>
-                        </h4>
-                        <button type="button" class="btn btn-outline-light btn-lg remove-obat" data-obat-id="${totalObat}" style="border-radius: 15px;">
-                            Hapus
+                        </h5>
+                        <button type="button" class="btn btn-outline-light remove-obat" data-obat-id="${totalObat}">
+                            <i class="bi bi-trash me-1"></i>Hapus
                         </button>
                     </div>
-                    <div class="card-body p-5">
-                        <div class="row g-4">
+                    <div class="card-body p-4">
+                        <div class="row g-3">
                             ${namaObatSection}
                             <div class="col-md-6">
-                                <label for="jumlahObat${totalObat}" class="form-label fw-bold text-dark mb-3" style="font-size: 1.3rem;">
+                                <label for="jumlahObat${totalObat}" class="form-label">
                                     Jumlah ${isKehamilan ? 'Suplemen' : 'Obat'}:
                                 </label>
-                                <select class="form-select shadow-sm" id="jumlahObat${totalObat}" name="jumlahObat[]" required style="font-size: 1.2rem; padding: 1rem; border-radius: 10px;">
+                                <select class="form-select" id="jumlahObat${totalObat}" name="jumlahObat[]" required>
                                     <option value="30 tablet/bulan">30 tablet (1 bulan)</option>
                                     <option value="60 tablet/bulan">60 tablet (2 bulan)</option>
                                     <option value="90 tablet/bulan">90 tablet (3 bulan)</option>
                                 </select>
                             </div>
                             <div class="col-md-6">
-                                <label for="waktuMinum${totalObat}" class="form-label fw-bold text-dark mb-3" style="font-size: 1.3rem;">
+                                <label for="waktuMinum${totalObat}" class="form-label">
                                     Jam Minum ${isKehamilan ? 'Suplemen' : 'Obat'}:
                                 </label>
-                                <select class="form-select shadow-sm" id="waktuMinum${totalObat}" name="waktuMinum[]" required style="font-size: 1.2rem; padding: 1rem; border-radius: 10px;">
+                                <select class="form-select" id="waktuMinum${totalObat}" name="waktuMinum[]" required>
                                     <option value="">-- Pilih jam --</option>
                                     <option value="06:00">06.00 (Pagi)</option>
                                     <option value="07:00">07.00 (Pagi)</option>
@@ -311,15 +316,14 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             if (totalObat < maxObat) {
-                const itemType = isKehamilan ? 'SUPLEMEN' : 'OBAT';
-                tambahObat.innerHTML = `TAMBAH ${itemType} KE-${totalObat + 1}`;
-                tambahObat.style.backgroundColor = '#0B5E91';
+                const itemType = isKehamilan ? 'Suplemen' : 'Obat';
+                tambahObat.innerHTML = `<i class="bi bi-plus-circle me-2"></i>Tambah ${itemType} Ke-${totalObat + 1}`;
             }
             
             if (totalObat === maxObat) {
                 tambahObat.disabled = true;
-                const itemType = isKehamilan ? 'SUPLEMEN' : 'OBAT';
-                tambahObat.innerHTML = `SEMUA ${itemType} SUDAH DITAMBAHKAN`;
+                const itemType = isKehamilan ? 'Suplemen' : 'Obat';
+                tambahObat.innerHTML = `<i class="bi bi-check-circle me-2"></i>Semua ${itemType} Ditambahkan`;
             }
         });
 
@@ -349,9 +353,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const maxObat = parseInt(tambahObat.dataset.maxObat || 0);
             const isKehamilan = tambahObat.dataset.isKehamilan === 'true';
             if (totalObat < maxObat) {
-                const itemType = isKehamilan ? 'SUPLEMEN' : 'OBAT';
-                tambahObat.innerHTML = `TAMBAH ${itemType} KE-${totalObat + 1}`;
-                tambahObat.style.backgroundColor = '#0B5E91';
+                const itemType = isKehamilan ? 'Suplemen' : 'Obat';
+                tambahObat.innerHTML = `<i class="bi bi-plus-circle me-2"></i>Tambah ${itemType} Ke-${totalObat + 1}`;
             }
         }
 
@@ -372,7 +375,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     errorMsg.className = 'alert alert-danger alert-dismissible fade show mt-3';
                     errorMsg.innerHTML = `
                         <i class="bi bi-exclamation-triangle-fill me-2"></i>
-                        Silakan tambahkan minimal ${minObat} obat.
+                        Silakan tambahkan minimal ${minObat} obat/suplemen.
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     `;
 
@@ -387,7 +390,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     const submitBtn = formPengingat.querySelector('button[type="submit"]');
                     if (submitBtn) {
                         const originalText = submitBtn.innerHTML;
-                        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Memproses...';
+                        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Memproses...';
                         submitBtn.disabled = true;
 
                         setTimeout(() => {

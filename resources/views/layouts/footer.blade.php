@@ -9,7 +9,7 @@
                     Jl. Brawijaya No.99, Jadan, Tamantirto, Kasihan, Bantul, Yogyakarta 55183
                 </p>
                 <div class="footer-social">
-                    <a href="https://wa.me/+6285280909235" class="footer-social-icon" target="_blank">
+                    <a href="https://wa.me/+6281292936247" class="footer-social-icon" target="_blank">
                         <i class="bi bi-whatsapp"></i>
                     </a>
                     <a href="https://www.instagram.com/klikfarmasi.official/" class="footer-social-icon" target="_blank">
@@ -30,8 +30,8 @@
                 <ul class="footer-links">
                     <li><a href="{{ route('petunjuk') }}">Petunjuk Penggunaan</a></li>
                     <li><a href="{{ route('tim-pengelola') }}">Tim Pengelola</a></li>
-                    <li><a href="{{ route('tanya-jawab.kehamilan') }}">FAQ</a></li>
-                    <li><a href="https://wa.me/+6285280909235">Hubungi Kami</a></li>
+                    <li><a href="{{ route('tanya-jawab.kehamilan') }}">Tanya Jawab</a></li>
+                    <li><a href="https://wa.me/+6281292936247">Hubungi Kami</a></li>
                 </ul>
             </div>
 

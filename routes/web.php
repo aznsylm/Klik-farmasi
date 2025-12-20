@@ -90,10 +90,6 @@ Route::middleware(['auth', \App\Http\Middleware\RoleMiddleware::class . ':admin'
     Route::post('/kode-pendaftaran', [\App\Http\Controllers\Admin\KodePendaftaranController::class, 'store'])->name('kode-pendaftaran.store');
     Route::patch('/kode-pendaftaran/{kodePendaftaran}/status', [\App\Http\Controllers\Admin\KodePendaftaranController::class, 'updateStatus'])->name('kode-pendaftaran.update-status');
     
-    // Kelola Catatan Admin
-    Route::post('/catatan', [\App\Http\Controllers\CatatanAdminController::class, 'simpan'])->name('catatan.simpan');
-    Route::put('/catatan/{id}', [\App\Http\Controllers\CatatanAdminController::class, 'update'])->name('catatan.update');
-    Route::delete('/catatan/{id}', [\App\Http\Controllers\CatatanAdminController::class, 'hapus'])->name('catatan.hapus');
     
     // Reset Password Pasien
     Route::post('/pasien/{id}/reset-password', [AdminController::class, 'resetPassword'])->name('pasien.resetPassword');
@@ -111,24 +107,29 @@ Route::middleware(['auth', \App\Http\Middleware\RoleMiddleware::class . ':admin'
     Route::delete('/tekanan-darah/{id}', [TekananDarahController::class, 'adminDelete'])->name('tekanan-darah.delete');
 });
 
-// Dashboard User
-Route::middleware(['auth', \App\Http\Middleware\RoleMiddleware::class . ':pasien'])->group(function () {
-    // Dashboard
-    Route::get('/user/dashboard', [PengingatObatController::class, 'index'])->name('user.dashboard');
+// Dashboard User - Only Dashboard Route
+Route::middleware(['auth', \App\Http\Middleware\RoleMiddleware::class . ':pasien'])->prefix('user')->name('user.')->group(function () {
+    // Dashboard - Only route needed
+    Route::get('/dashboard', function() {
+        $user = auth()->user();
+        $latestPengingat = $user->pengingatObat()->latest()->first();
+        return view('user.dashboard', compact('user', 'latestPengingat'));
+    })->name('dashboard');
     
+    // PDF Download
+    Route::get('/tekanan-darah/pdf', [TekananDarahController::class, 'generateUserPDFReport'])->name('tekanan-darah.pdf');
+});
 
-    
-    // Tekanan Darah routes
+// API Routes for Dashboard
+Route::middleware(['auth'])->group(function () {
+    Route::get('/api/blood-pressure-data', [TekananDarahController::class, 'getChartData']);
+    Route::post('/api/save-blood-pressure', [TekananDarahController::class, 'store']);
+});
+
+// Legacy routes for backward compatibility
+Route::middleware(['auth', \App\Http\Middleware\RoleMiddleware::class . ':pasien'])->group(function () {
     Route::post('/tekanan-darah', [TekananDarahController::class, 'store'])->name('tekanan-darah.store');
     Route::get('/tekanan-darah/chart', [TekananDarahController::class, 'getChartData'])->name('tekanan-darah.chart');
-    Route::post('/catatan', [TekananDarahController::class, 'updateCatatan'])->name('catatan.update');
-    
-    // Catatan dari Admin
-    Route::get('/catatan-admin', [\App\Http\Controllers\CatatanAdminController::class, 'getCatatanPasien'])->name('catatan-admin.get');
-    Route::post('/catatan-admin/{id}/baca', [\App\Http\Controllers\CatatanAdminController::class, 'tandaiSudahBaca'])->name('catatan-admin.baca');
-    
-    // Download PDF Report
-    Route::get('/tekanan-darah/pdf', [TekananDarahController::class, 'generateUserPDFReport'])->name('user.tekanan-darah.pdf');
 });
 
 Route::middleware('auth')->group(function () {

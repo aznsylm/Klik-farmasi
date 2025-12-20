@@ -86,24 +86,82 @@ class FontteWhatsAppService
 
     public function buatPesanPengingatObat($namaPasien, $namaObat, $jumlahObat, $waktuMinum, $suplemen = null)
     {
-        $pesan = "*PENGINGAT PENTING - MINUM OBAT*\n\n" .
-                 "Halo Bapak/Ibu {$namaPasien}! 👋\n\n" .
-                 "⚠️ *PERHATIAN: 5 MENIT LAGI WAKTUNYA MINUM OBAT*\n\n" .
-                 "Detail Obat Hipertensi:\n" .
-                 "Nama: *{$namaObat}*\n" .
-                 "Waktu: *{$waktuMinum}*\n";
+        $motivasi = [
+            "Waktunya minum obat nih. Jangan sampai kelewat ya!",
+            "Eh, udah waktunya lho. Yuk minum obatnya dulu.",
+            "Ingat, obat dulu baru aktivitas lain. Semangat!",
+            "Jangan lupa minum obat ya. Badan butuh ini.",
+            "Ayo dong, obatnya udah nungguin dari tadi.",
+            "Sebentar lagi waktunya. Siap-siap minum obat ya.",
+            "Tubuh kita butuh ini. Jangan ditunda-tunda.",
+            "Udah jam segini, saatnya minum obat nih.",
+            "Minum obat dulu yuk, biar badan tetep fit.",
+            "Jangan sampai lupa ya. Kesehatan nomor satu.",
+            "Waktunya jagain kesehatan. Ayo minum obat!",
+            "Sebentar aja kok, minum obat terus lanjut aktivitas.",
+            "Badan udah ngasih sinyal nih. Waktunya obat.",
+            "Yuk, luangin waktu sebentar buat minum obat.",
+            "Jangan dilewatin ya. Obat ini penting banget.",
+            "Udah siap belum? Waktunya minum obat nih.",
+            "Ayo semangat! Minum obat dulu baru yang lain.",
+            "Ingat pesan dokter? Waktunya minum obat.",
+            "Sebentar lagi jam minum obat. Jangan lupa ya!",
+            "Tubuh kita udah kerja keras. Kasih yang terbaik dong.",
+            "Halo! Sudah siap minum obat belum?",
+            "Reminder nih, jangan lupa konsumsi obatnya.",
+            "Hai, waktunya rutin minum obat lagi.",
+            "Ding dong! Alarm minum obat berbunyi.",
+            "Psst, ini pengingat penting buat kesehatan.",
+            "Cek jam deh, udah waktunya minum obat.",
+            "Hei, jangan sampai terlewat ya jadwalnya.",
+            "Yuk konsisten, minum obat tepat waktu.",
+            "Badan lagi nunggu asupan obatnya nih.",
+            "Alarm kesehatan berbunyi! Waktunya minum obat.",
+            "Jangan ditunda lagi, langsung minum aja.",
+            "Kesehatan prioritas, yuk minum obatnya.",
+            "Sudah waktunya, jangan lupa minum obat.",
+            "Rutinitas sehat dimulai dari sekarang.",
+            "Obat sudah menunggu, ayo diminum.",
+            "Tepat waktu itu penting, terutama untuk kesehatan.",
+            "Yuk jaga konsistensi minum obatnya.",
+            "Badan butuh asupan rutin, jangan lupa ya.",
+            "Sekarang waktunya, minum obat dulu.",
+            "Pengingat ramah: sudah jam minum obat.",
+            "Halo sehat! Waktunya konsumsi obat rutin.",
+            "Jangan sampai lupa, ini penting banget.",
+            "Yuk disiplin, minum obat sesuai jadwal.",
+            "Badan udah ngasih tanda, waktunya obat.",
+            "Sebentar doang kok, minum obat terus lanjut.",
+            "Kesehatan nomor satu, jangan diabaikan.",
+            "Sudah jam segini, saatnya minum obat.",
+            "Yuk rutin, biar badan selalu sehat.",
+            "Jangan ditunda, langsung minum sekarang.",
+            "Obat menunggu, tubuh juga butuh.",
+            "Waktunya datang, jangan sampai terlewat.",
+            "Hei, sudah siap belum minum obatnya?",
+            "Reminder penting: jangan lupa obat rutin.",
+            "Yuk konsisten, demi kesehatan yang lebih baik.",
+            "Badan lagi butuh, jangan diabaikan ya.",
+            "Sekarang waktunya, ayo minum obat.",
+            "Jangan lupa ya, ini untuk kebaikan sendiri.",
+            "Sudah jam minum obat, yuk langsung aja.",
+            "Kesehatan investasi terbaik, jaga terus.",
+            "Waktunya tiba, jangan sampai kelewatan.",
+            "Yuk disiplin, minum obat tepat waktu."
+        ];
         
-        // Tambahkan suplemen jika ada
-        if ($suplemen) {
-            $pesan .= "Suplemen: *{$suplemen}*\n";
-        }
+        $pesanMotivasi = $motivasi[array_rand($motivasi)];
         
-        $pesan .= "\n*Siapkan obat Anda sekarang!*\n" .
-                  "Jangan lupa minum dengan air putih\n" .
-                  "Perhatikan aturan makan (sebelum/sesudah makan)\n\n" .
-                  "Konsistensi minum obat adalah kunci kesembuhan Anda! 💪\n\n" .
-                  "Butuh bantuan? Hubungi Admin Klik Farmasi\n" .
-                  "_Pesan otomatis dari Klik Farmasi - Platform Kesehatan Digital_";
+        // Variasi format pesan untuk menghindari deteksi spam
+        $formatVariasi = [
+            "Sebentar lagi\n{$namaObat} | {$waktuMinum}\n\n{$pesanMotivasi}\n\n— Klik Farmasi",
+            "{$waktuMinum} • {$namaObat}\n\n{$pesanMotivasi}\n\nSalam sehat, Klik Farmasi",
+            "🔔 {$waktuMinum}\n{$namaObat}\n\n{$pesanMotivasi}\n\n~ Klik Farmasi ~",
+            "Jadwal: {$waktuMinum}\nObat: {$namaObat}\n\n{$pesanMotivasi}\n\nKlik Farmasi 🌿",
+            "{$namaObat} • {$waktuMinum}\n\n{$pesanMotivasi}\n\nTerima kasih,\nKlik Farmasi"
+        ];
+        
+        $pesan = $formatVariasi[array_rand($formatVariasi)];
         
         return $pesan;
     }
