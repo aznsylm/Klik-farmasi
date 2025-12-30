@@ -51,7 +51,7 @@
                         <td>{{ $kode->pembuatKode->name }}</td>
                         <td>{{ $kode->penggunaKode->name ?? '-' }}</td>
                         <td>{{ $kode->created_at->format('d M Y, H:i') }}</td>
-                        <td>{{ $kode->digunakan_pada ? $kode->digunakan_pada->format('d M Y, H:i') : '-' }}</td>
+                        <td>{{ $kode->status == 'terpakai' && $kode->updated_at ? $kode->updated_at->format('d M Y, H:i') : '-' }}</td>
                         <td>
                             @if($kode->status != 'terpakai')
                                 <form action="{{ route('admin.kode-pendaftaran.update-status', $kode->id) }}" method="POST" style="display:inline;">

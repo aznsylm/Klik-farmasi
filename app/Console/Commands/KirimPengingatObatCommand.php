@@ -5,7 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Models\PengingatObat;
 use App\Models\DetailObatPengingat;
-use App\Models\NotificationLog;
+use App\Models\WhatsappLog;
 use App\Services\FontteWhatsAppService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
@@ -168,9 +168,10 @@ class KirimPengingatObatCommand extends Command
             $counter++;
             
             // cek apakah sudah pernah dikirim hari ini
-            $sudahDikirim = NotificationLog::where('user_id', $pengingat->user->id)
+            $sudahDikirim = WhatsappLog::where('user_id', $pengingat->user->id)
                 ->where('detail_obat_id', $obat->id)
-                ->where('tanggal_kirim', $tanggalHariIni)
+                ->where('jenis_pesan', 'pengingat_obat')
+                ->whereDate('created_at', $tanggalHariIni)
                 ->where('status', 'sent')
                 ->exists();
 
@@ -197,11 +198,11 @@ class KirimPengingatObatCommand extends Command
                     'pengingat_obat'
                 );
 
-                NotificationLog::create([
+                WhatsappLog::create([
                     'user_id' => $pengingat->user->id,
                     'detail_obat_id' => $obat->id,
-                    'tanggal_kirim' => $tanggalHariIni,
-                    'waktu_kirim' => $waktuSekarang->format('H:i:s'),
+                    'jenis_pesan' => 'pengingat_obat',
+                    'pesan' => $pesan,
                     'status' => $result['success'] ? 'sent' : 'failed',
                     'response_message' => $result['message'] ?? null
                 ]);

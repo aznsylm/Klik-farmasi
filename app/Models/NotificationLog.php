@@ -9,15 +9,8 @@ class NotificationLog extends Model
     protected $fillable = [
         'user_id',
         'detail_obat_id', 
-        'tanggal_kirim',
-        'waktu_kirim',
         'status',
         'response_message'
-    ];
-
-    protected $casts = [
-        'tanggal_kirim' => 'date',
-        'waktu_kirim' => 'datetime:H:i:s'
     ];
 
     public function user()

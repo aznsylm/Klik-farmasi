@@ -10,7 +10,7 @@ class AdminController extends Controller
 {
     public function dashboard()
     {
-        $adminPuskesmas = auth()->user()->puskesmas_id ?? 'kalasan';
+        $adminPuskesmas = auth()->user()->puskesmas ?? 'kalasan';
         
         // Statistik Tekanan Darah
         $tdStats = $this->getTekananDarahStats($adminPuskesmas);
@@ -30,7 +30,7 @@ class AdminController extends Controller
                 FROM catatan_tekanan_darah
                 GROUP BY user_id
             ) latest ON ctd.user_id = latest.user_id AND ctd.created_at = latest.max_date
-            WHERE u.puskesmas_id = ? AND u.role = 'pasien'
+            WHERE u.puskesmas = ? AND u.role = 'pasien'
         ", [$puskesmas]);
             
         $normal = [];
@@ -62,7 +62,7 @@ class AdminController extends Controller
 
         // Filter berdasarkan puskesmas untuk admin biasa
         if (auth()->user()->role !== 'super_admin') {
-            $query->where('puskesmas_id', auth()->user()->puskesmas_id);
+            $query->where('puskesmas', auth()->user()->puskesmas);
         }
     
         if ($request->filled('search')) {
@@ -92,21 +92,25 @@ class AdminController extends Controller
         return view('superadmin.user-create', compact('role'));
     }
 
-    public function show($id)
+    public function show($id, Request $request)
     {
         $query = User::with('pengingatObat');
         
         // Filter berdasarkan puskesmas untuk admin biasa
         if (auth()->user()->role !== 'super_admin') {
-            $query->where('puskesmas_id', auth()->user()->puskesmas_id);
+            $query->where('puskesmas', auth()->user()->puskesmas);
         }
         
         $user = $query->findOrFail($id);
         
+        // Get WhatsApp tracking data with period filter
+        $period = $request->get('period', 'week');
+        $trackingData = $this->getWhatsappTrackingData($user->id, $period);
+        
         if (auth()->user()->role === 'super_admin') {
             return view('superadmin.user-detail', compact('user'));
         }
-        return view('admin.pasien.detail', compact('user'));
+        return view('admin.pasien.detail', compact('user', 'trackingData', 'period'));
     }
 
     public function edit($id)
@@ -171,7 +175,7 @@ class AdminController extends Controller
     
         // Simpan puskesmas jika super admin
         if (auth()->user()->role === 'super_admin' && $request->filled('puskesmas')) {
-            $data['puskesmas_id'] = $request->puskesmas;
+            $data['puskesmas'] = $request->puskesmas;
         }
     
         $user->update($data);
@@ -199,7 +203,7 @@ class AdminController extends Controller
     {
         // Jika bukan super admin, gunakan puskesmas admin yang login
         $puskesmas = auth()->user()->role !== 'super_admin' 
-            ? auth()->user()->puskesmas_id 
+            ? auth()->user()->puskesmas 
             : $request->puskesmas;
 
         $request->validate([
@@ -245,7 +249,7 @@ class AdminController extends Controller
                 'usia' => $request->usia,
                 'password' => bcrypt($request->password),
                 'role' => 'pasien',
-                'puskesmas_id' => $puskesmas
+                'puskesmas' => $puskesmas
             ]);
 
             if (auth()->user()->role === 'super_admin') {
@@ -303,7 +307,7 @@ class AdminController extends Controller
                 'usia' => $request->usia,
                 'password' => \Hash::make($request->password),
                 'role' => 'admin',
-                'puskesmas_id' => $request->puskesmas
+                'puskesmas' => $request->puskesmas
             ]);
             return redirect()->route('superadmin.users', ['role' => 'admin'])->with('success', 'Admin baru berhasil ditambahkan!');
         } catch (\Exception $e) {
@@ -320,6 +324,118 @@ class AdminController extends Controller
         $user = User::findOrFail($id);
         $user->update(['password' => bcrypt($request->new_password)]);
 
-        return back()->with('success', 'Password berhasil diubah!');
+        return redirect()->route('admin.pasienDetail', $user->id)->with('success', 'Password berhasil diubah!');
+    }
+
+    private function getWhatsappTrackingData($userId, $period = 'week')
+    {
+        $user = \App\Models\User::findOrFail($userId);
+        $pengingat = $user->pengingatObat()->latest()->first();
+        
+        if (!$pengingat) {
+            return [];
+        }
+
+        $obatList = $pengingat->detailObat()->where('status_obat', 'aktif')->get();
+        $trackingData = [];
+
+        foreach ($obatList as $obat) {
+            $days = $this->getDaysByPeriod($userId, $obat->id, $period);
+            
+            $trackingData[] = [
+                'obat' => $obat,
+                'days' => $days,
+                'success_rate' => $this->calculateSuccessRate($days)
+            ];
+        }
+
+        return $trackingData;
+    }
+
+    private function getDaysByPeriod($userId, $obatId, $period)
+    {
+        $days = [];
+        
+        // Get obat creation date
+        $obat = \App\Models\DetailObatPengingat::find($obatId);
+        $obatCreatedDate = $obat ? $obat->created_at->toDateString() : null;
+        
+        if ($period === 'all') {
+            // Group by month for all data
+            $logs = \App\Models\WhatsappLog::where('user_id', $userId)
+                ->where('detail_obat_id', $obatId)
+                ->where('jenis_pesan', 'pengingat_obat')
+                ->orderBy('created_at', 'desc')
+                ->get()
+                ->groupBy(function($log) {
+                    return $log->created_at->format('Y-m');
+                });
+
+            foreach ($logs as $month => $monthLogs) {
+                $sent = $monthLogs->where('status', 'sent')->count();
+                $failed = $monthLogs->where('status', 'failed')->count();
+                
+                $days[] = [
+                    'date' => $month,
+                    'day' => date('M Y', strtotime($month . '-01')),
+                    'status' => $sent > $failed ? 'sent' : ($failed > 0 ? 'failed' : 'pending'),
+                    'total' => $monthLogs->count(),
+                    'sent' => $sent,
+                    'failed' => $failed,
+                    'is_today' => false
+                ];
+            }
+        } else {
+            $dayCount = $period === 'week' ? 7 : 30;
+            
+            for ($i = $dayCount - 1; $i >= 0; $i--) {
+                $date = \Carbon\Carbon::now()->subDays($i)->toDateString();
+                $dayName = \Carbon\Carbon::parse($date)->format($period === 'week' ? 'D' : 'd/m');
+                
+                // Check if this date is before obat was created
+                if ($obatCreatedDate && $date < $obatCreatedDate) {
+                    $status = 'not_added';
+                } else {
+                    $log = \App\Models\WhatsappLog::where('user_id', $userId)
+                        ->where('detail_obat_id', $obatId)
+                        ->where('jenis_pesan', 'pengingat_obat')
+                        ->whereDate('created_at', $date)
+                        ->first();
+                    
+                    $status = 'pending';
+                    if ($log) {
+                        $status = $log->status === 'sent' ? 'sent' : 'failed';
+                    } elseif (\Carbon\Carbon::parse($date)->isFuture()) {
+                        $status = 'future';
+                    }
+                }
+                
+                $days[] = [
+                    'date' => $date,
+                    'day' => $dayName,
+                    'status' => $status,
+                    'is_today' => $date === \Carbon\Carbon::now()->toDateString()
+                ];
+            }
+        }
+        
+        return $days;
+    }
+
+    private function calculateSuccessRate($days)
+    {
+        if (isset($days[0]['total'])) {
+            // Monthly data
+            $totalSent = array_sum(array_column($days, 'sent'));
+            $totalAll = array_sum(array_column($days, 'total'));
+            return $totalAll > 0 ? round(($totalSent / $totalAll) * 100) : 0;
+        }
+        
+        // Daily data - exclude 'not_added' and 'future' from calculation
+        $validDays = array_filter($days, fn($day) => !in_array($day['status'], ['future', 'not_added']));
+        $total = count($validDays);
+        $success = count(array_filter($validDays, fn($day) => $day['status'] === 'sent'));
+        
+        return $total > 0 ? round(($success / $total) * 100) : 0;
     }
 }

@@ -185,7 +185,7 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-bold">Pilih Puskesmas</label>
-                            <select class="form-select" name="puskesmas_id" required>
+                            <select class="form-select" name="puskesmas" required>
                                 @if (auth()->user()->role === 'super_admin')
                                     <option value="">-- Pilih Puskesmas --</option>
                                     <option value="kalasan">Puskesmas Kalasan</option>

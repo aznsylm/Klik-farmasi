@@ -121,8 +121,7 @@ class AuthController extends Controller
         // Update status kode pendaftaran
         $kodePendaftaran->update([
             'status' => 'terpakai',
-            'digunakan_oleh' => $user->id,
-            'digunakan_pada' => now()
+            'digunakan_oleh' => $user->id
         ]);
 
         // Kembali ke halaman register dengan session sukses

@@ -26,18 +26,18 @@ Route::get('/tim-pengelola', [PageController::class, 'timPengelola'])->name('tim
 Route::post('/pengingat', [PengingatObatController::class, 'store'])->name('pengingat.store');
 
 Route::get('/dashboard', function () {
-    $role = auth()->user()->role;
-    if ($role === 'super_admin') {
+    $user = auth()->user();
+    if ($user->isSuperAdmin()) {
         return redirect()->route('superadmin.dashboard');
-    } elseif ($role === 'admin') {
+    } elseif ($user->role === 'admin') {
         return redirect()->route('admin.dashboard');
-    } elseif ($role === 'pasien') {
+    } elseif ($user->role === 'pasien') {
         return redirect()->route('user.dashboard');
     }
 })->middleware(['auth'])->name('dashboard');
 
 // Dashboard Super Admin
-Route::middleware(['auth', \App\Http\Middleware\RoleMiddleware::class . ':super_admin'])->prefix('superadmin')->name('superadmin.')->group(function () {
+Route::middleware(['auth', 'superadmin'])->prefix('superadmin')->name('superadmin.')->group(function () {
     Route::get('/dashboard', function () {
         return redirect()->route('superadmin.users', ['role' => 'admin']);
     })->name('dashboard');
@@ -52,6 +52,7 @@ Route::middleware(['auth', \App\Http\Middleware\RoleMiddleware::class . ':super_
     Route::get('/users/{id}/edit', [AdminController::class, 'edit'])->name('userEdit');
     Route::put('/users/{id}', [AdminController::class, 'update'])->name('userUpdate');
     Route::post('/pengingat/{id}/stop', [PengingatObatController::class, 'stopPengobatan'])->name('pengingat.stop');
+    Route::post('/pengingat/{id}/activate', [PengingatObatController::class, 'activatePengobatan'])->name('pengingat.activate');
     Route::delete('/users/{id}', [AdminController::class, 'destroy'])->name('deleteUser');
 
 
@@ -72,6 +73,7 @@ Route::middleware(['auth', \App\Http\Middleware\RoleMiddleware::class . ':admin'
     
     // Kelola Pengingat Obat
     Route::post('/pengingat/{id}/stop', [PengingatObatController::class, 'stopPengobatan'])->name('pengingat.stop');
+    Route::post('/pengingat/{id}/activate', [PengingatObatController::class, 'activatePengobatan'])->name('pengingat.activate');
 
     // Kelola Artikel
     Route::resource('artikel', \App\Http\Controllers\Admin\ArticleController::class)->parameters(['artikel' => 'article']);

@@ -79,7 +79,7 @@
                         </div>
                         <div class="info-row">
                             <span class="info-label">Puskesmas:</span>
-                            <span>{{ ucwords(str_replace('_', ' ', $user->puskesmas_id ?? '-')) }}</span>
+                            <span>{{ ucwords(str_replace('_', ' ', $user->puskesmas ?? '-')) }}</span>
                         </div>
                         @if($pengingat)
                         <div class="info-row">

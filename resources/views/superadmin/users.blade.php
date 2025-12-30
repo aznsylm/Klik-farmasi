@@ -101,7 +101,7 @@
                                     <td>{{ $user->nomor_hp }}</td>
                                     <td>{{ $user->jenis_kelamin }}</td>
                                     <td>{{ $user->usia }}</td>
-                                    <td>{{ $user->puskesmas_id ?? '-' }}</td>
+                                    <td>{{ $user->puskesmas ?? '-' }}</td>
                                     <td class="text-center">
                                         <a href="{{ route('superadmin.userDetail', $user->id) }}"
                                             class="btn btn-info btn-sm" title="Detail">

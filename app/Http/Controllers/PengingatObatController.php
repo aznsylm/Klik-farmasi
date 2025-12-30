@@ -30,6 +30,27 @@ class PengingatObatController extends Controller
         
         return redirect()->back()->with('success', "Pengobatan {$pasienName} telah dihentikan. Input tekanan darah otomatis dinonaktifkan.");
     }
+
+    public function activatePengobatan($id)
+    {
+        $pengingat = PengingatObat::findOrFail($id);
+        
+        // Cek apakah user adalah admin
+        if (!auth()->user() || !in_array(auth()->user()->role, ['admin', 'super_admin'])) {
+            return redirect()->back()->with('error', 'Unauthorized action.');
+        }
+
+        // Update status pengingat dan reset tanggal mulai
+        $pengingat->update([
+            'status' => 'aktif',
+            'created_at' => now(), // Reset periode 91 hari
+            'updated_at' => now()
+        ]);
+        
+        $pasienName = $pengingat->user->name ?? 'Pasien';
+        
+        return redirect()->back()->with('success', "Pengobatan {$pasienName} telah diaktifkan kembali. Pasien perlu mengisi ulang data pengingat di dashboard.");
+    }
     public function showForm()
     {
         // Jika user belum login (guest)

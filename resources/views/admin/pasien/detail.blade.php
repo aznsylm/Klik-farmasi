@@ -91,7 +91,7 @@
                     }
                     // 5. Tidak Input >3 Hari
                     if (!$alertMessage && $latestPengingat && $latestPengingat->status === 'aktif') {
-                        $daysSinceLastInput = $latestTekananDarah ? \Carbon\Carbon::parse($latestTekananDarah->created_at)->diffInDays(now()) : 999;
+                        $daysSinceLastInput = $latestTekananDarah ? (int) \Carbon\Carbon::parse($latestTekananDarah->created_at)->diffInDays(now()) : 999;
                         if ($daysSinceLastInput > 3) {
                             $alertMessage = 'Pasien sudah ' . $daysSinceLastInput . ' hari tidak catat tekanan darah. Perlu diingatkan';
                             $alertClass = 'bg-info text-white';
@@ -99,7 +99,7 @@
                     }
                     // 6. Mendekati Batas 91 Hari
                     if (!$alertMessage && $latestPengingat && $latestPengingat->status === 'aktif') {
-                        $daysSinceStart = \Carbon\Carbon::parse($latestPengingat->created_at)->diffInDays(now());
+                        $daysSinceStart = (int) \Carbon\Carbon::parse($latestPengingat->created_at)->diffInDays(now());
                         $remainingDays = 91 - $daysSinceStart;
                         if ($remainingDays > 0 && $remainingDays <= 7) {
                             $alertMessage = 'Masa pantau akan berakhir dalam ' . $remainingDays . ' hari. Perlu tindak lanjut';
@@ -118,174 +118,278 @@
                     }
                 @endphp
                 
-                @if($alertMessage)
-                <div class="alert {{ $alertClass }} mb-3 fw-semibold" style="border: none; font-size: 14px;">
-                    {{ $alertMessage }}
-                </div>
-                @endif
-                <div class="row">
-                    <div class="col-md-6">
-                        <table class="table table-borderless">
-                            <tr>
-                                <th width="35%">Nama</th>
-                                <td width="5%">:</td>
-                                <td>{{ $user->name }}</td>
-                            </tr>
-                            <tr>
-                                <th>Usia</th>
-                                <td>:</td>
-                                <td>{{ $user->usia }} tahun</td>
-                            </tr>
-                            <tr>
-                                <th>Jenis Kelamin</th>
-                                <td>:</td>
-                                <td>{{ $user->jenis_kelamin }}</td>
-                            </tr>
-                            <tr>
-                                <th>Whatsapp</th>
-                                <td>:</td>
-                                <td>{{ $user->nomor_hp }}</td>
-                            </tr>
-                            <tr>
-                                <th>Email</th>
-                                <td>:</td>
-                                <td>{{ $user->email }}</td>
-                            </tr>
-                            <tr>
-                                <th>Password</th>
-                                <td>:</td>
-                                <td>
-                                    <form action="{{ route('admin.pasien.resetPassword', $user->id) }}" method="POST"
-                                        class="d-flex gap-2">
-                                        @csrf
-                                        <div class="input-group input-group-sm">
-                                            <input type="password" name="new_password" class="form-control form-control-sm"
-                                                placeholder="Password baru" required id="passwordInput">
-                                            <button class="btn btn-outline-secondary" type="button"
-                                                onclick="togglePassword('passwordInput')">
-                                                <i class="bi bi-eye-slash"></i>
-                                            </button>
-                                        </div>
-                                        <button type="submit" class="btn btn-warning btn-sm">Edit</button>
-                                    </form>
-                                    @error('new_password')
-                                        <small class="text-danger">{{ $message }}</small>
-                                    @enderror
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>Dibuat pada</th>
-                                <td>:</td>
-                                <td>{{ $user->created_at->format('d M Y, H:i') }}</td>
-                            </tr>
-                            <tr>
-                                <th>Puskesmas</th>
-                                <td>:</td>
-                                <td>{{ $user->puskesmas }}</td>
-                            </tr>
-                        </table>
+        @if($alertMessage)
+        <div class="alert {{ $alertClass }} mb-4 fw-semibold" style="border: none; font-size: 14px;">
+            {{ $alertMessage }}
+        </div>
+        @endif
+
+        <!-- Main Content: Grafik Tekanan Darah -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="bg-white p-4 shadow-sm">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="mb-0 fw-bold">Grafik Tekanan Darah</h6>
+                        <div>
+                            <button type="button" class="btn btn-success btn-sm me-1" onclick="showTambahDataModal()" title="Tambah Data">
+                                <i class="bi bi-plus-lg"></i>
+                            </button>
+                            <button type="button" class="btn btn-primary btn-sm me-1" onclick="showDataModal()" title="Lihat Data">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                            <a href="{{ route('admin.pasien.tekanan-darah.pdf', $user->id) }}" class="btn btn-danger btn-sm" title="Download PDF" target="_blank">
+                                <i class="bi bi-file-earmark-pdf"></i>
+                            </a>
+                        </div>
                     </div>
-                    <div class="col-md-6 d-flex align-items-center justify-content-center">
-                        <div class="text-center">
-                            <div
-                                style="width: 150px; height: 150px; background-color: #f8f9fa; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 60px; color: #6c757d;">
-                                {{ substr($user->name, 0, 1) }}
-                            </div>
-                            <div class="mt-3">
-                                <button type="button" class="btn btn-warning" data-bs-toggle="modal"
-                                    data-bs-target="#editPasienModal">
-                                    Edit Pasien
-                                </button>
-                            </div>
+                    <div style="position: relative; height: 350px;">
+                        <canvas id="tekananDarahChart"></canvas>
+                        <div id="chartPlaceholder" class="text-center py-5" style="display: none;">
+                            <i class="bi bi-graph-up text-muted" style="font-size: 3rem;"></i>
+                            <p class="text-muted mt-3">Belum ada data untuk ditampilkan</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Riwayat Pengingat Obat -->
-        <div class="card mt-4">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="mb-0">Riwayat Pengingat Obat</h5>
-            </div>
-            <div class="card-body">
-
-                @forelse($allPengingat as $pengingat)
-                    <div class="alert pengingat-item"
-                        style="background-color: #e3f2fd; border-color: #0b5e91; color: #0b5e91;"
-                        data-status="{{ $pengingat->status }}">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h6 class="mb-1">Pengobatan {{ $pengingat->diagnosa }}</h6>
-                                <p class="mb-1">Mulai:
-                                    {{ \Carbon\Carbon::parse($pengingat->tanggal_mulai)->format('d M Y') }}</p>
-                                <p class="mb-0">
-                                    Status:
-                                    @php
-                                        $tanggalMulai = \Carbon\Carbon::parse($pengingat->created_at)->startOfDay();
-                                        $now = \Carbon\Carbon::now('Asia/Jakarta');
-                                        $daysDiff = $tanggalMulai->diffInDays($now);
-                                        $currentWeek = floor($daysDiff / 7) + 1;
-                                        $pengingatOver91Days = $daysDiff >= 91;
-                                    @endphp
-                                    <span class="badge" style="background-color: #0b5e91; color: white;">
-                                        @if ($pengingat->status == 'aktif' && $pengingatOver91Days)
-                                            Selesai (13 minggu)
-                                        @else
-                                            {{ ucfirst($pengingat->status) }}
-                                        @endif
-                                    </span>
-                                </p>
-                            </div>
-                            @if ($pengingat->status == 'aktif' && !$pengingatOver91Days)
-                                <form action="{{ route('admin.pengingat.stop', $pengingat->id) }}" method="POST"
-                                    onsubmit="return confirm('Apakah Anda yakin ingin menghentikan pengobatan ini?');">
+        <!-- Data Obat -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="bg-white p-4 shadow-sm">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="mb-0 fw-bold">Data Obat</h6>
+                        @if($selectedPengingat)
+                        <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#tambahObatModal" title="Tambah Obat">
+                            <i class="bi bi-plus-lg"></i>
+                        </button>
+                        @endif
+                    </div>
+                    @if($selectedPengingat && $selectedPengingat->detailObat->count() > 0)
+                        @php
+                            $daysSinceStart = (int) \Carbon\Carbon::parse($selectedPengingat->created_at)->diffInDays(now());
+                        @endphp
+                        <div class="mb-3 p-2 rounded" style="background: #f8f9fa;">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <small class="text-muted">Mulai: {{ $selectedPengingat->created_at->format('d M Y') }} ({{ $daysSinceStart }} hari)</small>
+                                    <br>
+                                    <small class="text-muted">Diagnosa: {{ $selectedPengingat->diagnosa }}</small>
+                                </div>
+                                @if ($selectedPengingat->status == 'aktif' && $daysSinceStart < 91)
+                                <form action="{{ route('admin.pengingat.stop', $selectedPengingat->id) }}" method="POST" onsubmit="return confirmStop()" class="me-2">
                                     @csrf
-                                    <button type="submit" class="btn btn-danger">
-                                        <i class="bi bi-stop-circle"></i> Stop Pengobatan
+                                    <button type="submit" class="btn btn-danger btn-sm">
+                                        <i class="bi bi-stop-circle"></i> Stop
                                     </button>
                                 </form>
+                                @elseif ($selectedPengingat->status == 'tidak_aktif')
+                                <form action="{{ route('admin.pengingat.activate', $selectedPengingat->id) }}" method="POST" onsubmit="return confirm('Pasien perlu mengisi ulang data pengingat. Lanjutkan?');">
+                                    @csrf
+                                    <button type="submit" class="btn btn-success btn-sm">
+                                        <i class="bi bi-play-circle"></i> Aktifkan
+                                    </button>
+                                </form>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-sm mb-0">
+                                <thead>
+                                    <tr>
+                                        <th class="small fw-bold">Obat</th>
+                                        <th class="small fw-bold">Jumlah</th>
+                                        <th class="small fw-bold">Waktu</th>
+                                        <th class="small fw-bold">Suplemen</th>
+                                        <th class="small fw-bold">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($selectedPengingat->detailObat as $obat)
+                                    <tr>
+                                        <td class="small fw-semibold">{{ $obat->nama_obat }}</td>
+                                        <td class="small">{{ $obat->jumlah_obat }}</td>
+                                        <td class="small">{{ \Carbon\Carbon::parse($obat->waktu_minum)->format('H:i') }}</td>
+                                        <td class="small">{{ $obat->suplemen ?? '-' }}</td>
+                                        <td class="small">
+                                            <button type="button" class="btn btn-warning btn-sm me-1" onclick="editObat({{ $obat->id }}, '{{ $obat->nama_obat }}', '{{ $obat->jumlah_obat }}', '{{ $obat->waktu_minum }}', '{{ $obat->suplemen }}', '{{ $obat->status_obat }}')" title="Edit">
+                                                <i class="bi bi-pencil"></i>
+                                            </button>
+                                            <form action="{{ route('admin.obat.delete', $obat->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus obat ini?')">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger btn-sm" title="Hapus">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    @else
+                        <div class="text-center py-3">
+                            <p class="text-muted mb-2 small">Belum ada obat yang diatur</p>
+                            @if($selectedPengingat)
+                            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#tambahObatModal">
+                                Tambah Obat Pertama
+                            </button>
                             @endif
                         </div>
+                    @endif
+                </div>
+            </div>
+        </div>
+
+        <!-- WhatsApp Tracking Section -->
+        @if(!empty($trackingData))
+        <div class="row mb-4" id="whatsapp-tracking">
+            <div class="col-12">
+                <div class="bg-white p-4 shadow-sm">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="mb-0 fw-bold">Status Pengiriman Pengingat</h6>
+                        <div class="btn-group" role="group">
+                            <a href="{{ route('admin.pasienDetail', ['id' => $user->id, 'period' => 'week']) }}#whatsapp-tracking" class="btn btn-sm {{ ($period ?? 'week') === 'week' ? 'btn-primary' : 'btn-outline-primary' }}">7 Hari</a>
+                            <a href="{{ route('admin.pasienDetail', ['id' => $user->id, 'period' => 'month']) }}#whatsapp-tracking" class="btn btn-sm {{ ($period ?? 'week') === 'month' ? 'btn-primary' : 'btn-outline-primary' }}">30 Hari</a>
+                            <a href="{{ route('admin.pasienDetail', ['id' => $user->id, 'period' => 'all']) }}#whatsapp-tracking" class="btn btn-sm {{ ($period ?? 'week') === 'all' ? 'btn-primary' : 'btn-outline-primary' }}">Semua</a>
+                        </div>
                     </div>
-                @empty
-                    <p class="text-muted mb-0">Tidak ada pengingat obat.</p>
-                @endforelse
+                    @foreach($trackingData as $track)
+                    <div class="mb-3 p-3 border rounded">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <strong>{{ $track['obat']->nama_obat }} ({{ \Carbon\Carbon::parse($track['obat']->waktu_minum)->format('H:i') }})</strong>
+                            @php
+                                $validTrackingDays = collect($track['days'])->filter(fn($day) => !in_array($day['status'], ['not_added', 'future']));
+                                $hasValidTracking = $validTrackingDays->count() > 0;
+                            @endphp
+                            @if($hasValidTracking)
+                                <span class="badge bg-{{ $track['success_rate'] >= 80 ? 'success' : ($track['success_rate'] >= 60 ? 'warning' : 'danger') }}">{{ $track['success_rate'] }}% berhasil</span>
+                            @else
+                                <span class="badge bg-secondary">Belum ada data</span>
+                            @endif
+                        </div>
+                        <div class="d-flex gap-1 flex-wrap">
+                            @foreach($track['days'] as $day)
+                            <div class="tracking-day {{ $day['is_today'] ? 'today' : '' }}" 
+             style="min-width: 45px; max-width: 45px;" 
+                                 data-bs-toggle="tooltip" 
+                                 title="@if(isset($day['total'])){{ $day['day'] }} - Total: {{ $day['total'] }}, Berhasil: {{ $day['sent'] }}, Gagal: {{ $day['failed'] }}@else{{ \Carbon\Carbon::parse($day['date'])->format('D, d M') }} - {{ $day['status'] === 'not_added' ? 'Obat belum ditambahkan' : ucfirst($day['status'] === 'sent' ? 'Terkirim' : ($day['status'] === 'failed' ? 'Gagal' : 'Belum ada data')) }}@endif">
+                                @if(isset($day['total']))
+                                    @if($day['sent'] > $day['failed'])
+                                        <span class="badge bg-success">✓</span>
+                                    @elseif($day['failed'] > 0)
+                                        <span class="badge bg-danger">✗</span>
+                                    @else
+                                        <span class="badge bg-warning text-dark">-</span>
+                                    @endif
+                                @else
+                                    @if($day['status'] === 'sent')
+                                        <span class="badge bg-success">✓</span>
+                                    @elseif($day['status'] === 'failed')
+                                        <span class="badge bg-danger">✗</span>
+                                    @elseif($day['status'] === 'future')
+                                        <span class="badge bg-warning text-dark">-</span>
+                                    @elseif($day['status'] === 'not_added')
+                                        <span class="badge bg-secondary text-white">N</span>
+                                    @else
+                                        <span class="badge bg-warning text-dark">-</span>
+                                    @endif
+                                @endif
+                                <small class="d-block text-center mt-1">{{ $day['day'] }}</small>
+                            </div>
+                            @endforeach
+                        </div>
+                    </div>
+                    @endforeach
+                    <div class="mt-3">
+                        <small class="text-muted">
+                            <strong>Legend:</strong> 
+                            <span class="badge bg-success me-1">✓</span> Terkirim
+                            <span class="badge bg-danger me-1">✗</span> Gagal
+                            <span class="badge bg-warning text-dark me-1">-</span> Belum ada data
+                            <span class="badge bg-secondary text-white me-1">N</span> Obat belum ditambahkan
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @endif
+
+        <!-- Data Profil Pasien -->
+        <div class="bg-white p-4 shadow-sm mb-4">
+            <h6 class="mb-3 fw-bold">Data Profil Pasien</h6>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6 col-12 mb-3">
+                            <label class="small fw-bold text-muted">Nama Lengkap</label>
+                            <p class="mb-0">{{ $user->name }}</p>
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-12 mb-3">
+                            <label class="small fw-bold text-muted">Usia</label>
+                            <p class="mb-0">{{ $user->usia }} tahun</p>
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-12 mb-3">
+                            <label class="small fw-bold text-muted">Jenis Kelamin</label>
+                            <p class="mb-0">{{ $user->jenis_kelamin }}</p>
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-12 mb-3">
+                            <label class="small fw-bold text-muted">WhatsApp</label>
+                            <p class="mb-0">+{{ $user->nomor_hp }}</p>
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-12 mb-3">
+                            <label class="small fw-bold text-muted">Email</label>
+                            <p class="mb-0">{{ $user->email }}</p>
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-12 mb-3">
+                            <label class="small fw-bold text-muted">Puskesmas</label>
+                            <p class="mb-0">{{ ucwords(str_replace('_', ' ', $user->puskesmas)) }}</p>
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-12 mb-3">
+                            <label class="small fw-bold text-muted">Terdaftar</label>
+                            <p class="mb-0">{{ $user->created_at->format('d M Y, H:i') }}</p>
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-12 mb-3">
+                            <label class="small fw-bold text-muted">Reset Password</label>
+                            <form action="{{ route('admin.pasien.resetPassword', $user->id) }}" method="POST" class="d-flex gap-2">
+                                @csrf
+                                <input type="password" name="new_password" class="form-control form-control-sm" placeholder="Password baru" required style="max-width: 150px;">
+                                <button type="submit" class="btn btn-warning btn-sm">Reset</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 text-center">
+                    <div class="d-inline-flex align-items-center justify-content-center bg-light rounded-circle" style="width: 80px; height: 80px; font-size: 2rem; color: #6c757d;">
+                        {{ strtoupper(substr($user->name, 0, 1)) }}
+                    </div>
+                    <div class="mt-3">
+                        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editPasienModal">
+                            Edit Data Pasien
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
 
         @if ($allPengingat->isNotEmpty())
             <!-- Detail Data Pengingat Obat -->
-            <div class="card mt-4">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">
-                        Data Pengingat Obat
-                    </h5>
-                    <div>
-                        <button type="button" class="btn btn-success btn-sm me-2" data-bs-toggle="modal"
-                            data-bs-target="#tambahObatModal" data-diagnosa="{{ $selectedPengingat->diagnosa }}">
-                            Tambah Obat
-                        </button>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="p-3 data-card rounded" style="background: #f8f9fa; border-left: 5px solid #0b5e91;">
-                        <!-- Header Pengingat -->
-                        <div class="row mb-3">
+            <div class="bg-white p-4 shadow-sm mb-4" style="display: none;">
+                <h6 class="mb-3 fw-bold">Detail Data Pengingat Obat</h6>
+                <div class="p-3 rounded" style="background: #f8f9fa;">
+                    @if ($selectedPengingat)
+                        <div class="row">
                             <div class="col-md-6">
-                                @if ($selectedPengingat)
-                                    <small class="text-muted">
-                                        @if ($selectedPengingat->updated_at->ne($selectedPengingat->created_at))
-                                            Terakhir diupdate: {{ $selectedPengingat->updated_at->format('d M Y, H:i') }}
-                                            WIB
-                                            <br>
-                                            <span class="text-muted">(Dibuat:
-                                                {{ $selectedPengingat->created_at->format('d M Y, H:i') }} WIB)</span>
-                                        @else
-                                            Dibuat: {{ $selectedPengingat->created_at->format('d M Y, H:i') }} WIB
-                                        @endif
-                                    </small>
-                                @endif
+                                <small class="text-muted">
+                                    @if ($selectedPengingat->updated_at->ne($selectedPengingat->created_at))
+                                        Terakhir diupdate: {{ $selectedPengingat->updated_at->format('d M Y, H:i') }} WIB
+                                        <br>
+                                        <span class="text-muted">(Dibuat: {{ $selectedPengingat->created_at->format('d M Y, H:i') }} WIB)</span>
+                                    @else
+                                        Dibuat: {{ $selectedPengingat->created_at->format('d M Y, H:i') }} WIB
+                                    @endif
+                                </small>
                             </div>
                             <div class="col-md-6 text-md-end">
                                 <span class="badge" style="background-color: #0b5e91; color: white;">
@@ -293,120 +397,27 @@
                                 </span>
                             </div>
                         </div>
-
-                        <!-- Daftar Obat -->
-                        <div class="mb-3">
-                            <h6 class="mb-3 fw-bold">
-                                Daftar Obat ({{ $selectedPengingat->detailObat->count() }} jenis)
-                            </h6>
-                            <div class="table-responsive">
-                                <table class="table table-hover">
-                                    <thead class="table-light">
-                                        <tr>
-                                            <th width="5%">No</th>
-                                            <th width="30%">Nama Obat</th>
-                                            <th width="15%">Jumlah</th>
-                                            <th width="20%">Waktu Minum</th>
-                                            <th width="20%">Suplemen</th>
-                                            <th width="10%">Status</th>
-                                            <th width="10%">Aksi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($selectedPengingat->detailObat as $key => $obat)
-                                            <tr>
-                                                <td>{{ $key + 1 }}</td>
-                                                <td class="fw-medium">{{ $obat->nama_obat }}</td>
-                                                <td>
-                                                    {{ $obat->jumlah_obat }}
-                                                </td>
-                                                <td>
-                                                    {{ \Carbon\Carbon::parse($obat->waktu_minum)->format('H:i') }} WIB
-                                                </td>
-                                                <td>
-                                                    @if ($obat->suplemen)
-                                                        {{ $obat->suplemen }}
-                                                    @else
-                                                        -
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    {{ ucfirst($obat->status_obat) }}
-                                                </td>
-                                                <td>
-                                                    <button type="button" class="btn btn-warning btn-sm"
-                                                        onclick="editObat({{ $obat->id }}, '{{ $obat->nama_obat }}', '{{ $obat->jumlah_obat }}', '{{ $obat->waktu_minum }}', '{{ $obat->suplemen }}', '{{ $obat->status_obat }}')">
-                                                        Edit
-                                                    </button>
-                                                    <form action="{{ route('admin.obat.delete', $obat->id) }}"
-                                                        method="POST" class="d-inline"
-                                                        onsubmit="return confirm('Yakin ingin menghapus obat ini?')">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="btn btn-danger btn-sm">
-                                                            Hapus
-                                                        </button>
-                                                    </form>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
+                    @endif
                 </div>
             </div>
+        @endif
 
-            <!-- Grafik Tekanan Darah -->
-            <div class="card mt-4">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">
-                        <i class="bi bi-graph-up me-2"></i>
-                        Grafik Tekanan Darah
-                    </h5>
-                    <div>
-                        <button type="button" class="btn btn-success btn-sm me-2" onclick="showTambahDataModal()">
-                            Tambah Data
-                        </button>
-                        <button type="button" class="btn btn-primary btn-sm me-2" onclick="showDataTable()">
-                            Lihat Data
-                        </button>
-                        <button type="button" class="btn btn-success btn-sm" onclick="showPDFModal()">
-                            <i class="bi bi-file-earmark-pdf me-1"></i> Download PDF
-                        </button>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="chart-container">
-                                <canvas id="tekananDarahChart" width="400" height="300"></canvas>
-                                <div id="chartPlaceholder" class="text-center py-5" style="display: none;">
-                                    <i class="bi bi-graph-up text-muted" style="font-size: 3rem;"></i>
-                                    <p class="text-muted mt-3">Belum ada data untuk ditampilkan</p>
-                                    <small class="text-muted">Grafik akan muncul setelah ada input tekanan darah</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Tabel Data Tekanan Darah -->
-            <div class="card mt-4" id="dataTableCard" style="display: none;">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">
-                        <i class="bi bi-table me-2"></i>
-                        Data Tekanan Darah
-                    </h5>
-                    <button type="button" class="btn btn-secondary btn-sm" onclick="hideDataTable()">
-                        <i class="bi bi-x-lg me-1"></i> Tutup
-                    </button>
+    </div>
+
+
+
+    <!-- Modal Data Tekanan Darah -->
+    <div class="modal fade" id="dataModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Data Tekanan Darah - {{ $user->name }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="card-body">
+                <div class="modal-body">
                     <div class="table-responsive">
-                        <table class="table table-hover" id="tekananDarahTable">
+                        <table class="table table-hover" id="dataModalTable">
                             <thead class="table-light">
                                 <tr>
                                     <th>No</th>
@@ -417,22 +428,15 @@
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
-                            <tbody id="tekananDarahTableBody">
+                            <tbody id="dataModalTableBody">
                                 <!-- Data will be loaded here -->
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
-
-
-
-        @endif
-
-
+        </div>
     </div>
-
-
 
     <!-- Modal Edit Pasien -->
     <div class="modal fade" id="editPasienModal" tabindex="-1">
@@ -482,12 +486,9 @@
                         <div class="mb-3">
                             <label class="form-label">Puskesmas</label>
                             <select class="form-control" name="puskesmas" required>
-                                <option value="kalasan" {{ $user->puskesmas == 'kalasan' ? 'selected' : '' }}>Kalasan
-                                </option>
-                                <option value="godean_2" {{ $user->puskesmas == 'godean_2' ? 'selected' : '' }}>Godean
-                                    2</option>
-                                <option value="umbulharjo" {{ $user->puskesmas == 'umbulharjo' ? 'selected' : '' }}>
-                                    Umbulharjo</option>
+                                <option value="kalasan" {{ $user->puskesmas == 'kalasan' ? 'selected' : '' }}>Kalasan</option>
+                                <option value="godean_2" {{ $user->puskesmas == 'godean_2' ? 'selected' : '' }}>Godean 2</option>
+                                <option value="umbulharjo" {{ $user->puskesmas == 'umbulharjo' ? 'selected' : '' }}>Umbulharjo</option>
                             </select>
                         </div>
                     </div>
@@ -686,6 +687,10 @@
                 </div>
                 <form id="editTekananDarahForm">
                     <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Tanggal</label>
+                            <input type="date" class="form-control" id="editTanggal" required>
+                        </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-bold">Sistol (mmHg)</label>
@@ -758,9 +763,6 @@
                         bootstrap.Modal.getInstance(document.getElementById('tambahTekananDarahModal')).hide();
                         alert('Data berhasil ditambahkan');
                         loadChartData();
-                        if (document.getElementById('dataTableCard').style.display !== 'none') {
-                            loadTableData();
-                        }
                         // Reset form
                         document.getElementById('tambahTekananDarahForm').reset();
                     } else {
@@ -785,6 +787,7 @@
             submitBtn.innerHTML = 'Menyimpan...';
 
             const formData = {
+                tanggal_input: document.getElementById('editTanggal').value,
                 sistol: parseInt(document.getElementById('editSistol').value),
                 diastol: parseInt(document.getElementById('editDiastol').value),
                 _token: '{{ csrf_token() }}',
@@ -806,9 +809,6 @@
                         bootstrap.Modal.getInstance(document.getElementById('editTekananDarahModal')).hide();
                         alert('Data berhasil diupdate');
                         loadChartData();
-                        if (document.getElementById('dataTableCard').style.display !== 'none') {
-                            loadTableData();
-                        }
                     } else {
                         alert('Error: ' + data.message);
                     }
@@ -827,6 +827,7 @@
 
         function editTekananDarah(id, tanggal, sistol, diastol) {
             currentEditId = id;
+            document.getElementById('editTanggal').value = tanggal;
             document.getElementById('editSistol').value = sistol;
             document.getElementById('editDiastol').value = diastol;
             new bootstrap.Modal(document.getElementById('editTekananDarahModal')).show();
@@ -871,9 +872,6 @@
                         if (data.success) {
                             alert('Data berhasil dihapus');
                             loadChartData();
-                            if (document.getElementById('dataTableCard').style.display !== 'none') {
-                                loadTableData();
-                            }
                         } else {
                             alert('Error: ' + data.message);
                         }
@@ -1026,24 +1024,22 @@
                 });
         }
 
-        function showDataTable() {
-            document.getElementById('dataTableCard').style.display = 'block';
-            loadTableData();
+        function showDataModal() {
+            const modal = new bootstrap.Modal(document.getElementById('dataModal'));
+            loadModalTableData();
+            modal.show();
         }
 
-        function hideDataTable() {
-            document.getElementById('dataTableCard').style.display = 'none';
-        }
-
-        function loadTableData() {
-            const tbody = document.getElementById('tekananDarahTableBody');
-            tbody.innerHTML = '';
+        function loadModalTableData() {
+            const tbody = document.getElementById('dataModalTableBody');
+            tbody.innerHTML = '<tr><td colspan="6" class="text-center">Loading...</td></tr>';
 
             if (chartData.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted">Belum ada data tekanan darah</td></tr>';
                 return;
             }
 
+            tbody.innerHTML = '';
             chartData.forEach((item, index) => {
                 const row = `
                     <tr>
@@ -1051,13 +1047,13 @@
                         <td>${new Date(item.tanggal).toLocaleDateString('id-ID')}</td>
                         <td>${item.sistol}</td>
                         <td>${item.diastol}</td>
-                        <td>${item.sumber === 'input_harian' ? 'Input Pasien' : item.sumber === 'admin_input' ? 'Input Admin' : 'Edit Admin'}</td>
+                        <td>${item.sumber === 'input_harian' ? 'Pasien' : item.sumber === 'admin_input' ? 'Admin' : 'Admin Mengedit'}</td>
                         <td>
-                            <button class="btn btn-warning btn-sm" onclick="editTekananDarah(${item.id}, '${item.tanggal}', ${item.sistol}, ${item.diastol})">
-                                Edit
+                            <button class="btn btn-warning btn-sm me-1" onclick="editTekananDarah(${item.id}, '${item.tanggal}', ${item.sistol}, ${item.diastol})" title="Edit">
+                                <i class="bi bi-pencil"></i>
                             </button>
-                            <button class="btn btn-danger btn-sm" onclick="deleteTekananDarah(${item.id})">
-                                Hapus
+                            <button class="btn btn-danger btn-sm" onclick="deleteTekananDarah(${item.id})" title="Hapus">
+                                <i class="bi bi-trash"></i>
                             </button>
                         </td>
                     </tr>
@@ -1145,38 +1141,50 @@
             }
         }
 
-
-
-        // PDF Modal functions
-        function showPDFModal() {
-            const modal = new bootstrap.Modal(document.getElementById('pdfModal'));
-            const iframe = document.getElementById('pdfIframe');
-            iframe.src = '{{ route('admin.pasien.tekanan-darah.pdf', $user->id) }}';
-            modal.show();
+        // Confirm stop with backup alert
+        function confirmStop() {
+            return confirm('PENTING: Unduh riwayat PDF terlebih dahulu sebagai backup!\n\nSetelah dihentikan, pengingat dapat diaktifkan kembali tapi pasien perlu input ulang data pengingat.\n\nLanjutkan menghentikan?');
         }
 
-        // Clear iframe when modal is hidden
-        const pdfModal = document.getElementById('pdfModal');
-        if (pdfModal) {
-            pdfModal.addEventListener('hidden.bs.modal', function() {
-                document.getElementById('pdfIframe').src = '';
-            });
-        }
+
     </script>
-
-
-    <!-- PDF Modal -->
-    <div class="modal fade" id="pdfModal" tabindex="-1">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Laporan Tekanan Darah - {{ $user->name }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body p-0">
-                    <iframe id="pdfIframe" width="100%" height="600" frameborder="0"></iframe>
-                </div>
-            </div>
-        </div>
-    </div>
+    
+    <style>
+        .tracking-day {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 6px 4px;
+            border-radius: 6px;
+            min-width: 45px;
+            max-width: 45px;
+            transition: all 0.2s ease;
+            margin-bottom: 4px;
+        }
+        
+        .tracking-day:hover {
+            background-color: #f8f9fa;
+            transform: translateY(-2px);
+        }
+        
+        .tracking-day.today {
+            background-color: #e3f2fd;
+            border: 2px solid #2196f3;
+        }
+        
+        .tracking-day .badge {
+            font-size: 14px;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .tracking-day small {
+            font-size: 10px;
+            font-weight: 600;
+            color: #666;
+        }
+    </style>
 @endsection

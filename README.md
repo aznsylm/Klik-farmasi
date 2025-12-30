@@ -67,6 +67,37 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 
 **Klik Farmasi** adalah platform kesehatan digital yang dirancang khusus untuk manajemen hipertensi. Aplikasi ini menyediakan solusi komprehensif untuk penderita hipertensi dalam mengelola kesehatan mereka.
 
+## Setup Super Admin
+
+### Konfigurasi Environment
+Tambahkan konfigurasi super admin di file `.env`:
+
+```env
+SUPER_ADMIN_NAME="Super Administrator"
+SUPER_ADMIN_EMAIL="superadmin@klikfarmasi.com"
+SUPER_ADMIN_PASSWORD="YourSecurePassword"
+```
+
+### Membuat Akun Super Admin
+Jalankan command berikut untuk membuat akun super admin:
+
+```bash
+php artisan superadmin:setup
+```
+
+### Verifikasi Setup
+Untuk memverifikasi setup super admin:
+
+```bash
+php artisan superadmin:verify
+```
+
+### Keamanan
+- **PENTING**: Ganti password default sebelum production
+- **JANGAN** commit file `.env` ke repository
+- **BACKUP** konfigurasi `.env` dengan aman
+- Super admin hanya boleh ada 1 akun berdasarkan email di `.env`
+
 ### Fitur Utama
 
 #### 1. Pengingat Minum Obat

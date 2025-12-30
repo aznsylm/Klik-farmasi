@@ -120,13 +120,13 @@
                 @enderror
             </div>
             <div class="form-group">
-                <select class="form-select {{ $errors->has('puskesmas_id') ? 'is-invalid' : '' }}" name="puskesmas_id" id="registerPuskesmas" required>
-                    <option value="" disabled hidden {{ !old('puskesmas_id') ? 'selected' : '' }}>Pilih Puskesmas *</option>
-                    <option value="kalasan" {{ old('puskesmas_id') == 'kalasan' ? 'selected' : '' }}>Puskesmas Kalasan</option>
-                    <option value="godean_2" {{ old('puskesmas_id') == 'godean_2' ? 'selected' : '' }}>Puskesmas Godean 2</option>
-                    <option value="umbulharjo" {{ old('puskesmas_id') == 'umbulharjo' ? 'selected' : '' }}>Puskesmas Umbulharjo</option>
+                <select class="form-select {{ $errors->has('puskesmas') ? 'is-invalid' : '' }}" name="puskesmas" id="registerPuskesmas" required>
+                    <option value="" disabled hidden {{ !old('puskesmas') ? 'selected' : '' }}>Pilih Puskesmas *</option>
+                    <option value="kalasan" {{ old('puskesmas') == 'kalasan' ? 'selected' : '' }}>Puskesmas Kalasan</option>
+                    <option value="godean_2" {{ old('puskesmas') == 'godean_2' ? 'selected' : '' }}>Puskesmas Godean 2</option>
+                    <option value="umbulharjo" {{ old('puskesmas') == 'umbulharjo' ? 'selected' : '' }}>Puskesmas Umbulharjo</option>
                 </select>
-                @error('puskesmas_id')
+                @error('puskesmas')
                     <div class="error-message">
                         <i class="fas fa-exclamation-circle"></i>
                         <span>{{ $message }}</span>

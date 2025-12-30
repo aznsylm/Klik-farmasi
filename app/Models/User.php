@@ -64,9 +64,9 @@ class User extends Authenticatable
         return $this->hasMany(CatatanTekananDarah::class);
     }
 
-    public function logWhatsapp(): HasMany
+    public function whatsappLogs(): HasMany
     {
-        return $this->hasMany(LogWhatsapp::class);
+        return $this->hasMany(WhatsappLog::class);
     }
 
     public function kodePendaftaranDibuat(): HasMany
@@ -77,6 +77,24 @@ class User extends Authenticatable
     public function kodePendaftaranDigunakan(): HasMany
     {
         return $this->hasMany(KodePendaftaran::class, 'digunakan_oleh');
+    }
+
+    /**
+     * Check if user is super admin based on environment configuration
+     */
+    public function isSuperAdmin(): bool
+    {
+        return $this->email === env('SUPER_ADMIN_EMAIL') && 
+               $this->role === 'super_admin';
+    }
+
+    /**
+     * Check if current authenticated user is super admin
+     */
+    public static function isCurrentUserSuperAdmin(): bool
+    {
+        $user = auth()->user();
+        return $user && $user->isSuperAdmin();
     }
 
 

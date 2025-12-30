@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\LogWhatsapp;
+use App\Models\WhatsappLog;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
@@ -38,18 +38,18 @@ class FontteWhatsAppService
             // Cek status respons
             $berhasil = $response->successful() && ($responseData['status'] ?? false);
 
-            $status = $berhasil ? 'terkirim' : 'gagal';
+            $status = $berhasil ? 'sent' : 'failed';
             $pesanResponse = $responseData['message'] ?? 'Tidak ada pesan dari API';
 
             // Simpan ke log database kalau ada userId
             if ($userId) {
-                LogWhatsapp::create([
-                    'user_id'      => $userId,
-                    'pesan'        => $pesan,
-                    'jenis_pesan'  => $jenisPesan,
-                    'status'       => $status,
-                    'response_api' => json_encode($responseData),
-                    'dikirim_pada' => now()
+                WhatsappLog::create([
+                    'user_id'         => $userId,
+                    'detail_obat_id'  => null,
+                    'jenis_pesan'     => $jenisPesan,
+                    'pesan'           => $pesan,
+                    'status'          => $status,
+                    'response_message' => json_encode($responseData)
                 ]);
             }
 
@@ -66,13 +66,13 @@ class FontteWhatsAppService
             Log::error('Error kirim WhatsApp: ' . $e->getMessage());
 
             if ($userId) {
-                LogWhatsapp::create([
-                    'user_id'      => $userId,
-                    'pesan'        => $pesan,
-                    'jenis_pesan'  => $jenisPesan,
-                    'status'       => 'gagal',
-                    'response_api' => json_encode(['error' => $e->getMessage()]),
-                    'dikirim_pada' => now()
+                WhatsappLog::create([
+                    'user_id'         => $userId,
+                    'detail_obat_id'  => null,
+                    'jenis_pesan'     => $jenisPesan,
+                    'pesan'           => $pesan,
+                    'status'          => 'failed',
+                    'response_message' => json_encode(['error' => $e->getMessage()])
                 ]);
             }
 

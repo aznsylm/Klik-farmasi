@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class DetailObatPengingat extends Model
 {
-    protected $table = 'detail_obat_pengingat';
+    protected $table = 'detail_obat';
     protected $guarded = [];
 
     public function pengingatObat()

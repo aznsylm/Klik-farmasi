@@ -16,14 +16,13 @@ class CatatanTekananDarah extends Model
         'pengingat_obat_id',
         'sistol',
         'diastol',
-        'tanggal_input',
-        'waktu_input',
+        'catatan',
         'sumber'
     ];
 
     protected $casts = [
-        'tanggal_input' => 'date',
-        'waktu_input' => 'datetime:H:i'
+        'sistol' => 'integer',
+        'diastol' => 'integer'
     ];
 
     public function user()

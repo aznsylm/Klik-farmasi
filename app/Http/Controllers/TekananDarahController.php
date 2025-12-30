@@ -50,7 +50,7 @@ class TekananDarahController extends Controller
         
         // Check if already input today
         $existing = CatatanTekananDarah::where('user_id', auth()->id())
-            ->where('tanggal_input', $today)
+            ->whereDate('created_at', $today)
             ->first();
 
         if ($existing) {
@@ -65,9 +65,9 @@ class TekananDarahController extends Controller
             'pengingat_obat_id' => $latestPengingat->id,
             'sistol' => $request->sistol,
             'diastol' => $request->diastol,
-            'tanggal_input' => $today,
-            'waktu_input' => Carbon::now('Asia/Jakarta')->toTimeString(),
-            'sumber' => 'input_harian'
+            'sumber' => 'input_harian',
+            'created_at' => Carbon::now('Asia/Jakarta'),
+            'updated_at' => Carbon::now('Asia/Jakarta')
         ]);
 
         return response()->json([
@@ -81,7 +81,7 @@ class TekananDarahController extends Controller
         try {
             // Ambil semua data tekanan darah user, urutkan berdasarkan tanggal
             $tekananDarah = CatatanTekananDarah::where('user_id', auth()->id())
-                ->orderBy('tanggal_input', 'asc')
+                ->orderBy('created_at', 'asc')
                 ->get();
 
             // Siapkan data untuk chart
@@ -93,7 +93,7 @@ class TekananDarahController extends Controller
 
             // Jika ada data, format untuk chart
             foreach ($tekananDarah as $data) {
-                $chartData['labels'][] = Carbon::parse($data->tanggal_input)->format('d M');
+                $chartData['labels'][] = Carbon::parse($data->created_at)->format('d M');
                 $chartData['sistol'][] = (int) $data->sistol;
                 $chartData['diastol'][] = (int) $data->diastol;
             }
@@ -125,7 +125,7 @@ class TekananDarahController extends Controller
         
         $data = CatatanTekananDarah::where('user_id', $userId)
             ->where('pengingat_obat_id', $pengingat->id)
-            ->orderBy('tanggal_input')
+            ->orderBy('created_at')
             ->get();
         
         $labels = [];
@@ -134,12 +134,12 @@ class TekananDarahController extends Controller
         $rawData = [];
         
         foreach ($data as $item) {
-            $labels[] = Carbon::parse($item->tanggal_input)->format('d/m');
+            $labels[] = Carbon::parse($item->created_at)->format('d/m');
             $sistol[] = $item->sistol;
             $diastol[] = $item->diastol;
             $rawData[] = [
                 'id' => $item->id,
-                'tanggal' => $item->tanggal_input,
+                'tanggal' => $item->created_at->format('Y-m-d'),
                 'sistol' => $item->sistol,
                 'diastol' => $item->diastol,
                 'sumber' => $item->sumber
@@ -174,15 +174,17 @@ class TekananDarahController extends Controller
                 ]);
             }
 
-            CatatanTekananDarah::create([
+            $catatan = CatatanTekananDarah::create([
                 'user_id' => $request->user_id,
                 'pengingat_obat_id' => $pengingat->id,
                 'sistol' => $request->sistol,
                 'diastol' => $request->diastol,
-                'tanggal_input' => $request->tanggal_input,
-                'waktu_input' => Carbon::now('Asia/Jakarta')->toTimeString(),
                 'sumber' => 'admin_input'
             ]);
+            
+            // Set created_at to match tanggal_input
+            $catatan->created_at = $request->tanggal_input;
+            $catatan->save();
 
             return response()->json([
                 'success' => true,
@@ -199,7 +201,8 @@ class TekananDarahController extends Controller
         try {
             $request->validate([
                 'sistol' => 'required|integer|min:50|max:250',
-                'diastol' => 'required|integer|min:50|max:150'
+                'diastol' => 'required|integer|min:50|max:150',
+                'tanggal_input' => 'required|date'
             ]);
 
             $catatan = CatatanTekananDarah::findOrFail($id);
@@ -208,6 +211,10 @@ class TekananDarahController extends Controller
                 'diastol' => $request->diastol,
                 'sumber' => 'admin_edit'
             ]);
+            
+            // Update created_at to match tanggal_input since we removed tanggal_input column
+            $catatan->created_at = $request->tanggal_input;
+            $catatan->save();
 
             return response()->json(['success' => true, 'message' => 'Data berhasil diupdate']);
         } catch (\Exception $e) {
@@ -241,13 +248,13 @@ class TekananDarahController extends Controller
         
         $data = CatatanTekananDarah::where('user_id', $userId)
             ->where('pengingat_obat_id', $pengingat->id)
-            ->orderBy('tanggal_input')
+            ->orderBy('created_at')
             ->get();
         
         $chartData = [];
         foreach ($data as $item) {
             $chartData[] = [
-                'tanggal' => Carbon::parse($item->tanggal_input)->format('d/m/Y'),
+                'tanggal' => Carbon::parse($item->created_at)->format('d/m/Y'),
                 'sistol' => $item->sistol,
                 'diastol' => $item->diastol,
                 'sumber' => $item->sumber
@@ -281,13 +288,13 @@ class TekananDarahController extends Controller
         $pengingat = $user->pengingatObat()->with('detailObat')->latest()->first();
         
         $data = CatatanTekananDarah::where('user_id', $user->id)
-            ->orderBy('tanggal_input')
+            ->orderBy('created_at')
             ->get();
         
         $chartData = [];
         foreach ($data as $item) {
             $chartData[] = [
-                'tanggal' => Carbon::parse($item->tanggal_input)->format('d/m/Y'),
+                'tanggal' => Carbon::parse($item->created_at)->format('d/m/Y'),
                 'sistol' => $item->sistol,
                 'diastol' => $item->diastol
             ];
@@ -313,13 +320,13 @@ class TekananDarahController extends Controller
         
         $data = CatatanTekananDarah::where('user_id', $userId)
             ->where('pengingat_obat_id', $pengingat->id)
-            ->orderBy('tanggal_input')
+            ->orderBy('created_at')
             ->get();
         
         $chartData = [];
         foreach ($data as $item) {
             $chartData[] = [
-                'tanggal' => Carbon::parse($item->tanggal_input)->format('d/m/Y'),
+                'tanggal' => Carbon::parse($item->created_at)->format('d/m/Y'),
                 'sistol' => $item->sistol,
                 'diastol' => $item->diastol,
                 'sumber' => $item->sumber

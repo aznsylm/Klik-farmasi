@@ -13,12 +13,7 @@ class KodePendaftaran extends Model
         'kode',
         'status',
         'dibuat_oleh',
-        'digunakan_oleh',
-        'digunakan_pada'
-    ];
-
-    protected $casts = [
-        'digunakan_pada' => 'datetime'
+        'digunakan_oleh'
     ];
 
     public function pembuatKode(): BelongsTo
