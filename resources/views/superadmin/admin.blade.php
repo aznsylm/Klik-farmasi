@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.superadmin')
 @section('title', 'Daftar Admin')
 @section('content')
 <!-- Content Header -->
@@ -38,62 +38,39 @@
             </div>
         @endif
 
-        <!-- Navigation Tabs -->
-        <div class="card">
-            <div class="card-header p-0">
-                <ul class="nav nav-pills ml-auto p-2">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="{{ route('superadmin.admin') }}">
-                            <i class="fas fa-user-shield mr-1"></i> Daftar Admin
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('superadmin.pasien') }}">
-                            <i class="fas fa-users mr-1"></i> Daftar Pasien
-                        </a>
-                    </li>
-                    <li class="nav-item ml-auto">
-                        <button class="btn btn-primary" data-toggle="modal" data-target="#modalTambahAdmin">
-                            <i class="fas fa-plus mr-1"></i> Tambah Admin
-                        </button>
-                    </li>
-                </ul>
+        <!-- Action Bar -->
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <button class="btn btn-primary" data-toggle="modal" data-target="#modalTambahAdmin">
+                    <i class="fas fa-plus mr-1"></i> Tambah Admin
+                </button>
             </div>
-        </div>
-
-        <!-- Search Card -->
-        <div class="card">
-            <div class="card-body">
-                <form method="GET" action="{{ route('superadmin.admin') }}" class="row">
-                    <div class="col-md-8">
-                        <div class="input-group">
-                            <input type="text" name="search" class="form-control"
-                                placeholder="Cari nama, email, nomor HP..." value="{{ request('search') }}">
-                            <div class="input-group-append">
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="fas fa-search"></i> Cari
-                                </button>
-                            </div>
+            <div class="col-md-4">
+                <form method="GET" action="{{ route('superadmin.admin') }}">
+                    <div class="input-group">
+                        <input type="text" name="search" class="form-control" placeholder="Cari nama, email, HP, jenis kelamin, usia, puskesmas..." value="{{ request('search') }}">
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-search"></i>
+                            </button>
+                            <a href="{{ route('superadmin.admin') }}" class="btn btn-secondary">
+                                <i class="fas fa-times"></i>
+                            </a>
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        @if (request('search'))
-                            <a href="{{ route('superadmin.admin') }}" class="btn btn-secondary">
-                                <i class="fas fa-times mr-1"></i> Reset
-                            </a>
-                        @endif
-                    </div>
                 </form>
+            </div>
+            <div class="col-md-4 text-right">
+                <a href="{{ route('superadmin.dashboard') }}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left mr-1"></i> Kembali ke Dashboard
+                </a>
             </div>
         </div>
 
         <!-- Data Table -->
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">
-                    <i class="fas fa-user-shield mr-1"></i>
-                    Daftar Admin
-                </h3>
+                <h3 class="card-title"><i class="fas fa-user-shield mr-1"></i> Data Admin</h3>
             </div>
             <div class="card-body p-0">
                 <div class="table-responsive">
@@ -124,11 +101,7 @@
                                     </td>
                                     <td>{{ $user->email }}</td>
                                     <td>{{ $user->nomor_hp }}</td>
-                                    <td>
-                                        <span class="badge badge-{{ $user->jenis_kelamin == 'Laki-laki' ? 'primary' : 'pink' }}">
-                                            {{ $user->jenis_kelamin }}
-                                        </span>
-                                    </td>
+                                    <td>{{ $user->jenis_kelamin }}</td>
                                     <td>{{ $user->usia }} tahun</td>
                                     <td>{{ $user->puskesmas ?? '-' }}</td>
                                     <td class="text-center">
@@ -158,8 +131,8 @@
                                 <tr>
                                     <td colspan="8" class="text-center py-4">
                                         <div class="text-muted">
-                                            <i class="fas fa-exclamation-circle fa-3x mb-3"></i>
-                                            <p class="mb-0">Belum ada admin terdaftar.</p>
+                                            <i class="fas fa-user-shield fa-3x mb-3"></i>
+                                            <p class="mb-0">Tidak ada data admin.</p>
                                         </div>
                                     </td>
                                 </tr>
@@ -179,5 +152,8 @@
     </div>
 </section>
 
-@include('superadmin.partials.modals')
+@include('components.superadmin.modal-tambah-user', ['role' => 'admin'])
+@include('components.superadmin.modal-detail-user')
+@include('components.superadmin.modal-edit-user')
+@include('components.superadmin.modal-scripts')
 @endsection

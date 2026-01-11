@@ -1,46 +1,117 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="h-100">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title') - SuperAdmin Klik Farmasi</title>
-
+    @auth
+    <meta name="user-id" content="{{ auth()->id() }}">
+    @endauth
+    
     <!-- PWA Meta Tags -->
-    <meta name="theme-color" content="#0B5E91">
-    <link rel="manifest" href="{{ asset('manifest.json') }}">
-    <link rel="apple-touch-icon" href="{{ asset('icons/icon-192x192.png') }}">
-
-    <!-- AdminLTE CSS -->
-    <link rel="stylesheet" href="{{ asset('adminlte/css/adminlte.min.css') }}">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="{{ asset('adminlte/plugins/fontawesome-free/css/all.min.css') }}">
+    <meta name="theme-color" content="#0b5e91">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Klik Farmasi SuperAdmin">
+    <meta name="msapplication-TileImage" content="/icons/icon-144x144.png">
+    <meta name="msapplication-TileColor" content="#0b5e91">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json">
+    
+    <!-- Apple Touch Icons -->
+    <link rel="apple-touch-icon" href="/icons/icon-192x192.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-192x192.png">
+    
+    <title>@yield('title', 'Dashboard Super Admin') | Klik Farmasi</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ asset('assets/Favicon.png') }}">
+    
     <!-- Google Font: Source Sans Pro -->
-    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Bootstrap Icons (for compatibility) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css">
+    <!-- AdminLTE -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <style>
-        .main-header .navbar-brand {
-            color: #fff !important;
+        :root {
+            --primary-color: #0b5e91;
+            --primary-hover: #094b74;
         }
-        .content-wrapper {
-            background-color: #f4f6f9;
+        
+        /* Custom Klik Farmasi Colors */
+        .bg-primary { background-color: var(--primary-color) !important; }
+        .btn-primary { background-color: var(--primary-color); border-color: var(--primary-color); }
+        .btn-primary:hover { background-color: var(--primary-hover); border-color: var(--primary-hover); }
+        .navbar-primary { background-color: var(--primary-color) !important; }
+        .sidebar-dark-primary .nav-sidebar > .nav-item > .nav-link.active { background-color: var(--primary-color); }
+        .content-header h1 { color: var(--primary-color); }
+        
+        /* Logo styling */
+        .brand-image { max-height: 33px; }
+        .brand-text { font-weight: 600; }
+        
+        /* Custom card styling */
+        .card { box-shadow: 0 0 1px rgba(0,0,0,.125), 0 1px 3px rgba(0,0,0,.2); }
+        .small-box { box-shadow: 0 0 1px rgba(0,0,0,.125), 0 1px 3px rgba(0,0,0,.2); }
+        
+        /* Lightweight preloader animation */
+        .dots-loader {
+            display: flex;
+            gap: 8px;
         }
-        .card-header {
-            background-color: #007bff;
-            color: white;
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            animation: bounce 1.4s ease-in-out infinite both;
         }
-        .btn-primary {
-            background-color: #007bff;
-            border-color: #007bff;
+        .dot:nth-child(1) { animation-delay: -0.32s; }
+        .dot:nth-child(2) { animation-delay: -0.16s; }
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); opacity: 0.3; }
+            40% { transform: scale(1); opacity: 1; }
         }
-        .navbar-primary {
-            background-color: #007bff !important;
+        
+        /* Feature cards */
+        .feature-card {
+            transition: all 0.3s ease;
+            border: none;
+            box-shadow: 0 0 1px rgba(0,0,0,.125), 0 1px 3px rgba(0,0,0,.2);
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 15px rgba(0,0,0,.2);
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .content-wrapper { margin-left: 0 !important; }
         }
     </style>
+    @yield('additional_css')
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
+    <!-- Preloader -->
+    <div class="preloader flex-column justify-content-center align-items-center">
+        <div class="dots-loader">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+        <div class="mt-3 font-weight-bold" style="color: #0b5e91;">Memuat...</div>
+    </div>
+
     <!-- Navbar -->
     <nav class="main-header navbar navbar-expand navbar-primary navbar-dark">
         <!-- Left navbar links -->
@@ -52,17 +123,27 @@
 
         <!-- Right navbar links -->
         <ul class="navbar-nav ml-auto">
+            <!-- User Dropdown -->
             <li class="nav-item dropdown">
                 <a class="nav-link" data-toggle="dropdown" href="#">
-                    <i class="fas fa-user mr-1"></i> {{ Auth::user()->name }}
+                    <i class="far fa-user"></i>
+                    <span class="d-none d-md-inline ml-1">{{ Auth::user()->name }}</span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                    <a href="{{ route('logout') }}" class="dropdown-item"
-                       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                        <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                    <span class="dropdown-item dropdown-header">Super Administrator</span>
+                    <div class="dropdown-divider"></div>
+                    <a href="#" class="dropdown-item" data-toggle="modal" data-target="#modalProfilSuperAdmin">
+                        <i class="fas fa-id-card mr-2"></i> Lihat Profil
                     </a>
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                    <a href="{{ route('beranda') }}" class="dropdown-item">
+                        <i class="fas fa-home mr-2"></i> Lihat Website
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <form action="{{ route('logout') }}" method="POST" class="d-inline">
                         @csrf
+                        <button type="submit" class="dropdown-item">
+                            <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                        </button>
                     </form>
                 </div>
             </li>
@@ -73,8 +154,8 @@
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
         <!-- Brand Logo -->
         <a href="{{ route('superadmin.dashboard') }}" class="brand-link">
-            <img src="{{ asset('assets/LOGO KLIKFARMASI VEKTOR MIRING.png') }}" alt="Klik Farmasi" class="brand-image img-circle elevation-3" style="opacity: .8; max-height: 33px;">
-            <span class="brand-text font-weight-light">SuperAdmin</span>
+            <img src="{{ asset('assets/Favicon.png') }}" alt="Klik Farmasi" class="brand-image img-circle elevation-3">
+            <span class="brand-text font-weight-light">Klik Farmasi</span>
         </a>
 
         <!-- Sidebar -->
@@ -91,19 +172,13 @@
                     <li class="nav-item">
                         <a href="{{ route('superadmin.admin') }}" class="nav-link {{ request()->routeIs('superadmin.admin') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-user-shield"></i>
-                            <p>Kelola Admin</p>
+                            <p>Data Admin</p>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a href="{{ route('superadmin.pasien') }}" class="nav-link {{ request()->routeIs('superadmin.pasien') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-users"></i>
-                            <p>Kelola Pasien</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('beranda') }}" class="nav-link" target="_blank">
-                            <i class="nav-icon fas fa-globe"></i>
-                            <p>Lihat Website</p>
+                            <p>Data Pasien</p>
                         </a>
                     </li>
                 </ul>
@@ -118,23 +193,113 @@
 
     <!-- Footer -->
     <footer class="main-footer">
-        <strong>Copyright &copy; {{ date('Y') }} <a href="#">Klik Farmasi</a>.</strong>
-        All rights reserved.
+        <strong>Copyright &copy; {{ date('Y') }} <a href="{{ route('beranda') }}">Klik Farmasi</a>.</strong>
+        Platform Kesehatan Digital untuk Manajemen Hipertensi.
         <div class="float-right d-none d-sm-inline-block">
-            <b>Version</b> 1.0.0
+            <b>Version</b> 1.0.0 | Developed by <a href="https://github.com/aznsylm" target="_blank"><i class="fab fa-github"></i> Aizan</a> | <a href="https://www.linkedin.com/in/aizansyalim/" target="_blank"><i class="fab fa-linkedin"></i></a>
         </div>
     </footer>
 </div>
 
 <!-- jQuery -->
-<script src="{{ asset('adminlte/plugins/jquery/jquery.min.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <!-- Bootstrap 4 -->
-<script src="{{ asset('adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.2/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
-<script src="{{ asset('adminlte/js/adminlte.min.js') }}"></script>
-<!-- PWA -->
+<script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
+<!-- PWA JavaScript -->
 <script src="{{ asset('js/pwa.js') }}"></script>
 
-@stack('scripts')
+<script>
+    // Remove preloader after page load
+    $(window).on('load', function() {
+        $('.preloader').fadeOut('slow');
+    });
+    
+    // Fallback: remove preloader after 3 seconds
+    setTimeout(function() {
+        $('.preloader').fadeOut('slow');
+    }, 3000);
+    
+    // Toggle password visibility function (preserve existing functionality)
+    function togglePassword(inputId) {
+        const input = document.getElementById(inputId);
+        let icon;
+        
+        // Handle different input structures
+        if (input.nextElementSibling && input.nextElementSibling.querySelector) {
+            icon = input.nextElementSibling.querySelector('i');
+        } else if (input.parentElement && input.parentElement.nextElementSibling) {
+            icon = input.parentElement.nextElementSibling.querySelector('i');
+        }
+        
+        if (icon && input.type === "password") {
+            input.type = "text";
+            // Remove hide icons
+            icon.classList.remove('bi-eye-slash', 'fa-eye-slash');
+            // Add show icons
+            icon.classList.add('bi-eye', 'fa-eye');
+        } else if (icon) {
+            input.type = "password";
+            // Remove show icons
+            icon.classList.remove('bi-eye', 'fa-eye');
+            // Add hide icons
+            icon.classList.add('bi-eye-slash', 'fa-eye-slash');
+        }
+    })
+@yield('additional_scripts')
+</script>
+
+<!-- Modal Profil Super Admin -->
+<div class="modal fade" id="modalProfilSuperAdmin" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <h4 class="modal-title text-white">Profil Super Administrator</h4>
+                <button type="button" class="close text-white" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-9">
+                        <div class="form-group">
+                            <label class="font-weight-bold"><i class="fas fa-envelope mr-1"></i> Email</label>
+                            <p>{{ Auth::user()->email }}</p>
+                        </div>
+                        <div class="form-group">
+                            <label class="font-weight-bold"><i class="fas fa-shield-alt mr-1"></i> Role</label>
+                            <p>Super Administrator</p>
+                        </div>
+                        <div class="form-group">
+                            <label class="font-weight-bold"><i class="fas fa-calendar-plus mr-1"></i> Terdaftar</label>
+                            <p>{{ Auth::user()->created_at->format('d M Y, H:i') }}</p>
+                        </div>
+                        
+                        <div class="alert alert-info mt-3">
+                            <h6><i class="fas fa-info-circle mr-1"></i> Cara Mengubah Data Super Admin:</h6>
+                            <ol class="mb-0 pl-3">
+                                <li>Buka file <code>.env</code> di root project</li>
+                                <li>Edit konfigurasi berikut:
+                                    <ul>
+                                        <li><code>SUPER_ADMIN_NAME="Nama Baru"</code></li>
+                                        <li><code>SUPER_ADMIN_EMAIL="email@baru.com"</code></li>
+                                        <li><code>SUPER_ADMIN_PASSWORD="PasswordBaru123!"</code></li>
+                                    </ul>
+                                </li>
+                                <li>Jalankan command: <code>php artisan superadmin:setup</code></li>
+                                <li>Data SuperAdmin akan diperbarui otomatis</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>

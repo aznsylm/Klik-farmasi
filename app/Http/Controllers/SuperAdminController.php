@@ -20,7 +20,7 @@ class SuperAdminController extends Controller
 
     public function admin(Request $request)
     {
-        $query = User::where('role', 'admin');
+        $query = User::where('role', 'admin')->orderBy('created_at', 'desc');
         
         if ($request->has('search') && $request->search) {
             $search = $request->search;
@@ -37,7 +37,7 @@ class SuperAdminController extends Controller
 
     public function pasien(Request $request)
     {
-        $query = User::where('role', 'pasien');
+        $query = User::where('role', 'pasien')->orderBy('created_at', 'desc');
         
         if ($request->has('search') && $request->search) {
             $search = $request->search;
@@ -57,16 +57,29 @@ class SuperAdminController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
-            'nomor_hp' => 'required|string|max:15',
-            'password' => 'required|string|min:6',
+            'nomor_hp' => 'required|string|max:15|unique:users,nomor_hp',
+            'password' => 'required|string|min:8',
             'role' => 'required|in:admin,pasien',
             'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
             'usia' => 'required|integer|min:1|max:120',
-            'puskesmas' => 'nullable|string|max:255'
+            'puskesmas' => 'required|string|max:255'
+        ], [
+            'email.unique' => 'Email sudah terdaftar, gunakan email lain!',
+            'nomor_hp.unique' => 'Nomor HP sudah terdaftar, gunakan nomor lain!',
+            'name.required' => 'Nama wajib diisi!',
+            'email.required' => 'Email wajib diisi!',
+            'email.email' => 'Format email tidak valid!',
+            'nomor_hp.required' => 'Nomor HP wajib diisi!',
+            'password.required' => 'Password wajib diisi!',
+            'password.min' => 'Password minimal 8 karakter!',
+            'jenis_kelamin.required' => 'Jenis kelamin wajib dipilih!',
+            'usia.required' => 'Usia wajib diisi!',
+            'puskesmas.required' => 'Puskesmas wajib dipilih!'
         ]);
 
         if ($validator->fails()) {
-            return back()->withErrors($validator)->withInput();
+            $errorMessage = $validator->errors()->first();
+            return back()->with('error', $errorMessage)->withInput();
         }
 
         User::create([
@@ -88,21 +101,47 @@ class SuperAdminController extends Controller
     {
         $user = User::findOrFail($id);
         
-        $validator = Validator::make($request->all(), [
+        $rules = [
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $id,
-            'nomor_hp' => 'required|string|max:15',
+            'nomor_hp' => 'required|string|max:15|unique:users,nomor_hp,' . $id,
             'role' => 'required|in:admin,pasien',
             'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
             'usia' => 'required|integer|min:1|max:120',
-            'puskesmas' => 'nullable|string|max:255'
-        ]);
-
-        if ($validator->fails()) {
-            return back()->withErrors($validator);
+            'puskesmas' => 'required|string|max:255'
+        ];
+        
+        if ($request->filled('password')) {
+            $rules['password'] = 'string|min:8';
         }
 
-        $user->update($request->only(['name', 'email', 'nomor_hp', 'role', 'jenis_kelamin', 'usia', 'puskesmas']));
+        $messages = [
+            'email.unique' => 'Email sudah terdaftar, gunakan email lain!',
+            'nomor_hp.unique' => 'Nomor HP sudah terdaftar, gunakan nomor lain!',
+            'name.required' => 'Nama wajib diisi!',
+            'email.required' => 'Email wajib diisi!',
+            'email.email' => 'Format email tidak valid!',
+            'nomor_hp.required' => 'Nomor HP wajib diisi!',
+            'password.min' => 'Password minimal 8 karakter!',
+            'jenis_kelamin.required' => 'Jenis kelamin wajib dipilih!',
+            'usia.required' => 'Usia wajib diisi!',
+            'puskesmas.required' => 'Puskesmas wajib dipilih!'
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            $errorMessage = $validator->errors()->first();
+            return back()->with('error', $errorMessage);
+        }
+
+        $updateData = $request->only(['name', 'email', 'nomor_hp', 'role', 'jenis_kelamin', 'usia', 'puskesmas']);
+        
+        if ($request->filled('password')) {
+            $updateData['password'] = Hash::make($request->password);
+        }
+        
+        $user->update($updateData);
 
         return back()->with('success', 'Data user berhasil diperbarui!');
     }

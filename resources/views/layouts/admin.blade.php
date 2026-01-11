@@ -130,13 +130,7 @@
                     <span class="d-none d-md-inline ml-1">{{ Auth::user()->name }}</span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                    <span class="dropdown-item dropdown-header">
-                        @if(Auth::user()->isSuperAdmin())
-                            Super Administrator
-                        @else
-                            Administrator
-                        @endif
-                    </span>
+                    <span class="dropdown-item dropdown-header">Administrator</span>
                     <div class="dropdown-divider"></div>
                     <a href="{{ route('beranda') }}" class="dropdown-item">
                         <i class="fas fa-home mr-2"></i> Lihat Website
@@ -156,7 +150,7 @@
     <!-- Main Sidebar Container -->
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
         <!-- Brand Logo -->
-        <a href="@if(Auth::user()->isSuperAdmin()) {{ route('superadmin.dashboard') }} @else {{ route('admin.dashboard') }} @endif" class="brand-link">
+        <a href="{{ route('admin.dashboard') }}" class="brand-link">
             <img src="{{ asset('assets/Favicon.png') }}" alt="Klik Farmasi" class="brand-image img-circle elevation-3">
             <span class="brand-text font-weight-light">Klik Farmasi</span>
         </a>
@@ -166,87 +160,31 @@
             <!-- Sidebar Menu -->
             <nav class="mt-2">
                 <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                    @if(Auth::user()->isSuperAdmin())
-                        <li class="nav-item">
-                            <a href="{{ route('superadmin.dashboard') }}" class="nav-link {{ request()->routeIs('superadmin.dashboard') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-tachometer-alt"></i>
-                                <p>Dashboard</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('superadmin.admin') }}" class="nav-link {{ request()->routeIs('superadmin.admin') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-user-shield"></i>
-                                <p>Data Admin</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('superadmin.pasien') }}" class="nav-link {{ request()->routeIs('superadmin.pasien') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-users"></i>
-                                <p>Data Pasien</p>
-                            </a>
-                        </li>
-                    @else
-                        <li class="nav-item">
-                            <a href="{{ route('admin.dashboard') }}" class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-tachometer-alt"></i>
-                                <p>Dashboard</p>
-                            </a>
-                        </li>
-                        
-                        <li class="nav-item">
-                            <a href="{{ route('admin.pasien') }}" class="nav-link {{ request()->routeIs('admin.pasien*') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-users"></i>
-                                <p>
-                                    Data Pasien
-                                    @if(isset($totalCatatanPasien) && $totalCatatanPasien > 0)
-                                        <span class="badge badge-danger right">{{ $totalCatatanPasien }}</span>
-                                    @endif
-                                </p>
-                            </a>
-                        </li>
+                    <li class="nav-item">
+                        <a href="{{ route('admin.dashboard') }}" class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-tachometer-alt"></i>
+                            <p>Dashboard</p>
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a href="{{ route('admin.pasien') }}" class="nav-link {{ request()->routeIs('admin.pasien*') ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-users"></i>
+                            <p>
+                                Data Pasien
+                                @if(isset($totalCatatanPasien) && $totalCatatanPasien > 0)
+                                    <span class="badge badge-danger right">{{ $totalCatatanPasien }}</span>
+                                @endif
+                            </p>
+                        </a>
+                    </li>
 
-                        <li class="nav-item">
-                            <a href="{{ route('admin.kode-pendaftaran.index') }}" class="nav-link {{ request()->routeIs('admin.kode-pendaftaran.*') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-key"></i>
-                                <p>Kode Pendaftaran</p>
-                            </a>
-                        </li>
-                        
-                        {{-- <li class="nav-item">
-                            <a href="{{ route('admin.artikel.index') }}" class="nav-link {{ request()->routeIs('admin.artikel.*') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-file-alt"></i>
-                                <p>Artikel</p>
-                            </a>
-                        </li>
-                        
-                        <li class="nav-item">
-                            <a href="{{ route('admin.berita.index') }}" class="nav-link {{ request()->routeIs('admin.berita.*') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-newspaper"></i>
-                                <p>Berita</p>
-                            </a>
-                        </li>
-                        
-                        <li class="nav-item">
-                            <a href="{{ route('admin.tanya-jawab.index') }}" class="nav-link {{ request()->routeIs('admin.tanya-jawab.*') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-question-circle"></i>
-                                <p>Tanya Jawab</p>
-                            </a>
-                        </li>
-                        
-                        <li class="nav-item">
-                            <a href="{{ route('admin.unduhan.index') }}" class="nav-link {{ request()->routeIs('admin.unduhan.*') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-download"></i>
-                                <p>Unduhan</p>
-                            </a>
-                        </li>
-                        
-                        <li class="nav-item">
-                            <a href="{{ route('admin.testimoni.index') }}" class="nav-link {{ request()->routeIs('admin.testimoni.*') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-quote-left"></i>
-                                <p>Testimoni</p>
-                            </a>
-                        </li> --}}
-                    @endif
+                    <li class="nav-item">
+                        <a href="{{ route('admin.kode-pendaftaran.index') }}" class="nav-link {{ request()->routeIs('admin.kode-pendaftaran.*') ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-key"></i>
+                            <p>Kode Pendaftaran</p>
+                        </a>
+                    </li>
                 </ul>
             </nav>
         </div>
