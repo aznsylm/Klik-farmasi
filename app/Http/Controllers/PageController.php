@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Download;
 use Illuminate\Http\Request;
 use App\Models\Article;
+use App\Models\ArticleRead;
 use App\Models\Testimonial;
 use App\Models\News;
 use App\Models\Faq;
+use Illuminate\Support\Facades\Auth;
 
 class PageController extends Controller
 {
@@ -71,9 +73,14 @@ class PageController extends Controller
                          ->where('article_type', $articleType)
                          ->firstOrFail();
 
-        // Increment views counter hanya untuk guest dan pasien
-        if (!auth()->check() || auth()->user()->role === 'pasien') {
-            $article->increment('views');
+        // Track article read untuk pasien yang login
+        if (Auth::check() && Auth::user()->role === 'pasien') {
+            ArticleRead::firstOrCreate([
+                'article_id' => $article->id,
+                'user_id' => Auth::id()
+            ], [
+                'read_at' => now()
+            ]);
         }
 
         // Ambil artikel terkait berdasarkan article_type yang sama

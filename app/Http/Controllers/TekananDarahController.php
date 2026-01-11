@@ -10,6 +10,15 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class TekananDarahController extends Controller
 {
+    public function userIndex()
+    {
+        $recentRecords = CatatanTekananDarah::where('user_id', auth()->id())
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+            
+        return view('user.tekanan-darah', compact('recentRecords'));
+    }
+
     public function store(Request $request)
     {
         $request->validate([
@@ -17,38 +26,9 @@ class TekananDarahController extends Controller
             'diastol' => 'required|integer|min:50|max:150'
         ]);
 
-        // Get latest pengingat obat
-        $latestPengingat = \App\Models\PengingatObat::where('user_id', auth()->id())
-            ->latest()
-            ->first();
-
-        if (!$latestPengingat) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Belum ada pengingat obat yang diatur'
-            ]);
-        }
-
-        // Check if pengingat is still active
-        if ($latestPengingat->status !== 'aktif') {
-            return response()->json([
-                'success' => false,
-                'message' => 'Pengingat obat sudah tidak aktif. Hubungi admin jika ada kendala.'
-            ]);
-        }
-
-        // Check 91-day limit
-        $daysSinceStart = Carbon::parse($latestPengingat->created_at)->diffInDays(Carbon::now('Asia/Jakarta'));
-        if ($daysSinceStart >= 91) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Masa input tekanan darah sudah berakhir (91 hari). Hubungi admin jika ada kendala.'
-            ]);
-        }
-
         $today = Carbon::now('Asia/Jakarta')->toDateString();
         
-        // Check if already input today
+        // Check if already input today (anti-redundansi)
         $existing = CatatanTekananDarah::where('user_id', auth()->id())
             ->whereDate('created_at', $today)
             ->first();
@@ -56,13 +36,13 @@ class TekananDarahController extends Controller
         if ($existing) {
             return response()->json([
                 'success' => false,
-                'message' => 'Anda sudah menginput tekanan darah hari ini. Silakan coba lagi besok.'
+                'message' => 'Anda sudah menginput tekanan darah hari ini. Silakan coba lagi besok atau edit data yang sudah ada.'
             ]);
         }
 
         CatatanTekananDarah::create([
             'user_id' => auth()->id(),
-            'pengingat_obat_id' => $latestPengingat->id,
+            'pengingat_obat_id' => null, // Tidak terikat pengingat obat
             'sistol' => $request->sistol,
             'diastol' => $request->diastol,
             'sumber' => 'input_harian',
@@ -74,6 +54,48 @@ class TekananDarahController extends Controller
             'success' => true,
             'message' => 'Data tekanan darah berhasil disimpan'
         ]);
+    }
+
+    public function userUpdate(Request $request, $id)
+    {
+        try {
+            $validated = $request->validate([
+                'sistol' => 'required|integer|min:50|max:250',
+                'diastol' => 'required|integer|min:50|max:150'
+            ]);
+
+            $catatan = CatatanTekananDarah::where('id', $id)
+                ->where('user_id', auth()->id())
+                ->first();
+
+            if (!$catatan) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Data tidak ditemukan'
+                ], 404);
+            }
+
+            $catatan->sistol = $validated['sistol'];
+            $catatan->diastol = $validated['diastol'];
+            $catatan->sumber = 'input_harian';
+            $catatan->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Data berhasil diupdate'
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Data tidak valid: ' . implode(', ', $e->validator->errors()->all())
+            ], 422);
+        } catch (\Exception $e) {
+            \Log::error('User Update Error: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Error: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
     public function getChartData()
@@ -164,19 +186,23 @@ class TekananDarahController extends Controller
                 'tanggal_input' => 'required|date'
             ]);
 
-            $user = User::findOrFail($request->user_id);
-            $pengingat = $user->pengingatObat()->latest()->first();
+            $targetDate = Carbon::parse($request->tanggal_input)->toDateString();
             
-            if (!$pengingat) {
+            // Check if already exists on target date (anti-redundansi)
+            $existing = CatatanTekananDarah::where('user_id', $request->user_id)
+                ->whereDate('created_at', $targetDate)
+                ->first();
+                
+            if ($existing) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Pasien belum memiliki pengingat obat'
+                    'message' => 'Sudah ada data tekanan darah di tanggal tersebut'
                 ]);
             }
 
             $catatan = CatatanTekananDarah::create([
                 'user_id' => $request->user_id,
-                'pengingat_obat_id' => $pengingat->id,
+                'pengingat_obat_id' => null, // Tidak terikat pengingat obat
                 'sistol' => $request->sistol,
                 'diastol' => $request->diastol,
                 'sumber' => 'admin_input'
@@ -292,18 +318,48 @@ class TekananDarahController extends Controller
             ->get();
         
         $chartData = [];
+        $sistolData = [];
+        $diastolData = [];
+        
         foreach ($data as $item) {
+            // Klasifikasi berdasarkan panduan medis
+            if ($item->sistol < 120 && $item->diastol < 80) {
+                $category = 'NORMAL';
+            } elseif ($item->sistol >= 120 && $item->sistol <= 129 && $item->diastol < 80) {
+                $category = 'PRE HIPERTENSI';
+            } elseif (($item->sistol >= 130 && $item->sistol <= 139) || ($item->diastol >= 80 && $item->diastol <= 89)) {
+                $category = 'HIPERTENSI STAGE 1';
+            } else {
+                $category = 'HIPERTENSI STAGE 2';
+            }
+            
             $chartData[] = [
                 'tanggal' => Carbon::parse($item->created_at)->format('d/m/Y'),
                 'sistol' => $item->sistol,
-                'diastol' => $item->diastol
+                'diastol' => $item->diastol,
+                'kategori' => $category
             ];
+            
+            $sistolData[] = $item->sistol;
+            $diastolData[] = $item->diastol;
         }
+        
+        // Statistik
+        $stats = [
+            'total' => $data->count(),
+            'avg_sistol' => $data->count() > 0 ? round($data->avg('sistol'), 1) : 0,
+            'avg_diastol' => $data->count() > 0 ? round($data->avg('diastol'), 1) : 0,
+            'max_sistol' => $data->count() > 0 ? $data->max('sistol') : 0,
+            'max_diastol' => $data->count() > 0 ? $data->max('diastol') : 0,
+            'min_sistol' => $data->count() > 0 ? $data->min('sistol') : 0,
+            'min_diastol' => $data->count() > 0 ? $data->min('diastol') : 0,
+        ];
         
         $pdf = Pdf::loadView('admin.reports.tekanan-darah-pdf', [
             'user' => $user,
             'pengingat' => $pengingat,
             'chartData' => $chartData,
+            'stats' => $stats,
             'totalData' => $data->count(),
             'avgSistol' => $data->avg('sistol'),
             'avgDiastol' => $data->avg('diastol'),

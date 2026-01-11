@@ -38,12 +38,19 @@ class AdminController extends Controller
         $sangatTinggi = [];
         
         foreach ($latestTD as $td) {
-            if ($td->sistol < 140 && $td->diastol < 90) {
+            // Klasifikasi berdasarkan panduan medis: ambil kategori tertinggi
+            if ($td->sistol < 120 && $td->diastol < 80) {
+                // Normal: <120 DAN <80
                 $normal[] = ['name' => $td->name, 'sistol' => $td->sistol, 'diastol' => $td->diastol];
-            } elseif ($td->sistol >= 180 || $td->diastol >= 110) {
+            } elseif ($td->sistol >= 120 && $td->sistol <= 129 && $td->diastol < 80) {
+                // Pre Hipertensi: 120-129 DAN <80
+                $tinggi[] = ['name' => $td->name, 'sistol' => $td->sistol, 'diastol' => $td->diastol];
+            } elseif (($td->sistol >= 130 && $td->sistol <= 139) || ($td->diastol >= 80 && $td->diastol <= 89)) {
+                // Stage 1: 130-139 ATAU 80-89
                 $sangatTinggi[] = ['name' => $td->name, 'sistol' => $td->sistol, 'diastol' => $td->diastol];
             } else {
-                $tinggi[] = ['name' => $td->name, 'sistol' => $td->sistol, 'diastol' => $td->diastol];
+                // Stage 2: ≥140 ATAU ≥90
+                $sangatTinggi[] = ['name' => $td->name, 'sistol' => $td->sistol, 'diastol' => $td->diastol];
             }
         }
         
@@ -56,34 +63,19 @@ class AdminController extends Controller
 
     public function index(Request $request)
     {
-        // Default: pasien, kecuali superadmin memilih role lain
-        $role = $request->get('role', 'pasien');
-        $query = User::where('role', $role);
-
-        // Filter berdasarkan puskesmas untuk admin biasa
-        if (auth()->user()->role !== 'super_admin') {
-            $query->where('puskesmas', auth()->user()->puskesmas);
-        }
+        $query = User::where('role', 'pasien');
+        $query->where('puskesmas', auth()->user()->puskesmas);
     
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function($q) use ($search) {
                 $q->where('name', 'like', "%$search%")
                   ->orWhere('email', 'like', "%$search%")
-                  ->orWhere('nomor_hp', 'like', "%$search%")
-                  ->orWhere('jenis_kelamin', 'like', "%$search%")
-                  ->orWhere('usia', 'like', "%$search%");
+                  ->orWhere('nomor_hp', 'like', "%$search%");
             });
         }
     
-        // Catatan system removed - no longer needed
-    
-        // Urutkan terbaru di atas
         $users = $query->orderBy('created_at', 'desc')->paginate(10)->withQueryString();
-    
-        if (auth()->user()->role === 'super_admin') {
-            return view('superadmin.users', compact('users', 'role'));
-        }
         return view('admin.pasien.index', compact('users'));
     }
     public function create(Request $request)
@@ -95,37 +87,19 @@ class AdminController extends Controller
     public function show($id, Request $request)
     {
         $query = User::with('pengingatObat');
-        
-        // Filter berdasarkan puskesmas untuk admin biasa
-        if (auth()->user()->role !== 'super_admin') {
-            $query->where('puskesmas', auth()->user()->puskesmas);
-        }
-        
+        $query->where('puskesmas', auth()->user()->puskesmas);
         $user = $query->findOrFail($id);
         
-        // Get WhatsApp tracking data with period filter
         $period = $request->get('period', 'week');
         $trackingData = $this->getWhatsappTrackingData($user->id, $period);
         
-        if (auth()->user()->role === 'super_admin') {
-            return view('superadmin.user-detail', compact('user'));
-        }
         return view('admin.pasien.detail', compact('user', 'trackingData', 'period'));
-    }
-
-    public function edit($id)
-    {
-        $user = User::findOrFail($id);
-        
-        if (auth()->user()->role === 'super_admin') {
-            return view('superadmin.user-edit', compact('user'));
-        }
-        return view('admin.pasien.edit', compact('user'));
     }
     
     public function update(Request $request, $id)
     {
         $user = User::findOrFail($id);
+        $user->where('puskesmas', auth()->user()->puskesmas);
     
         $rules = [
             'name' => 'required|string|max:100',
@@ -140,71 +114,34 @@ class AdminController extends Controller
             'password' => [
                 'nullable',
                 'min:8',
-                'confirmed',
-                'regex:/[a-zA-Z]/',
-                'regex:/[0-9]/'
+                'confirmed'
             ],
         ];
     
-        // Hanya super admin yang bisa mengubah role dan puskesmas
-        if (auth()->user()->role === 'super_admin') {
-            $rules['puskesmas'] = 'required|in:kalasan,godean_2,umbulharjo';
-        }
-    
-        $request->validate($rules, [
-            'nomor_hp.regex' => 'Nomor HP harus 8-15 digit angka saja',
-            'email.unique' => 'Email sudah terdaftar. Silakan gunakan email lain.',
-            'nomor_hp.unique' => 'Nomor HP sudah terdaftar. Silakan gunakan nomor lain.',
-            'password.confirmed' => 'Konfirmasi password tidak cocok',
-            'puskesmas.required' => 'Silakan pilih puskesmas'
-        ]);
+        $request->validate($rules);
     
         $data = $request->only(['name', 'email', 'nomor_hp', 'jenis_kelamin', 'usia']);
         
-        // Format nomor HP (pastikan ada prefix 62)
-        if (isset($data['nomor_hp'])) {
-            $nomor_hp = $data['nomor_hp'];
-            // Hapus +62 atau 62 di awal jika ada, lalu tambahkan 62
-            $nomor_hp = preg_replace('/^(\+62|62)/', '', $nomor_hp);
-            $data['nomor_hp'] = '62' . $nomor_hp;
-        }
-    
         if ($request->filled('password')) {
             $data['password'] = \Hash::make($request->password);
         }
     
-        // Simpan puskesmas jika super admin
-        if (auth()->user()->role === 'super_admin' && $request->filled('puskesmas')) {
-            $data['puskesmas'] = $request->puskesmas;
-        }
-    
         $user->update($data);
-    
-        if (auth()->user()->role === 'super_admin') {
-            return redirect()->route('superadmin.users', ['role' => $user->role])->with('success', 'Akun berhasil diperbarui.');
-        }
         return redirect()->route('admin.pasienDetail', $user->id)->with('success', 'Pasien berhasil diperbarui.');
     }
 
     public function destroy($id)
     {
         $user = User::findOrFail($id);
-        $role = $user->role;
         $user->delete();
-    
-        if (auth()->user()->role === 'super_admin') {
-            $msg = $role === 'admin' ? 'Admin berhasil dihapus.' : 'Pasien berhasil dihapus.';
-            return redirect()->route('superadmin.users', ['role' => $role])->with('success', $msg);
-        }
+        
         return redirect()->route('admin.pasien')->with('success', 'Pasien berhasil dihapus.');
     }
 
     public function addPasien(Request $request)
     {
-        // Jika bukan super admin, gunakan puskesmas admin yang login
-        $puskesmas = auth()->user()->role !== 'super_admin' 
-            ? auth()->user()->puskesmas 
-            : $request->puskesmas;
+        // Gunakan puskesmas admin yang login
+        $puskesmas = auth()->user()->puskesmas;
 
         $request->validate([
             'name' => 'required|string|max:100',
@@ -222,14 +159,12 @@ class AdminController extends Controller
                 'confirmed',
                 'regex:/[a-zA-Z]/',
                 'regex:/[0-9]/'
-            ],
-            'puskesmas' => auth()->user()->role === 'super_admin' ? 'required|in:kalasan,godean_2,umbulharjo' : 'nullable'
+            ]
         ], [
             'nomor_hp.regex' => 'Format nomor HP tidak valid',
             'password.confirmed' => 'Konfirmasi password tidak cocok',
             'password.min' => 'Password minimal 8 karakter',
             'password.regex' => 'Password harus mengandung huruf dan angka',
-            'puskesmas.required' => 'Silakan pilih puskesmas',
             'email.unique' => 'Email sudah terdaftar',
             'nomor_hp.unique' => 'Nomor HP sudah terdaftar'
         ]);
@@ -252,10 +187,6 @@ class AdminController extends Controller
                 'puskesmas' => $puskesmas
             ]);
 
-            if (auth()->user()->role === 'super_admin') {
-                return redirect()->route('superadmin.users', ['role' => 'pasien'])
-                    ->with('success', 'Pasien berhasil ditambahkan!');
-            }
             return redirect()->route('admin.pasien')
                 ->with('success', 'Pasien berhasil ditambahkan!');
         } catch (\Exception $e) {
@@ -265,55 +196,7 @@ class AdminController extends Controller
         }
     }
 
-    public function addAdmin(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|max:100',
-            'email' => 'required|email|unique:users,email',
-            'nomor_hp' => [
-                'required',
-                'unique:users,nomor_hp',
-                'regex:/^[0-9]{8,15}$/'
-            ],
-            'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
-            'usia' => 'required|integer|min:18|max:120',
-            'password' => [
-                'required',
-                'min:8',
-                'confirmed',
-                'regex:/[a-zA-Z]/',
-                'regex:/[0-9]/'
-            ],
-            'puskesmas' => 'required|in:kalasan,godean_2,umbulharjo'
-        ], [
-            'email.unique' => 'Email sudah terdaftar. Silakan gunakan email lain.',
-            'nomor_hp.unique' => 'Nomor HP sudah terdaftar. Silakan gunakan nomor lain.',
-            'puskesmas.required' => 'Silakan pilih puskesmas',
-            'puskesmas.in' => 'Puskesmas yang dipilih tidak valid'
-        ]);
 
-        // Format nomor HP (pastikan ada prefix 62)
-        $nomor_hp = $request->nomor_hp;
-        // Hapus +62 atau 62 di awal jika ada, lalu tambahkan 62
-        $nomor_hp = preg_replace('/^(\+62|62)/', '', $nomor_hp);
-        $nomor_hp = '62' . $nomor_hp;
-
-        try {
-            User::create([
-                'name' => $request->name,
-                'email' => $request->email,
-                'nomor_hp' => $nomor_hp,
-                'jenis_kelamin' => $request->jenis_kelamin,
-                'usia' => $request->usia,
-                'password' => \Hash::make($request->password),
-                'role' => 'admin',
-                'puskesmas' => $request->puskesmas
-            ]);
-            return redirect()->route('superadmin.users', ['role' => 'admin'])->with('success', 'Admin baru berhasil ditambahkan!');
-        } catch (\Exception $e) {
-            return back()->with('error', 'Gagal menambahkan admin. Silakan coba lagi.')->withInput();
-        }
-    }
 
     public function resetPassword(Request $request, $id)
     {

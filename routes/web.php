@@ -11,6 +11,12 @@ use App\Http\Controllers\TekananDarahController;
 
 
 Route::get('/', [PageController::class, 'beranda'])->name('beranda');
+
+// PWA Routes
+Route::get('/offline', function () {
+    return response()->file(public_path('offline.html'));
+})->name('offline');
+
 Route::get('/tanya-jawab/hipertensi-kehamilan', [PageController::class, 'tanyaJawabKehamilan'])->name('tanya-jawab.kehamilan');
 Route::get('/tanya-jawab/hipertensi-non-kehamilan', [PageController::class, 'tanyaJawabNonKehamilan'])->name('tanya-jawab.non-kehamilan');
 Route::get('/artikel', [PageController::class, 'artikel'])->name('artikel');
@@ -38,24 +44,13 @@ Route::get('/dashboard', function () {
 
 // Dashboard Super Admin
 Route::middleware(['auth', 'superadmin'])->prefix('superadmin')->name('superadmin.')->group(function () {
-    Route::get('/dashboard', function () {
-        return redirect()->route('superadmin.users', ['role' => 'admin']);
-    })->name('dashboard');
-
-    // Tambahkan route kelola admin & pasien
-    Route::get('/users', [AdminController::class, 'index'])->name('users');
-
-    Route::get('/users/create', [AdminController::class, 'create'])->name('users.create');
-    Route::post('/users/create-admin', [AdminController::class, 'addAdmin'])->name('addAdmin');
-    Route::post('/users/create-pasien', [AdminController::class, 'addPasien'])->name('addPasien');
-    Route::get('/users/{id}', [AdminController::class, 'show'])->name('userDetail');
-    Route::get('/users/{id}/edit', [AdminController::class, 'edit'])->name('userEdit');
-    Route::put('/users/{id}', [AdminController::class, 'update'])->name('userUpdate');
-    Route::post('/pengingat/{id}/stop', [PengingatObatController::class, 'stopPengobatan'])->name('pengingat.stop');
-    Route::post('/pengingat/{id}/activate', [PengingatObatController::class, 'activatePengobatan'])->name('pengingat.activate');
-    Route::delete('/users/{id}', [AdminController::class, 'destroy'])->name('deleteUser');
-
-
+    Route::get('/dashboard', [\App\Http\Controllers\SuperAdminController::class, 'dashboard'])->name('dashboard');
+    Route::get('/admin', [\App\Http\Controllers\SuperAdminController::class, 'admin'])->name('admin');
+    Route::get('/pasien', [\App\Http\Controllers\SuperAdminController::class, 'pasien'])->name('pasien');
+    
+    Route::post('/users', [\App\Http\Controllers\SuperAdminController::class, 'storeUser'])->name('storeUser');
+    Route::put('/users/{id}', [\App\Http\Controllers\SuperAdminController::class, 'updateUser'])->name('updateUser');
+    Route::delete('/users/{id}', [\App\Http\Controllers\SuperAdminController::class, 'deleteUser'])->name('deleteUser');
 });
 
 // Dashboard Admin
@@ -109,14 +104,29 @@ Route::middleware(['auth', \App\Http\Middleware\RoleMiddleware::class . ':admin'
     Route::delete('/tekanan-darah/{id}', [TekananDarahController::class, 'adminDelete'])->name('tekanan-darah.delete');
 });
 
-// Dashboard User - Only Dashboard Route
+// Dashboard User - Multiple Pages
 Route::middleware(['auth', \App\Http\Middleware\RoleMiddleware::class . ':pasien'])->prefix('user')->name('user.')->group(function () {
-    // Dashboard - Only route needed
+    // Dashboard - Overview
     Route::get('/dashboard', function() {
         $user = auth()->user();
         $latestPengingat = $user->pengingatObat()->latest()->first();
         return view('user.dashboard', compact('user', 'latestPengingat'));
     })->name('dashboard');
+    
+    // Tekanan Darah - Chart & Input
+    Route::get('/tekanan-darah', [TekananDarahController::class, 'userIndex'])->name('tekanan-darah');
+    
+    // Daftar Obat
+    Route::get('/obat', function() {
+        $user = auth()->user();
+        $latestPengingat = $user->pengingatObat()->latest()->first();
+        return view('user.obat', compact('latestPengingat'));
+    })->name('obat');
+    
+    // Konsultasi
+    Route::get('/konsultasi', function() {
+        return view('user.konsultasi');
+    })->name('konsultasi');
     
     // PDF Download
     Route::get('/tekanan-darah/pdf', [TekananDarahController::class, 'generateUserPDFReport'])->name('tekanan-darah.pdf');
@@ -126,6 +136,8 @@ Route::middleware(['auth', \App\Http\Middleware\RoleMiddleware::class . ':pasien
 Route::middleware(['auth'])->group(function () {
     Route::get('/api/blood-pressure-data', [TekananDarahController::class, 'getChartData']);
     Route::post('/api/save-blood-pressure', [TekananDarahController::class, 'store']);
+    Route::put('/api/user-blood-pressure/{id}', [TekananDarahController::class, 'userUpdate']);
+    Route::post('/api/obat/update-status', [\App\Http\Controllers\DetailObatController::class, 'updateStatus'])->name('user.obat.update-status');
 });
 
 // Legacy routes for backward compatibility

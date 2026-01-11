@@ -79,23 +79,20 @@ class User extends Authenticatable
         return $this->hasMany(KodePendaftaran::class, 'digunakan_oleh');
     }
 
-    /**
-     * Check if user is super admin based on environment configuration
-     */
+    // Role helper methods
     public function isSuperAdmin(): bool
     {
-        return $this->email === env('SUPER_ADMIN_EMAIL') && 
-               $this->role === 'super_admin';
+        return $this->role === 'superadmin';
     }
 
-    /**
-     * Check if current authenticated user is super admin
-     */
-    public static function isCurrentUserSuperAdmin(): bool
+    public function isAdmin(): bool
     {
-        $user = auth()->user();
-        return $user && $user->isSuperAdmin();
+        return $this->role === 'admin';
     }
 
+    public function isPasien(): bool
+    {
+        return $this->role === 'pasien';
+    }
 
 }

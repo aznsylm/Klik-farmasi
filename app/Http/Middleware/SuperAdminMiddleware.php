@@ -4,14 +4,14 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class SuperAdminMiddleware
 {
     public function handle(Request $request, Closure $next)
     {
-        if (!User::isCurrentUserSuperAdmin()) {
-            abort(403, 'Unauthorized. Super Admin access required.');
+        if (!Auth::check() || Auth::user()->role !== 'superadmin') {
+            return redirect()->route('login')->with('error', 'Akses ditolak. Anda tidak memiliki izin SuperAdmin.');
         }
 
         return $next($request);

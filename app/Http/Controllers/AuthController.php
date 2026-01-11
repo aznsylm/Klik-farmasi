@@ -19,6 +19,10 @@ class AuthController extends Controller
         $request->validate([
             'login' => 'required',
             'password' => 'required|min:8',
+        ], [
+            'login.required' => 'Email atau nomor HP wajib diisi',
+            'password.required' => 'Password wajib diisi',
+            'password.min' => 'Password minimal 8 karakter',
         ]);
 
         // Tentukan apakah input email atau nomor HP
@@ -27,7 +31,7 @@ class AuthController extends Controller
         // Jika nomor HP, pastikan formatnya benar
         if ($login_type === 'nomor_hp') {
             if (!preg_match('/^62[0-9]{9,13}$/', $request->login)) {
-                return back()->withInput()->with('error', 'Login gagal! Periksa kembali email/nomor HP dan password Anda.');
+                return back()->withInput()->with('error', 'Format nomor WA atau email tidak valid');
             }
         }
 
@@ -38,17 +42,19 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
+            
             // Redirect sesuai role
-            if (Auth::user()->role === 'super_admin') {
-                return redirect()->route('superadmin.users');
-            } elseif (Auth::user()->role === 'admin') {
+            $user = Auth::user();
+            if ($user->role === 'superadmin') {
+                return redirect()->route('superadmin.dashboard');
+            } elseif ($user->role === 'admin') {
                 return redirect()->route('admin.dashboard');
             } else {
                 return redirect()->route('user.dashboard');
             }
         }
 
-        return back()->withInput()->with('error', 'Login gagal! Periksa kembali email/nomor HP dan password Anda.');
+        return back()->withInput()->with('error', 'Akun tidak ditemukan atau password salah');
     }
 
     public function showRegisterForm()
@@ -74,26 +80,26 @@ class AuthController extends Controller
                 'confirmed'
             ],
         ], [
-            'name.required' => 'Nama lengkap wajib diisi.',
-            'name.max' => 'Nama lengkap maksimal 100 karakter.',
-            'email.required' => 'Email wajib diisi.',
-            'email.email' => 'Format email tidak valid.',
-            'email.unique' => 'Email sudah terdaftar.',
-            'nomor_hp.required' => 'Nomor HP wajib diisi.',
-            'nomor_hp.digits_between' => 'Nomor HP harus 8-15 digit.',
-            'nomor_hp.unique' => 'Nomor HP sudah terdaftar.',
-            'jenis_kelamin.required' => 'Jenis kelamin wajib dipilih.',
-            'usia.required' => 'Usia wajib diisi.',
-            'usia.integer' => 'Usia harus berupa angka.',
-            'usia.min' => 'Usia minimal 1 tahun.',
-            'usia.max' => 'Usia maksimal 120 tahun.',
-            'puskesmas.required' => 'Puskesmas wajib dipilih.',
-            'puskesmas.in' => 'Pilihan puskesmas tidak valid.',
-            'kode_pendaftaran.required' => 'Kode pendaftaran wajib diisi.',
-            'password.required' => 'Password wajib diisi.',
-            'password.min' => 'Password minimal 8 karakter.',
-            'password.regex' => 'Password harus mengandung huruf dan angka.',
-            'password.confirmed' => 'Konfirmasi password tidak cocok.',
+            'name.required' => 'Nama lengkap wajib diisi',
+            'name.max' => 'Nama maksimal 100 karakter',
+            'email.required' => 'Email wajib diisi',
+            'email.email' => 'Format email tidak valid',
+            'email.unique' => 'Email sudah terdaftar',
+            'nomor_hp.required' => 'Nomor HP wajib diisi',
+            'nomor_hp.digits_between' => 'Nomor HP harus 8-15 digit',
+            'nomor_hp.unique' => 'Nomor HP sudah terdaftar',
+            'jenis_kelamin.required' => 'Jenis kelamin wajib dipilih',
+            'usia.required' => 'Usia wajib diisi',
+            'usia.integer' => 'Usia harus berupa angka',
+            'usia.min' => 'Usia minimal 1 tahun',
+            'usia.max' => 'Usia maksimal 120 tahun',
+            'puskesmas.required' => 'Puskesmas wajib dipilih',
+            'puskesmas.in' => 'Pilihan puskesmas tidak valid',
+            'kode_pendaftaran.required' => 'Kode pendaftaran wajib diisi',
+            'password.required' => 'Password wajib diisi',
+            'password.min' => 'Password minimal 8 karakter',
+            'password.regex' => 'Password harus ada huruf dan angka',
+            'password.confirmed' => 'Konfirmasi password tidak cocok',
         ]);
 
         // Validasi kode pendaftaran
@@ -103,7 +109,7 @@ class AuthController extends Controller
 
         if (!$kodePendaftaran) {
             return back()->withInput()->withErrors([
-                'kode_pendaftaran' => 'Kode pendaftaran tidak valid atau sudah terpakai.'
+                'kode_pendaftaran' => 'Kode tidak valid atau sudah terpakai'
             ]);
         }
 
@@ -130,7 +136,7 @@ class AuthController extends Controller
     
     public function logout(Request $request)
     {
-        \Auth::logout();
+        Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         return redirect()->route('login')->with('success', 'Berhasil logout.');

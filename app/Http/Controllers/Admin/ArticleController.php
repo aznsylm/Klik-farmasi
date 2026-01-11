@@ -7,12 +7,27 @@ use App\Http\Controllers\Controller;
 use App\Models\Article;
 use App\Models\News;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ArticleController extends Controller
 {
     public function index()
     {
-        $articles = Article::orderBy('created_at', 'desc')->get();
+        $articles = Article::orderBy('created_at', 'desc')
+            ->get()
+            ->map(function($article) {
+                $article->views = $article->getViewsByPuskesmas();
+                return $article;
+            });
+        
+        $articles = new \Illuminate\Pagination\LengthAwarePaginator(
+            $articles->forPage(request()->get('page', 1), 10),
+            $articles->count(),
+            10,
+            request()->get('page', 1),
+            ['path' => request()->url(), 'pageName' => 'page']
+        );
+        
         return view('admin.articles.index', compact('articles'));
     }
 

@@ -12,6 +12,26 @@
     <meta name="robots" content="index, follow">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    @auth
+    <meta name="user-id" content="{{ auth()->id() }}">
+    @endauth
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#0b5e91">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Klik Farmasi">
+    <meta name="msapplication-TileImage" content="/icons/icon-144x144.png">
+    <meta name="msapplication-TileColor" content="#0b5e91">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json">
+    
+    <!-- Apple Touch Icons -->
+    <link rel="apple-touch-icon" href="/icons/icon-192x192.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-192x192.png">
+    
     <title>@yield('title', 'Klik Farmasi')</title>
 
     <!-- Open Graph Meta Tags -->
@@ -171,6 +191,38 @@
                 padding-left: 1.5rem !important
             }
         }
+        
+        /* Public preloader */
+        .public-preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+        .dots-loader {
+            display: flex;
+            gap: 8px;
+        }
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #0b5e91;
+            animation: bounce 1.4s ease-in-out infinite both;
+        }
+        .dot:nth-child(1) { animation-delay: -0.32s; }
+        .dot:nth-child(2) { animation-delay: -0.16s; }
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); opacity: 0.3; }
+            40% { transform: scale(1); opacity: 1; }
+        }
     </style>
 
     <!-- Favicon -->
@@ -214,6 +266,16 @@
 </head>
 
 <body class="d-flex flex-column h-100">
+    <!-- Public Preloader -->
+    <div class="public-preloader" id="publicPreloader">
+        <div class="dots-loader">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+        <div class="mt-3 font-weight-bold" style="color: #0b5e91;">Memuat...</div>
+    </div>
+
     <!-- Navbar -->
     @include('layouts.navbar')
 
@@ -241,6 +303,24 @@
     <!-- CDN AOS -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js" defer></script>
     <script>
+        // Remove public preloader
+        window.addEventListener('load', function() {
+            const preloader = document.getElementById('publicPreloader');
+            if (preloader) {
+                preloader.style.opacity = '0';
+                setTimeout(() => preloader.remove(), 300);
+            }
+        });
+        
+        // Fallback: remove preloader after 2 seconds
+        setTimeout(function() {
+            const preloader = document.getElementById('publicPreloader');
+            if (preloader) {
+                preloader.style.opacity = '0';
+                setTimeout(() => preloader.remove(), 300);
+            }
+        }, 2000);
+        
         document.addEventListener('DOMContentLoaded', function() {
             AOS.init({
                 duration: 800,
@@ -251,6 +331,8 @@
 
     <!-- Bootstrap Core JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" defer></script>
+    <!-- PWA JavaScript -->
+    <script src="{{ asset('js/pwa.js') }}" defer></script>
     <!-- Main JS - Unified JavaScript -->
     <script src="{{ asset('js/main.js') }}" defer></script>
 

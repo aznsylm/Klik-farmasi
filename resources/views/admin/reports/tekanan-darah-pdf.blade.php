@@ -81,16 +81,6 @@
                             <span class="info-label">Puskesmas:</span>
                             <span>{{ ucwords(str_replace('_', ' ', $user->puskesmas ?? '-')) }}</span>
                         </div>
-                        @if($pengingat)
-                        <div class="info-row">
-                            <span class="info-label">Diagnosa:</span>
-                            <span>{{ $pengingat->diagnosa }}</span>
-                        </div>
-                        <div class="info-row">
-                            <span class="info-label">Tanggal Mulai:</span>
-                            <span>{{ \Carbon\Carbon::parse($pengingat->tanggal_mulai)->format('d M Y') }}</span>
-                        </div>
-                        @endif
                     </td>
                 </tr>
             </table>
@@ -106,6 +96,7 @@
                     <th>Nama Obat</th>
                     <th>Jumlah</th>
                     <th>Waktu Minum</th>
+                    <th>Suplemen</th>
                 </tr>
             </thead>
             <tbody>
@@ -114,12 +105,57 @@
                     <td>{{ $obat->nama_obat }}</td>
                     <td>{{ $obat->jumlah_obat }} tablet</td>
                     <td>{{ $obat->waktu_minum }}</td>
+                    <td>{{ $obat->suplemen ?? '-' }}</td>
                 </tr>
                 @endforeach
             </tbody>
         </table>
     </div>
     @endif
+
+    <div class="section">
+        <h3>Statistik Tekanan Darah</h3>
+        <div class="patient-info">
+            <table style="width: 100%; border: none;">
+                <tr>
+                    <td style="width: 50%; vertical-align: top; border: none; padding-right: 15px;">
+                        <div class="info-row">
+                            <span class="info-label">Total Catatan:</span>
+                            <span>{{ $stats['total'] }} data</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Rata-rata Sistol:</span>
+                            <span>{{ $stats['avg_sistol'] }} mmHg</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Rata-rata Diastol:</span>
+                            <span>{{ $stats['avg_diastol'] }} mmHg</span>
+                        </div>
+                    </td>
+                    <td style="width: 50%; vertical-align: top; border: none; padding-left: 15px;">
+                        <div class="info-row">
+                            <span class="info-label">Sistol Tertinggi:</span>
+                            <span>{{ $stats['max_sistol'] }} mmHg</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Diastol Tertinggi:</span>
+                            <span>{{ $stats['max_diastol'] }} mmHg</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Periode:</span>
+                            <span>
+                                @if(count($chartData) > 0)
+                                    {{ $chartData[0]['tanggal'] }} - {{ end($chartData)['tanggal'] }}
+                                @else
+                                    -
+                                @endif
+                            </span>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
 
     <div class="section">
         <h3>Riwayat Tekanan Darah ({{ count($chartData) }} data)</h3>
@@ -130,6 +166,7 @@
                     <th>Tanggal</th>
                     <th>Sistol (mmHg)</th>
                     <th>Diastol (mmHg)</th>
+                    <th>Kategori</th>
                 </tr>
             </thead>
             <tbody>
@@ -139,10 +176,11 @@
                         <td>{{ $data['tanggal'] }}</td>
                         <td>{{ $data['sistol'] }}</td>
                         <td>{{ $data['diastol'] }}</td>
+                        <td>{{ $data['kategori'] }}</td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="4" style="text-align: center;">Tidak ada data tekanan darah</td>
+                        <td colspan="5" style="text-align: center;">Tidak ada data tekanan darah</td>
                     </tr>
                 @endforelse
             </tbody>

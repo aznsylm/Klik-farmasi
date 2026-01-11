@@ -6,9 +6,21 @@
     <nav class="sidebar-nav">
         @if(auth()->user() && auth()->user()->role === 'super_admin')
             <div class="nav-item">
-                <a href="{{ route('superadmin.users', ['role' => 'admin']) }}" class="nav-link {{ request()->routeIs('superadmin.users') || request()->routeIs('superadmin.userDetail') || request()->routeIs('superadmin.userEdit') ? 'active' : '' }}">
+                <a href="{{ route('superadmin.users', ['role' => 'admin']) }}" class="nav-link {{ request()->routeIs('superadmin.users') && (!request()->has('role') || request('role') == 'admin') ? 'active' : '' }}">
                     <i class="bi bi-speedometer2"></i>
                     <span>Dashboard</span>
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="{{ route('superadmin.users', ['role' => 'admin']) }}" class="nav-link {{ request()->routeIs('superadmin.users') && request('role') == 'admin' ? 'active' : '' }}">
+                    <i class="bi bi-person-gear"></i>
+                    <span>Data Admin</span>
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="{{ route('superadmin.users', ['role' => 'pasien']) }}" class="nav-link {{ request()->routeIs('superadmin.users') && request('role') == 'pasien' ? 'active' : '' }}">
+                    <i class="bi bi-people-fill"></i>
+                    <span>Data Pasien</span>
                 </a>
             </div>
         @else

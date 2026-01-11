@@ -14,13 +14,13 @@
     <!-- Tombol Kembali -->
     <a href="{{ url('/') }}" 
     style="position: absolute; top: 24px; left: 24px; z-index: 10; display: flex; align-items: center; gap: 6px; text-decoration: none; color: #0b5e91; font-weight: 600; font-size: 1rem;">
-        <i class="fas fa-arrow-left"></i> Halaman Utama
+        <i class="fas fa-arrow-left"></i> Kembali
     </a>
 
     <!-- Login Form -->
     <div id="loginForm">
         
-        <h2 class="form-title">Masuk</h2>
+        <h2 class="form-title">Login</h2>
         <p class="form-subtitle">Selamat datang kembali! Silakan login untuk melanjutkan</p>
         
         @if(session('success'))
@@ -41,7 +41,7 @@
             @csrf
             <div class="form-group">
                 <div class="password-input-wrapper">
-                    <input type="text" class="form-control {{ $errors->has('login') ? 'is-invalid' : '' }}" name="login" id="loginInput" placeholder="Email atau 62xxxxxxxxx" required value="{{ old('login') }}" style="flex: 1;" oninput="formatPhoneInput(this)" autocomplete="username">
+                    <input type="text" class="form-control {{ $errors->has('login') ? 'is-invalid' : '' }}" name="login" id="loginInput" placeholder="Email atau Nomor Whatsapp" value="{{ old('login') }}" style="flex: 1;" oninput="formatPhoneInput(this)" autocomplete="username">
                     <div class="password-info-icon" data-tooltip="Untuk nomor HP wajib gunakan awalan 62 (contoh: 6281234567890)">
                         <i class="fas fa-question-circle"></i>
                     </div>
@@ -56,10 +56,10 @@
             <div class="form-group">
                 <div class="password-input-wrapper">
                     <div class="password-group {{ $errors->has('password') ? 'is-invalid' : '' }}">
-                        <input type="password" class="form-control" name="password" id="loginPassword" placeholder="Password" required autocomplete="current-password">
+                        <input type="password" class="form-control" name="password" id="loginPassword" placeholder="Password" autocomplete="current-password">
                         <i class="fas fa-eye-slash password-toggle" onclick="togglePassword('loginPassword', this)"></i>
                     </div>
-                    <div class="password-info-icon" data-tooltip="Lupa password? Hubungi admin puskesmas Anda untuk reset password: +62 812-9293-6247">
+                    <div class="password-info-icon" data-tooltip="Lupa password? Hubungi admin untuk reset password: +62 823-1338-2915">
                         <i class="fas fa-question-circle"></i>
                     </div>
                 </div>

@@ -7,22 +7,17 @@ use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up()
     {
-        // Update role column to only allow 'admin' and 'pasien'
-        // Super admin will be managed separately via environment
-        DB::statement("ALTER TABLE users MODIFY COLUMN role ENUM('admin', 'pasien') DEFAULT 'pasien'");
+        // First update any existing 'super_admin' to 'admin' temporarily
+        DB::table('users')->where('role', 'super_admin')->update(['role' => 'admin']);
+        
+        // Then modify the ENUM
+        DB::statement("ALTER TABLE users MODIFY COLUMN role ENUM('superadmin', 'admin', 'pasien') DEFAULT 'pasien'");
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down()
     {
-        // Restore original enum with super_admin
         DB::statement("ALTER TABLE users MODIFY COLUMN role ENUM('super_admin', 'admin', 'pasien') DEFAULT 'pasien'");
     }
 };

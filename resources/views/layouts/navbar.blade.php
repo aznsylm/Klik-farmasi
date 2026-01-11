@@ -106,11 +106,11 @@
                         <span class="text-white">{{ Auth::user()->name }}</span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end shadow border-0" aria-labelledby="dropdownUser">
-                        @if(Auth::user()->role === 'super_admin')
-                            <!-- Opsi untuk Super Admin -->
+                        @if(Auth::user()->role === 'superadmin')
+                            <!-- Opsi untuk SuperAdmin -->
                             <li>
                                 <a class="dropdown-item py-2" href="{{ route('superadmin.dashboard') }}">
-                                    Dashboard Super Admin
+                                    Dashboard SuperAdmin
                                 </a>
                             </li>
                         @elseif(Auth::user()->role === 'admin')
@@ -129,11 +129,11 @@
                             </li>
                         @endif
                         <li>
-                            <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+                            <a class="dropdown-item py-2" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                Logout
+                            </a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                 @csrf
-                                <button type="submit" class="dropdown-item py-2">
-                                    Logout
-                                </button>
                             </form>
                         </li>
                     </ul>

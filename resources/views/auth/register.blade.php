@@ -18,7 +18,7 @@
 
     <!-- Register Form -->
     <div id="registerForm">
-        <h2 class="form-title">Daftar Akun</h2>
+        <h2 class="form-title">Register</h2>
         
         @if($errors->any())
             <div class="alert alert-danger">

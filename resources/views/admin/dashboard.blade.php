@@ -1,186 +1,270 @@
 @extends('layouts.admin')
 
 @section('content')
+<!-- Content Header -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">
+                    @if(Auth::user()->isSuperAdmin())
+                        Dashboard Super Admin
+                    @else
+                        Dashboard Admin
+                    @endif
+                </h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active">Dashboard</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+<!-- Dashboard Statistics -->
+<div class="row">
+    <!-- Statistik Tekanan Darah -->
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title"><i class="fas fa-chart-pie mr-1"></i> Statistik Tekanan Darah Pasien</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="small-box bg-success" style="cursor: pointer;" data-toggle="modal" data-target="#modalNormal">
+                            <div class="inner">
+                                <h3>{{ $tdStats['normal']['count'] ?? 0 }}</h3>
+                                <p>Normal</p>
+                                <small>&lt; 120/80 mmHg</small>
+                            </div>
+                            <div class="icon">
+                                <i class="fas fa-heart"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="small-box bg-info" style="cursor: pointer;" data-toggle="modal" data-target="#modalTinggi">
+                            <div class="inner">
+                                <h3>{{ $tdStats['tinggi']['count'] ?? 0 }}</h3>
+                                <p>Pre Hipertensi</p>
+                                <small>120-129/80-90 mmHg</small>
+                            </div>
+                            <div class="icon">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="small-box bg-warning" style="cursor: pointer;" data-toggle="modal" data-target="#modalSangatTinggi">
+                            <div class="inner">
+                                <h3>{{ $tdStats['sangat_tinggi']['count'] ?? 0 }}</h3>
+                                <p>Hipertensi Stage 1</p>
+                                <small>140-159/90-99 mmHg</small>
+                            </div>
+                            <div class="icon">
+                                <i class="fas fa-exclamation-circle"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="small-box bg-danger" style="cursor: pointer;" data-toggle="modal" data-target="#modalStage2">
+                            <div class="inner">
+                                <h3>0</h3>
+                                <p>Hipertensi Stage 2</p>
+                                <small>≥ 160/100 mmHg</small>
+                            </div>
+                            <div class="icon">
+                                <i class="fas fa-exclamation-circle"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     
-    <!-- Dashboard Statistics -->
-    <div class="row mb-4">
-        <!-- Statistik Tekanan Darah -->
-        <div class="col-lg-8">
-            <h5 class="mb-3">Statistik Tekanan Darah Pasien</h5>
-            <div class="row">
-                <div class="col-md-4 mb-3">
-                    <div class="card bg-primary text-white h-100" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#modalNormal">
-                        <div class="card-body text-center">
-                            <h3 class="mb-1">{{ $tdStats['normal']['count'] ?? 0 }}</h3>
-                            <p class="mb-0">TD Normal</p>
-                            <small>&lt; 140/90 mmHg</small>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 mb-3">
-                    <div class="card bg-info text-white h-100" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#modalTinggi">
-                        <div class="card-body text-center">
-                            <h3 class="mb-1">{{ $tdStats['tinggi']['count'] ?? 0 }}</h3>
-                            <p class="mb-0">TD Tinggi</p>
-                            <small>140-179/90-109 mmHg</small>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 mb-3">
-                    <div class="card text-white h-100" style="background-color: #0d6efd; cursor: pointer;" data-bs-toggle="modal" data-bs-target="#modalSangatTinggi">
-                        <div class="card-body text-center">
-                            <h3 class="mb-1">{{ $tdStats['sangat_tinggi']['count'] ?? 0 }}</h3>
-                            <p class="mb-0">TD Sangat Tinggi</p>
-                            <small>≥ 180/110 mmHg</small>
-                        </div>
-                    </div>
-                </div>
+    <!-- Chart -->
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title"><i class="fas fa-chart-pie mr-1"></i> Distribusi TD</h3>
             </div>
-        </div>
-        
-        <!-- Chart -->
-        <div class="col-lg-4">
-            <div class="card h-100">
-                <div class="card-body">
-                    <h6 class="card-title">Distribusi TD</h6>
-                    <div style="height: 250px; position: relative;">
-                        <canvas id="tdChart"></canvas>
-                    </div>
+            <div class="card-body">
+                <div style="height: 250px; position: relative;">
+                    <canvas id="tdChart"></canvas>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- Features Grid -->
-    <div class="features-grid">
-        <!-- Kelola Data Pasien -->
-        <div class="feature-card users">
-            <div class="feature-header">
-                <div class="feature-icon">
-                    <i class="bi bi-people-fill"></i>
+<!-- Features Grid -->
+<div class="row">
+    <!-- Kelola Data Pasien -->
+    <div class="col-lg-4 col-md-6">
+        <div class="card feature-card">
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="bg-primary rounded p-3 mr-3">
+                        <i class="fas fa-users text-white fa-2x"></i>
+                    </div>
+                    <div>
+                        <h5 class="card-title mb-0">Kelola Data Pasien</h5>
+                    </div>
                 </div>
-                <h3 class="feature-title">Kelola Data Pasien</h3>
+                <p class="card-text">Akses dan kelola data pasien dengan mudah. Pantau informasi personal, riwayat medis, dan status kesehatan secara terintegrasi.</p>
+                <a href="{{ route('admin.pasien') }}" class="btn btn-primary btn-block">
+                    <i class="fas fa-arrow-right mr-1"></i> Kelola Data Pasien
+                </a>
             </div>
-            <p class="feature-description">
-                Akses dan kelola data pasien dengan mudah. Pantau informasi personal, riwayat medis, dan status kesehatan secara terintegrasi.
-            </p>
-            <a href="{{ route('admin.pasien') }}" class="feature-action">
-                Kelola Data Pasien
-            </a>
-        </div>
-
-        <!-- Kelola Kode Pendaftaran -->
-        <div class="feature-card codes">
-            <div class="feature-header">
-                <div class="feature-icon">
-                    <i class="bi bi-key-fill"></i>
-                </div>
-                <h3 class="feature-title">Kelola Kode Pendaftaran</h3>
-            </div>
-            <p class="feature-description">
-                Buat dan kelola kode pendaftaran untuk pasien baru. Kontrol akses registrasi dengan sistem kode yang aman dan terorganisir.
-            </p>
-            <a href="{{ route('admin.kode-pendaftaran.index') }}" class="feature-action">
-                Kelola Kode Pendaftaran
-            </a>
-        </div>
-
-        <!-- Kelola Artikel -->
-        <div class="feature-card articles">
-            <div class="feature-header">
-                <div class="feature-icon">
-                    <i class="bi bi-file-earmark-text"></i>
-                </div>
-                <h3 class="feature-title">Kelola Artikel</h3>
-            </div>
-            <p class="feature-description">
-                Buat dan publikasikan artikel kesehatan berkualitas. Berikan edukasi dan informasi terkini tentang hipertensi kepada pasien.
-            </p>
-            <a href="{{ route('admin.artikel.index') }}" class="feature-action">
-                Kelola Artikel
-            </a>
-        </div>
-
-        <!-- Kelola Berita -->
-        <div class="feature-card news">
-            <div class="feature-header">
-                <div class="feature-icon">
-                    <i class="bi bi-newspaper"></i>
-                </div>
-                <h3 class="feature-title">Kelola Berita</h3>
-            </div>
-            <p class="feature-description">
-                Update berita terkini seputar kesehatan dan hipertensi. Bagikan informasi penting dari sumber terpercaya kepada pengguna.
-            </p>
-            <a href="{{ route('admin.berita.index') }}" class="feature-action">
-                Kelola Berita
-            </a>
-        </div>
-
-        <!-- Kelola Tanya Jawab -->
-        <div class="feature-card faqs">
-            <div class="feature-header">
-                <div class="feature-icon">
-                    <i class="bi bi-question-circle"></i>
-                </div>
-                <h3 class="feature-title">Kelola Tanya Jawab</h3>
-            </div>
-            <p class="feature-description">
-                Sediakan jawaban untuk pertanyaan umum tentang hipertensi. Bantu pasien mendapatkan informasi yang mereka butuhkan dengan cepat.
-            </p>
-            <a href="{{ route('admin.tanya-jawab.index') }}" class="feature-action">
-                Kelola Tanya Jawab
-            </a>
-        </div>
-
-        <!-- Kelola Unduhan -->
-        <div class="feature-card downloads">
-            <div class="feature-header">
-                <div class="feature-icon">
-                    <i class="bi bi-cloud-arrow-down"></i>
-                </div>
-                <h3 class="feature-title">Kelola Unduhan</h3>
-            </div>
-            <p class="feature-description">
-                Sediakan materi edukasi dan panduan kesehatan yang dapat diunduh. Berikan akses mudah ke sumber informasi penting bagi pasien.
-            </p>
-            <a href="{{ route('admin.unduhan.index') }}" class="feature-action">
-                Kelola Unduhan
-            </a>
-        </div>
-
-        <!-- Kelola Testimoni -->
-        <div class="feature-card testimonials">
-            <div class="feature-header">
-                <div class="feature-icon">
-                    <i class="bi bi-chat-left-quote"></i>
-                </div>
-                <h3 class="feature-title">Kelola Testimoni</h3>
-            </div>
-            <p class="feature-description">
-                Tampilkan pengalaman positif dari pengguna layanan. Bangun kepercayaan dan kredibilitas melalui cerita sukses pasien.
-            </p>
-            <a href="{{ route('admin.testimoni.index') }}" class="feature-action">
-                Kelola Testimoni
-            </a>
         </div>
     </div>
 
-    <!-- Modals -->
-<!-- Modal TD Normal -->
+    <!-- Kelola Kode Pendaftaran -->
+    <div class="col-lg-4 col-md-6">
+        <div class="card feature-card">
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="bg-success rounded p-3 mr-3">
+                        <i class="fas fa-key text-white fa-2x"></i>
+                    </div>
+                    <div>
+                        <h5 class="card-title mb-0">Kelola Kode Pendaftaran</h5>
+                    </div>
+                </div>
+                <p class="card-text">Buat dan kelola kode pendaftaran untuk pasien baru. Kontrol akses registrasi dengan sistem kode yang aman dan terorganisir.</p>
+                <a href="{{ route('admin.kode-pendaftaran.index') }}" class="btn btn-success btn-block">
+                    <i class="fas fa-arrow-right mr-1"></i> Kelola Kode Pendaftaran
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Kelola Artikel -->
+    <div class="col-lg-4 col-md-6">
+        <div class="card feature-card">
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="bg-info rounded p-3 mr-3">
+                        <i class="fas fa-file-alt text-white fa-2x"></i>
+                    </div>
+                    <div>
+                        <h5 class="card-title mb-0">Kelola Artikel</h5>
+                    </div>
+                </div>
+                <p class="card-text">Buat dan publikasikan artikel kesehatan berkualitas. Berikan edukasi dan informasi terkini tentang hipertensi kepada pasien.</p>
+                <a href="{{ route('admin.artikel.index') }}" class="btn btn-info btn-block">
+                    <i class="fas fa-arrow-right mr-1"></i> Kelola Artikel
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Kelola Berita -->
+    <div class="col-lg-4 col-md-6">
+        <div class="card feature-card">
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="bg-warning rounded p-3 mr-3">
+                        <i class="fas fa-newspaper text-white fa-2x"></i>
+                    </div>
+                    <div>
+                        <h5 class="card-title mb-0">Kelola Berita</h5>
+                    </div>
+                </div>
+                <p class="card-text">Update berita terkini seputar kesehatan dan hipertensi. Bagikan informasi penting dari sumber terpercaya kepada pengguna.</p>
+                <a href="{{ route('admin.berita.index') }}" class="btn btn-warning btn-block">
+                    <i class="fas fa-arrow-right mr-1"></i> Kelola Berita
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Kelola Tanya Jawab -->
+    <div class="col-lg-4 col-md-6">
+        <div class="card feature-card">
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="bg-secondary rounded p-3 mr-3">
+                        <i class="fas fa-question-circle text-white fa-2x"></i>
+                    </div>
+                    <div>
+                        <h5 class="card-title mb-0">Kelola Tanya Jawab</h5>
+                    </div>
+                </div>
+                <p class="card-text">Sediakan jawaban untuk pertanyaan umum tentang hipertensi. Bantu pasien mendapatkan informasi yang mereka butuhkan dengan cepat.</p>
+                <a href="{{ route('admin.tanya-jawab.index') }}" class="btn btn-secondary btn-block">
+                    <i class="fas fa-arrow-right mr-1"></i> Kelola Tanya Jawab
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Kelola Unduhan -->
+    <div class="col-lg-4 col-md-6">
+        <div class="card feature-card">
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="bg-dark rounded p-3 mr-3">
+                        <i class="fas fa-download text-white fa-2x"></i>
+                    </div>
+                    <div>
+                        <h5 class="card-title mb-0">Kelola Unduhan</h5>
+                    </div>
+                </div>
+                <p class="card-text">Sediakan materi edukasi dan panduan kesehatan yang dapat diunduh. Berikan akses mudah ke sumber informasi penting bagi pasien.</p>
+                <a href="{{ route('admin.unduhan.index') }}" class="btn btn-dark btn-block">
+                    <i class="fas fa-arrow-right mr-1"></i> Kelola Unduhan
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Kelola Testimoni -->
+    <div class="col-lg-4 col-md-6">
+        <div class="card feature-card">
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="bg-primary rounded p-3 mr-3">
+                        <i class="fas fa-quote-left text-white fa-2x"></i>
+                    </div>
+                    <div>
+                        <h5 class="card-title mb-0">Kelola Testimoni</h5>
+                    </div>
+                </div>
+                <p class="card-text">Tampilkan pengalaman positif dari pengguna layanan. Bangun kepercayaan dan kredibilitas melalui cerita sukses pasien.</p>
+                <a href="{{ route('admin.testimoni.index') }}" class="btn btn-primary btn-block">
+                    <i class="fas fa-arrow-right mr-1"></i> Kelola Testimoni
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modals -->
+<!-- Modal Normal -->
 <div class="modal fade" id="modalNormal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title">Pasien dengan TD Normal</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            <div class="modal-header bg-success">
+                <h4 class="modal-title text-white">Pasien dengan Tekanan Darah Normal</h4>
+                <button type="button" class="close text-white" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
             </div>
             <div class="modal-body">
                 @if(isset($tdStats['normal']['patients']) && count($tdStats['normal']['patients']) > 0)
                     @foreach($tdStats['normal']['patients'] as $patient)
                     <div class="d-flex justify-content-between align-items-center border-bottom py-2">
                         <span>{{ $patient['name'] }}</span>
-                        <span class="badge bg-success">{{ $patient['sistol'] }}/{{ $patient['diastol'] }} mmHg</span>
+                        <span class="badge badge-success">{{ $patient['sistol'] }}/{{ $patient['diastol'] }} mmHg</span>
                     </div>
                     @endforeach
                 @else
@@ -191,20 +275,22 @@
     </div>
 </div>
 
-<!-- Modal TD Tinggi -->
+<!-- Modal Pre Hipertensi -->
 <div class="modal fade" id="modalTinggi" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header bg-info text-white">
-                <h5 class="modal-title">Pasien dengan TD Tinggi</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            <div class="modal-header bg-info">
+                <h4 class="modal-title text-white">Pasien dengan Pre Hipertensi</h4>
+                <button type="button" class="close text-white" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
             </div>
             <div class="modal-body">
                 @if(isset($tdStats['tinggi']['patients']) && count($tdStats['tinggi']['patients']) > 0)
                     @foreach($tdStats['tinggi']['patients'] as $patient)
                     <div class="d-flex justify-content-between align-items-center border-bottom py-2">
                         <span>{{ $patient['name'] }}</span>
-                        <span class="badge bg-warning">{{ $patient['sistol'] }}/{{ $patient['diastol'] }} mmHg</span>
+                        <span class="badge badge-info">{{ $patient['sistol'] }}/{{ $patient['diastol'] }} mmHg</span>
                     </div>
                     @endforeach
                 @else
@@ -215,20 +301,22 @@
     </div>
 </div>
 
-<!-- Modal TD Sangat Tinggi -->
+<!-- Modal Hipertensi Stage 1 -->
 <div class="modal fade" id="modalSangatTinggi" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header text-white" style="background-color: #0d6efd;">
-                <h5 class="modal-title">Pasien dengan TD Sangat Tinggi</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            <div class="modal-header bg-warning">
+                <h4 class="modal-title text-white">Pasien dengan Hipertensi Stage 1</h4>
+                <button type="button" class="close text-white" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
             </div>
             <div class="modal-body">
                 @if(isset($tdStats['sangat_tinggi']['patients']) && count($tdStats['sangat_tinggi']['patients']) > 0)
                     @foreach($tdStats['sangat_tinggi']['patients'] as $patient)
                     <div class="d-flex justify-content-between align-items-center border-bottom py-2">
                         <span>{{ $patient['name'] }}</span>
-                        <span class="badge bg-danger">{{ $patient['sistol'] }}/{{ $patient['diastol'] }} mmHg</span>
+                        <span class="badge badge-warning">{{ $patient['sistol'] }}/{{ $patient['diastol'] }} mmHg</span>
                     </div>
                     @endforeach
                 @else
@@ -239,23 +327,41 @@
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- Modal Hipertensi Stage 2 -->
+<div class="modal fade" id="modalStage2" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger">
+                <h4 class="modal-title text-white">Pasien dengan Hipertensi Stage 2</h4>
+                <button type="button" class="close text-white" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p class="text-muted text-center">Tidak ada data</p>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const ctx = document.getElementById('tdChart');
     if (ctx) {
         const data = {
-            labels: ['Normal', 'Tinggi', 'Sangat Tinggi'],
+            labels: ['Normal', 'Pre Hipertensi', 'Stage 1', 'Stage 2'],
             datasets: [{
                 data: [
                     {{ $tdStats['normal']['count'] ?? 0 }},
                     {{ $tdStats['tinggi']['count'] ?? 0 }},
-                    {{ $tdStats['sangat_tinggi']['count'] ?? 0 }}
+                    {{ $tdStats['sangat_tinggi']['count'] ?? 0 }},
+                    0
                 ],
                 backgroundColor: [
-                    '#007bff',
-                    '#17a2b8', 
-                    '#0d6efd'
+                    '#28a745',
+                    '#17a2b8',
+                    '#ffc107', 
+                    '#dc3545'
                 ],
                 borderWidth: 0
             }]
@@ -281,4 +387,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
+    </div>
+</section>
 @endsection

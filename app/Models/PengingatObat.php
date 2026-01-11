@@ -9,7 +9,6 @@ class PengingatObat extends Model
     protected $table = 'pengingat_obat';
     protected $fillable = [
         'user_id',
-        'diagnosa',
         'tekanan_darah',
         'tanggal_mulai',
         'status', 

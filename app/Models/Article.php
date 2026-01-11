@@ -4,6 +4,7 @@ namespace App\Models;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\Auth;
 
 class Article extends Model
 {
@@ -18,6 +19,7 @@ class Article extends Model
         'image',
         'slug',
         'article_type',
+        'views',
     ];
 
     protected $casts = [
@@ -37,5 +39,42 @@ class Article extends Model
                 $article->slug = Str::slug($article->title);
             }
         });
+    }
+
+    public function reads()
+    {
+        return $this->hasMany(ArticleRead::class);
+    }
+
+    // Get views count filtered by puskesmas for admin
+    public function getViewsByPuskesmas($puskesmas = null)
+    {
+        if (!$puskesmas && Auth::check()) {
+            $puskesmas = Auth::user()->puskesmas;
+        }
+        
+        return $this->reads()
+            ->whereHas('user', function($query) use ($puskesmas) {
+                $query->where('puskesmas', $puskesmas)
+                      ->where('role', 'pasien');
+            })
+            ->count();
+    }
+
+    // Get readers list filtered by puskesmas
+    public function getReadersByPuskesmas($puskesmas = null)
+    {
+        if (!$puskesmas && Auth::check()) {
+            $puskesmas = Auth::user()->puskesmas;
+        }
+        
+        return $this->reads()
+            ->with('user')
+            ->whereHas('user', function($query) use ($puskesmas) {
+                $query->where('puskesmas', $puskesmas)
+                      ->where('role', 'pasien');
+            })
+            ->orderBy('read_at', 'desc')
+            ->get();
     }
 }

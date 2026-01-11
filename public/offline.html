@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offline - Klik Farmasi</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #0b5e91 0%, #1a6fa0 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+        .offline-container {
+            text-align: center;
+            padding: 2rem;
+            max-width: 500px;
+        }
+        .offline-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+        .offline-title {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+        .offline-message {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+        .retry-btn {
+            background: #baa971;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .retry-btn:hover {
+            background: #a08e5e;
+        }
+        .features-list {
+            text-align: left;
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+        }
+        .features-list h3 {
+            margin-top: 0;
+            color: #baa971;
+        }
+        .features-list ul {
+            list-style: none;
+            padding: 0;
+        }
+        .features-list li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .features-list li:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="offline-container">
+        <div class="offline-icon">📱</div>
+        <h1 class="offline-title">Mode Offline</h1>
+        <p class="offline-message">
+            Anda sedang offline, tetapi masih bisa mengakses konten yang telah di-cache sebelumnya.
+        </p>
+        
+        <div class="features-list">
+            <h3>Yang Bisa Diakses Offline:</h3>
+            <ul>
+                <li>📖 Artikel Kesehatan</li>
+                <li>📰 Berita Terbaru</li>
+                <li>❓ Tanya Jawab</li>
+                <li>📥 Halaman Unduhan</li>
+                <li>ℹ️ Petunjuk & Tim Pengelola</li>
+            </ul>
+        </div>
+        
+        <p class="offline-message">
+            <strong>Catatan:</strong> Untuk login dan mengakses dashboard, koneksi internet diperlukan.
+        </p>
+        
+        <button class="retry-btn" onclick="window.location.reload()">
+            Coba Lagi
+        </button>
+    </div>
+</body>
+</html>

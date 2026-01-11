@@ -1,728 +1,319 @@
 <!DOCTYPE html>
-<html lang="id">
-
+<html lang="id" class="h-100">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'Dashboard Admin')</title>
+    @auth
+    <meta name="user-id" content="{{ auth()->id() }}">
+    @endauth
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#0b5e91">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Klik Farmasi Admin">
+    <meta name="msapplication-TileImage" content="/icons/icon-144x144.png">
+    <meta name="msapplication-TileColor" content="#0b5e91">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json">
+    
+    <!-- Apple Touch Icons -->
+    <link rel="apple-touch-icon" href="/icons/icon-192x192.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-192x192.png">
+    
+    <title>@yield('title', 'Dashboard Admin') | Klik Farmasi</title>
+    
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="{{ asset('assets/Favicon.png') }}">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css"
-        rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
-        rel="stylesheet">
+    
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Bootstrap Icons (for compatibility) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css">
+    <!-- AdminLTE -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --primary-color: #0b5e91;
+            --primary-hover: #094b74;
         }
-
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(120deg, #a8edea 0%, #fed6e3 100%);
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        .dashboard-container {
-            min-height: 100vh;
-            position: relative;
-        }
-
-        /* Sidebar Navigation */
-        .sidebar {
-            position: fixed;
-            left: 0;
-            top: 0;
-            width: 280px;
-            height: 100vh;
-            background: #0b5e91;
-            padding: 2rem 0;
-            transform: translateX(-100%);
-            transition: transform 0.3s ease;
-            z-index: 1000;
-            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
-            overflow-y: auto;
-        }
-
-        .sidebar.active {
-            transform: translateX(0);
-        }
-
-        .sidebar-header {
-            text-align: center;
-            padding: 0 2rem 2rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-            margin-bottom: 2rem;
-        }
-
-        .sidebar-logo {
-            width: 60px;
-            height: 60px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
+        
+        /* Custom Klik Farmasi Colors */
+        .bg-primary { background-color: var(--primary-color) !important; }
+        .btn-primary { background-color: var(--primary-color); border-color: var(--primary-color); }
+        .btn-primary:hover { background-color: var(--primary-hover); border-color: var(--primary-hover); }
+        .navbar-primary { background-color: var(--primary-color) !important; }
+        .sidebar-dark-primary .nav-sidebar > .nav-item > .nav-link.active { background-color: var(--primary-color); }
+        .content-header h1 { color: var(--primary-color); }
+        
+        /* Logo styling */
+        .brand-image { max-height: 33px; }
+        .brand-text { font-weight: 600; }
+        
+        /* Custom card styling */
+        .card { box-shadow: 0 0 1px rgba(0,0,0,.125), 0 1px 3px rgba(0,0,0,.2); }
+        .small-box { box-shadow: 0 0 1px rgba(0,0,0,.125), 0 1px 3px rgba(0,0,0,.2); }
+        
+        /* Lightweight preloader animation */
+        .dots-loader {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 1rem;
-            font-size: 1.5rem;
-            color: white;
-        }
-
-        .sidebar-title {
-            color: white;
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin: 0;
-        }
-
-        .sidebar-nav {
-            padding: 0 1rem;
-        }
-
-        .nav-item {
-            margin-bottom: 0.5rem;
-        }
-
-        .nav-link {
-            display: flex;
-            align-items: center;
-            padding: 1rem 1.5rem;
-            color: rgba(255, 255, 255, 0.8);
-            text-decoration: none;
-            border-radius: 12px;
-            transition: all 0.3s ease;
-            font-weight: 500;
-        }
-
-        .nav-link:hover,
-        .nav-link.active {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            transform: translateX(5px);
-        }
-
-        .nav-link i {
-            margin-right: 12px;
-            font-size: 1.1rem;
-        }
-
-        /* Main Content */
-        .main-content {
-            margin-left: 0;
-            min-height: 100vh;
-            transition: margin-left 0.3s ease;
-        }
-
-        .main-content.sidebar-open {
-            margin-left: 280px;
-        }
-
-        /* Top Header */
-        .top-header {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 1.5rem 2rem;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            border-radius: 0 0 30px 30px;
-            margin-bottom: 2rem;
-        }
-
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .menu-toggle {
-            background: #0b5e91;
-            border: none;
-            width: 50px;
-            height: 50px;
-            border-radius: 12px;
-            color: white;
-            font-size: 1.2rem;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-
-        .menu-toggle:hover {
-            transform: scale(1.05);
-        }
-
-        .header-info h1 {
-            font-size: 2.2rem;
-            font-weight: 700;
-            background: #0b5e91;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 0.5rem;
-        }
-
-        .welcome-msg {
-            color: #6c757d;
-            font-size: 1.1rem;
-        }
-
-        .user-profile {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .profile-avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: #0b5e91;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 600;
-            font-size: 1.2rem;
-        }
-
-        /* Dashboard Content */
-        .dashboard-content {
-            padding: 0 2rem 2rem;
-        }
-
-        /* Overlay */
-        .sidebar-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 999;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .sidebar-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        /* Back Button */
-        .back-button {
-            margin-bottom: 20px;
-        }
-
-        /* Table Styles */
-        .table {
-            border-radius: 10px;
-            overflow: hidden;
-        }
-
-        .table thead {
-            background-color: #343a40;
-            color: #fff;
-        }
-
-        .table-hover tbody tr:hover {
-            background-color: #f8f9fa;
-        }
-
-        .table td,
-        .table th {
-            vertical-align: middle;
-        }
-
-        /* Card Styles */
-        .card {
-            border-radius: 15px;
-            border: none;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-        }
-
-        .card-header {
-            background-color: #f8f9fa;
-            border-bottom: 1px solid #e9ecef;
-            padding: 1rem 1.5rem;
-        }
-
-        .card-body {
-            padding: 1.5rem;
-        }
-
-        /* Button Styles */
-        .btn {
-            border-radius: 8px;
-            padding: 0.5rem 1rem;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .btn-primary {
-            background-color: #0b5e91;
-            border-color: #0b5e91;
-        }
-
-        .btn-primary:hover {
-            background-color: #094b74;
-            border-color: #094b74;
-        }
-
-        .btn-success {
-            background-color: #38b000;
-            border-color: #38b000;
-        }
-
-        .btn-success:hover {
-            background-color: #2d9000;
-            border-color: #2d9000;
-        }
-
-        .btn-danger {
-            background-color: #d90429;
-            border-color: #d90429;
-        }
-
-        .btn-danger:hover {
-            background-color: #ba0324;
-            border-color: #ba0324;
-        }
-
-        .btn-warning {
-            background-color: #ffb703;
-            border-color: #ffb703;
-            color: #343a40;
-        }
-
-        .btn-warning:hover {
-            background-color: #fb8500;
-            border-color: #fb8500;
-            color: white;
-        }
-
-        .btn-info {
-            background-color: #00b4d8;
-            border-color: #00b4d8;
-        }
-
-        .btn-info:hover {
-            background-color: #0096c7;
-            border-color: #0096c7;
-        }
-
-        /* Form Styles */
-        .form-control,
-        .form-select {
-            border-radius: 8px;
-            padding: 0.6rem 1rem;
-            border: 1px solid #ced4da;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .form-control:focus,
-        .form-select:focus {
-            border-color: #0b5e91;
-            box-shadow: 0 0 0 0.25rem rgba(11, 94, 145, 0.25);
-        }
-
-        /* Password Input */
-        .password-field {
-            position: relative;
-        }
-
-        .password-toggle {
-            position: absolute;
-            top: 50%;
-            right: 10px;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            color: #6c757d;
-            cursor: pointer;
-            z-index: 10;
-        }
-
-        /* Alert Styles */
-        .alert {
-            border-radius: 10px;
-            border: none;
-            padding: 1rem 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .alert-success {
-            background-color: #d4edda;
-            color: #155724;
-        }
-
-        .alert-danger {
-            background-color: #f8d7da;
-            color: #721c24;
-        }
-
-        /* Pagination Style */
-        .pagination {
-            justify-content: center;
-            margin-top: 1.5rem;
-        }
-
-        .pagination .page-item .page-link {
-            color: #0b5e91;
-            border-radius: 6px;
-            margin: 0 2px;
-            border: 1px solid #e2e8f0;
-            transition: background 0.2s, color 0.2s;
-        }
-
-        .pagination .page-item.active .page-link {
-            background: #0b5e91;
-            color: #fff;
-            border-color: #0b5e91;
-        }
-
-        .pagination .page-item .page-link:hover {
-            background: #e6f2fa;
-            color: #0b5e91;
-        }
-
-        /* Feature Cards */
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .feature-card {
-            background: white;
-            border-radius: 24px;
-            padding: 2.5rem;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .feature-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-        }
-
-        .feature-card.users::before,
-        .feature-card.articles::before,
-        .feature-card.news::before,
-        .feature-card.faqs::before,
-        .feature-card.downloads::before,
-        .feature-card.testimonials::before,
-        .feature-card.codes::before {
-            background: #0b5e91;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-12px) scale(1.03);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-        }
-
-        .feature-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .feature-icon {
-            width: 60px;
-            height: 60px;
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 1rem;
-            font-size: 1.5rem;
-            color: white;
-        }
-
-        .feature-card.users .feature-icon,
-        .feature-card.articles .feature-icon,
-        .feature-card.news .feature-icon,
-        .feature-card.faqs .feature-icon,
-        .feature-card.downloads .feature-icon,
-        .feature-card.testimonials .feature-icon,
-        .feature-card.codes .feature-icon {
-            background: #0b5e91;
-        }
-
-        .feature-title {
-            font-size: 1.4rem;
-            font-weight: 600;
-            color: #2d3748;
-            margin: 0;
-        }
-
-        .feature-description {
-            color: #4a5568;
-            line-height: 1.6;
-            margin-bottom: 2rem;
-            height: 80px;
-            overflow: hidden;
-            text-align: justify;
-            font-weight: 400;
-        }
-
-        .feature-action {
-            display: inline-flex;
-            align-items: center;
             gap: 8px;
-            padding: 12px 24px;
-            border-radius: 12px;
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            color: white;
         }
-
-        .feature-card.users .feature-action,
-        .feature-card.articles .feature-action,
-        .feature-card.news .feature-action,
-        .feature-card.faqs .feature-action,
-        .feature-card.downloads .feature-action,
-        .feature-card.testimonials .feature-action,
-        .feature-card.codes .feature-action {
-            background: #0b5e91;
-        }
-
-        .feature-action:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-            color: white;
-            text-decoration: none;
-        }
-
-        /* Logout Section */
-        .logout-section {
-            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
-            border-radius: 24px;
-            padding: 2rem;
-            text-align: center;
-            color: white;
-            box-shadow: 0 8px 32px rgba(238, 90, 36, 0.3);
-        }
-
-        .logout-icon {
-            width: 80px;
-            height: 80px;
+        .dot {
+            width: 12px;
+            height: 12px;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 1.5rem;
-            font-size: 2rem;
+            background: var(--primary-color);
+            animation: bounce 1.4s ease-in-out infinite both;
         }
-
-        .logout-title {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
+        .dot:nth-child(1) { animation-delay: -0.32s; }
+        .dot:nth-child(2) { animation-delay: -0.16s; }
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); opacity: 0.3; }
+            40% { transform: scale(1); opacity: 1; }
         }
-
-        .logout-description {
-            margin-bottom: 2rem;
-            opacity: 0.9;
-        }
-
-        .logout-btn {
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            color: white;
-            padding: 12px 32px;
-            border-radius: 12px;
-            font-weight: 500;
+        
+        /* Feature cards */
+        .feature-card {
             transition: all 0.3s ease;
-            cursor: pointer;
+            border: none;
+            box-shadow: 0 0 1px rgba(0,0,0,.125), 0 1px 3px rgba(0,0,0,.2);
         }
-
-        .logout-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-2px);
-            color: white;
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 15px rgba(0,0,0,.2);
         }
-
-        .motivation-banner {
-            background: #0b5e91;
-            border-radius: 18px;
-            padding: 32px 24px;
-            color: #fff;
-            text-align: center;
-            margin-bottom: 32px;
-            box-shadow: 0 4px 24px rgba(11, 94, 145, 0.08);
-        }
-
-        .motivation-text {
-            font-size: 1.25rem;
-            font-style: italic;
-            font-weight: 500;
-            margin: 0;
-        }
-
-        /* Responsive */
+        
+        /* Responsive adjustments */
         @media (max-width: 768px) {
-            .header-info h1 {
-                font-size: 1.8rem;
-            }
-
-            .welcome-msg {
-                font-size: 1rem;
-            }
-
-            .features-grid {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
-            }
-
-            .feature-card {
-                padding: 2rem;
-            }
-
-            .dashboard-content {
-                padding: 0 1rem 2rem;
-            }
-
-            .top-header {
-                padding: 1rem;
-            }
-
-            .table {
-                font-size: 0.9rem;
-            }
-
-            .btn {
-                font-size: 0.8rem;
-                padding: 0.4rem 0.8rem;
-            }
-        }
-
-        @media (min-width: 1200px) {
-            .main-content {
-                margin-left: 280px;
-            }
-
-            .sidebar {
-                transform: translateX(0);
-            }
+            .content-wrapper { margin-left: 0 !important; }
         }
     </style>
     @yield('additional_css')
 </head>
 
-<body>
-    <!-- Sidebar -->
-    <x-admin.sidebar />
-
-    <!-- Sidebar Overlay -->
-    <div class="sidebar-overlay" id="sidebarOverlay"></div>
-
-    <!-- Main Content -->
-    <div class="main-content" id="mainContent">
-        <!-- Top Header -->
-        <x-admin.top-header />
-
-        <!-- Dashboard Content -->
-        <div class="dashboard-content">
-            @yield('content')
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
+    <!-- Preloader -->
+    <div class="preloader flex-column justify-content-center align-items-center">
+        <div class="dots-loader">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
         </div>
+        <div class="mt-3 font-weight-bold" style="color: #0b5e91;">Memuat...</div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // Sidebar Toggle
-        const menuToggle = document.getElementById('menuToggle');
-        const sidebar = document.getElementById('sidebar');
-        const sidebarOverlay = document.getElementById('sidebarOverlay');
-        const mainContent = document.getElementById('mainContent');
+    <!-- Navbar -->
+    <nav class="main-header navbar navbar-expand navbar-primary navbar-dark">
+        <!-- Left navbar links -->
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+            </li>
+        </ul>
 
-        if (menuToggle) {
-            menuToggle.addEventListener('click', toggleSidebar);
+        <!-- Right navbar links -->
+        <ul class="navbar-nav ml-auto">
+            <!-- User Dropdown -->
+            <li class="nav-item dropdown">
+                <a class="nav-link" data-toggle="dropdown" href="#">
+                    <i class="far fa-user"></i>
+                    <span class="d-none d-md-inline ml-1">{{ Auth::user()->name }}</span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                    <span class="dropdown-item dropdown-header">
+                        @if(Auth::user()->isSuperAdmin())
+                            Super Administrator
+                        @else
+                            Administrator
+                        @endif
+                    </span>
+                    <div class="dropdown-divider"></div>
+                    <a href="{{ route('beranda') }}" class="dropdown-item">
+                        <i class="fas fa-home mr-2"></i> Lihat Website
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <form action="{{ route('logout') }}" method="POST" class="d-inline">
+                        @csrf
+                        <button type="submit" class="dropdown-item">
+                            <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                        </button>
+                    </form>
+                </div>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Main Sidebar Container -->
+    <aside class="main-sidebar sidebar-dark-primary elevation-4">
+        <!-- Brand Logo -->
+        <a href="@if(Auth::user()->isSuperAdmin()) {{ route('superadmin.dashboard') }} @else {{ route('admin.dashboard') }} @endif" class="brand-link">
+            <img src="{{ asset('assets/Favicon.png') }}" alt="Klik Farmasi" class="brand-image img-circle elevation-3">
+            <span class="brand-text font-weight-light">Klik Farmasi</span>
+        </a>
+
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <!-- Sidebar Menu -->
+            <nav class="mt-2">
+                <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                    @if(Auth::user()->isSuperAdmin())
+                        <li class="nav-item">
+                            <a href="{{ route('superadmin.dashboard') }}" class="nav-link {{ request()->routeIs('superadmin.dashboard') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-tachometer-alt"></i>
+                                <p>Dashboard</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('superadmin.admin') }}" class="nav-link {{ request()->routeIs('superadmin.admin') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-user-shield"></i>
+                                <p>Data Admin</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('superadmin.pasien') }}" class="nav-link {{ request()->routeIs('superadmin.pasien') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-users"></i>
+                                <p>Data Pasien</p>
+                            </a>
+                        </li>
+                    @else
+                        <li class="nav-item">
+                            <a href="{{ route('admin.dashboard') }}" class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-tachometer-alt"></i>
+                                <p>Dashboard</p>
+                            </a>
+                        </li>
+                        
+                        <li class="nav-item">
+                            <a href="{{ route('admin.pasien') }}" class="nav-link {{ request()->routeIs('admin.pasien*') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-users"></i>
+                                <p>
+                                    Data Pasien
+                                    @if(isset($totalCatatanPasien) && $totalCatatanPasien > 0)
+                                        <span class="badge badge-danger right">{{ $totalCatatanPasien }}</span>
+                                    @endif
+                                </p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="{{ route('admin.kode-pendaftaran.index') }}" class="nav-link {{ request()->routeIs('admin.kode-pendaftaran.*') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-key"></i>
+                                <p>Kode Pendaftaran</p>
+                            </a>
+                        </li>
+                        
+                        {{-- <li class="nav-item">
+                            <a href="{{ route('admin.artikel.index') }}" class="nav-link {{ request()->routeIs('admin.artikel.*') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-file-alt"></i>
+                                <p>Artikel</p>
+                            </a>
+                        </li>
+                        
+                        <li class="nav-item">
+                            <a href="{{ route('admin.berita.index') }}" class="nav-link {{ request()->routeIs('admin.berita.*') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-newspaper"></i>
+                                <p>Berita</p>
+                            </a>
+                        </li>
+                        
+                        <li class="nav-item">
+                            <a href="{{ route('admin.tanya-jawab.index') }}" class="nav-link {{ request()->routeIs('admin.tanya-jawab.*') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-question-circle"></i>
+                                <p>Tanya Jawab</p>
+                            </a>
+                        </li>
+                        
+                        <li class="nav-item">
+                            <a href="{{ route('admin.unduhan.index') }}" class="nav-link {{ request()->routeIs('admin.unduhan.*') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-download"></i>
+                                <p>Unduhan</p>
+                            </a>
+                        </li>
+                        
+                        <li class="nav-item">
+                            <a href="{{ route('admin.testimoni.index') }}" class="nav-link {{ request()->routeIs('admin.testimoni.*') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-quote-left"></i>
+                                <p>Testimoni</p>
+                            </a>
+                        </li> --}}
+                    @endif
+                </ul>
+            </nav>
+        </div>
+    </aside>
+
+    <!-- Content Wrapper -->
+    <div class="content-wrapper">
+        @yield('content')
+    </div>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <strong>Copyright &copy; {{ date('Y') }} <a href="{{ route('beranda') }}">Klik Farmasi</a>.</strong>
+        Platform Kesehatan Digital untuk Manajemen Hipertensi.
+        <div class="float-right d-none d-sm-inline-block">
+            <b>Version</b> 1.0.0 | Developed by <a href="https://github.com/aznsylm" target="_blank"><i class="fab fa-github"></i> Aizan</a> | <a href="https://www.linkedin.com/in/aizansyalim/" target="_blank"><i class="fab fa-linkedin"></i></a>
+        </div>
+    </footer>
+</div>
+
+<!-- jQuery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.2/js/bootstrap.bundle.min.js"></script>
+<!-- AdminLTE App -->
+<script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
+<!-- PWA JavaScript -->
+<script src="{{ asset('js/pwa.js') }}"></script>
+
+<script>
+    // Remove preloader after page load
+    $(window).on('load', function() {
+        $('.preloader').fadeOut('slow');
+    });
+    
+    // Fallback: remove preloader after 3 seconds
+    setTimeout(function() {
+        $('.preloader').fadeOut('slow');
+    }, 3000);
+    
+    // Toggle password visibility function (preserve existing functionality)
+    function togglePassword(inputId) {
+        const input = document.getElementById(inputId);
+        let icon;
+        
+        // Handle different input structures
+        if (input.nextElementSibling && input.nextElementSibling.querySelector) {
+            icon = input.nextElementSibling.querySelector('i');
+        } else if (input.parentElement && input.parentElement.nextElementSibling) {
+            icon = input.parentElement.nextElementSibling.querySelector('i');
         }
-
-        if (sidebarOverlay) {
-            sidebarOverlay.addEventListener('click', closeSidebar);
+        
+        if (icon && input.type === "password") {
+            input.type = "text";
+            // Remove hide icons
+            icon.classList.remove('bi-eye-slash', 'fa-eye-slash');
+            // Add show icons
+            icon.classList.add('bi-eye', 'fa-eye');
+        } else if (icon) {
+            input.type = "password";
+            // Remove show icons
+            icon.classList.remove('bi-eye', 'fa-eye');
+            // Add hide icons
+            icon.classList.add('bi-eye-slash', 'fa-eye-slash');
         }
-
-        function toggleSidebar() {
-            sidebar.classList.toggle('active');
-            sidebarOverlay.classList.toggle('active');
-
-            if (window.innerWidth >= 1200) {
-                mainContent.classList.toggle('sidebar-open');
-            }
-        }
-
-        function closeSidebar() {
-            sidebar.classList.remove('active');
-            sidebarOverlay.classList.remove('active');
-
-            if (window.innerWidth >= 1200) {
-                mainContent.classList.remove('sidebar-open');
-            }
-        }
-
-        // Responsive handling
-        function handleResize() {
-            if (window.innerWidth >= 1200) {
-                sidebar.classList.add('active');
-                mainContent.classList.add('sidebar-open');
-                sidebarOverlay.classList.remove('active');
-            } else {
-                sidebar.classList.remove('active');
-                mainContent.classList.remove('sidebar-open');
-                sidebarOverlay.classList.remove('active');
-            }
-        }
-
-        window.addEventListener('resize', handleResize);
-        handleResize(); // Initial call
-
-        // Fix sidebar links
-        document.querySelectorAll('.sidebar-nav .nav-link').forEach(link => {
-            link.addEventListener('click', function() {
-                if (!this.getAttribute('data-bs-toggle')) {
-                    window.location.href = this.getAttribute('href');
-                }
-            });
-        });
-
-        // Toggle password visibility
-        function togglePassword(inputId) {
-            const input = document.getElementById(inputId);
-            const icon = input.nextElementSibling.querySelector('i');
-
-            if (input.type === "password") {
-                input.type = "text";
-                icon.classList.remove('bi-eye-slash');
-                icon.classList.add('bi-eye');
-            } else {
-                input.type = "password";
-                icon.classList.remove('bi-eye');
-                icon.classList.add('bi-eye-slash');
-            }
-        }
-    </script>
-    @yield('additional_scripts')
+    }
+</script>
+@yield('additional_scripts')
 </body>
-
 </html>

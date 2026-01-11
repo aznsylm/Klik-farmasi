@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\DetailObatPengingat;
+use App\Models\PengingatObat;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DetailObatController extends Controller
 {
@@ -58,5 +60,32 @@ class DetailObatController extends Controller
         $obat->delete();
 
         return back()->with('obat_success', 'Obat berhasil dihapus!');
+    }
+
+    public function updateStatus(Request $request)
+    {
+        $request->validate([
+            'obat_id' => 'required|exists:detail_obat,id',
+            'status' => 'required|in:aktif,habis'
+        ]);
+
+        $obat = DetailObatPengingat::with('pengingatObat')->findOrFail($request->obat_id);
+        
+        // Check if user owns this obat
+        if ($obat->pengingatObat->user_id !== Auth::id()) {
+            return back()->with('error', 'Tidak diizinkan mengubah data ini.');
+        }
+
+        $obat->update(['status_obat' => $request->status]);
+
+        // Update pengingat status based on obat status
+        $pengingat = $obat->pengingatObat;
+        $hasActiveObat = $pengingat->detailObat()->where('status_obat', 'aktif')->exists();
+        
+        $newPengingatStatus = $hasActiveObat ? 'aktif' : 'tidak_aktif';
+        $pengingat->update(['status' => $newPengingatStatus]);
+
+        $statusText = $request->status === 'aktif' ? 'Aktif' : 'Habis';
+        return back()->with('success', "Status obat berhasil diubah menjadi {$statusText}!");
     }
 }

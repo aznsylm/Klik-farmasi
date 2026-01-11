@@ -43,13 +43,9 @@
                                     <i class="bi bi-calendar3 me-1 me-md-2"></i>
                                     <span>{{ $article->published_at ? $article->published_at->format('d M Y') : 'Tanggal tidak tersedia' }}</span>
                                 </div>
-                                <div class="me-2 me-md-4 d-flex align-items-center mb-1">
+                                <div class="d-flex align-items-center mb-1">
                                     <i class="bi bi-clock me-1 me-md-2"></i>
                                     <span>{{ ceil(str_word_count($article->content) / 200) }} menit membaca</span>
-                                </div>
-                                <div class="d-flex align-items-center mb-1">
-                                    <i class="bi bi-eye me-1 me-md-2"></i>
-                                    <span>{{ number_format($article->views) }} kali dilihat</span>
                                 </div>
                             </div>
 

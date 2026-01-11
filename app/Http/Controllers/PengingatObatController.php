@@ -196,28 +196,16 @@ class PengingatObatController extends Controller
             }
         }
 
-        $isKehamilan = $request->diagnosa === 'Kehamilan';
-        
         $rules = [
-            'diagnosa' => 'required|in:Hipertensi-Non-Kehamilan,Hipertensi-Kehamilan,Kehamilan',
             'sistol' => 'required|integer|min:50|max:250',
             'diastol' => 'required|integer|min:50|max:150',
             'tanggal_mulai' => 'nullable|date|after_or_equal:today',
             'catatan' => 'nullable|string|max:3000',
-            'jumlahObat' => 'required|array',
-            'waktuMinum' => 'required|array',
-            'suplemen' => 'array',
+            'namaObat' => 'required|array|min:1|max:5',
+            'jumlahObat' => 'required|array|min:1|max:5',
+            'waktuMinum' => 'required|array|min:1|max:5',
+            'suplemen' => 'nullable|array',
         ];
-        
-        // Untuk non-kehamilan, namaObat wajib
-        if (!$isKehamilan) {
-            $rules['namaObat'] = 'required|array';
-        }
-        
-        // Untuk kehamilan, suplemen wajib
-        if ($isKehamilan) {
-            $rules['suplemen'] = 'required|array';
-        }
         
         $request->validate($rules);
         
@@ -229,7 +217,6 @@ class PengingatObatController extends Controller
         // Simpan ke pengingat_obat
         $pengingat = PengingatObat::create([
             'user_id' => auth()->id(),
-            'diagnosa' => $request->diagnosa,
             'tekanan_darah' => $request->tekananDarah,
             'tanggal_mulai' => $request->tanggal_mulai ?: \Carbon\Carbon::tomorrow('Asia/Jakarta')->toDateString(),
             'catatan' => $request->catatan ?: '-',
@@ -283,14 +270,12 @@ class PengingatObatController extends Controller
             // Continue execution - don't fail the whole process
         }
 
-        // Simpan ke detail_obat_pengingat
-        $isKehamilan = $request->diagnosa === 'Kehamilan';
-        
-        foreach ($request->jumlahObat as $i => $jumlahObat) {
+        // Simpan ke detail_obat_pengingat - Universal untuk semua jenis
+        foreach ($request->namaObat as $i => $namaObat) {
             DetailObatPengingat::create([
                 'pengingat_obat_id' => $pengingat->id,
-                'nama_obat' => $isKehamilan ? 'Tidak ada' : $request->namaObat[$i],
-                'jumlah_obat' => $jumlahObat,
+                'nama_obat' => $namaObat,
+                'jumlah_obat' => $request->jumlahObat[$i],
                 'waktu_minum' => $request->waktuMinum[$i],
                 'suplemen' => !empty($request->suplemen[$i]) ? $request->suplemen[$i] : '-',
                 'urutan' => $i + 1,

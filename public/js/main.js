@@ -126,12 +126,11 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // ===== PENGINGAT OBAT FUNCTIONALITY =====
-    const diagnosa = document.getElementById('diagnosa');
     const tambahObat = document.getElementById('tambahObat');
     const obatContainer = document.getElementById('obatContainer');
     const formPengingat = document.getElementById('formPengingat');
 
-    if (diagnosa && tambahObat && obatContainer) {
+    if (tambahObat && obatContainer) {
         let totalObat = 0;
         let obatItems = [];
 
@@ -172,50 +171,21 @@ document.addEventListener('DOMContentLoaded', function() {
             "Furosemid tab 40 mg",
         ];
 
-        diagnosa.addEventListener('change', function() {
-            totalObat = 0;
-            obatItems = [];
-            obatContainer.innerHTML = '';
-            tambahObat.disabled = false;
+        // Universal system: 1-5 obat untuk semua pasien
+        const maxObat = 5;
+        const minObat = 1;
 
-            // Semua kategori: minimal 1, maksimal 5
-            tambahObat.dataset.maxObat = 5;
-            tambahObat.dataset.minObat = 1;
-            tambahObat.dataset.isKehamilan = diagnosa.value === 'Kehamilan';
-
-            const maxObat = parseInt(tambahObat.dataset.maxObat || 0);
-            const minObat = parseInt(tambahObat.dataset.minObat || 0);
-            const isKehamilan = tambahObat.dataset.isKehamilan === 'true';
-
-            if (maxObat > 0) {
-                const infoMsg = document.createElement('div');
-                infoMsg.className = 'alert alert-info d-flex align-items-center p-4 mb-4';
-                infoMsg.style.fontSize = '1.1rem';
-                const itemType = isKehamilan ? 'suplemen' : 'obat';
-                infoMsg.innerHTML = `
-                    <i class="bi bi-info-circle-fill me-3" style="font-size: 1.5rem;"></i>
-                    <div><strong>Informasi:</strong> Untuk kondisi ini, Anda perlu menambahkan minimal ${minObat} ${itemType} dan maksimal ${maxObat} ${itemType}.</div>
-                `;
-                obatContainer.appendChild(infoMsg);
-                
-                if (totalObat === 0) {
-                    tambahObat.innerHTML = isKehamilan ? 'TAMBAH SUPLEMEN PERTAMA' : 'TAMBAH OBAT PERTAMA';
-                } else {
-                    tambahObat.innerHTML = isKehamilan ? `TAMBAH SUPLEMEN KE-${totalObat + 1}` : `TAMBAH OBAT KE-${totalObat + 1}`;
-                }
-            }
-        });
+        // Show info message
+        const infoMsg = document.createElement('div');
+        infoMsg.className = 'alert alert-info d-flex align-items-center p-4 mb-4';
+        infoMsg.style.fontSize = '1.1rem';
+        infoMsg.innerHTML = `
+            <i class="bi bi-info-circle-fill me-3" style="font-size: 1.5rem;"></i>
+            <div><strong>Informasi:</strong> Anda dapat menambahkan minimal ${minObat} obat dan maksimal ${maxObat} obat.</div>
+        `;
+        obatContainer.appendChild(infoMsg);
 
         tambahObat.addEventListener('click', function() {
-            // Validasi: pastikan diagnosa sudah dipilih
-            if (!diagnosa.value) {
-                showValidationPopup('Silakan pilih jenis hipertensi terlebih dahulu sebelum menambah obat.');
-                return;
-            }
-
-            const maxObat = parseInt(tambahObat.dataset.maxObat || 0);
-            const isKehamilan = tambahObat.dataset.isKehamilan === 'true';
-
             if (totalObat < maxObat) {
                 totalObat++;
                 const obatDiv = document.createElement('div');
@@ -223,48 +193,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 obatDiv.dataset.obatId = totalObat;
                 obatDiv.style.borderColor = '#0B5E91';
                 
-                const itemType = isKehamilan ? 'SUPLEMEN' : 'OBAT';
-                const namaObatSection = isKehamilan ? '' : `
-                    <div class="col-12">
-                        <label for="namaObat${totalObat}" class="form-label">
-                            Nama Obat:
-                        </label>
-                        <select class="form-select" id="namaObat${totalObat}" name="namaObat[]" required>
-                            <option value="">-- Pilih nama obat --</option>
-                            ${daftarObat.map(obat => `<option value="${obat}">${obat}</option>`).join('')}
-                        </select>
-                    </div>`;
-                
-                const suplemenSection = isKehamilan ? `
-                    <div class="col-12">
-                        <label for="suplemen${totalObat}" class="form-label">
-                            Jenis Suplemen:
-                        </label>
-                        <select class="form-select" id="suplemen${totalObat}" name="suplemen[]" required>
-                            <option value="">-- Pilih suplemen --</option>
-                            <option value="Asam folat">Asam Folat</option>
-                            <option value="Zat besi">Zat Besi</option>
-                            <option value="Kalsium">Kalsium</option>
-                            <option value="Suplemen Multivitamin">Multivitamin untuk Ibu Hamil</option>
-                        </select>
-                    </div>` : `
-                    <div class="col-12">
-                        <label for="suplemen${totalObat}" class="form-label">
-                            Suplemen Tambahan (Opsional):
-                        </label>
-                        <select class="form-select" id="suplemen${totalObat}" name="suplemen[]">
-                            <option value="">-- Pilih suplemen jika ada --</option>
-                            <option value="Asam folat">Asam Folat</option>
-                            <option value="Zat besi">Zat Besi</option>
-                            <option value="Kalsium">Kalsium</option>
-                            <option value="Suplemen Multivitamin">Multivitamin untuk Ibu Hamil</option>
-                        </select>
-                    </div>`;
-                
                 obatDiv.innerHTML = `
                     <div class="card-header text-white d-flex justify-content-between align-items-center py-3" style="background-color: #0B5E91;">
                         <h5 class="mb-0 fw-bold text-white">
-                            ${itemType} KE-<span class="obat-number">${totalObat}</span>
+                            OBAT KE-<span class="obat-number">${totalObat}</span>
                         </h5>
                         <button type="button" class="btn btn-outline-light remove-obat" data-obat-id="${totalObat}">
                             <i class="bi bi-trash me-1"></i>Hapus
@@ -272,10 +204,18 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                     <div class="card-body p-4">
                         <div class="row g-3">
-                            ${namaObatSection}
+                            <div class="col-12">
+                                <label for="namaObat${totalObat}" class="form-label">
+                                    Nama Obat:
+                                </label>
+                                <select class="form-select" id="namaObat${totalObat}" name="namaObat[]" required>
+                                    <option value="">-- Pilih nama obat --</option>
+                                    ${daftarObat.map(obat => `<option value="${obat}">${obat}</option>`).join('')}
+                                </select>
+                            </div>
                             <div class="col-md-6">
                                 <label for="jumlahObat${totalObat}" class="form-label">
-                                    Jumlah ${isKehamilan ? 'Suplemen' : 'Obat'}:
+                                    Jumlah Obat:
                                 </label>
                                 <select class="form-select" id="jumlahObat${totalObat}" name="jumlahObat[]" required>
                                     <option value="30 tablet/bulan">30 tablet (1 bulan)</option>
@@ -285,7 +225,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             </div>
                             <div class="col-md-6">
                                 <label for="waktuMinum${totalObat}" class="form-label">
-                                    Jam Minum ${isKehamilan ? 'Suplemen' : 'Obat'}:
+                                    Jam Minum Obat:
                                 </label>
                                 <select class="form-select" id="waktuMinum${totalObat}" name="waktuMinum[]" required>
                                     <option value="">-- Pilih jam --</option>
@@ -300,7 +240,18 @@ document.addEventListener('DOMContentLoaded', function() {
                                     <option value="21:00">21.00 (Malam)</option>
                                 </select>
                             </div>
-                            ${suplemenSection}
+                            <div class="col-12">
+                                <label for="suplemen${totalObat}" class="form-label">
+                                    Suplemen Tambahan (Opsional):
+                                </label>
+                                <select class="form-select" id="suplemen${totalObat}" name="suplemen[]">
+                                    <option value="">-- Pilih suplemen jika ada --</option>
+                                    <option value="Asam folat">Asam Folat</option>
+                                    <option value="Zat besi">Zat Besi</option>
+                                    <option value="Kalsium">Kalsium</option>
+                                    <option value="Suplemen Multivitamin">Multivitamin untuk Ibu Hamil</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                 `;
@@ -316,14 +267,12 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             if (totalObat < maxObat) {
-                const itemType = isKehamilan ? 'Suplemen' : 'Obat';
-                tambahObat.innerHTML = `<i class="bi bi-plus-circle me-2"></i>Tambah ${itemType} Ke-${totalObat + 1}`;
+                tambahObat.innerHTML = `<i class="bi bi-plus-circle me-2"></i>Tambah Obat Ke-${totalObat + 1}`;
             }
             
             if (totalObat === maxObat) {
                 tambahObat.disabled = true;
-                const itemType = isKehamilan ? 'Suplemen' : 'Obat';
-                tambahObat.innerHTML = `<i class="bi bi-check-circle me-2"></i>Semua ${itemType} Ditambahkan`;
+                tambahObat.innerHTML = `<i class="bi bi-check-circle me-2"></i>Semua Obat Ditambahkan`;
             }
         });
 
@@ -350,11 +299,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
             
-            const maxObat = parseInt(tambahObat.dataset.maxObat || 0);
-            const isKehamilan = tambahObat.dataset.isKehamilan === 'true';
             if (totalObat < maxObat) {
-                const itemType = isKehamilan ? 'Suplemen' : 'Obat';
-                tambahObat.innerHTML = `<i class="bi bi-plus-circle me-2"></i>Tambah ${itemType} Ke-${totalObat + 1}`;
+                tambahObat.innerHTML = `<i class="bi bi-plus-circle me-2"></i>Tambah Obat Ke-${totalObat + 1}`;
             }
         }
 
@@ -368,14 +314,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     return;
                 }
 
-                const minObat = parseInt(tambahObat.dataset.minObat || 0);
-
                 if (totalObat < minObat) {
                     const errorMsg = document.createElement('div');
                     errorMsg.className = 'alert alert-danger alert-dismissible fade show mt-3';
                     errorMsg.innerHTML = `
                         <i class="bi bi-exclamation-triangle-fill me-2"></i>
-                        Silakan tambahkan minimal ${minObat} obat/suplemen.
+                        Silakan tambahkan minimal ${minObat} obat.
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     `;
 

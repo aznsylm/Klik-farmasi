@@ -1,15 +1,30 @@
 @extends('layouts.admin')
 
-@section('title', 'Detail Pasien')
+@section('title', 'Detail Pasien - ' . $user->name)
 
 @section('content')
-    <div class="container py-5">
-        <!-- Tombol Kembali -->
-        <div class="back-button">
-            <a href="{{ route('admin.pasien') }}" class="btn btn-secondary">
-                <i class="bi bi-arrow-left"></i> Kembali ke Daftar Pasien
-            </a>
+<!-- Content Header -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Detail Pasien</h1>
+                <p class="text-muted mb-0">{{ $user->name }}</p>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('admin.pasien') }}">Pasien</a></li>
+                    <li class="breadcrumb-item active">Detail</li>
+                </ol>
+            </div>
         </div>
+    </div>
+</div>
+
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
 
         @php
             $allPengingat = $user->pengingatObat()->latest()->get();
@@ -27,34 +42,47 @@
 
 
 
+        <!-- Notifications -->
         @if (session('success'))
             <div class="alert alert-success alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <i class="fas fa-check-circle mr-2"></i>
                 {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         @endif
 
         @if (session('error'))
             <div class="alert alert-danger alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <i class="fas fa-times-circle mr-2"></i>
                 {{ session('error') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         @endif
 
         @if ($errors->any())
             <div class="alert alert-danger alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
                 <ul class="mb-0">
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
                     @endforeach
                 </ul>
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         @endif
 
+        <!-- Back Button -->
+        <div class="row mb-3">
+            <div class="col-12">
+                <a href="{{ route('admin.pasien') }}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left mr-1"></i> Kembali ke Daftar Pasien
+                </a>
+            </div>
+        </div>
+
+        <!-- Patient Profile Card -->
         <div class="card">
             <div class="card-header">
-                <h5 class="mb-0">Profil Pasien</h5>
+                <h3 class="card-title"><i class="fas fa-user mr-1"></i> Profil Pasien</h3>
             </div>
             <div class="card-body">
                 <!-- Alert Informatif -->
@@ -66,55 +94,31 @@
                     $latestTekananDarah = \App\Models\CatatanTekananDarah::where('user_id', $user->id)->latest()->first();
                     $allTekananDarah = \App\Models\CatatanTekananDarah::where('user_id', $user->id)->orderBy('created_at', 'desc')->take(3)->get();
                     
-                    // 1. Tekanan Darah Kritis
-                    if ($latestTekananDarah && ($latestTekananDarah->sistol >= 180 || $latestTekananDarah->diastol >= 120)) {
-                        $alertMessage = 'SEGERA KE IGD! Tekanan darah pasien sangat tinggi dan berbahaya';
+                    // 1. Tekanan Darah Kritis (Stage 2)
+                    if ($latestTekananDarah && ($latestTekananDarah->sistol >= 140 || $latestTekananDarah->diastol >= 90)) {
+                        $alertMessage = 'Tekanan darah pasien tinggi (Stage 1/2)! Perlu segera dihubungi';
                         $alertClass = 'bg-danger text-white';
                     }
-                    // 2. Hipertensi Kehamilan - Tekanan Tinggi
-                    elseif ($latestPengingat && $latestPengingat->diagnosa === 'Hipertensi-Kehamilan' && $latestTekananDarah && ($latestTekananDarah->sistol >= 140 || $latestTekananDarah->diastol >= 90)) {
-                        $alertMessage = 'Tekanan darah tinggi saat hamil berbahaya! Pasien perlu segera ke dokter kandungan';
-                        $alertClass = 'bg-danger text-white';
+                    // 2. Tidak Input >30 Hari
+                    elseif ($latestTekananDarah) {
+                        $daysSinceLastInput = (int) \Carbon\Carbon::parse($latestTekananDarah->created_at)->diffInDays(now());
+                        if ($daysSinceLastInput > 30) {
+                            $alertMessage = 'Pasien sudah ' . $daysSinceLastInput . ' hari tidak catat tekanan darah. Perlu diingatkan';
+                            $alertClass = 'bg-warning text-dark';
+                        }
                     }
-                    // 3. Tekanan Darah Sangat Tinggi
-                    elseif ($latestTekananDarah && (($latestTekananDarah->sistol >= 160 && $latestTekananDarah->sistol < 180) || ($latestTekananDarah->diastol >= 100 && $latestTekananDarah->diastol < 120))) {
-                        $alertMessage = 'Tekanan darah pasien sangat tinggi! Perlu segera dihubungi dokter';
-                        $alertClass = 'bg-warning text-dark';
-                    }
-                    // 4. Trend Naik Konsisten
+                    // 3. Trend Naik Konsisten
                     elseif ($allTekananDarah->count() >= 3) {
                         $data = $allTekananDarah->reverse()->values();
                         if ($data[0]->sistol < $data[1]->sistol && $data[1]->sistol < $data[2]->sistol) {
                             $alertMessage = 'Tekanan darah pasien terus naik dalam 3 catatan terakhir. Perlu perhatian khusus';
-                            $alertClass = 'bg-warning text-dark';
-                        }
-                    }
-                    // 5. Tidak Input >3 Hari
-                    if (!$alertMessage && $latestPengingat && $latestPengingat->status === 'aktif') {
-                        $daysSinceLastInput = $latestTekananDarah ? (int) \Carbon\Carbon::parse($latestTekananDarah->created_at)->diffInDays(now()) : 999;
-                        if ($daysSinceLastInput > 3) {
-                            $alertMessage = 'Pasien sudah ' . $daysSinceLastInput . ' hari tidak catat tekanan darah. Perlu diingatkan';
                             $alertClass = 'bg-info text-white';
                         }
                     }
-                    // 6. Mendekati Batas 91 Hari
-                    if (!$alertMessage && $latestPengingat && $latestPengingat->status === 'aktif') {
-                        $daysSinceStart = (int) \Carbon\Carbon::parse($latestPengingat->created_at)->diffInDays(now());
-                        $remainingDays = 91 - $daysSinceStart;
-                        if ($remainingDays > 0 && $remainingDays <= 7) {
-                            $alertMessage = 'Masa pantau akan berakhir dalam ' . $remainingDays . ' hari. Perlu tindak lanjut';
-                            $alertClass = 'bg-info text-white';
-                        }
-                    }
-                    // 7. Pengingat Obat Tidak Aktif
-                    if (!$alertMessage && (!$latestPengingat || $latestPengingat->status !== 'aktif')) {
-                        $alertMessage = 'Pengingat obat pasien tidak aktif. Perlu diaktifkan kembali';
-                        $alertClass = 'bg-secondary text-white';
-                    }
-                    // 8. Belum Ada Data
-                    if (!$alertMessage && !$latestTekananDarah) {
+                    // 4. Belum Ada Data
+                    elseif (!$latestTekananDarah) {
                         $alertMessage = 'Pasien belum pernah input tekanan darah. Perlu panduan penggunaan';
-                        $alertClass = 'bg-success text-white';
+                        $alertClass = 'bg-secondary text-white';
                     }
                 @endphp
                 
@@ -124,47 +128,46 @@
         </div>
         @endif
 
-        <!-- Main Content: Grafik Tekanan Darah -->
-        <div class="row mb-4">
-            <div class="col-12">
-                <div class="bg-white p-4 shadow-sm">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h6 class="mb-0 fw-bold">Grafik Tekanan Darah</h6>
-                        <div>
-                            <button type="button" class="btn btn-success btn-sm me-1" onclick="showTambahDataModal()" title="Tambah Data">
-                                <i class="bi bi-plus-lg"></i>
-                            </button>
-                            <button type="button" class="btn btn-primary btn-sm me-1" onclick="showDataModal()" title="Lihat Data">
-                                <i class="bi bi-eye"></i>
-                            </button>
-                            <a href="{{ route('admin.pasien.tekanan-darah.pdf', $user->id) }}" class="btn btn-danger btn-sm" title="Download PDF" target="_blank">
-                                <i class="bi bi-file-earmark-pdf"></i>
-                            </a>
-                        </div>
-                    </div>
-                    <div style="position: relative; height: 350px;">
-                        <canvas id="tekananDarahChart"></canvas>
-                        <div id="chartPlaceholder" class="text-center py-5" style="display: none;">
-                            <i class="bi bi-graph-up text-muted" style="font-size: 3rem;"></i>
-                            <p class="text-muted mt-3">Belum ada data untuk ditampilkan</p>
-                        </div>
+        <!-- Blood Pressure Chart Card -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h3 class="card-title"><i class="fas fa-chart-line mr-1"></i> Grafik Tekanan Darah</h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-success btn-sm mr-1" onclick="showTambahDataModal()" title="Tambah Data">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                    <button type="button" class="btn btn-primary btn-sm mr-1" onclick="showDataModal()" title="Lihat Data">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                    <a href="{{ route('admin.pasien.tekanan-darah.pdf', $user->id) }}" class="btn btn-danger btn-sm" title="Download PDF" target="_blank">
+                        <i class="fas fa-file-pdf"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
+                <div style="position: relative; height: 350px;">
+                    <canvas id="tekananDarahChart"></canvas>
+                    <div id="chartPlaceholder" class="text-center py-5" style="display: none;">
+                        <i class="fas fa-chart-line text-muted" style="font-size: 3rem;"></i>
+                        <p class="text-muted mt-3">Belum ada data untuk ditampilkan</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Data Obat -->
-        <div class="row mb-4">
-            <div class="col-12">
-                <div class="bg-white p-4 shadow-sm">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h6 class="mb-0 fw-bold">Data Obat</h6>
-                        @if($selectedPengingat)
-                        <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#tambahObatModal" title="Tambah Obat">
-                            <i class="bi bi-plus-lg"></i>
-                        </button>
-                        @endif
-                    </div>
+        <!-- Medication Data Card -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h3 class="card-title"><i class="fas fa-pills mr-1"></i> Data Obat</h3>
+                @if($selectedPengingat)
+                <div class="card-tools">
+                    <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#tambahObatModal" title="Tambah Obat">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+                @endif
+            </div>
+            <div class="card-body">
                     @if($selectedPengingat && $selectedPengingat->detailObat->count() > 0)
                         @php
                             $daysSinceStart = (int) \Carbon\Carbon::parse($selectedPengingat->created_at)->diffInDays(now());
@@ -173,88 +176,91 @@
                             <div class="d-flex justify-content-between align-items-center">
                                 <div>
                                     <small class="text-muted">Mulai: {{ $selectedPengingat->created_at->format('d M Y') }} ({{ $daysSinceStart }} hari)</small>
-                                    <br>
-                                    <small class="text-muted">Diagnosa: {{ $selectedPengingat->diagnosa }}</small>
                                 </div>
                                 @if ($selectedPengingat->status == 'aktif' && $daysSinceStart < 91)
                                 <form action="{{ route('admin.pengingat.stop', $selectedPengingat->id) }}" method="POST" onsubmit="return confirmStop()" class="me-2">
                                     @csrf
                                     <button type="submit" class="btn btn-danger btn-sm">
-                                        <i class="bi bi-stop-circle"></i> Stop
+                                        <i class="fas fa-stop-circle"></i> Stop
                                     </button>
                                 </form>
                                 @elseif ($selectedPengingat->status == 'tidak_aktif')
                                 <form action="{{ route('admin.pengingat.activate', $selectedPengingat->id) }}" method="POST" onsubmit="return confirm('Pasien perlu mengisi ulang data pengingat. Lanjutkan?');">
                                     @csrf
                                     <button type="submit" class="btn btn-success btn-sm">
-                                        <i class="bi bi-play-circle"></i> Aktifkan
+                                        <i class="fas fa-play-circle"></i> Aktifkan
                                     </button>
                                 </form>
                                 @endif
                             </div>
                         </div>
                         <div class="table-responsive">
-                            <table class="table table-sm mb-0">
-                                <thead>
+                            <table class="table table-striped table-hover">
+                                <thead class="thead-dark">
                                     <tr>
-                                        <th class="small fw-bold">Obat</th>
-                                        <th class="small fw-bold">Jumlah</th>
-                                        <th class="small fw-bold">Waktu</th>
-                                        <th class="small fw-bold">Suplemen</th>
-                                        <th class="small fw-bold">Aksi</th>
+                                        <th>Obat</th>
+                                        <th>Jumlah</th>
+                                        <th>Waktu</th>
+                                        <th>Suplemen</th>
+                                        <th class="text-center">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach($selectedPengingat->detailObat as $obat)
                                     <tr>
-                                        <td class="small fw-semibold">{{ $obat->nama_obat }}</td>
-                                        <td class="small">{{ $obat->jumlah_obat }}</td>
-                                        <td class="small">{{ \Carbon\Carbon::parse($obat->waktu_minum)->format('H:i') }}</td>
-                                        <td class="small">{{ $obat->suplemen ?? '-' }}</td>
-                                        <td class="small">
-                                            <button type="button" class="btn btn-warning btn-sm me-1" onclick="editObat({{ $obat->id }}, '{{ $obat->nama_obat }}', '{{ $obat->jumlah_obat }}', '{{ $obat->waktu_minum }}', '{{ $obat->suplemen }}', '{{ $obat->status_obat }}')" title="Edit">
-                                                <i class="bi bi-pencil"></i>
-                                            </button>
-                                            <form action="{{ route('admin.obat.delete', $obat->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus obat ini?')">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-danger btn-sm" title="Hapus">
-                                                    <i class="bi bi-trash"></i>
+                                        <td>{{ $obat->nama_obat }}</td>
+                                        <td>{{ $obat->jumlah_obat }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($obat->waktu_minum)->format('H:i') }}</td>
+                                        <td>{{ $obat->suplemen ?? '-' }}</td>
+                                        <td class="text-center">
+                                            <div class="btn-group" role="group">
+                                                <button type="button" class="btn btn-warning btn-sm" onclick="editObat({{ $obat->id }}, '{{ $obat->nama_obat }}', '{{ $obat->jumlah_obat }}', '{{ $obat->waktu_minum }}', '{{ $obat->suplemen }}', '{{ $obat->status_obat }}')" title="Edit">
+                                                    <i class="fas fa-edit"></i>
                                                 </button>
-                                            </form>
+                                                <form action="{{ route('admin.obat.delete', $obat->id) }}" method="POST" style="display: inline;" onsubmit="return confirm('Yakin ingin menghapus obat ini?')">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-danger btn-sm" title="Hapus">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
                                         </td>
                                     </tr>
                                     @endforeach
-                                </tbody>
+                </tbody>
                             </table>
                         </div>
                     @else
-                        <div class="text-center py-3">
-                            <p class="text-muted mb-2 small">Belum ada obat yang diatur</p>
-                            @if($selectedPengingat)
-                            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#tambahObatModal">
-                                Tambah Obat Pertama
-                            </button>
-                            @endif
+                        <div class="text-center py-4">
+                            <div class="text-muted">
+                                <i class="fas fa-pills fa-3x mb-3"></i>
+                                <p class="mb-2">Belum ada obat yang diatur</p>
+                                @if($selectedPengingat)
+                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#tambahObatModal">
+                                    <i class="fas fa-plus mr-1"></i>Tambah Obat Pertama
+                                </button>
+                                @endif
+                            </div>
                         </div>
                     @endif
-                </div>
             </div>
         </div>
 
-        <!-- WhatsApp Tracking Section -->
+        <!-- WhatsApp Tracking Card -->
         @if(!empty($trackingData))
-        <div class="row mb-4" id="whatsapp-tracking">
-            <div class="col-12">
-                <div class="bg-white p-4 shadow-sm">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h6 class="mb-0 fw-bold">Status Pengiriman Pengingat</h6>
-                        <div class="btn-group" role="group">
-                            <a href="{{ route('admin.pasienDetail', ['id' => $user->id, 'period' => 'week']) }}#whatsapp-tracking" class="btn btn-sm {{ ($period ?? 'week') === 'week' ? 'btn-primary' : 'btn-outline-primary' }}">7 Hari</a>
-                            <a href="{{ route('admin.pasienDetail', ['id' => $user->id, 'period' => 'month']) }}#whatsapp-tracking" class="btn btn-sm {{ ($period ?? 'week') === 'month' ? 'btn-primary' : 'btn-outline-primary' }}">30 Hari</a>
-                            <a href="{{ route('admin.pasienDetail', ['id' => $user->id, 'period' => 'all']) }}#whatsapp-tracking" class="btn btn-sm {{ ($period ?? 'week') === 'all' ? 'btn-primary' : 'btn-outline-primary' }}">Semua</a>
-                        </div>
+        <div class="card mb-4" id="whatsapp-tracking">
+            <div class="card-header">
+                <h3 class="card-title"><i class="fas fa-whatsapp mr-1"></i> Status Pengiriman Pengingat</h3>
+                <div class="card-tools">
+                    <div class="btn-group" role="group">
+                        <a href="{{ route('admin.pasienDetail', ['id' => $user->id, 'period' => 'week']) }}#whatsapp-tracking" class="btn btn-sm {{ ($period ?? 'week') === 'week' ? 'btn-primary' : 'btn-outline-primary' }}">7 Hari</a>
+                        <a href="{{ route('admin.pasienDetail', ['id' => $user->id, 'period' => 'month']) }}#whatsapp-tracking" class="btn btn-sm {{ ($period ?? 'week') === 'month' ? 'btn-primary' : 'btn-outline-primary' }}">30 Hari</a>
+                        <a href="{{ route('admin.pasienDetail', ['id' => $user->id, 'period' => 'all']) }}#whatsapp-tracking" class="btn btn-sm {{ ($period ?? 'week') === 'all' ? 'btn-primary' : 'btn-outline-primary' }}">Semua</a>
                     </div>
+                </div>
+            </div>
+            <div class="card-body">
                     @foreach($trackingData as $track)
                     <div class="mb-3 p-3 border rounded">
                         <div class="d-flex justify-content-between align-items-center mb-2">
@@ -316,57 +322,60 @@
         </div>
         @endif
 
-        <!-- Data Profil Pasien -->
-        <div class="bg-white p-4 shadow-sm mb-4">
-            <h6 class="mb-3 fw-bold">Data Profil Pasien</h6>
+        <!-- Patient Profile Data Card -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h3 class="card-title"><i class="fas fa-user-circle mr-1"></i> Data Profil Pasien</h3>
+            </div>
+            <div class="card-body">
             <div class="row">
                 <div class="col-md-8">
                     <div class="row">
                         <div class="col-md-6 col-sm-6 col-12 mb-3">
-                            <label class="small fw-bold text-muted">Nama Lengkap</label>
+                            <label class="font-weight-bold text-muted">Nama Lengkap</label>
                             <p class="mb-0">{{ $user->name }}</p>
                         </div>
                         <div class="col-md-6 col-sm-6 col-12 mb-3">
-                            <label class="small fw-bold text-muted">Usia</label>
+                            <label class="font-weight-bold text-muted">Usia</label>
                             <p class="mb-0">{{ $user->usia }} tahun</p>
                         </div>
                         <div class="col-md-6 col-sm-6 col-12 mb-3">
-                            <label class="small fw-bold text-muted">Jenis Kelamin</label>
+                            <label class="font-weight-bold text-muted">Jenis Kelamin</label>
                             <p class="mb-0">{{ $user->jenis_kelamin }}</p>
                         </div>
                         <div class="col-md-6 col-sm-6 col-12 mb-3">
-                            <label class="small fw-bold text-muted">WhatsApp</label>
+                            <label class="font-weight-bold text-muted">WhatsApp</label>
                             <p class="mb-0">+{{ $user->nomor_hp }}</p>
                         </div>
                         <div class="col-md-6 col-sm-6 col-12 mb-3">
-                            <label class="small fw-bold text-muted">Email</label>
+                            <label class="font-weight-bold text-muted">Email</label>
                             <p class="mb-0">{{ $user->email }}</p>
                         </div>
                         <div class="col-md-6 col-sm-6 col-12 mb-3">
-                            <label class="small fw-bold text-muted">Puskesmas</label>
+                            <label class="font-weight-bold text-muted">Puskesmas</label>
                             <p class="mb-0">{{ ucwords(str_replace('_', ' ', $user->puskesmas)) }}</p>
                         </div>
                         <div class="col-md-6 col-sm-6 col-12 mb-3">
-                            <label class="small fw-bold text-muted">Terdaftar</label>
+                            <label class="font-weight-bold text-muted">Terdaftar</label>
                             <p class="mb-0">{{ $user->created_at->format('d M Y, H:i') }}</p>
                         </div>
                         <div class="col-md-6 col-sm-6 col-12 mb-3">
-                            <label class="small fw-bold text-muted">Reset Password</label>
-                            <form action="{{ route('admin.pasien.resetPassword', $user->id) }}" method="POST" class="d-flex gap-2">
+                            <label class="font-weight-bold text-muted">Reset Password</label>
+                            <form action="{{ route('admin.pasien.resetPassword', $user->id) }}" method="POST" class="d-flex">
                                 @csrf
-                                <input type="password" name="new_password" class="form-control form-control-sm" placeholder="Password baru" required style="max-width: 150px;">
+                                <input type="password" name="new_password" class="form-control form-control-sm mr-2" placeholder="Password baru" required style="max-width: 150px;">
                                 <button type="submit" class="btn btn-warning btn-sm">Reset</button>
                             </form>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-4 text-center">
-                    <div class="d-inline-flex align-items-center justify-content-center bg-light rounded-circle" style="width: 80px; height: 80px; font-size: 2rem; color: #6c757d;">
+                    <div class="d-inline-flex align-items-center justify-content-center bg-primary rounded-circle text-white" style="width: 80px; height: 80px; font-size: 2rem;">
                         {{ strtoupper(substr($user->name, 0, 1)) }}
                     </div>
                     <div class="mt-3">
-                        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editPasienModal">
-                            Edit Data Pasien
+                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editPasienModal">
+                            <i class="fas fa-user-edit mr-1"></i>Edit Data Pasien
                         </button>
                     </div>
                 </div>
@@ -374,10 +383,12 @@
         </div>
 
         @if ($allPengingat->isNotEmpty())
-            <!-- Detail Data Pengingat Obat -->
-            <div class="bg-white p-4 shadow-sm mb-4" style="display: none;">
-                <h6 class="mb-3 fw-bold">Detail Data Pengingat Obat</h6>
-                <div class="p-3 rounded" style="background: #f8f9fa;">
+            <!-- Medication Reminder Details Card -->
+            <div class="card mb-4" style="display: none;">
+                <div class="card-header">
+                    <h3 class="card-title"><i class="fas fa-clock mr-1"></i> Detail Data Pengingat Obat</h3>
+                </div>
+                <div class="card-body">
                     @if ($selectedPengingat)
                         <div class="row">
                             <div class="col-md-6">
@@ -391,8 +402,8 @@
                                     @endif
                                 </small>
                             </div>
-                            <div class="col-md-6 text-md-end">
-                                <span class="badge" style="background-color: #0b5e91; color: white;">
+                            <div class="col-md-6 text-md-right">
+                                <span class="badge badge-primary">
                                     {{ ucfirst($selectedPengingat->status) }}
                                 </span>
                             </div>
@@ -402,8 +413,8 @@
             </div>
         @endif
 
-
     </div>
+</section>
 
 
 
@@ -411,14 +422,16 @@
     <div class="modal fade" id="dataModal" tabindex="-1">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Data Tekanan Darah - {{ $user->name }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <div class="modal-header bg-primary">
+                    <h4 class="modal-title text-white">Data Tekanan Darah - {{ $user->name }}</h4>
+                    <button type="button" class="close text-white" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
                 </div>
                 <div class="modal-body">
                     <div class="table-responsive">
                         <table class="table table-hover" id="dataModalTable">
-                            <thead class="table-light">
+                            <thead class="thead-light">
                                 <tr>
                                     <th>No</th>
                                     <th>Tanggal</th>
@@ -442,48 +455,45 @@
     <div class="modal fade" id="editPasienModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Edit Data Pasien</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <div class="modal-header bg-primary">
+                    <h4 class="modal-title text-white">Edit Data Pasien</h4>
+                    <button type="button" class="close text-white" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
                 </div>
                 <form id="editPasienForm" action="{{ route('admin.pasienUpdate', $user->id) }}" method="POST">
                     @csrf
                     @method('PUT')
                     <div class="modal-body">
-                        <div class="mb-3">
+                        <div class="form-group">
                             <label class="form-label">Nama</label>
-                            <input type="text" class="form-control" name="name" value="{{ $user->name }}"
-                                required>
+                            <input type="text" class="form-control" name="name" value="{{ $user->name }}" required>
                         </div>
-                        <div class="mb-3">
+                        <div class="form-group">
                             <label class="form-label">Email</label>
-                            <input type="email" class="form-control" name="email" value="{{ $user->email }}"
-                                required>
+                            <input type="email" class="form-control" name="email" value="{{ $user->email }}" required>
                         </div>
-                        <div class="mb-3">
+                        <div class="form-group">
                             <label class="form-label">Nomor HP</label>
                             <div class="input-group">
-                                <span class="input-group-text">+62</span>
-                                <input type="text" class="form-control" name="nomor_hp"
-                                    value="{{ $user->nomor_hp }}" required pattern="[0-9]{8,13}" maxlength="13"
-                                    minlength="8" placeholder="8xxxxxxxxx">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">+62</span>
+                                </div>
+                                <input type="text" class="form-control" name="nomor_hp" value="{{ $user->nomor_hp }}" required pattern="[0-9]{8,13}" maxlength="13" minlength="8" placeholder="8xxxxxxxxx">
                             </div>
                         </div>
-                        <div class="mb-3">
+                        <div class="form-group">
                             <label class="form-label">Jenis Kelamin</label>
                             <select class="form-control" name="jenis_kelamin" required>
-                                <option value="Laki-laki" {{ $user->jenis_kelamin == 'Laki-laki' ? 'selected' : '' }}>
-                                    Laki-laki</option>
-                                <option value="Perempuan" {{ $user->jenis_kelamin == 'Perempuan' ? 'selected' : '' }}>
-                                    Perempuan</option>
+                                <option value="Laki-laki" {{ $user->jenis_kelamin == 'Laki-laki' ? 'selected' : '' }}>Laki-laki</option>
+                                <option value="Perempuan" {{ $user->jenis_kelamin == 'Perempuan' ? 'selected' : '' }}>Perempuan</option>
                             </select>
                         </div>
-                        <div class="mb-3">
+                        <div class="form-group">
                             <label class="form-label">Usia</label>
-                            <input type="number" class="form-control" name="usia" value="{{ $user->usia }}"
-                                min="1" max="120" required>
+                            <input type="number" class="form-control" name="usia" value="{{ $user->usia }}" min="1" max="120" required>
                         </div>
-                        <div class="mb-3">
+                        <div class="form-group">
                             <label class="form-label">Puskesmas</label>
                             <select class="form-control" name="puskesmas" required>
                                 <option value="kalasan" {{ $user->puskesmas == 'kalasan' ? 'selected' : '' }}>Kalasan</option>
@@ -493,8 +503,12 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-warning" id="editPasienBtn">Update Data</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                            <i class="fas fa-times mr-1"></i>Batal
+                        </button>
+                        <button type="submit" class="btn btn-warning" id="editPasienBtn">
+                            <i class="fas fa-save mr-1"></i>Update Data
+                        </button>
                     </div>
                 </form>
             </div>
@@ -505,32 +519,34 @@
     <div class="modal fade" id="tambahObatModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Tambah Obat Baru</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <div class="modal-header bg-primary">
+                    <h4 class="modal-title text-white">Tambah Obat Baru</h4>
+                    <button type="button" class="close text-white" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
                 </div>
                 <form id="tambahObatForm" action="{{ route('admin.obat.store') }}" method="POST">
                     @csrf
                     <input type="hidden" name="pengingat_obat_id" value="{{ $selectedPengingat->id ?? '' }}">
                     <div class="modal-body">
-                        <div class="mb-3 nama-obat-field">
-                            <label class="form-label fw-bold">Nama Obat</label>
-                            <select class="form-select" name="nama_obat" id="tambahNamaObat">
+                        <div class="form-group nama-obat-field">
+                            <label class="form-label">Nama Obat</label>
+                            <select class="form-control" name="nama_obat" id="tambahNamaObat">
                                 <option value="">-- Pilih nama obat --</option>
                                 @include('admin.partials.drug-options')
                             </select>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Jumlah Obat</label>
-                            <select class="form-select" name="jumlah_obat" required>
+                        <div class="form-group">
+                            <label class="form-label">Jumlah Obat</label>
+                            <select class="form-control" name="jumlah_obat" required>
                                 <option value="30 tablet/bulan">30 tablet (1 bulan)</option>
                                 <option value="60 tablet/bulan">60 tablet (2 bulan)</option>
                                 <option value="90 tablet/bulan">90 tablet (3 bulan)</option>
                             </select>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Waktu Minum</label>
-                            <select class="form-select" name="waktu_minum" required>
+                        <div class="form-group">
+                            <label class="form-label">Waktu Minum</label>
+                            <select class="form-control" name="waktu_minum" required>
                                 <option value="">-- Pilih jam --</option>
                                 <option value="06:00">06.00 (Pagi)</option>
                                 <option value="07:00">07.00 (Pagi)</option>
@@ -543,9 +559,9 @@
                                 <option value="21:00">21.00 (Malam)</option>
                             </select>
                         </div>
-                        <div class="mb-3 suplemen-field">
-                            <label class="form-label fw-bold">Suplemen Tambahan (Opsional)</label>
-                            <select class="form-select" name="suplemen" id="tambahSuplemen">
+                        <div class="form-group suplemen-field">
+                            <label class="form-label">Suplemen Tambahan (Opsional)</label>
+                            <select class="form-control" name="suplemen" id="tambahSuplemen">
                                 <option value="">-- Pilih suplemen jika ada --</option>
                                 <option value="Asam folat">Asam Folat</option>
                                 <option value="Zat besi">Zat Besi</option>
@@ -553,9 +569,9 @@
                                 <option value="Suplemen Multivitamin">Multivitamin untuk Ibu Hamil</option>
                             </select>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Status Obat</label>
-                            <select class="form-select" name="status_obat" required>
+                        <div class="form-group">
+                            <label class="form-label">Status Obat</label>
+                            <select class="form-control" name="status_obat" required>
                                 <option value="aktif">Aktif</option>
                                 <option value="habis">Habis</option>
                                 <option value="berhenti">Berhenti</option>
@@ -563,8 +579,12 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-success" id="tambahObatBtn">Tambah Obat</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                            <i class="fas fa-times mr-1"></i>Batal
+                        </button>
+                        <button type="submit" class="btn btn-success" id="tambahObatBtn">
+                            <i class="fas fa-save mr-1"></i>Tambah Obat
+                        </button>
                     </div>
                 </form>
             </div>
@@ -575,32 +595,34 @@
     <div class="modal fade" id="editObatModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Edit Obat</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <div class="modal-header bg-primary">
+                    <h4 class="modal-title text-white">Edit Obat</h4>
+                    <button type="button" class="close text-white" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
                 </div>
                 <form id="editObatForm" method="POST">
                     @csrf
                     @method('PUT')
                     <div class="modal-body">
-                        <div class="mb-3 nama-obat-field">
-                            <label class="form-label fw-bold">Nama Obat</label>
-                            <select class="form-select" name="nama_obat" id="editNamaObat">
+                        <div class="form-group nama-obat-field">
+                            <label class="form-label">Nama Obat</label>
+                            <select class="form-control" name="nama_obat" id="editNamaObat">
                                 <option value="">-- Pilih nama obat --</option>
                                 @include('admin.partials.drug-options')
                             </select>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Jumlah Obat</label>
-                            <select class="form-select" name="jumlah_obat" id="editJumlahObat" required>
+                        <div class="form-group">
+                            <label class="form-label">Jumlah Obat</label>
+                            <select class="form-control" name="jumlah_obat" id="editJumlahObat" required>
                                 <option value="30 tablet/bulan">30 tablet (1 bulan)</option>
                                 <option value="60 tablet/bulan">60 tablet (2 bulan)</option>
                                 <option value="90 tablet/bulan">90 tablet (3 bulan)</option>
                             </select>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Waktu Minum</label>
-                            <select class="form-select" name="waktu_minum" id="editWaktuMinum" required>
+                        <div class="form-group">
+                            <label class="form-label">Waktu Minum</label>
+                            <select class="form-control" name="waktu_minum" id="editWaktuMinum" required>
                                 <option value="">-- Pilih jam --</option>
                                 <option value="06:00">06.00 (Pagi)</option>
                                 <option value="07:00">07.00 (Pagi)</option>
@@ -613,9 +635,9 @@
                                 <option value="21:00">21.00 (Malam)</option>
                             </select>
                         </div>
-                        <div class="mb-3 suplemen-field">
-                            <label class="form-label fw-bold">Suplemen Tambahan (Opsional)</label>
-                            <select class="form-select" name="suplemen" id="editSuplemen">
+                        <div class="form-group suplemen-field">
+                            <label class="form-label">Suplemen Tambahan (Opsional)</label>
+                            <select class="form-control" name="suplemen" id="editSuplemen">
                                 <option value="">-- Pilih suplemen jika ada --</option>
                                 <option value="Asam folat">Asam Folat</option>
                                 <option value="Zat besi">Zat Besi</option>
@@ -623,9 +645,9 @@
                                 <option value="Suplemen Multivitamin">Multivitamin untuk Ibu Hamil</option>
                             </select>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Status Obat</label>
-                            <select class="form-select" name="status_obat" id="editStatusObat" required>
+                        <div class="form-group">
+                            <label class="form-label">Status Obat</label>
+                            <select class="form-control" name="status_obat" id="editStatusObat" required>
                                 <option value="aktif">Aktif</option>
                                 <option value="habis">Habis</option>
                                 <option value="berhenti">Berhenti</option>
@@ -633,8 +655,12 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-warning" id="editObatBtn">Update Obat</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                            <i class="fas fa-times mr-1"></i>Batal
+                        </button>
+                        <button type="submit" class="btn btn-warning" id="editObatBtn">
+                            <i class="fas fa-save mr-1"></i>Update Obat
+                        </button>
                     </div>
                 </form>
             </div>
@@ -645,32 +671,40 @@
     <div class="modal fade" id="tambahTekananDarahModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Tambah Data Tekanan Darah</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <div class="modal-header bg-primary">
+                    <h4 class="modal-title text-white">Tambah Data Tekanan Darah</h4>
+                    <button type="button" class="close text-white" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
                 </div>
                 <form id="tambahTekananDarahForm">
                     <div class="modal-body">
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Tanggal</label>
+                        <div class="form-group">
+                            <label class="form-label">Tanggal</label>
                             <input type="date" class="form-control" id="tambahTanggal" required>
                         </div>
                         <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-bold">Sistol (mmHg)</label>
-                                <input type="number" class="form-control" id="tambahSistol" min="70"
-                                    max="250" required>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">Sistol (mmHg)</label>
+                                    <input type="number" class="form-control" id="tambahSistol" min="70" max="250" required placeholder="120">
+                                </div>
                             </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-bold">Diastol (mmHg)</label>
-                                <input type="number" class="form-control" id="tambahDiastol" min="40"
-                                    max="150" required>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">Diastol (mmHg)</label>
+                                    <input type="number" class="form-control" id="tambahDiastol" min="40" max="150" required placeholder="80">
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-success" id="tambahTekananBtn">Tambah Data</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                            <i class="fas fa-times mr-1"></i>Batal
+                        </button>
+                        <button type="submit" class="btn btn-success" id="tambahTekananBtn">
+                            <i class="fas fa-save mr-1"></i>Tambah Data
+                        </button>
                     </div>
                 </form>
             </div>
@@ -730,7 +764,7 @@
             // Reset form
             document.getElementById('tambahTekananDarahForm').reset();
             document.getElementById('tambahTanggal').value = new Date().toISOString().split('T')[0];
-            new bootstrap.Modal(document.getElementById('tambahTekananDarahModal')).show();
+            $('#tambahTekananDarahModal').modal('show');
         }
 
         // Handle tambah data form submission
@@ -760,13 +794,13 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        bootstrap.Modal.getInstance(document.getElementById('tambahTekananDarahModal')).hide();
+                        $('#tambahTekananDarahModal').modal('hide');
                         alert('Data berhasil ditambahkan');
                         loadChartData();
                         // Reset form
                         document.getElementById('tambahTekananDarahForm').reset();
                     } else {
-                        alert('Error: ' + data.message);
+                        alert('Error: ' + (data.message || 'Terjadi kesalahan'));
                     }
                 })
                 .catch(error => {
@@ -775,7 +809,7 @@
                 })
                 .finally(() => {
                     submitBtn.disabled = false;
-                    submitBtn.innerHTML = 'Tambah Data';
+                    submitBtn.innerHTML = '<i class="fas fa-save mr-1"></i>Tambah Data';
                 });
         });
 
@@ -806,11 +840,11 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        bootstrap.Modal.getInstance(document.getElementById('editTekananDarahModal')).hide();
+                        $('#editTekananDarahModal').modal('hide');
                         alert('Data berhasil diupdate');
                         loadChartData();
                     } else {
-                        alert('Error: ' + data.message);
+                        alert('Error: ' + (data.message || 'Terjadi kesalahan'));
                     }
                 })
                 .catch(error => {
@@ -819,7 +853,7 @@
                 })
                 .finally(() => {
                     submitBtn.disabled = false;
-                    submitBtn.innerHTML = 'Update Data';
+                    submitBtn.innerHTML = '<i class="fas fa-save mr-1"></i>Update Data';
                 });
         });
 
@@ -830,7 +864,7 @@
             document.getElementById('editTanggal').value = tanggal;
             document.getElementById('editSistol').value = sistol;
             document.getElementById('editDiastol').value = diastol;
-            new bootstrap.Modal(document.getElementById('editTekananDarahModal')).show();
+            $('#editTekananDarahModal').modal('show');
         }
 
         // Validasi input angka untuk sistol dan diastol
@@ -915,7 +949,7 @@
             document.getElementById('editSuplemen').value = suplemen || '';
             document.getElementById('editStatusObat').value = status;
             document.getElementById('editObatForm').action = '{{ url('/admin/obat') }}/' + id;
-            new bootstrap.Modal(document.getElementById('editObatModal')).show();
+            $('#editObatModal').modal('show');
         }
 
         // Chart and data management
@@ -1025,9 +1059,8 @@
         }
 
         function showDataModal() {
-            const modal = new bootstrap.Modal(document.getElementById('dataModal'));
             loadModalTableData();
-            modal.show();
+            $('#dataModal').modal('show');
         }
 
         function loadModalTableData() {
@@ -1062,23 +1095,23 @@
             });
         }
 
-        // Function to toggle modal fields based on diagnosa
-        function toggleModalFields(diagnosa) {
-            const isKehamilan = diagnosa === 'Kehamilan';
+        // Function to toggle modal fields - Universal untuk semua pasien
+        function toggleModalFields() {
+            // Semua field ditampilkan untuk semua pasien
             const namaObatFields = document.querySelectorAll('.nama-obat-field');
             const suplemenFields = document.querySelectorAll('.suplemen-field');
             
             namaObatFields.forEach(field => {
-                field.style.display = isKehamilan ? 'none' : 'block';
+                field.style.display = 'block';
                 const select = field.querySelector('select');
-                if (select) select.required = !isKehamilan;
+                if (select) select.required = true;
             });
             
             suplemenFields.forEach(field => {
                 const label = field.querySelector('label');
                 const select = field.querySelector('select');
-                if (label) label.textContent = isKehamilan ? 'Jenis Suplemen *' : 'Suplemen Tambahan (Opsional)';
-                if (select) select.required = isKehamilan;
+                if (label) label.textContent = 'Suplemen Tambahan (Opsional)';
+                if (select) select.required = false;
             });
         }
 
@@ -1098,17 +1131,14 @@
             const tambahObatModal = document.getElementById('tambahObatModal');
             if (tambahObatModal) {
                 tambahObatModal.addEventListener('show.bs.modal', function(e) {
-                    const button = e.relatedTarget;
-                    const diagnosa = button.getAttribute('data-diagnosa');
-                    toggleModalFields(diagnosa);
+                    toggleModalFields();
                 });
             }
             
             const editObatModal = document.getElementById('editObatModal');
             if (editObatModal) {
                 editObatModal.addEventListener('show.bs.modal', function() {
-                    const diagnosa = '{{ $selectedPengingat->diagnosa ?? '' }}';
-                    toggleModalFields(diagnosa);
+                    toggleModalFields();
                 });
             }
 

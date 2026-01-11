@@ -68,27 +68,6 @@
                                     <div class="col-12">
                                         <div class="mb-4">
                                             <div class="input-wrapper">
-                                                <label for="diagnosa" class="form-label">
-                                                    Jenis Hipertensi:
-                                                </label>
-                                                <select class="form-select {{ $errors->has('diagnosa') ? 'is-invalid' : '' }}" id="diagnosa" name="diagnosa" required>
-                                                    <option value="" selected hidden>-- Pilih salah satu --</option>
-                                                    <option value="Hipertensi-Non-Kehamilan" {{ old('diagnosa') == 'Hipertensi-Non-Kehamilan' ? 'selected' : '' }}>Hipertensi Non-Kehamilan</option>
-                                                    <option value="Hipertensi-Kehamilan" {{ old('diagnosa') == 'Hipertensi-Kehamilan' ? 'selected' : '' }}>Hipertensi saat Hamil</option>
-                                                    <option value="Kehamilan" {{ old('diagnosa') == 'Kehamilan' ? 'selected' : '' }}>Kehamilan</option>
-                                                </select>
-                                            </div>
-                                            @error('diagnosa')
-                                                <div class="error-message">
-                                                    <i class="fas fa-exclamation-circle"></i>
-                                                    <span>{{ $message }}</span>
-                                                </div>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                    <div class="col-12">
-                                        <div class="mb-4">
-                                            <div class="input-wrapper">
                                                 <label class="form-label">
                                                     Tekanan Darah Terakhir:
                                                 </label>
@@ -471,18 +450,13 @@ document.addEventListener('DOMContentLoaded', function() {
         form.onsubmit = function(e) {
             e.preventDefault();
             
-            const diagnosa = document.getElementById('diagnosa').value;
             const s = +sistol.value, d = +diastol.value;
             const obatCards = document.querySelectorAll('.obat-card');
             
             let errorMessage = '';
             
-            // Check diagnosa
-            if (!diagnosa) {
-                errorMessage = 'Silakan pilih jenis hipertensi Anda terlebih dahulu.';
-            }
             // Check tekanan darah
-            else if (!s || !d) {
+            if (!s || !d) {
                 errorMessage = 'Mohon isi kedua nilai tekanan darah (sistol dan diastol).';
             }
             else if (s < 50 || s > 250 || d < 50 || d > 150) {
@@ -492,30 +466,19 @@ document.addEventListener('DOMContentLoaded', function() {
             else if (obatCards.length === 0) {
                 errorMessage = 'Silakan tambahkan minimal satu obat terlebih dahulu.';
             }
-            // Check drug details
+            // Check drug details - Universal validation
             else {
                 let drugError = false;
-                const isKehamilan = diagnosa === 'Kehamilan';
                 obatCards.forEach((card, index) => {
                     const namaObat = card.querySelector('select[name="namaObat[]"]');
                     const jumlahObat = card.querySelector('select[name="jumlahObat[]"]').value;
                     const waktuMinum = card.querySelector('select[name="waktuMinum[]"]').value;
-                    const suplemen = card.querySelector('select[name="suplemen[]"]');
                     
-                    if (isKehamilan) {
-                        // Untuk kehamilan: suplemen, jumlah, waktu wajib
-                        if (!suplemen.value || !jumlahObat || !waktuMinum) {
-                            errorMessage = `Mohon lengkapi data suplemen ke-${index + 1} (jenis suplemen, jumlah, dan waktu minum).`;
-                            drugError = true;
-                            return;
-                        }
-                    } else {
-                        // Untuk non-kehamilan: nama obat, jumlah, waktu wajib
-                        if (!namaObat.value || !jumlahObat || !waktuMinum) {
-                            errorMessage = `Mohon lengkapi data obat ke-${index + 1} (nama obat, jumlah, dan waktu minum).`;
-                            drugError = true;
-                            return;
-                        }
+                    // Universal validation: nama obat, jumlah, waktu wajib
+                    if (!namaObat.value || !jumlahObat || !waktuMinum) {
+                        errorMessage = `Mohon lengkapi data obat ke-${index + 1} (nama obat, jumlah, dan waktu minum).`;
+                        drugError = true;
+                        return;
                     }
                 });
                 

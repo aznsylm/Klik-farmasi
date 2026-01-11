@@ -3,85 +3,87 @@
 @section('title', 'Kelola Testimoni')
 
 @section('content')
-<div class="container py-5">
-    <div class="text-center mb-4">
-        <h1 class="fw-bold">Kelola Testimoni</h1>
-    </div>
-
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <!-- Tombol Tambah Testimonial -->
-        <a href="{{ route('admin.testimoni.create') }}" class="btn btn-primary"> Tambah Testimoni
-        </a>
-
-        <!-- Tombol Kembali ke Dashboard -->
-        <a href="{{ route('admin.dashboard') }}" class="btn btn-secondary">
-            <i class="bi bi-arrow-left"></i> Kembali ke Dashboard
-        </a>
-    </div>
-
-    <!-- Notifikasi Sukses -->
-    @if (session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+<!-- Content Header -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">Kelola Testimoni</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Testimoni</li>
+                </ol>
+            </div>
         </div>
-    @endif
-
-    <!-- Tabel Testimonial -->
-    <div class="table-responsive">
-        <table class="table table-bordered table-hover align-middle">
-            <thead class="table-dark">
-                <tr>
-                    <th>No</th>
-                    <th>Kalimat</th>
-                    <th>Nama</th>
-                    <th class="text-center">Aksi</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($testimonials as $testimonial)
-                    <tr>
-                        <td>{{ $loop->iteration }}</td>
-                        <td>{{ $testimonial->quote }}</td>
-                        <td>{{ $testimonial->name }}</td>
-                        <td class="text-center">
-                            <a href="{{ route('admin.testimoni.edit', $testimonial->id) }}" class="btn btn-warning btn-sm me-1">
-                                Edit
-                            </a>
-
-                            <form action="{{ route('admin.testimoni.destroy', $testimonial->id) }}" method="POST" style="display:inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus testimonial ini?')">
-                                    Hapus
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
     </div>
 </div>
 
-<style>
-    body {
-        font-family: 'Poppins', sans-serif;
-    }
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Daftar Testimoni</h3>
+                <div class="card-tools">
+                    <a href="{{ route('admin.testimoni.create') }}" class="btn btn-primary btn-sm">
+                        <i class="fas fa-plus"></i> Tambah Testimoni
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
+                @if (session('success'))
+                    <div class="alert alert-success alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        {{ session('success') }}
+                    </div>
+                @endif
 
-    .table {
-        border-radius: 12px;
-        overflow: hidden;
-    }
-
-    .table-hover tbody tr:hover {
-        background-color: #f8f9fa;
-    }
-
-    .table td, .table th {
-        vertical-align: middle;
-        text-align: left;
-    }
-
-</style>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Kalimat</th>
+                                <th>Nama</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($testimonials as $testimonial)
+                                <tr>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ Str::limit($testimonial->quote, 100) }}</td>
+                                    <td>{{ $testimonial->name }}</td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <a href="{{ route('admin.testimoni.edit', $testimonial->id) }}" class="btn btn-warning btn-sm" title="Edit">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <form action="{{ route('admin.testimoni.destroy', $testimonial->id) }}" method="POST" class="d-inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus testimonial ini?')" title="Hapus">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            @if($testimonials->hasPages())
+            <div class="card-footer">
+                <div class="d-flex justify-content-center">
+                    {{ $testimonials->onEachSide(1)->links('pagination::bootstrap-4') }}
+                </div>
+            </div>
+            @endif
+        </div>
+    </div>
+</section>
 @endsection
