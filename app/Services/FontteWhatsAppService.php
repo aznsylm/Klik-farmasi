@@ -156,8 +156,8 @@ class FontteWhatsAppService
         $formatVariasi = [
             "Sebentar lagi\n{$namaObat} | {$waktuMinum}\n\n{$pesanMotivasi}\n\n— Klik Farmasi",
             "{$waktuMinum} • {$namaObat}\n\n{$pesanMotivasi}\n\nSalam sehat, Klik Farmasi",
-            "🔔 {$waktuMinum}\n{$namaObat}\n\n{$pesanMotivasi}\n\n~ Klik Farmasi ~",
-            "Jadwal: {$waktuMinum}\nObat: {$namaObat}\n\n{$pesanMotivasi}\n\nKlik Farmasi 🌿",
+            "{$waktuMinum}\n{$namaObat}\n\n{$pesanMotivasi}\n\n~ Klik Farmasi ~",
+            "Jadwal: {$waktuMinum}\nObat: {$namaObat}\n\n{$pesanMotivasi}\n\nKlik Farmasi",
             "{$namaObat} • {$waktuMinum}\n\n{$pesanMotivasi}\n\nTerima kasih,\nKlik Farmasi"
         ];
         

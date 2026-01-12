@@ -7,10 +7,15 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PengingatObatController;
 use App\Http\Controllers\TekananDarahController;
+use App\Http\Controllers\TestController;
 
 
 
 Route::get('/', [PageController::class, 'beranda'])->name('beranda');
+
+// Testing WhatsApp Service
+Route::get('/test-wa', [TestController::class, 'testWhatsApp']);
+Route::get('/test-pengingat', [TestController::class, 'testPengingat']);
 
 // PWA Routes
 Route::get('/offline', function () {

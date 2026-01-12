@@ -38,14 +38,14 @@ function togglePassword(inputId) {
 
 // Show edit modal function for index page
 function showEditPasienModal(id, name, email, phone, gender, age, puskesmas) {
-    document.getElementById('editName').value = name;
+    document.getElementById('editNama').value = name;
     document.getElementById('editEmail').value = email;
-    document.getElementById('editPhone').value = phone;
-    document.getElementById('editGender').value = gender;
-    document.getElementById('editAge').value = age;
-    document.getElementById('editPasswordInput').value = '';
+    document.getElementById('editNomorHp').value = phone;
+    document.getElementById('editJenisKelamin').value = gender;
+    document.getElementById('editUsia').value = age;
+    document.getElementById('editPuskesmas').value = puskesmas;
     
-    document.getElementById('editPasienForm').action = '{{ route("admin.pasien") }}/' + id;
+    document.getElementById('editPasienForm').action = '/admin/pasien/' + id;
     $('#editPasienModal').modal('show');
 }
 

@@ -4,7 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Models\PengingatObat;
-use App\Models\DetailObatPengingat;
+use App\Models\DetailObat;
 use App\Models\WhatsappLog;
 use App\Services\FontteWhatsAppService;
 use Carbon\Carbon;
@@ -28,161 +28,52 @@ class KirimPengingatObatCommand extends Command
         $this->info('Memulai pengiriman pengingat obat...');
         $waktuSekarang = Carbon::now('Asia/Jakarta');
         $tanggalHariIni = $waktuSekarang->toDateString();
+        $waktuTarget = $waktuSekarang->addMinutes(5)->format('H:i');
+        
         Log::info('Cron pengingat:kirim-obat dipanggil pada ' . $waktuSekarang->toDateTimeString());
         $this->info("Waktu sekarang: " . $waktuSekarang->format('Y-m-d H:i:s'));
+        $this->info("Mencari obat dengan jadwal: {$waktuTarget}");
 
-        // Ambil daftar waktu_minum unik dari DB (format H:i) untuk obat aktif
-        $waktuList = DetailObatPengingat::query()
-            ->where('status_obat', 'aktif')
-            ->whereHas('pengingatObat', function ($q) use ($tanggalHariIni) {
-                $q->where('status', 'aktif')
-                  ->where('tanggal_mulai', '<=', $tanggalHariIni);
-            })
-            ->selectRaw("TIME_FORMAT(waktu_minum, '%H:%i') as waktu")
-            ->pluck('waktu')
-            ->unique()
-            ->values();
-
-        if ($waktuList->isEmpty()) {
-            $this->info('Tidak ada waktu obat aktif di database. Keluar.');
-            Log::info('Tidak ada waktu obat aktif di DB.');
-            return 0;
-        }
-
-        $this->info('Waktu obat terdaftar: ' . implode(', ', $waktuList->toArray()));
-
-        // Cari jadwal obat dalam extended window (30-120 menit sebelum)
-        $targetObat = null;
-        $windowInfo = null;
-        
-        foreach ($waktuList as $waktu) {
-            $carbonObat = Carbon::createFromFormat('H:i', $waktu, 'Asia/Jakarta')
-                ->setDate($waktuSekarang->year, $waktuSekarang->month, $waktuSekarang->day);
-
-            $diffSeconds = $carbonObat->getTimestamp() - $waktuSekarang->getTimestamp();
-            $diffMinutes = $diffSeconds / 60;
-
-            // Hitung total jadwal untuk waktu ini
-            $totalJadwalWaktu = DetailObatPengingat::query()
-                ->where('status_obat', 'aktif')
-                ->whereHas('pengingatObat', function ($q) use ($tanggalHariIni) {
-                    $q->where('status', 'aktif')
-                      ->where('tanggal_mulai', '<=', $tanggalHariIni);
-                })
-                ->whereRaw('TIME_FORMAT(waktu_minum, "%H:%i") = ?', [$waktu])
-                ->count();
-
-            // Dynamic window berdasarkan jumlah jadwal
-            if ($totalJadwalWaktu <= 10 && $diffMinutes >= 30 && $diffMinutes <= 120) {
-                $targetObat = $waktu;
-                $windowInfo = "Window: 30-120 menit (≤10 jadwal)";
-                break;
-            } elseif ($totalJadwalWaktu <= 30 && $diffMinutes >= 60 && $diffMinutes <= 120) {
-                $targetObat = $waktu;
-                $windowInfo = "Window: 60-120 menit (11-30 jadwal)";
-                break;
-            } elseif ($totalJadwalWaktu <= 50 && $diffMinutes >= 90 && $diffMinutes <= 120) {
-                $targetObat = $waktu;
-                $windowInfo = "Window: 90-120 menit (31-50 jadwal)";
-                break;
-            } elseif ($totalJadwalWaktu > 50 && $diffMinutes >= 120 && $diffMinutes <= 150) {
-                $targetObat = $waktu;
-                $windowInfo = "Window: 120-150 menit (50+ jadwal)";
-                break;
-            }
-        }
-
-        if (!$targetObat) {
-            $this->info("Tidak ada jadwal obat dalam window pengiriman. Keluar.");
-            Log::info("No target obat dalam extended window ({$waktuSekarang->format('H:i:s')}).");
-            return 0;
-        }
-
-        $this->info("Ditemukan jadwal obat {$targetObat}. {$windowInfo}");
-        Log::info("Target pengiriman: {$targetObat} | {$windowInfo} | Waktu: {$waktuSekarang->format('H:i:s')}");
-
+        // Ambil pengingat aktif dengan obat yang jadwalnya 5 menit lagi
         $pengingatAktif = PengingatObat::with(['user', 'detailObat'])
             ->where('status', 'aktif')
             ->where('tanggal_mulai', '<=', $tanggalHariIni)
+            ->whereHas('detailObat', function ($q) use ($waktuTarget) {
+                $q->where('status_obat', 'aktif')
+                  ->whereRaw('TIME_FORMAT(waktu_minum, "%H:%i") = ?', [$waktuTarget]);
+            })
             ->get();
 
-        // Hitung total jadwal untuk menentukan delay
-        $totalJadwal = 0;
-        foreach ($pengingatAktif as $pengingat) {
-            $totalJadwal += $pengingat->detailObat()
-                ->where('status_obat', 'aktif')
-                ->whereRaw('TIME_FORMAT(waktu_minum, "%H:%i") = ?', [$targetObat])
-                ->count();
+        if ($pengingatAktif->isEmpty()) {
+            $this->info('Tidak ada jadwal obat untuk waktu ini.');
+            Log::info("Tidak ada jadwal obat untuk {$waktuTarget}");
+            return 0;
         }
 
-        // Batch system: maksimal 10 pesan per run untuk anti-spam
-        $maxBatch = 10;
-        $actualBatch = min($totalJadwal, $maxBatch);
-        
-        // Dynamic delay berdasarkan jumlah jadwal
-        if ($totalJadwal <= 10) {
-            $delay = 60; // 60 detik untuk jadwal sedikit
-        } elseif ($totalJadwal <= 30) {
-            $delay = 90; // 90 detik untuk jadwal sedang
-        } elseif ($totalJadwal <= 50) {
-            $delay = 90; // 90 detik untuk jadwal banyak
-        } else {
-            $delay = 60; // 60 detik untuk jadwal sangat banyak (batch kecil)
-        }
+        $totalDikirim = 0;
+        $totalGagal = 0;
 
-        $this->info("Total jadwal: {$totalJadwal}, Batch: {$actualBatch}, Delay: {$delay} detik per pesan");
-        Log::info("Anti-spam: {$totalJadwal} total, batch {$actualBatch}, delay {$delay}s");
-
-        // Kumpulkan semua data pengiriman untuk randomize
-        $daftarPengiriman = [];
         foreach ($pengingatAktif as $pengingat) {
             $obatWaktuIni = $pengingat->detailObat()
                 ->where('status_obat', 'aktif')
-                ->whereRaw('TIME_FORMAT(waktu_minum, "%H:%i") = ?', [$targetObat])
+                ->whereRaw('TIME_FORMAT(waktu_minum, "%H:%i") = ?', [$waktuTarget])
                 ->get();
 
             foreach ($obatWaktuIni as $obat) {
-                $daftarPengiriman[] = [
-                    'pengingat' => $pengingat,
-                    'obat' => $obat
-                ];
-            }
-        }
+                // Cek apakah sudah pernah dikirim hari ini
+                $sudahDikirim = WhatsappLog::where('user_id', $pengingat->user->id)
+                    ->where('detail_obat_id', $obat->id)
+                    ->where('jenis_pesan', 'pengingat_obat')
+                    ->whereDate('created_at', $tanggalHariIni)
+                    ->where('status', 'sent')
+                    ->exists();
 
-        // Randomize urutan pengiriman
-        shuffle($daftarPengiriman);
+                if ($sudahDikirim) {
+                    $this->info("Skip - sudah dikirim: {$pengingat->user->name} - {$obat->nama_obat}");
+                    continue;
+                }
 
-        $totalDikirim = 0;
-        $counter = 0;
-        $batchCounter = 0;
-
-        foreach ($daftarPengiriman as $item) {
-            // Batasi maksimal pesan per run
-            if ($batchCounter >= $maxBatch) {
-                $this->info("Batch limit tercapai ({$maxBatch} pesan). Sisa akan diproses run berikutnya.");
-                Log::info("Batch limit: {$maxBatch}, sisa: " . ($totalJadwal - $batchCounter));
-                break;
-            }
-            $pengingat = $item['pengingat'];
-            $obat = $item['obat'];
-            $counter++;
-            
-            // cek apakah sudah pernah dikirim hari ini
-            $sudahDikirim = WhatsappLog::where('user_id', $pengingat->user->id)
-                ->where('detail_obat_id', $obat->id)
-                ->where('jenis_pesan', 'pengingat_obat')
-                ->whereDate('created_at', $tanggalHariIni)
-                ->where('status', 'sent')
-                ->exists();
-
-            if ($sudahDikirim) {
-                $this->info("[{$counter}/{$actualBatch}] Skip - sudah dikirim: {$pengingat->user->name} - {$obat->nama_obat}");
-                Log::info("Skip pengingat: {$pengingat->user->name} - {$obat->nama_obat}. Sudah dikirim hari ini.");
-                continue;
-            }
-            
-            $batchCounter++;
-
+                // Buat pesan dengan template random
                 $pesan = $this->whatsappService->buatPesanPengingatObat(
                     $pengingat->user->name,
                     $obat->nama_obat,
@@ -191,6 +82,7 @@ class KirimPengingatObatCommand extends Command
                     $obat->suplemen
                 );
 
+                // Kirim pesan
                 $result = $this->whatsappService->kirimPesan(
                     $pengingat->user->nomor_hp,
                     $pesan,
@@ -198,6 +90,7 @@ class KirimPengingatObatCommand extends Command
                     'pengingat_obat'
                 );
 
+                // Simpan log
                 WhatsappLog::create([
                     'user_id' => $pengingat->user->id,
                     'detail_obat_id' => $obat->id,
@@ -208,25 +101,22 @@ class KirimPengingatObatCommand extends Command
                 ]);
 
                 if ($result['success']) {
-                    $this->info("[{$batchCounter}/{$actualBatch}] Dikirim ke {$pengingat->user->name} - {$obat->nama_obat}");
+                    $this->info("✓ Dikirim ke {$pengingat->user->name} - {$obat->nama_obat}");
                     Log::info("Dikirim ke {$pengingat->user->nomor_hp} - {$obat->nama_obat}");
                     $totalDikirim++;
                 } else {
-                    $this->error("Gagal kirim ke {$pengingat->user->name}: {$result['message']}");
+                    $this->error("✗ Gagal kirim ke {$pengingat->user->name}: {$result['message']}");
                     Log::error("Gagal kirim ke {$pengingat->user->nomor_hp}: " . json_encode($result));
+                    $totalGagal++;
                 }
 
-            // Anti-spam delay dengan random variation (kecuali pesan terakhir)
-            if ($batchCounter < $actualBatch) {
-                $randomDelay = $delay + rand(-15, 15); // ±15 detik variasi
-                $this->info("Delay {$randomDelay} detik...");
-                sleep($randomDelay);
+                // Delay 30 detik antar pesan untuk anti-spam
+                sleep(30);
             }
         }
 
-        $sisaPesan = $totalJadwal - $batchCounter;
-        $this->info("Selesai! Batch ini: {$totalDikirim} terkirim. Sisa: {$sisaPesan} pesan.");
-        Log::info("Batch selesai: {$totalDikirim} terkirim, sisa: {$sisaPesan}");
+        $this->info("Selesai! Terkirim: {$totalDikirim}, Gagal: {$totalGagal}");
+        Log::info("Pengingat selesai: {$totalDikirim} terkirim, {$totalGagal} gagal");
         return 0;
     }
 }
