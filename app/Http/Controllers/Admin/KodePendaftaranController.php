@@ -12,14 +12,9 @@ class KodePendaftaranController extends Controller
     {
         $kodeList = KodePendaftaran::with(['pembuatKode', 'penggunaKode'])
             ->orderByDesc('created_at')
-            ->paginate(20);
+            ->paginate(10);
 
         return view('admin.kode-pendaftaran.index', compact('kodeList'));
-    }
-
-    public function create()
-    {
-        return view('admin.kode-pendaftaran.create');
     }
 
     public function store(Request $request)

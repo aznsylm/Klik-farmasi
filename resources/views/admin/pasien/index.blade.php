@@ -7,7 +7,7 @@
 <div class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
-            <div class="col-sm-6">
+            <div class="col-12 col-sm-6">
                 <h1>Daftar Pasien</h1>
                 <p class="text-muted mb-0">
                     Puskesmas
@@ -20,7 +20,7 @@
                     @endif
                 </p>
             </div>
-            <div class="col-sm-6">
+            <div class="col-12 col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
                     <li class="breadcrumb-item active">Pasien</li>
@@ -53,25 +53,25 @@
         @if ($errors->any())
             <div class="alert alert-danger alert-dismissible">
                 <button type="button" class="close" data-dismiss="alert">&times;</button>
-                <ul class="mb-0">
+                <div class="mb-0">
                     @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
+                        <div>{{ $error }}</div>
                     @endforeach
-                </ul>
+                </div>
             </div>
         @endif
 
         <!-- Action Bar -->
         <div class="row mb-3">
-            <div class="col-md-4">
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#tambahPasienModal">
+            <div class="col-12 col-md-4 mb-2 mb-md-0">
+                <button type="button" class="btn btn-primary w-100 w-md-auto" data-toggle="modal" data-target="#tambahPasienModal">
                     <i class="fas fa-plus mr-1"></i> Tambah Pasien
                 </button>
             </div>
-            <div class="col-md-4">
+            <div class="col-12 col-md-4 mb-2 mb-md-0">
                 <form method="GET" action="{{ route('admin.pasien') }}">
                     <div class="input-group">
-                        <input type="text" name="search" class="form-control" placeholder="Cari nama, email, HP, jenis kelamin, usia..." value="{{ request('search') }}">
+                        <input type="text" name="search" class="form-control" placeholder="Cari nama, email, HP..." value="{{ request('search') }}">
                         <div class="input-group-append">
                             <button type="submit" class="btn btn-primary">
                                 <i class="fas fa-search"></i>
@@ -83,9 +83,9 @@
                     </div>
                 </form>
             </div>
-            <div class="col-md-4 text-right">
-                <a href="{{ route('admin.dashboard') }}" class="btn btn-secondary">
-                    <i class="fas fa-arrow-left mr-1"></i> Kembali ke Dashboard
+            <div class="col-12 col-md-4 text-md-right">
+                <a href="{{ route('admin.dashboard') }}" class="btn btn-secondary w-100 w-md-auto">
+                    <i class="fas fa-arrow-left mr-1"></i> Kembali
                 </a>
             </div>
         </div>
@@ -130,6 +130,10 @@
                                             <a href="{{ route('admin.pasienDetail', $user->id) }}" class="btn btn-info btn-sm" title="Detail">
                                                 <i class="fas fa-eye"></i>
                                             </a>
+                                            <button type="button" class="btn btn-warning btn-sm" title="Edit" 
+                                                onclick="showEditPasienModal({{ $user->id }}, '{{ $user->name }}', '{{ $user->email }}', '{{ $user->nomor_hp }}', '{{ $user->jenis_kelamin }}', {{ $user->usia }}, '{{ $user->puskesmas }}')">
+                                                <i class="fas fa-pencil-alt"></i>
+                                            </button>
                                             <form action="{{ route('admin.deletePasien', $user->id) }}" method="POST" style="display: inline;">
                                                 @csrf
                                                 @method('DELETE')
@@ -165,154 +169,84 @@
     </div>
 </section>
 
-<!-- Modal Tambah Pasien -->
-<div class="modal fade" id="tambahPasienModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header bg-primary">
-                <h4 class="modal-title text-white">Tambah Pasien Baru</h4>
-                <button type="button" class="close text-white" data-dismiss="modal">
-                    <span>&times;</span>
-                </button>
-            </div>
-            <form id="tambahPasienForm" action="{{ route('admin.addPasien') }}" method="POST">
-                @csrf
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label class="font-weight-bold">Nama Lengkap</label>
-                        <input type="text" class="form-control" name="name" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="font-weight-bold">Jenis Kelamin</label>
-                        <select class="form-control" name="jenis_kelamin" required>
-                            <option value="">-- Pilih Jenis Kelamin --</option>
-                            <option value="Laki-laki">Laki-laki</option>
-                            <option value="Perempuan">Perempuan</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="font-weight-bold">Usia</label>
-                        <input type="number" class="form-control" name="usia" min="1" max="120" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="font-weight-bold">Email</label>
-                        <input type="email" class="form-control" name="email" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="font-weight-bold">Password</label>
-                        <div class="input-group">
-                            <input type="password" class="form-control" name="password" id="passwordField" minlength="8" required>
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-secondary" type="button" id="togglePassword">
-                                    <i class="fas fa-eye-slash" id="passwordIcon"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="font-weight-bold">Konfirmasi Password</label>
-                        <div class="input-group">
-                            <input type="password" class="form-control" name="password_confirmation" id="confirmPasswordField" minlength="8" required>
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-secondary" type="button" id="toggleConfirmPassword">
-                                    <i class="fas fa-eye-slash" id="confirmPasswordIcon"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="font-weight-bold">WhatsApp</label>
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">+62</span>
-                            </div>
-                            <input type="text" class="form-control" name="nomor_hp" placeholder="8xxxxxxxxx" pattern="[0-9]{8,13}" maxlength="13" minlength="8" required>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="font-weight-bold">Pilih Puskesmas</label>
-                        <select class="form-control" name="puskesmas" required>
-                            @if (auth()->user()->role === 'super_admin')
-                                <option value="">-- Pilih Puskesmas --</option>
-                                <option value="kalasan">Puskesmas Kalasan</option>
-                                <option value="godean_2">Puskesmas Godean 2</option>
-                                <option value="umbulharjo">Puskesmas Umbulharjo</option>
-                            @else
-                                <option value="{{ auth()->user()->puskesmas }}" selected>
-                                    Puskesmas
-                                    @if (auth()->user()->puskesmas == 'kalasan')
-                                        Kalasan
-                                    @elseif(auth()->user()->puskesmas == 'godean_2')
-                                        Godean 2
-                                    @elseif(auth()->user()->puskesmas == 'umbulharjo')
-                                        Umbulharjo
-                                    @endif
-                                </option>
-                            @endif
-                        </select>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary" id="tambahPasienBtn">
-                        <i class="fas fa-save mr-1"></i> Tambah Pasien
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
+@include('components.admin.modal-tambah-pasien')
+@include('components.admin.modal-edit-pasien')
+@include('components.admin.modal-scripts')
 
 <script>
+// Handle tambah pasien form
 document.addEventListener('DOMContentLoaded', function() {
-    // Handle form submission
-    document.getElementById('tambahPasienForm').addEventListener('submit', function(e) {
-        const submitBtn = document.getElementById('tambahPasienBtn');
-        submitBtn.disabled = true;
-        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Menyimpan...';
-    });
-
-    // Phone input validation
-    const phoneInput = document.querySelector('input[name="nomor_hp"]');
-    if (phoneInput) {
-        phoneInput.addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length > 13) value = value.substring(0, 13);
-            e.target.value = value;
+    const tambahForm = document.querySelector('#tambahPasienModal form');
+    if (tambahForm) {
+        tambahForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            if (await validateTambahPasien()) {
+                this.submit();
+            }
         });
     }
-
-    // Password toggle
-    document.getElementById('togglePassword').addEventListener('click', function() {
-        const passwordField = document.getElementById('passwordField');
-        const passwordIcon = document.getElementById('passwordIcon');
-
-        if (passwordField.type === 'password') {
-            passwordField.type = 'text';
-            passwordIcon.className = 'fas fa-eye';
-        } else {
-            passwordField.type = 'password';
-            passwordIcon.className = 'fas fa-eye-slash';
-        }
-    });
-
-    document.getElementById('toggleConfirmPassword').addEventListener('click', function() {
-        const confirmPasswordField = document.getElementById('confirmPasswordField');
-        const confirmPasswordIcon = document.getElementById('confirmPasswordIcon');
-
-        if (confirmPasswordField.type === 'password') {
-            confirmPasswordField.type = 'text';
-            confirmPasswordIcon.className = 'fas fa-eye';
-        } else {
-            confirmPasswordField.type = 'password';
-            confirmPasswordIcon.className = 'fas fa-eye-slash';
-        }
-    });
-
-    // Show modal if validation errors
-    @if ($errors->any())
-        $('#tambahPasienModal').modal('show');
-    @endif
 });
+
+// Custom validation messages
+document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('invalid', function(e) {
+        const input = e.target;
+        
+        if (input.validity.valueMissing) {
+            if (input.type === 'email') {
+                input.setCustomValidity('Email wajib diisi');
+            } else if (input.name === 'name') {
+                input.setCustomValidity('Nama wajib diisi');
+            } else if (input.name === 'nomor_hp') {
+                input.setCustomValidity('Nomor HP wajib diisi');
+            } else if (input.name === 'puskesmas') {
+                input.setCustomValidity('Puskesmas wajib dipilih');
+            } else if (input.name === 'jenis_kelamin') {
+                input.setCustomValidity('Jenis kelamin wajib dipilih');
+            } else if (input.name === 'usia') {
+                input.setCustomValidity('Usia wajib diisi');
+            } else if (input.name === 'password') {
+                input.setCustomValidity('Password wajib diisi');
+            } else {
+                input.setCustomValidity('Field ini wajib diisi');
+            }
+        } else if (input.validity.typeMismatch) {
+            if (input.type === 'email') {
+                input.setCustomValidity('Format email tidak valid');
+            }
+        } else if (input.validity.patternMismatch) {
+            if (input.name === 'name') {
+                input.setCustomValidity('Nama hanya boleh huruf dan spasi, 2-50 karakter');
+            }
+        } else if (input.validity.tooShort) {
+            if (input.name === 'password') {
+                input.setCustomValidity('Password minimal 8 karakter');
+            }
+        } else if (input.validity.rangeUnderflow) {
+            if (input.name === 'usia') {
+                input.setCustomValidity('Usia terlalu kecil');
+            }
+        } else if (input.validity.rangeOverflow) {
+            if (input.name === 'usia') {
+                input.setCustomValidity('Usia terlalu besar (maksimal 120 tahun)');
+            }
+        }
+    }, true);
+    
+    // Clear custom validity on input
+    document.addEventListener('input', function(e) {
+        if (e.target.matches('input, select')) {
+            e.target.setCustomValidity('');
+        }
+    });
+});
+
+// Show modal if validation errors
+@if ($errors->any())
+    $(document).ready(function() {
+        $('#tambahPasienModal').modal('show');
+    });
+@endif
 </script>
 @endsection

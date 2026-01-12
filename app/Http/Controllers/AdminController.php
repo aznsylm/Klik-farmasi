@@ -15,14 +15,26 @@ class AdminController extends Controller
         // Statistik Tekanan Darah
         $tdStats = $this->getTekananDarahStats($adminPuskesmas);
         
-        return view('admin.dashboard', compact('tdStats'));
+        // Count data untuk Features Grid
+        $totalPasien = User::where('role', 'pasien')->where('puskesmas', $adminPuskesmas)->count();
+        $totalArtikel = \App\Models\Article::count();
+        $totalBerita = \App\Models\News::count();
+        $totalFaq = \App\Models\Faq::count();
+        $totalUnduhan = \App\Models\Download::count();
+        $totalTestimoni = \App\Models\Testimonial::count();
+        $totalKodePendaftaran = \App\Models\KodePendaftaran::count();
+        
+        return view('admin.dashboard', compact(
+            'tdStats', 'totalPasien', 'totalArtikel', 'totalBerita', 
+            'totalFaq', 'totalUnduhan', 'totalTestimoni', 'totalKodePendaftaran'
+        ));
     }
     
     private function getTekananDarahStats($puskesmas)
     {
         // Ambil TD terakhir setiap pasien di puskesmas ini
         $latestTD = \DB::select("
-            SELECT ctd.user_id, u.name, ctd.sistol, ctd.diastol
+            SELECT ctd.user_id, u.name, u.nomor_hp, ctd.sistol, ctd.diastol
             FROM catatan_tekanan_darah ctd
             INNER JOIN users u ON ctd.user_id = u.id
             INNER JOIN (
@@ -38,20 +50,18 @@ class AdminController extends Controller
         $sangatTinggi = [];
         
         foreach ($latestTD as $td) {
-            // Klasifikasi berdasarkan panduan medis: ambil kategori tertinggi
+            // Klasifikasi berdasarkan panduan medis yang sesuai dengan dashboard
             if ($td->sistol < 120 && $td->diastol < 80) {
                 // Normal: <120 DAN <80
-                $normal[] = ['name' => $td->name, 'sistol' => $td->sistol, 'diastol' => $td->diastol];
-            } elseif ($td->sistol >= 120 && $td->sistol <= 129 && $td->diastol < 80) {
-                // Pre Hipertensi: 120-129 DAN <80
-                $tinggi[] = ['name' => $td->name, 'sistol' => $td->sistol, 'diastol' => $td->diastol];
-            } elseif (($td->sistol >= 130 && $td->sistol <= 139) || ($td->diastol >= 80 && $td->diastol <= 89)) {
-                // Stage 1: 130-139 ATAU 80-89
-                $sangatTinggi[] = ['name' => $td->name, 'sistol' => $td->sistol, 'diastol' => $td->diastol];
-            } else {
-                // Stage 2: ≥140 ATAU ≥90
-                $sangatTinggi[] = ['name' => $td->name, 'sistol' => $td->sistol, 'diastol' => $td->diastol];
+                $normal[] = ['name' => $td->name, 'nomor_hp' => $td->nomor_hp, 'sistol' => $td->sistol, 'diastol' => $td->diastol];
+            } elseif (($td->sistol >= 120 && $td->sistol <= 129) || ($td->diastol >= 80 && $td->diastol <= 90)) {
+                // Pre Hipertensi: 120-129 ATAU 80-90
+                $tinggi[] = ['name' => $td->name, 'nomor_hp' => $td->nomor_hp, 'sistol' => $td->sistol, 'diastol' => $td->diastol];
+            } elseif (($td->sistol >= 140 && $td->sistol <= 159) || ($td->diastol >= 90 && $td->diastol <= 99)) {
+                // Hipertensi Stage 1: 140-159 ATAU 90-99
+                $sangatTinggi[] = ['name' => $td->name, 'nomor_hp' => $td->nomor_hp, 'sistol' => $td->sistol, 'diastol' => $td->diastol];
             }
+            // Stage 2 (≥160/100) tidak ditampilkan karena hardcoded 0 di dashboard
         }
         
         return [
@@ -98,8 +108,7 @@ class AdminController extends Controller
     
     public function update(Request $request, $id)
     {
-        $user = User::findOrFail($id);
-        $user->where('puskesmas', auth()->user()->puskesmas);
+        $user = User::where('puskesmas', auth()->user()->puskesmas)->findOrFail($id);
     
         $rules = [
             'name' => 'required|string|max:100',
@@ -111,14 +120,25 @@ class AdminController extends Controller
             ],
             'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
             'usia' => 'required|integer|min:1|max:120',
-            'password' => [
-                'nullable',
-                'min:8',
-                'confirmed'
-            ],
+            'password' => 'nullable|min:8'
         ];
     
-        $request->validate($rules);
+        $request->validate($rules, [
+            'name.required' => 'Nama wajib diisi',
+            'name.max' => 'Nama maksimal 100 karakter',
+            'email.required' => 'Email wajib diisi',
+            'email.email' => 'Format email tidak valid',
+            'email.unique' => 'Email sudah terdaftar',
+            'nomor_hp.required' => 'Nomor HP wajib diisi',
+            'nomor_hp.regex' => 'Format nomor HP tidak valid',
+            'nomor_hp.unique' => 'Nomor HP sudah terdaftar',
+            'jenis_kelamin.required' => 'Jenis kelamin wajib dipilih',
+            'usia.required' => 'Usia wajib diisi',
+            'usia.integer' => 'Usia harus berupa angka',
+            'usia.min' => 'Usia minimal 1 tahun',
+            'usia.max' => 'Usia maksimal 120 tahun',
+            'password.min' => 'Password minimal 8 karakter'
+        ]);
     
         $data = $request->only(['name', 'email', 'nomor_hp', 'jenis_kelamin', 'usia']);
         
@@ -127,7 +147,13 @@ class AdminController extends Controller
         }
     
         $user->update($data);
-        return redirect()->route('admin.pasienDetail', $user->id)->with('success', 'Pasien berhasil diperbarui.');
+        
+        // Check if request is from detail page (AJAX)
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json(['success' => true, 'redirect' => route('admin.pasienDetail', $id)]);
+        }
+        
+        return redirect()->route('admin.pasienDetail', $id)->with('success', 'Data pasien berhasil diperbarui.');
     }
 
     public function destroy($id)
@@ -155,18 +181,24 @@ class AdminController extends Controller
             'usia' => 'required|integer|min:1|max:120',
             'password' => [
                 'required',
-                'min:8',
-                'confirmed',
-                'regex:/[a-zA-Z]/',
-                'regex:/[0-9]/'
+                'min:8'
             ]
         ], [
-            'nomor_hp.regex' => 'Format nomor HP tidak valid',
-            'password.confirmed' => 'Konfirmasi password tidak cocok',
-            'password.min' => 'Password minimal 8 karakter',
-            'password.regex' => 'Password harus mengandung huruf dan angka',
+            'name.required' => 'Nama wajib diisi',
+            'name.max' => 'Nama maksimal 100 karakter',
+            'email.required' => 'Email wajib diisi',
+            'email.email' => 'Format email tidak valid',
             'email.unique' => 'Email sudah terdaftar',
-            'nomor_hp.unique' => 'Nomor HP sudah terdaftar'
+            'nomor_hp.required' => 'Nomor HP wajib diisi',
+            'nomor_hp.regex' => 'Format nomor HP tidak valid',
+            'nomor_hp.unique' => 'Nomor HP sudah terdaftar',
+            'jenis_kelamin.required' => 'Jenis kelamin wajib dipilih',
+            'usia.required' => 'Usia wajib diisi',
+            'usia.integer' => 'Usia harus berupa angka',
+            'usia.min' => 'Usia minimal 1 tahun',
+            'usia.max' => 'Usia maksimal 120 tahun',
+            'password.required' => 'Password wajib diisi',
+            'password.min' => 'Password minimal 8 karakter'
         ]);
 
         // Format nomor HP (pastikan ada prefix 62)
@@ -219,14 +251,21 @@ class AdminController extends Controller
             return [];
         }
 
-        $obatList = $pengingat->detailObat()->where('status_obat', 'aktif')->get();
+        // Ambil semua obat (aktif dan habis) untuk tracking lengkap
+        $obatList = $pengingat->detailObat()->get();
         $trackingData = [];
 
         foreach ($obatList as $obat) {
             $days = $this->getDaysByPeriod($userId, $obat->id, $period);
             
+            // Untuk admin Godean, prioritaskan suplemen di nama tracking
+            $displayName = auth()->user()->puskesmas === 'godean_2' 
+                ? ($obat->suplemen ?: $obat->nama_obat ?: 'Tidak ada nama')
+                : ($obat->nama_obat ?: $obat->suplemen ?: 'Tidak ada nama');
+            
             $trackingData[] = [
                 'obat' => $obat,
+                'display_name' => $displayName,
                 'days' => $days,
                 'success_rate' => $this->calculateSuccessRate($days)
             ];
@@ -305,6 +344,33 @@ class AdminController extends Controller
         return $days;
     }
 
+    public function checkDuplicate(Request $request)
+    {
+        $email = $request->input('email');
+        $nomorHp = $request->input('nomor_hp');
+        $userId = $request->input('user_id'); // For edit mode
+        
+        $exists = false;
+        
+        if ($email) {
+            $query = User::where('email', $email);
+            if ($userId) {
+                $query->where('id', '!=', $userId);
+            }
+            $exists = $query->exists();
+        }
+        
+        if ($nomorHp && !$exists) {
+            $query = User::where('nomor_hp', $nomorHp);
+            if ($userId) {
+                $query->where('id', '!=', $userId);
+            }
+            $exists = $query->exists();
+        }
+        
+        return response()->json(['exists' => $exists]);
+    }
+
     private function calculateSuccessRate($days)
     {
         if (isset($days[0]['total'])) {
@@ -320,5 +386,30 @@ class AdminController extends Controller
         $success = count(array_filter($validDays, fn($day) => $day['status'] === 'sent'));
         
         return $total > 0 ? round(($success / $total) * 100) : 0;
+    }
+    
+    public function getChartData($userId)
+    {
+        $user = User::where('puskesmas', auth()->user()->puskesmas)->findOrFail($userId);
+        
+        $data = \App\Models\CatatanTekananDarah::where('user_id', $userId)
+            ->orderBy('created_at', 'asc')
+            ->get();
+        
+        $labels = [];
+        $sistol = [];
+        $diastol = [];
+        
+        foreach ($data as $record) {
+            $labels[] = $record->created_at->format('d/m');
+            $sistol[] = $record->sistol;
+            $diastol[] = $record->diastol;
+        }
+        
+        return response()->json([
+            'labels' => $labels,
+            'sistol' => $sistol,
+            'diastol' => $diastol
+        ]);
     }
 }

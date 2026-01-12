@@ -65,10 +65,6 @@ Route::middleware(['auth', \App\Http\Middleware\RoleMiddleware::class . ':admin'
     Route::get('/pasien/{id}', [AdminController::class, 'show'])->name('pasienDetail');
     Route::put('/pasien/{id}', [AdminController::class, 'update'])->name('pasienUpdate');
     Route::delete('/pasien/{id}', [AdminController::class, 'destroy'])->name('deletePasien');
-    
-    // Kelola Pengingat Obat
-    Route::post('/pengingat/{id}/stop', [PengingatObatController::class, 'stopPengobatan'])->name('pengingat.stop');
-    Route::post('/pengingat/{id}/activate', [PengingatObatController::class, 'activatePengobatan'])->name('pengingat.activate');
 
     // Kelola Artikel
     Route::resource('artikel', \App\Http\Controllers\Admin\ArticleController::class)->parameters(['artikel' => 'article']);
@@ -83,7 +79,6 @@ Route::middleware(['auth', \App\Http\Middleware\RoleMiddleware::class . ':admin'
     
     // Kelola Kode Pendaftaran
     Route::get('/kode-pendaftaran', [\App\Http\Controllers\Admin\KodePendaftaranController::class, 'index'])->name('kode-pendaftaran.index');
-    Route::get('/kode-pendaftaran/create', [\App\Http\Controllers\Admin\KodePendaftaranController::class, 'create'])->name('kode-pendaftaran.create');
     Route::post('/kode-pendaftaran', [\App\Http\Controllers\Admin\KodePendaftaranController::class, 'store'])->name('kode-pendaftaran.store');
     Route::patch('/kode-pendaftaran/{kodePendaftaran}/status', [\App\Http\Controllers\Admin\KodePendaftaranController::class, 'updateStatus'])->name('kode-pendaftaran.update-status');
     
@@ -91,13 +86,19 @@ Route::middleware(['auth', \App\Http\Middleware\RoleMiddleware::class . ':admin'
     // Reset Password Pasien
     Route::post('/pasien/{id}/reset-password', [AdminController::class, 'resetPassword'])->name('pasien.resetPassword');
     
+    // Check duplicate email/phone
+    Route::post('/check-duplicate', [AdminController::class, 'checkDuplicate'])->name('check-duplicate');
+    
     // Kelola Obat Pasien
     Route::post('/obat', [\App\Http\Controllers\DetailObatController::class, 'store'])->name('obat.store');
     Route::put('/obat/{id}', [\App\Http\Controllers\DetailObatController::class, 'update'])->name('obat.update');
     Route::delete('/obat/{id}', [\App\Http\Controllers\DetailObatController::class, 'destroy'])->name('obat.delete');
+    Route::post('/obat/update-status', [\App\Http\Controllers\DetailObatController::class, 'adminUpdateStatus'])->name('obat.update-status');
     
     // Kelola Tekanan Darah Pasien
     Route::get('/pasien/{id}/tekanan-darah/chart', [TekananDarahController::class, 'getAdminChartData'])->name('pasien.tekanan-darah.chart');
+    Route::get('/pasien/{id}/tekanan-darah/records', [TekananDarahController::class, 'getAdminRecords'])->name('pasien.tekanan-darah.records');
+    Route::get('/pasien/{id}/tekanan-darah/dates', [TekananDarahController::class, 'getExistingDates'])->name('pasien.tekanan-darah.dates');
     Route::get('/pasien/{id}/tekanan-darah/pdf', [TekananDarahController::class, 'generatePDFReport'])->name('pasien.tekanan-darah.pdf');
     Route::post('/tekanan-darah', [TekananDarahController::class, 'adminStore'])->name('tekanan-darah.store');
     Route::put('/tekanan-darah/{id}', [TekananDarahController::class, 'adminUpdate'])->name('tekanan-darah.update');

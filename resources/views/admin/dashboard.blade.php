@@ -6,13 +6,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0">
-                    @if(Auth::user()->isSuperAdmin())
-                        Dashboard Super Admin
-                    @else
-                        Dashboard Admin
-                    @endif
-                </h1>
+                <h1 class="m-0">Dashboard Admin</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
@@ -33,7 +27,7 @@
     <div class="col-lg-8">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title"><i class="fas fa-chart-pie mr-1"></i> Statistik Tekanan Darah Pasien</h3>
+                <h3 class="card-title">Statistik Tekanan Darah Pasien</h3>
             </div>
             <div class="card-body">
                 <div class="row">
@@ -94,7 +88,7 @@
     <div class="col-lg-4">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title"><i class="fas fa-chart-pie mr-1"></i> Distribusi TD</h3>
+                <h3 class="card-title">Distribusi TD</h3>
             </div>
             <div class="card-body">
                 <div style="height: 250px; position: relative;">
@@ -119,6 +113,7 @@
                         <h5 class="card-title mb-0">Kelola Data Pasien</h5>
                     </div>
                 </div>
+                <small class="text-muted d-block mb-2">{{ $totalPasien }} pasien</small>
                 <p class="card-text">Akses dan kelola data pasien dengan mudah. Pantau informasi personal, riwayat medis, dan status kesehatan secara terintegrasi.</p>
                 <a href="{{ route('admin.pasien') }}" class="btn btn-primary btn-block">
                     <i class="fas fa-arrow-right mr-1"></i> Kelola Data Pasien
@@ -139,6 +134,7 @@
                         <h5 class="card-title mb-0">Kelola Kode Pendaftaran</h5>
                     </div>
                 </div>
+                <small class="text-muted d-block mb-2">{{ $totalKodePendaftaran }} kode</small>
                 <p class="card-text">Buat dan kelola kode pendaftaran untuk pasien baru. Kontrol akses registrasi dengan sistem kode yang aman dan terorganisir.</p>
                 <a href="{{ route('admin.kode-pendaftaran.index') }}" class="btn btn-success btn-block">
                     <i class="fas fa-arrow-right mr-1"></i> Kelola Kode Pendaftaran
@@ -159,6 +155,7 @@
                         <h5 class="card-title mb-0">Kelola Artikel</h5>
                     </div>
                 </div>
+                <small class="text-muted d-block mb-2">{{ $totalArtikel }} artikel</small>
                 <p class="card-text">Buat dan publikasikan artikel kesehatan berkualitas. Berikan edukasi dan informasi terkini tentang hipertensi kepada pasien.</p>
                 <a href="{{ route('admin.artikel.index') }}" class="btn btn-info btn-block">
                     <i class="fas fa-arrow-right mr-1"></i> Kelola Artikel
@@ -179,6 +176,7 @@
                         <h5 class="card-title mb-0">Kelola Berita</h5>
                     </div>
                 </div>
+                <small class="text-muted d-block mb-2">{{ $totalBerita }} berita</small>
                 <p class="card-text">Update berita terkini seputar kesehatan dan hipertensi. Bagikan informasi penting dari sumber terpercaya kepada pengguna.</p>
                 <a href="{{ route('admin.berita.index') }}" class="btn btn-warning btn-block">
                     <i class="fas fa-arrow-right mr-1"></i> Kelola Berita
@@ -199,6 +197,7 @@
                         <h5 class="card-title mb-0">Kelola Tanya Jawab</h5>
                     </div>
                 </div>
+                <small class="text-muted d-block mb-2">{{ $totalFaq }} FAQ</small>
                 <p class="card-text">Sediakan jawaban untuk pertanyaan umum tentang hipertensi. Bantu pasien mendapatkan informasi yang mereka butuhkan dengan cepat.</p>
                 <a href="{{ route('admin.tanya-jawab.index') }}" class="btn btn-secondary btn-block">
                     <i class="fas fa-arrow-right mr-1"></i> Kelola Tanya Jawab
@@ -219,6 +218,7 @@
                         <h5 class="card-title mb-0">Kelola Unduhan</h5>
                     </div>
                 </div>
+                <small class="text-muted d-block mb-2">{{ $totalUnduhan }} file</small>
                 <p class="card-text">Sediakan materi edukasi dan panduan kesehatan yang dapat diunduh. Berikan akses mudah ke sumber informasi penting bagi pasien.</p>
                 <a href="{{ route('admin.unduhan.index') }}" class="btn btn-dark btn-block">
                     <i class="fas fa-arrow-right mr-1"></i> Kelola Unduhan
@@ -239,6 +239,7 @@
                         <h5 class="card-title mb-0">Kelola Testimoni</h5>
                     </div>
                 </div>
+                <small class="text-muted d-block mb-2">{{ $totalTestimoni }} testimoni</small>
                 <p class="card-text">Tampilkan pengalaman positif dari pengguna layanan. Bangun kepercayaan dan kredibilitas melalui cerita sukses pasien.</p>
                 <a href="{{ route('admin.testimoni.index') }}" class="btn btn-primary btn-block">
                     <i class="fas fa-arrow-right mr-1"></i> Kelola Testimoni
@@ -263,8 +264,13 @@
                 @if(isset($tdStats['normal']['patients']) && count($tdStats['normal']['patients']) > 0)
                     @foreach($tdStats['normal']['patients'] as $patient)
                     <div class="d-flex justify-content-between align-items-center border-bottom py-2">
-                        <span>{{ $patient['name'] }}</span>
-                        <span class="badge badge-success">{{ $patient['sistol'] }}/{{ $patient['diastol'] }} mmHg</span>
+                        <div class="d-flex align-items-center">
+                            <a href="https://wa.me/{{ $patient['nomor_hp'] }}" target="_blank" class="text-success mr-2" title="Chat WhatsApp">
+                                <i class="fab fa-whatsapp fa-lg"></i>
+                            </a>
+                            <span>{{ $patient['name'] }}</span>
+                        </div>
+                        <span>{{ $patient['sistol'] }}/{{ $patient['diastol'] }} mmHg</span>
                     </div>
                     @endforeach
                 @else
@@ -289,8 +295,13 @@
                 @if(isset($tdStats['tinggi']['patients']) && count($tdStats['tinggi']['patients']) > 0)
                     @foreach($tdStats['tinggi']['patients'] as $patient)
                     <div class="d-flex justify-content-between align-items-center border-bottom py-2">
-                        <span>{{ $patient['name'] }}</span>
-                        <span class="badge badge-info">{{ $patient['sistol'] }}/{{ $patient['diastol'] }} mmHg</span>
+                        <div class="d-flex align-items-center">
+                            <a href="https://wa.me/{{ $patient['nomor_hp'] }}" target="_blank" class="text-success mr-2" title="Chat WhatsApp">
+                                <i class="fab fa-whatsapp fa-lg"></i>
+                            </a>
+                            <span>{{ $patient['name'] }}</span>
+                        </div>
+                        <span>{{ $patient['sistol'] }}/{{ $patient['diastol'] }} mmHg</span>
                     </div>
                     @endforeach
                 @else
@@ -315,8 +326,13 @@
                 @if(isset($tdStats['sangat_tinggi']['patients']) && count($tdStats['sangat_tinggi']['patients']) > 0)
                     @foreach($tdStats['sangat_tinggi']['patients'] as $patient)
                     <div class="d-flex justify-content-between align-items-center border-bottom py-2">
-                        <span>{{ $patient['name'] }}</span>
-                        <span class="badge badge-warning">{{ $patient['sistol'] }}/{{ $patient['diastol'] }} mmHg</span>
+                        <div class="d-flex align-items-center">
+                            <a href="https://wa.me/{{ $patient['nomor_hp'] }}" target="_blank" class="text-success mr-2" title="Chat WhatsApp">
+                                <i class="fab fa-whatsapp fa-lg"></i>
+                            </a>
+                            <span>{{ $patient['name'] }}</span>
+                        </div>
+                        <span>{{ $patient['sistol'] }}/{{ $patient['diastol'] }} mmHg</span>
                     </div>
                     @endforeach
                 @else

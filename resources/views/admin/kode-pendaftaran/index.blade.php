@@ -7,10 +7,10 @@
 <div class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
-            <div class="col-sm-6">
+            <div class="col-12 col-sm-6">
                 <h1 class="m-0">Kelola Kode Pendaftaran</h1>
             </div>
-            <div class="col-sm-6">
+            <div class="col-12 col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
                     <li class="breadcrumb-item active">Kode Pendaftaran</li>
@@ -27,9 +27,9 @@
             <div class="card-header">
                 <h3 class="card-title">Daftar Kode Pendaftaran</h3>
                 <div class="card-tools">
-                    <a href="{{ route('admin.kode-pendaftaran.create') }}" class="btn btn-primary btn-sm">
+                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#tambahKodeModal">
                         <i class="fas fa-plus"></i> Buat Kode Baru
-                    </a>
+                    </button>
                 </div>
             </div>
             <div class="card-body">
@@ -80,11 +80,10 @@
                                                 <input type="hidden" name="status" value="{{ $kode->status == 'aktif' ? 'nonaktif' : 'aktif' }}">
                                                 <button type="submit" class="btn btn-sm btn-{{ $kode->status == 'aktif' ? 'warning' : 'success' }}" title="{{ $kode->status == 'aktif' ? 'Nonaktifkan' : 'Aktifkan' }}">
                                                     <i class="fas fa-{{ $kode->status == 'aktif' ? 'pause' : 'play' }}"></i>
-                                                    {{ $kode->status == 'aktif' ? 'Nonaktifkan' : 'Aktifkan' }}
                                                 </button>
                                             </form>
                                         @else
-                                            <span class="text-muted">Sudah Digunakan</span>
+                                            <span class="text-muted">-</span>
                                         @endif
                                     </td>
                                 </tr>
@@ -92,12 +91,44 @@
                         </tbody>
                     </table>
                 </div>
-                
-                <div class="mt-3">
-                    {{ $kodeList->links() }}
+            </div>
+            @if($kodeList->hasPages())
+            <div class="card-footer">
+                <div class="d-flex justify-content-center flex-wrap">
+                    {{ $kodeList->onEachSide(0)->links('pagination::bootstrap-4') }}
                 </div>
             </div>
+            @endif
         </div>
     </div>
 </section>
+
+<!-- Modal Tambah Kode -->
+<div class="modal fade" id="tambahKodeModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Buat Kode Pendaftaran Baru</h4>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <form method="POST" action="{{ route('admin.kode-pendaftaran.store') }}">
+                @csrf
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="jumlah_kode">Jumlah Kode yang Dibuat</label>
+                        <input type="number" class="form-control" id="jumlah_kode" name="jumlah_kode" 
+                               value="1" min="1" max="50" required>
+                        <small class="form-text text-muted">Maksimal 50 kode dalam sekali buat</small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary">Buat Kode</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 @endsection

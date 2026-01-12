@@ -5,10 +5,10 @@
 <div class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
-            <div class="col-sm-6">
+            <div class="col-12 col-sm-6">
                 <h1 class="m-0">Daftar Pasien</h1>
             </div>
-            <div class="col-sm-6">
+            <div class="col-12 col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="{{ route('superadmin.dashboard') }}">Dashboard</a></li>
                     <li class="breadcrumb-item active">Daftar Pasien</li>
@@ -40,15 +40,15 @@
 
         <!-- Action Bar -->
         <div class="row mb-3">
-            <div class="col-md-4">
-                <button class="btn btn-primary" data-toggle="modal" data-target="#modalTambahPasien">
+            <div class="col-12 col-md-4 mb-2 mb-md-0">
+                <button class="btn btn-primary w-100 w-md-auto" data-toggle="modal" data-target="#modalTambahPasien">
                     <i class="fas fa-plus mr-1"></i> Tambah Pasien
                 </button>
             </div>
-            <div class="col-md-4">
+            <div class="col-12 col-md-4 mb-2 mb-md-0">
                 <form method="GET" action="{{ route('superadmin.pasien') }}">
                     <div class="input-group">
-                        <input type="text" name="search" class="form-control" placeholder="Cari nama, email, HP, jenis kelamin, usia, puskesmas..." value="{{ request('search') }}">
+                        <input type="text" name="search" class="form-control" placeholder="Cari nama, email, HP..." value="{{ request('search') }}">
                         <div class="input-group-append">
                             <button type="submit" class="btn btn-primary">
                                 <i class="fas fa-search"></i>
@@ -60,9 +60,9 @@
                     </div>
                 </form>
             </div>
-            <div class="col-md-4 text-right">
-                <a href="{{ route('superadmin.dashboard') }}" class="btn btn-secondary">
-                    <i class="fas fa-arrow-left mr-1"></i> Kembali ke Dashboard
+            <div class="col-12 col-md-4 text-md-right">
+                <a href="{{ route('superadmin.dashboard') }}" class="btn btn-secondary w-100 w-md-auto">
+                    <i class="fas fa-arrow-left mr-1"></i> Kembali
                 </a>
             </div>
         </div>

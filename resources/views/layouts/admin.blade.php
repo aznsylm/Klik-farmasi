@@ -132,6 +132,9 @@
                 <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                     <span class="dropdown-item dropdown-header">Administrator</span>
                     <div class="dropdown-divider"></div>
+                    <a href="#" class="dropdown-item" data-toggle="modal" data-target="#modalProfilAdmin">
+                        <i class="fas fa-id-card mr-2"></i> Lihat Profil
+                    </a>
                     <a href="{{ route('beranda') }}" class="dropdown-item">
                         <i class="fas fa-home mr-2"></i> Lihat Website
                     </a>
@@ -183,6 +186,41 @@
                         <a href="{{ route('admin.kode-pendaftaran.index') }}" class="nav-link {{ request()->routeIs('admin.kode-pendaftaran.*') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-key"></i>
                             <p>Kode Pendaftaran</p>
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a href="{{ route('admin.artikel.index') }}" class="nav-link {{ request()->routeIs('admin.artikel.*') ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-file-alt"></i>
+                            <p>Artikel</p>
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a href="{{ route('admin.berita.index') }}" class="nav-link {{ request()->routeIs('admin.berita.*') ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-newspaper"></i>
+                            <p>Berita</p>
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a href="{{ route('admin.tanya-jawab.index') }}" class="nav-link {{ request()->routeIs('admin.tanya-jawab.*') ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-question-circle"></i>
+                            <p>Tanya Jawab</p>
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a href="{{ route('admin.unduhan.index') }}" class="nav-link {{ request()->routeIs('admin.unduhan.*') ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-download"></i>
+                            <p>Unduhan</p>
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a href="{{ route('admin.testimoni.index') }}" class="nav-link {{ request()->routeIs('admin.testimoni.*') ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-quote-left"></i>
+                            <p>Testimoni</p>
                         </a>
                     </li>
                 </ul>
@@ -253,5 +291,49 @@
     }
 </script>
 @yield('additional_scripts')
+
+<!-- Modal Profil Admin -->
+<div class="modal fade" id="modalProfilAdmin" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <h4 class="modal-title text-white">Profil Administrator</h4>
+                <button type="button" class="close text-white" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-3 text-center">
+                        <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" 
+                             style="width: 100px; height: 100px; font-size: 2.5rem; color: white;">
+                            {{ substr(Auth::user()->name, 0, 1) }}
+                        </div>
+                        <h5>{{ Auth::user()->name }}</h5>
+                        <span class="badge badge-primary">Administrator</span>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="form-group">
+                            <label class="font-weight-bold"><i class="fas fa-envelope mr-1"></i> Email</label>
+                            <p>{{ Auth::user()->email }}</p>
+                        </div>
+                        <div class="form-group">
+                            <label class="font-weight-bold"><i class="fas fa-shield-alt mr-1"></i> Role</label>
+                            <p>Administrator</p>
+                        </div>
+                        <div class="form-group">
+                            <label class="font-weight-bold"><i class="fas fa-calendar-plus mr-1"></i> Terdaftar</label>
+                            <p>{{ Auth::user()->created_at->format('d M Y, H:i') }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>

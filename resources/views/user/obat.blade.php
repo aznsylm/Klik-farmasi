@@ -53,7 +53,7 @@
                     <div class="col-12">
                         <div class="alert alert-warning">
                             <i class="fas fa-exclamation-triangle mr-2"></i>
-                            <strong>Perhatian!</strong> Pengingat obat sedang tidak aktif. Jika diaktifkan kembali, Anda perlu mengisi ulang data pengingat obat.
+                            <strong>Perhatian!</strong> Pengingat obat sedang tidak aktif karena semua obat berstatus habis. Ubah status obat menjadi aktif untuk mengaktifkan kembali pengingat.
                         </div>
                     </div>
                 </div>

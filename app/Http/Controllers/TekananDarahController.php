@@ -139,14 +139,8 @@ class TekananDarahController extends Controller
     public function getAdminChartData($userId)
     {
         $user = User::findOrFail($userId);
-        $pengingat = $user->pengingatObat()->latest()->first();
-        
-        if (!$pengingat) {
-            return response()->json(['labels' => [], 'sistol' => [], 'diastol' => [], 'data' => []]);
-        }
         
         $data = CatatanTekananDarah::where('user_id', $userId)
-            ->where('pengingat_obat_id', $pengingat->id)
             ->orderBy('created_at')
             ->get();
         
@@ -173,6 +167,28 @@ class TekananDarahController extends Controller
             'sistol' => $sistol,
             'diastol' => $diastol,
             'data' => $rawData
+        ]);
+    }
+
+    public function getAdminRecords($userId, Request $request)
+    {
+        $perPage = 10;
+        $page = $request->get('page', 1);
+        
+        $query = CatatanTekananDarah::where('user_id', $userId)
+            ->orderBy('created_at', 'desc');
+            
+        $total = $query->count();
+        $records = $query->skip(($page - 1) * $perPage)
+            ->take($perPage)
+            ->get();
+        
+        return response()->json([
+            'data' => $records,
+            'current_page' => (int) $page,
+            'per_page' => $perPage,
+            'total' => $total,
+            'last_page' => ceil($total / $perPage)
         ]);
     }
 
@@ -268,34 +284,46 @@ class TekananDarahController extends Controller
             $user = User::findOrFail($userId);
             $pengingat = $user->pengingatObat()->latest()->first();
             
-            if (!$pengingat) {
-                return redirect()->back()->with('error', 'Tidak ada data pengingat obat');
+            $data = CatatanTekananDarah::where('user_id', $userId)
+                ->orderBy('created_at')
+                ->get();
+        
+            $chartData = [];
+            foreach ($data as $item) {
+                // Klasifikasi berdasarkan panduan medis
+                if ($item->sistol < 120 && $item->diastol < 80) {
+                    $category = 'NORMAL';
+                } elseif ($item->sistol >= 120 && $item->sistol <= 129 && $item->diastol < 80) {
+                    $category = 'PRE HIPERTENSI';
+                } elseif (($item->sistol >= 130 && $item->sistol <= 139) || ($item->diastol >= 80 && $item->diastol <= 89)) {
+                    $category = 'HIPERTENSI STAGE 1';
+                } else {
+                    $category = 'HIPERTENSI STAGE 2';
+                }
+                
+                $chartData[] = [
+                    'tanggal' => Carbon::parse($item->created_at)->format('d/m/Y'),
+                    'sistol' => $item->sistol,
+                    'diastol' => $item->diastol,
+                    'kategori' => $category
+                ];
             }
         
-        $data = CatatanTekananDarah::where('user_id', $userId)
-            ->where('pengingat_obat_id', $pengingat->id)
-            ->orderBy('created_at')
-            ->get();
-        
-        $chartData = [];
-        foreach ($data as $item) {
-            $chartData[] = [
-                'tanggal' => Carbon::parse($item->created_at)->format('d/m/Y'),
-                'sistol' => $item->sistol,
-                'diastol' => $item->diastol,
-                'sumber' => $item->sumber
+            $stats = [
+                'total' => $data->count(),
+                'avg_sistol' => $data->count() > 0 ? round($data->avg('sistol'), 1) : 0,
+                'avg_diastol' => $data->count() > 0 ? round($data->avg('diastol'), 1) : 0,
+                'max_sistol' => $data->count() > 0 ? $data->max('sistol') : 0,
+                'max_diastol' => $data->count() > 0 ? $data->max('diastol') : 0
             ];
-        }
         
-        $pdf = Pdf::loadView('admin.reports.tekanan-darah-pdf', [
-            'user' => $user,
-            'pengingat' => $pengingat,
-            'chartData' => $chartData,
-            'totalData' => $data->count(),
-            'avgSistol' => $data->avg('sistol'),
-            'avgDiastol' => $data->avg('diastol'),
-            'generatedAt' => Carbon::now()->format('d M Y, H:i')
-        ]);
+            $pdf = Pdf::loadView('components.tekanan-darah-pdf', [
+                'user' => $user,
+                'pengingat' => $pengingat,
+                'chartData' => $chartData,
+                'stats' => $stats,
+                'generatedAt' => Carbon::now()->format('d M Y, H:i')
+            ]);
         
             $filename = 'Laporan_Tekanan_Darah_' . $user->name . '_' . Carbon::now()->format('Y-m-d') . '.pdf';
             
@@ -355,20 +383,31 @@ class TekananDarahController extends Controller
             'min_diastol' => $data->count() > 0 ? $data->min('diastol') : 0,
         ];
         
-        $pdf = Pdf::loadView('admin.reports.tekanan-darah-pdf', [
+        $pdf = Pdf::loadView('components.tekanan-darah-pdf', [
             'user' => $user,
             'pengingat' => $pengingat,
             'chartData' => $chartData,
             'stats' => $stats,
-            'totalData' => $data->count(),
-            'avgSistol' => $data->avg('sistol'),
-            'avgDiastol' => $data->avg('diastol'),
             'generatedAt' => Carbon::now()->format('d M Y, H:i')
         ]);
         
         return $pdf->stream('Laporan_Tekanan_Darah_' . $user->name . '_' . Carbon::now()->format('Y-m-d') . '.pdf');
     }
     
+    public function getExistingDates($userId)
+    {
+        $dates = CatatanTekananDarah::where('user_id', $userId)
+            ->get()
+            ->map(function($item) {
+                return Carbon::parse($item->created_at)->format('Y-m-d');
+            })
+            ->unique()
+            ->values()
+            ->toArray();
+            
+        return response()->json(['dates' => $dates]);
+    }
+
     public function viewPDFPage($userId)
     {
         $user = User::findOrFail($userId);
