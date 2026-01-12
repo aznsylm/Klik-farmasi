@@ -1,0 +1,319 @@
+/* Mobile Responsive CSS for Beranda */
+
+/* Hero Section Mobile */
+@media (max-width: 768px) {
+    .revolutionary-hero-section {
+        min-height: 80vh;
+        padding: 40px 0 30px;
+    }
+    
+    .hero-content {
+        text-align: center;
+        padding: 15px 10px !important;
+    }
+    
+    .hero-content h1 {
+        font-size: 1.75rem !important;
+        line-height: 1.3;
+        margin-bottom: 1rem !important;
+    }
+    
+    .hero-content p {
+        font-size: 0.95rem;
+        line-height: 1.5;
+        margin-bottom: 1.5rem !important;
+    }
+    
+    .hero-content .btn {
+        font-size: 0.9rem;
+        padding: 12px 24px !important;
+        margin-bottom: 10px;
+        width: 100%;
+        max-width: 280px;
+    }
+    
+    .clean-carousel-wrapper {
+        margin-top: 20px;
+    }
+    
+    .carousel-inner .ratio {
+        --bs-aspect-ratio: 75% !important;
+    }
+}
+
+/* Features Section Mobile */
+@media (max-width: 768px) {
+    .features-section {
+        padding: 40px 0 !important;
+    }
+    
+    .features-header h2 {
+        font-size: 1.75rem;
+        margin-bottom: 1rem !important;
+    }
+    
+    .features-header p {
+        font-size: 0.95rem;
+        margin-bottom: 2rem !important;
+    }
+    
+    .enhanced-feature-card {
+        margin-bottom: 20px;
+        padding: 25px 20px;
+        text-align: center;
+    }
+    
+    .feature-icon {
+        width: 60px !important;
+        height: 60px !important;
+        margin: 0 auto 15px !important;
+    }
+    
+    .feature-icon i {
+        font-size: 24px !important;
+    }
+    
+    .feature-title {
+        font-size: 1.1rem;
+        margin-bottom: 10px;
+    }
+    
+    .feature-description {
+        font-size: 0.9rem;
+        line-height: 1.5;
+    }
+}
+
+/* Testimonials Section Mobile */
+@media (max-width: 768px) {
+    .testimonial-section {
+        padding: 40px 0 !important;
+    }
+    
+    .testimonial-section h2 {
+        font-size: 1.75rem;
+        margin-bottom: 1rem !important;
+    }
+    
+    .testimonial-section p {
+        font-size: 0.95rem;
+        margin-bottom: 2rem !important;
+    }
+    
+    .testimonial-marquee-container {
+        height: auto;
+        overflow: hidden;
+    }
+    
+    .testimonial-marquee-row {
+        margin-bottom: 25px;
+    }
+    
+    .testimonial-marquee-track {
+        gap: 25px !important;
+    }
+    
+    .testimonial-bubble {
+        min-width: 280px !important;
+        max-width: 320px;
+        margin: 0 !important;
+        padding: 20px 15px;
+    }
+    
+    .testimonial-quote {
+        font-size: 0.9rem;
+        line-height: 1.4;
+        margin-bottom: 10px;
+    }
+    
+    .testimonial-author {
+        font-size: 0.85rem;
+    }
+    
+    .testimonial-stars i {
+        font-size: 12px;
+    }
+}
+
+/* Articles Section Mobile */
+@media (max-width: 768px) {
+    .article-card {
+        margin-bottom: 25px;
+    }
+    
+    .article-image {
+        height: 200px;
+        overflow: hidden;
+    }
+    
+    .article-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .article-content {
+        padding: 15px !important;
+    }
+    
+    .article-title {
+        font-size: 1.1rem;
+        line-height: 1.3;
+        margin-bottom: 10px;
+    }
+    
+    .article-meta {
+        margin-bottom: 10px;
+    }
+    
+    .meta-item {
+        font-size: 0.8rem;
+        margin-bottom: 5px;
+    }
+    
+    .article-excerpt {
+        font-size: 0.9rem;
+        line-height: 1.4;
+        margin-bottom: 15px;
+    }
+    
+    .read-more {
+        font-size: 0.9rem;
+    }
+}
+
+/* Buttons Mobile */
+@media (max-width: 768px) {
+    .btn-lg {
+        font-size: 1rem;
+        padding: 12px 30px;
+    }
+    
+    .btn-khusus {
+        font-size: 0.9rem;
+        padding: 10px 25px;
+    }
+}
+
+/* Container and Spacing Mobile */
+@media (max-width: 768px) {
+    .container {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+    
+    .section-divider {
+        width: 60px;
+        height: 3px;
+        margin: 15px auto;
+    }
+    
+    .py-5 {
+        padding-top: 2.5rem !important;
+        padding-bottom: 2.5rem !important;
+    }
+    
+    .my-5 {
+        margin-top: 2rem !important;
+        margin-bottom: 2rem !important;
+    }
+    
+    .mb-5 {
+        margin-bottom: 2rem !important;
+    }
+}
+
+/* Navigation Mobile (if needed) */
+@media (max-width: 768px) {
+    .navbar-brand {
+        font-size: 1.1rem;
+    }
+    
+    .navbar-nav .nav-link {
+        padding: 10px 15px;
+        text-align: center;
+    }
+}
+
+/* Image Modal Mobile */
+@media (max-width: 768px) {
+    .modal-xl {
+        max-width: 95%;
+    }
+    
+    #modalImage {
+        max-height: 80vh !important;
+        width: auto;
+    }
+}
+
+/* Carousel Controls Mobile */
+@media (max-width: 768px) {
+    .clean-carousel-controls {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        right: 0;
+        transform: translateY(-50%);
+        z-index: 10;
+        margin-top: 0;
+    }
+    
+    .carousel-control-prev,
+    .carousel-control-next {
+        position: absolute !important;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 40px !important;
+        height: 40px !important;
+        border-radius: 50%;
+        padding: 0;
+        background: rgba(11, 94, 145, 0.8) !important;
+        border: 2px solid white;
+    }
+    
+    .carousel-control-prev {
+        left: 10px !important;
+    }
+    
+    .carousel-control-next {
+        right: 10px !important;
+    }
+    
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+        width: 16px;
+        height: 16px;
+    }
+}
+
+/* Text Alignment Mobile */
+@media (max-width: 768px) {
+    .text-center-mobile {
+        text-align: center !important;
+    }
+    
+    .d-flex.flex-column.flex-sm-row {
+        flex-direction: column !important;
+        align-items: center;
+    }
+    
+    .gap-3 > * {
+        margin-bottom: 10px;
+    }
+}
+
+/* Utility Classes for Mobile */
+@media (max-width: 576px) {
+    .fs-mobile-small {
+        font-size: 0.85rem !important;
+    }
+    
+    .p-mobile-small {
+        padding: 15px !important;
+    }
+    
+    .m-mobile-small {
+        margin: 10px !important;
+    }
+}

@@ -295,6 +295,7 @@
         
         .navbar-nav {
             padding: 15px 0;
+            text-align: left !important;
         }
         
         .navbar-collapse {
@@ -319,6 +320,7 @@
             padding: 8px 15px !important;
             border-radius: 5px;
             margin: 2px 0;
+            text-align: left !important;
         }
         
         .nav-link:hover {

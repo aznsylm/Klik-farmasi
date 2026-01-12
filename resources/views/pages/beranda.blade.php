@@ -13,6 +13,8 @@
     <link rel="preload" as="image" href="{{ asset('assets/Slideketiga.webp') }}" fetchpriority="high">
     <!-- Preload critical CSS -->
     <link rel="preload" as="style" href="{{ asset('css/main.css') }}">
+    <!-- Mobile Responsive CSS -->
+    <link rel="stylesheet" href="{{ asset('css/mobile-responsive.css') }}">
 @endpush
 
 @section('content')
@@ -25,11 +27,11 @@
             <div class="hero-visual-section" data-aos="fade-down">
                 <div class="container-fluid px-2 py-2 py-md-5 px-lg-4">
                     <div class="row align-items-center">
-                        <div class="col-12 col-lg-6 mt-4 mt-lg-0" data-aos="fade-right">
+                        <div class="col-12 col-lg-6 order-2 order-lg-1 mt-4 mt-lg-0" data-aos="fade-right">
                             <div class="hero-content px-3">
                                 <h1 class="h2 fw-bold mb-3 text-white">Hipertensi Mengancam? Jangan Biarkan Obat Terlupakan!</h1>
                                 <p class="mb-4 text-light">Setiap 30 detik, seseorang meninggal karena hipertensi yang tidak terkontrol. Jangan jadi korban selanjutnya! Platform revolusioner ini akan memastikan Anda tidak pernah melewatkan obat lagi.</p>
-                                <div class="d-flex flex-column flex-sm-row gap-3">
+                                <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center justify-content-lg-start">
                                     <a href="{{ route('pengingat') }}" class="btn btn-warning px-4 py-2 rounded-pill fw-bold">
                                         Mulai Pengingat Obat
                                     </a>
@@ -39,7 +41,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-12 col-lg-6">
+                        <div class="col-12 col-lg-6 order-1 order-lg-2">
                             <div class="clean-carousel-wrapper">
                                 <div id="cleanCarousel" class="carousel slide" data-bs-ride="carousel"
                                     data-bs-interval="6000">
@@ -110,8 +112,8 @@
                 <div class="section-divider mx-auto"></div>
             </div>
             <div class="features-grid">
-                <div class="row g-4 g-md-4 g-sm-3">
-                    <div class="col-12 col-sm-12 col-md-6 col-lg-6" data-aos="fade-up" data-aos-delay="100">
+                <div class="row g-4">
+                    <div class="col-12 col-md-6" data-aos="fade-up" data-aos-delay="100">
                         <div class="enhanced-feature-card reminder-card">
                             <div>
                                 <div class="feature-icon-wrapper">
@@ -130,7 +132,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-12 col-sm-12 col-md-6 col-lg-6" data-aos="fade-up" data-aos-delay="200">
+                    <div class="col-12 col-md-6" data-aos="fade-up" data-aos-delay="200">
                         <div class="enhanced-feature-card info-card">
                             <div>
                                 <div class="feature-icon-wrapper">
@@ -148,7 +150,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-12 col-sm-12 col-md-6 col-lg-6" data-aos="fade-up" data-aos-delay="200">
+                    <div class="col-12 col-md-6" data-aos="fade-up" data-aos-delay="300">
                         <div class="enhanced-feature-card info-card">
                             <div>
                                 <div class="feature-icon-wrapper">
@@ -166,7 +168,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-12 col-sm-12 col-md-6 col-lg-6" data-aos="fade-up" data-aos-delay="200">
+                    <div class="col-12 col-md-6" data-aos="fade-up" data-aos-delay="400">
                         <div class="enhanced-feature-card info-card">
                             <div>
                                 <div class="feature-icon-wrapper">
@@ -253,17 +255,17 @@
                     </div>
                 </div>
             </div>
-            <div class="row gx-4 gy-5">
+            <div class="row gx-4 gy-4">
                 @forelse ($articles as $article)
-                    <div class="col-lg-4 mb-lg-0" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
+                    <div class="col-12 col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
                         <div class="article-card">
                             <div class="article-image">
                                 @if ($article->image)
                                     <img src="{{ asset('storage/' . $article->image) }}" alt="{{ $article->title }}"
-                                        loading="lazy" decoding="async" width="400" height="220">
+                                        loading="lazy" decoding="async" class="img-fluid">
                                 @else
                                     <img src="{{ asset('assets/sample-1.jpg') }}" alt="Default Image" loading="lazy"
-                                        decoding="async" width="400" height="220">
+                                        decoding="async" class="img-fluid">
                                 @endif
                                 <div class="article-category"><span>{{ $article->category }}</span></div>
                             </div>
