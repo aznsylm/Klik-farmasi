@@ -67,6 +67,10 @@
             <!-- 2. Akun & Keamanan -->
             <div class="form-group">
                 <input type="email" class="form-control {{ $errors->has('email') ? 'is-invalid' : '' }}" name="email" id="registerEmail" placeholder="Email Aktif *" required value="{{ old('email') }}">
+                <div class="error-message" id="registerEmailError" style="display: none;">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span></span>
+                </div>
                 @error('email')
                     <div class="error-message">
                         <i class="fas fa-exclamation-circle"></i>
@@ -104,13 +108,17 @@
             <!-- 3. Kontak & Lokasi -->
             <div class="form-group">
                 <div class="phone-input-wrapper">
-                    <div class="phone-input-group {{ $errors->has('nomor_hp') ? 'is-invalid' : '' }}">
+                    <div class="phone-input-group {{ $errors->has('nomor_hp') ? 'is-invalid' : '' }}" id="phoneInputGroup">
                         <span class="phone-prefix">+62</span>
                         <input type="tel" class="form-control phone-input" name="nomor_hp" id="registerPhone" placeholder="8xxxxxxxxx *" required value="{{ old('nomor_hp') }}" pattern="[0-9]{8,13}" maxlength="13" minlength="8">
                     </div>
                     <div class="phone-info-icon" data-tooltip="Masukkan nomor HP tanpa awalan 0 atau 62. Contoh: 81234567890">
                         <i class="fas fa-question-circle"></i>
                     </div>
+                </div>
+                <div class="error-message" id="registerPhoneError" style="display: none;">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span></span>
                 </div>
                 @error('nomor_hp')
                     <div class="error-message">
@@ -145,7 +153,7 @@
                     </div>
                 @enderror
             </div>
-            <button type="submit" class="btn-primary">
+            <button type="submit" class="btn-primary" id="registerSubmitBtn">
                 <span>Daftar Sekarang</span>
             </button>
             <div class="form-link">
@@ -417,9 +425,14 @@
 
 @section('extra_scripts')
 <script>
+    let emailValid = true;
+    let phoneValid = true;
+    
     document.addEventListener('DOMContentLoaded', function() {
         const modal = document.getElementById('successModal');
         const phoneInput = document.getElementById('registerPhone');
+        const emailInput = document.getElementById('registerEmail');
+        const submitBtn = document.getElementById('registerSubmitBtn');
         
         if (modal.classList.contains('active')) {
             // Jika modal aktif, tambahkan event listener untuk menutup modal saat klik di luar
@@ -429,6 +442,104 @@
                 }
             });
         }
+        
+        // Validasi email duplikat
+        emailInput.addEventListener('blur', async function() {
+            const email = this.value.trim();
+            const emailError = document.getElementById('registerEmailError');
+            
+            if (!email) {
+                hideError('registerEmail', 'registerEmailError');
+                emailValid = true;
+                updateSubmitButton();
+                return;
+            }
+            
+            // Validasi format email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showError('registerEmail', 'registerEmailError', 'Format email tidak valid');
+                emailValid = false;
+                updateSubmitButton();
+                return;
+            }
+            
+            try {
+                const response = await fetch('/admin/check-duplicate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({ email: email })
+                });
+                
+                const data = await response.json();
+                
+                if (data.exists) {
+                    showError('registerEmail', 'registerEmailError', 'Email sudah terdaftar');
+                    emailValid = false;
+                } else {
+                    hideError('registerEmail', 'registerEmailError');
+                    emailValid = true;
+                }
+            } catch (error) {
+                console.error('Error checking email:', error);
+                emailValid = true;
+            }
+            
+            updateSubmitButton();
+        });
+        
+        // Validasi nomor HP duplikat
+        phoneInput.addEventListener('blur', async function() {
+            const phone = this.value.trim();
+            const phoneError = document.getElementById('registerPhoneError');
+            
+            if (!phone) {
+                hidePhoneError();
+                phoneValid = true;
+                updateSubmitButton();
+                return;
+            }
+            
+            // Validasi format nomor HP
+            if (phone.length < 8 || phone.length > 13) {
+                showPhoneError('Nomor HP harus 8-13 digit');
+                phoneValid = false;
+                updateSubmitButton();
+                return;
+            }
+            
+            // Format nomor HP untuk pengecekan (tambah 62)
+            const formattedPhone = '62' + phone;
+            
+            try {
+                const response = await fetch('/admin/check-duplicate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({ nomor_hp: formattedPhone })
+                });
+                
+                const data = await response.json();
+                
+                if (data.exists) {
+                    showPhoneError('Nomor HP sudah terdaftar');
+                    phoneValid = false;
+                } else {
+                    hidePhoneError();
+                    phoneValid = true;
+                }
+            } catch (error) {
+                console.error('Error checking phone:', error);
+                phoneValid = true;
+            }
+            
+            updateSubmitButton();
+        });
         
         // Validasi nomor HP - hanya angka
         if (phoneInput) {
@@ -451,14 +562,10 @@
                 
                 e.target.value = value;
                 
-                // Validasi panjang
-                if (value.length < 8) {
-                    e.target.setCustomValidity('Nomor HP minimal 8 digit');
-                } else if (value.length > 13) {
-                    e.target.setCustomValidity('Nomor HP maksimal 13 digit');
-                } else {
-                    e.target.setCustomValidity('');
-                }
+                // Reset error saat mengetik
+                hidePhoneError();
+                phoneValid = true;
+                updateSubmitButton();
             });
             
             // Cegah paste karakter non-digit
@@ -480,6 +587,128 @@
                 e.target.dispatchEvent(new Event('input'));
             });
         }
+        
+        // Reset error saat mengetik email
+        emailInput.addEventListener('input', function() {
+            hideError('registerEmail', 'registerEmailError');
+            emailValid = true;
+            updateSubmitButton();
+        });
+        
+        // Prevent form submit jika ada error
+        document.getElementById('registerFormElement').addEventListener('submit', function(e) {
+            if (!emailValid || !phoneValid) {
+                e.preventDefault();
+                alert('Mohon perbaiki kesalahan pada form sebelum melanjutkan');
+            }
+        });
+        
+        // Custom validation messages untuk semua input
+        setupCustomValidation();
     });
+    
+    function setupCustomValidation() {
+        // Custom validation messages
+        document.addEventListener('invalid', function(e) {
+            const input = e.target;
+            
+            if (input.validity.valueMissing) {
+                if (input.name === 'name') {
+                    input.setCustomValidity('Nama lengkap wajib diisi');
+                } else if (input.name === 'jenis_kelamin') {
+                    input.setCustomValidity('Jenis kelamin wajib dipilih');
+                } else if (input.name === 'usia') {
+                    input.setCustomValidity('Usia wajib diisi');
+                } else if (input.name === 'email') {
+                    input.setCustomValidity('Email wajib diisi');
+                } else if (input.name === 'password') {
+                    input.setCustomValidity('Password wajib diisi');
+                } else if (input.name === 'password_confirmation') {
+                    input.setCustomValidity('Konfirmasi password wajib diisi');
+                } else if (input.name === 'nomor_hp') {
+                    input.setCustomValidity('Nomor HP wajib diisi');
+                } else if (input.name === 'puskesmas') {
+                    input.setCustomValidity('Puskesmas wajib dipilih');
+                } else if (input.name === 'kode_pendaftaran') {
+                    input.setCustomValidity('Kode pendaftaran wajib diisi');
+                }
+            } else if (input.validity.typeMismatch) {
+                if (input.type === 'email') {
+                    input.setCustomValidity('Format email tidak valid');
+                }
+            } else if (input.validity.tooShort) {
+                if (input.name === 'password' || input.name === 'password_confirmation') {
+                    input.setCustomValidity('Password minimal 8 karakter');
+                } else if (input.name === 'nomor_hp') {
+                    input.setCustomValidity('Nomor HP minimal 8 digit');
+                }
+            } else if (input.validity.rangeUnderflow) {
+                if (input.name === 'usia') {
+                    input.setCustomValidity('Usia minimal 1 tahun');
+                }
+            } else if (input.validity.rangeOverflow) {
+                if (input.name === 'usia') {
+                    input.setCustomValidity('Usia maksimal 120 tahun');
+                }
+            } else if (input.validity.patternMismatch) {
+                if (input.name === 'nomor_hp') {
+                    input.setCustomValidity('Nomor HP hanya boleh berisi angka 8-13 digit');
+                }
+            }
+        }, true);
+        
+        // Clear custom validity saat user mulai mengetik
+        document.addEventListener('input', function(e) {
+            if (e.target.matches('input, select')) {
+                e.target.setCustomValidity('');
+            }
+        });
+    }
+    
+    function showError(inputId, errorId, message) {
+        const input = document.getElementById(inputId);
+        const error = document.getElementById(errorId);
+        
+        input.classList.add('is-invalid');
+        error.style.display = 'flex';
+        error.querySelector('span').textContent = message;
+    }
+    
+    function hideError(inputId, errorId) {
+        const input = document.getElementById(inputId);
+        const error = document.getElementById(errorId);
+        
+        input.classList.remove('is-invalid');
+        error.style.display = 'none';
+    }
+    
+    function showPhoneError(message) {
+        const phoneGroup = document.getElementById('phoneInputGroup');
+        const error = document.getElementById('registerPhoneError');
+        
+        phoneGroup.classList.add('is-invalid');
+        error.style.display = 'flex';
+        error.querySelector('span').textContent = message;
+    }
+    
+    function hidePhoneError() {
+        const phoneGroup = document.getElementById('phoneInputGroup');
+        const error = document.getElementById('registerPhoneError');
+        
+        phoneGroup.classList.remove('is-invalid');
+        error.style.display = 'none';
+    }
+    
+    function updateSubmitButton() {
+        const submitBtn = document.getElementById('registerSubmitBtn');
+        
+        if (!emailValid || !phoneValid) {
+            submitBtn.style.opacity = '0.6';
+            submitBtn.style.cursor = 'not-allowed';
+        } else {
+            submitBtn.style.opacity = '1';
+            submitBtn.style.cursor = 'pointer';
+        }
+    }
 </script>
 @endsection

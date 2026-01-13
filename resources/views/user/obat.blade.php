@@ -198,7 +198,7 @@
                             <i class="fas fa-pills fa-3x text-muted mb-3"></i>
                             <h4 class="text-muted">{{ Auth::user()->puskesmas === 'godean_2' ? 'Belum Ada Suplemen' : 'Belum Ada Obat' }}</h4>
                             <p class="text-muted">{{ Auth::user()->puskesmas === 'godean_2' ? 'Anda belum memiliki pengingat suplemen.' : 'Anda belum memiliki pengingat obat.' }}</p>
-                            <a href="{{ route('user.pengingat') }}" class="btn btn-primary">
+                            <a href="{{ route('pengingat') }}" class="btn btn-primary">
                                 <i class="fas fa-plus mr-1"></i>
                                 {{ Auth::user()->puskesmas === 'godean_2' ? 'Buat Pengingat Suplemen' : 'Buat Pengingat Obat' }}
                             </a>

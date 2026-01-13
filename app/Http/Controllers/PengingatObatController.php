@@ -185,49 +185,40 @@ class PengingatObatController extends Controller
 
         // Simpan tekanan darah awal ke catatan_tekanan_darah
         try {
-            $tanggalHariIni = Carbon::now('Asia/Jakarta')->toDateString();
-            
-            // Hapus data tekanan darah yang mungkin sudah ada di tanggal yang sama dengan sumber pengingat_awal
-            $deleted = CatatanTekananDarah::where('user_id', auth()->id())
-                ->where('tanggal_input', $tanggalHariIni)
+            // Cek apakah sudah ada catatan hari ini dengan sumber pengingat_awal
+            $today = Carbon::now('Asia/Jakarta')->toDateString();
+            $existingRecord = CatatanTekananDarah::where('user_id', auth()->id())
+                ->whereDate('created_at', $today)
                 ->where('sumber', 'pengingat_awal')
-                ->delete();
+                ->first();
             
-            \Log::info('Deleted existing pengingat_awal records:', [
-                'user_id' => auth()->id(),
-                'date' => $tanggalHariIni,
-                'deleted_count' => $deleted
-            ]);
-            
-            $bloodPressureData = CatatanTekananDarah::create([
-                'user_id' => auth()->id(),
-                'pengingat_obat_id' => $pengingat->id,
-                'sistol' => $request->sistol,
-                'diastol' => $request->diastol,
-                'tanggal_input' => $tanggalHariIni,
-                'waktu_input' => Carbon::now('Asia/Jakarta')->toTimeString(),
-                'sumber' => 'pengingat_awal'
-            ]);
-            
-            \Log::info('Successfully saved initial blood pressure:', [
-                'user_id' => auth()->id(),
-                'bp_id' => $bloodPressureData->id,
-                'sistol' => $request->sistol,
-                'diastol' => $request->diastol
-            ]);
+            if ($existingRecord) {
+                // Update existing record
+                $existingRecord->update([
+                    'pengingat_obat_id' => $pengingat->id,
+                    'sistol' => $request->sistol,
+                    'diastol' => $request->diastol,
+                ]);
+                \Log::info('Updated existing blood pressure record:', ['id' => $existingRecord->id]);
+            } else {
+                // Create new record
+                $bloodPressureData = CatatanTekananDarah::create([
+                    'user_id' => auth()->id(),
+                    'pengingat_obat_id' => $pengingat->id,
+                    'sistol' => $request->sistol,
+                    'diastol' => $request->diastol,
+                    'sumber' => 'pengingat_awal'
+                ]);
+                \Log::info('Created new blood pressure record:', ['id' => $bloodPressureData->id]);
+            }
             
         } catch (\Exception $e) {
             \Log::error('Error saving initial blood pressure:', [
                 'user_id' => auth()->id(),
                 'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString(),
-                'data' => [
-                    'sistol' => $request->sistol,
-                    'diastol' => $request->diastol,
-                    'tanggal_input' => $tanggalHariIni
-                ]
+                'sistol' => $request->sistol,
+                'diastol' => $request->diastol
             ]);
-            // Continue execution - don't fail the whole process
         }
 
         // Simpan ke detail_obat_pengingat - Universal untuk semua jenis

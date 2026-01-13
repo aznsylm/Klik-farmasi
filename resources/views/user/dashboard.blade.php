@@ -44,15 +44,15 @@
                 (int) \Carbon\Carbon::parse($latestTekananDarah->created_at)->diffInDays(now()) : 999;
             
             // Alert logic - prioritized by importance
-            if ($latestTekananDarah && ($latestTekananDarah->sistol >= 140 || $latestTekananDarah->diastol >= 90)) {
+            if (!$latestTekananDarah) {
+                $alertMessage = 'Selamat datang! Mulai catat tekanan darah untuk pantau kesehatan Anda';
+                $alertClass = 'alert-info';
+            } elseif ($latestTekananDarah && ($latestTekananDarah->sistol >= 140 || $latestTekananDarah->diastol >= 90)) {
                 $alertMessage = 'Tekanan darah Anda tinggi! Segera konsultasi dengan admin atau dokter';
                 $alertClass = 'alert-danger';
             } elseif ($daysSinceLastInput > 30) {
                 $alertMessage = 'Sudah ' . $daysSinceLastInput . ' hari tidak input tekanan darah. Yuk catat tekanan darah Anda!';
                 $alertClass = 'alert-warning';
-            } elseif (!$latestTekananDarah) {
-                $alertMessage = 'Selamat datang! Mulai catat tekanan darah untuk pantau kesehatan Anda';
-                $alertClass = 'alert-info';
             }
         @endphp
 
@@ -62,6 +62,11 @@
                 <div class="alert {{ $alertClass }} alert-dismissible">
                     <button type="button" class="close" data-dismiss="alert">&times;</button>
                     <i class="fas fa-info-circle mr-2"></i>{{ $alertMessage }}
+                    @if(!$latestPengingat && !$latestTekananDarah)
+                        <br><a href="{{ route('user.obat') }}" class="btn btn-sm mt-2">
+                            Isi Pengingat Obat
+                        </a>
+                    @endif
                 </div>
             </div>
         </div>
