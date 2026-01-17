@@ -9,7 +9,21 @@ class DownloadController extends Controller
 {
     public function index()
     {
-        $downloads = Download::orderBy('created_at', 'desc')->paginate(10); 
+        $downloads = Download::orderBy('created_at', 'desc')
+            ->get()
+            ->map(function($download) {
+                $download->views = $download->getViewsByPuskesmas();
+                return $download;
+            });
+        
+        $downloads = new \Illuminate\Pagination\LengthAwarePaginator(
+            $downloads->forPage(request()->get('page', 1), 10),
+            $downloads->count(),
+            10,
+            request()->get('page', 1),
+            ['path' => request()->url(), 'pageName' => 'page']
+        );
+        
         return view('admin.downloads.index', compact('downloads'));
     }
 

@@ -61,7 +61,7 @@ class Article extends Model
             ->count();
     }
 
-    // Get readers list filtered by puskesmas
+    // Get readers list filtered by puskesmas with access count
     public function getReadersByPuskesmas($puskesmas = null)
     {
         if (!$puskesmas && Auth::check()) {
@@ -74,7 +74,7 @@ class Article extends Model
                 $query->where('puskesmas', $puskesmas)
                       ->where('role', 'pasien');
             })
-            ->orderBy('read_at', 'desc')
+            ->orderBy('access_count', 'desc')
             ->get();
     }
 }

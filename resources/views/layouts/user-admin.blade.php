@@ -259,6 +259,23 @@
                             @endif
                         </td>
                     </tr>
+                    <tr>
+                        <td class="font-weight-bold">Keterangan:</td>
+                        <td>
+                            @php
+                                $puskesmas = strtolower(Auth::user()->puskesmas ?? '');
+                                if (str_contains($puskesmas, 'kalasan')) {
+                                    echo 'Hipertensi Non Kehamilan';
+                                } elseif (str_contains($puskesmas, 'godean')) {
+                                    echo 'Hipertensi Kehamilan';
+                                } elseif (str_contains($puskesmas, 'umbulharjo')) {
+                                    echo 'Hipertensi';
+                                } else {
+                                    echo '-';
+                                }
+                            @endphp
+                        </td>
+                    </tr>
                 </table>
             </div>
         </div>

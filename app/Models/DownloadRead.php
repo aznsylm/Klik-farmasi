@@ -5,23 +5,23 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ArticleRead extends Model
+class DownloadRead extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'article_id',
+        'download_id',
         'user_id',
         'access_count'
     ];
 
     protected $casts = [
-        // removed read_at
+        // no additional casts needed
     ];
 
-    public function article()
+    public function download()
     {
-        return $this->belongsTo(Article::class);
+        return $this->belongsTo(Download::class);
     }
 
     public function user()

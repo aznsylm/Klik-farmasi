@@ -6,6 +6,7 @@ use App\Models\Download;
 use Illuminate\Http\Request;
 use App\Models\Article;
 use App\Models\ArticleRead;
+use App\Models\DownloadRead;
 use App\Models\Testimonial;
 use App\Models\News;
 use App\Models\Faq;
@@ -75,12 +76,21 @@ class PageController extends Controller
 
         // Track article read untuk pasien yang login
         if (Auth::check() && Auth::user()->role === 'pasien') {
-            ArticleRead::firstOrCreate([
-                'article_id' => $article->id,
-                'user_id' => Auth::id()
-            ], [
-                'read_at' => now()
-            ]);
+            $existingRead = ArticleRead::where('article_id', $article->id)
+                                     ->where('user_id', Auth::id())
+                                     ->first();
+            
+            if ($existingRead) {
+                // Increment access count for existing reader
+                $existingRead->increment('access_count');
+            } else {
+                // Create new record for first-time reader
+                ArticleRead::create([
+                    'article_id' => $article->id,
+                    'user_id' => Auth::id(),
+                    'access_count' => 1
+                ]);
+            }
         }
 
         // Ambil artikel terkait berdasarkan article_type yang sama
@@ -117,6 +127,32 @@ class PageController extends Controller
     {
         $downloads = Download::orderBy('created_at', 'desc')->paginate(9); // Pagination untuk 9 unduhan per halaman
         return view('pages.unduhan', compact('downloads'));
+    }
+
+    public function trackDownload($id)
+    {
+        // Track download access untuk pasien yang login
+        if (Auth::check() && Auth::user()->role === 'pasien') {
+            $existingRead = DownloadRead::where('download_id', $id)
+                                      ->where('user_id', Auth::id())
+                                      ->first();
+            
+            if ($existingRead) {
+                // Increment access count for existing reader
+                $existingRead->increment('access_count');
+            } else {
+                // Create new record for first-time reader
+                DownloadRead::create([
+                    'download_id' => $id,
+                    'user_id' => Auth::id(),
+                    'access_count' => 1
+                ]);
+            }
+        }
+
+        // Redirect to actual download file
+        $download = Download::findOrFail($id);
+        return redirect()->away($download->file_link);
     }
 
     public function pengingat() {

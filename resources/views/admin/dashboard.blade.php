@@ -44,7 +44,7 @@
                         </div>
                     </div>
                     <div class="col-md-3">
-                        <div class="small-box bg-info" style="cursor: pointer;" data-toggle="modal" data-target="#modalTinggi">
+                        <div class="small-box bg-warning" style="cursor: pointer;" data-toggle="modal" data-target="#modalTinggi">
                             <div class="inner">
                                 <h3>{{ $tdStats['tinggi']['count'] ?? 0 }}</h3>
                                 <p>Pre Hipertensi</p>
@@ -56,7 +56,7 @@
                         </div>
                     </div>
                     <div class="col-md-3">
-                        <div class="small-box bg-warning" style="cursor: pointer;" data-toggle="modal" data-target="#modalSangatTinggi">
+                        <div class="small-box" style="cursor: pointer; background-color: #fd7e14; color: white;" data-toggle="modal" data-target="#modalSangatTinggi">
                             <div class="inner">
                                 <h3>{{ $tdStats['sangat_tinggi']['count'] ?? 0 }}</h3>
                                 <p>Hipertensi Stage 1</p>
@@ -285,7 +285,7 @@
 <div class="modal fade" id="modalTinggi" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header bg-info">
+            <div class="modal-header bg-warning">
                 <h4 class="modal-title text-white">Pasien dengan Pre Hipertensi</h4>
                 <button type="button" class="close text-white" data-dismiss="modal">
                     <span>&times;</span>
@@ -316,7 +316,7 @@
 <div class="modal fade" id="modalSangatTinggi" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header bg-warning">
+            <div class="modal-header" style="background-color: #fd7e14;">
                 <h4 class="modal-title text-white">Pasien dengan Hipertensi Stage 1</h4>
                 <button type="button" class="close text-white" data-dismiss="modal">
                     <span>&times;</span>
@@ -375,8 +375,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 ],
                 backgroundColor: [
                     '#28a745',
-                    '#17a2b8',
-                    '#ffc107', 
+                    '#ffc107',
+                    '#fd7e14', 
                     '#dc3545'
                 ],
                 borderWidth: 0

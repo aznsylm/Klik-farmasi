@@ -79,7 +79,7 @@ class DetailObatController extends Controller
     {
         $request->validate([
             'obat_id' => 'required|exists:detail_obat,id',
-            'status' => 'required|in:aktif,habis'
+            'status' => 'required|in:aktif,tidak_aktif'
         ]);
 
         $obat = DetailObatPengingat::with('pengingatObat')->findOrFail($request->obat_id);
@@ -98,7 +98,7 @@ class DetailObatController extends Controller
         $newPengingatStatus = $hasActiveObat ? 'aktif' : 'tidak_aktif';
         $pengingat->update(['status' => $newPengingatStatus]);
 
-        $statusText = $request->status === 'aktif' ? 'Aktif' : 'Habis';
+        $statusText = $request->status === 'aktif' ? 'Aktif' : 'Tidak Aktif';
         return back()->with('success', "Status obat berhasil diubah menjadi {$statusText}!");
     }
 
@@ -106,7 +106,7 @@ class DetailObatController extends Controller
     {
         $request->validate([
             'obat_id' => 'required|exists:detail_obat,id',
-            'status' => 'required|in:aktif,habis'
+            'status' => 'required|in:aktif,tidak_aktif'
         ]);
 
         $obat = DetailObatPengingat::with('pengingatObat')->findOrFail($request->obat_id);
@@ -119,7 +119,7 @@ class DetailObatController extends Controller
         $newPengingatStatus = $hasActiveObat ? 'aktif' : 'tidak_aktif';
         $pengingat->update(['status' => $newPengingatStatus]);
 
-        $statusText = $request->status === 'aktif' ? 'Aktif' : 'Habis';
+        $statusText = $request->status === 'aktif' ? 'Aktif' : 'Tidak Aktif';
         return back()->with('success', "Status obat berhasil diubah menjadi {$statusText}!");
     }
 }

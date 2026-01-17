@@ -14,36 +14,36 @@
                         <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" 
                              style="width: 80px; height: 80px; font-size: 2rem; color: white;" id="detailUserInitial">
                         </div>
-                        <h5 id="detailUserName"></h5>
-                        <span class="badge badge-primary" id="detailUserRoleBadge"></span>
+                        <h4 id="detailUserName"></h4>
+                        <span class="badge" id="detailUserRoleBadge"></span>
                     </div>
                     <div class="col-md-9">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="font-weight-bold"><i class="fas fa-envelope mr-1"></i> Email</label>
+                                    <label class="font-weight-bold">Email</label>
                                     <p id="detailUserEmail"></p>
                                 </div>
                                 <div class="form-group">
-                                    <label class="font-weight-bold"><i class="fas fa-phone mr-1"></i> Nomor HP</label>
+                                    <label class="font-weight-bold">Nomor HP</label>
                                     <p id="detailUserPhone"></p>
                                 </div>
                                 <div class="form-group">
-                                    <label class="font-weight-bold"><i class="fas fa-venus-mars mr-1"></i> Jenis Kelamin</label>
+                                    <label class="font-weight-bold">Jenis Kelamin</label>
                                     <p id="detailUserGender"></p>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="font-weight-bold"><i class="fas fa-birthday-cake mr-1"></i> Usia</label>
+                                    <label class="font-weight-bold">Usia</label>
                                     <p id="detailUserAge"></p>
                                 </div>
                                 <div class="form-group">
-                                    <label class="font-weight-bold"><i class="fas fa-hospital mr-1"></i> Puskesmas</label>
+                                    <label class="font-weight-bold">Puskesmas</label>
                                     <p id="detailUserPuskesmas"></p>
                                 </div>
                                 <div class="form-group">
-                                    <label class="font-weight-bold"><i class="fas fa-calendar-plus mr-1"></i> Terdaftar</label>
+                                    <label class="font-weight-bold">Terdaftar</label>
                                     <p id="detailUserCreated"></p>
                                 </div>
                             </div>

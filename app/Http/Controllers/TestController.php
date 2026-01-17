@@ -30,6 +30,8 @@ class TestController extends Controller
                 'test_blood_pressure_reminder' => $result3
             ]
         ]);
+    }
+
     public function testPengingat()
     {
         // Jalankan command pengingat secara manual

@@ -159,7 +159,7 @@
                                                             <input type="hidden" name="obat_id" value="{{ $obat->id }}">
                                                             <select name="status" class="form-control form-control-sm" onchange="this.form.submit()">
                                                                 <option value="aktif" {{ $obat->status_obat === 'aktif' ? 'selected' : '' }}>Aktif</option>
-                                                                <option value="habis" {{ $obat->status_obat === 'habis' ? 'selected' : '' }}>Habis</option>
+                                                                <option value="tidak_aktif" {{ $obat->status_obat === 'tidak_aktif' ? 'selected' : '' }}>Tidak Aktif</option>
                                                             </select>
                                                         </form>
                                                     </td>
@@ -174,7 +174,7 @@
                                                             <input type="hidden" name="obat_id" value="{{ $obat->id }}">
                                                             <select name="status" class="form-control form-control-sm" onchange="this.form.submit()">
                                                                 <option value="aktif" {{ $obat->status_obat === 'aktif' ? 'selected' : '' }}>Aktif</option>
-                                                                <option value="habis" {{ $obat->status_obat === 'habis' ? 'selected' : '' }}>Habis</option>
+                                                                <option value="tidak_aktif" {{ $obat->status_obat === 'tidak_aktif' ? 'selected' : '' }}>Tidak Aktif</option>
                                                             </select>
                                                         </form>
                                                     </td>

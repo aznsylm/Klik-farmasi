@@ -75,9 +75,7 @@ class KirimPengingatObatCommand extends Command
 
                 // Buat pesan dengan template random
                 $pesan = $this->whatsappService->buatPesanPengingatObat(
-                    $pengingat->user->name,
                     $obat->nama_obat,
-                    $obat->jumlah_obat,
                     $obat->waktu_minum,
                     $obat->suplemen
                 );

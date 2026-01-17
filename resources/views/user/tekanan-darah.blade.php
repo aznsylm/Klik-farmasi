@@ -120,16 +120,21 @@
                                                             $textColor = 'text-success';
                                                         } elseif ($record->sistol >= 120 && $record->sistol <= 129 && $record->diastol < 80) {
                                                             $category = 'PRE HIPERTENSI';
-                                                            $textColor = 'text-info';
+                                                            $textColor = 'text-warning';
                                                         } elseif (($record->sistol >= 130 && $record->sistol <= 139) || ($record->diastol >= 80 && $record->diastol <= 89)) {
                                                             $category = 'HIPERTENSI STAGE 1';
-                                                            $textColor = 'text-warning';
+                                                            $textColor = '';
+                                                            $customStyle = 'color: #fd7e14; font-weight: bold;';
                                                         } else {
                                                             $category = 'HIPERTENSI STAGE 2';
                                                             $textColor = 'text-danger';
                                                         }
                                                     @endphp
-                                                    <strong class="{{ $textColor }}">{{ $category }}</strong>
+                                                    @if(isset($customStyle))
+                                                        <strong style="{{ $customStyle }}">{{ $category }}</strong>
+                                                    @else
+                                                        <strong class="{{ $textColor }}">{{ $category }}</strong>
+                                                    @endif
                                                 </td>
                                                 <td>
                                                     <button class="btn btn-warning btn-sm" onclick="editRecord({{ $record->id }}, {{ $record->sistol }}, {{ $record->diastol }})" title="Edit">

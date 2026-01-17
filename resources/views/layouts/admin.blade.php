@@ -318,6 +318,10 @@
                             <p>{{ Auth::user()->email }}</p>
                         </div>
                         <div class="form-group">
+                            <label class="font-weight-bold"><i class="fas fa-hospital mr-1"></i> Puskesmas</label>
+                            <p>{{ Auth::user()->puskesmas ?? '-' }}</p>
+                        </div>
+                        <div class="form-group">
                             <label class="font-weight-bold"><i class="fas fa-shield-alt mr-1"></i> Role</label>
                             <p>Administrator</p>
                         </div>

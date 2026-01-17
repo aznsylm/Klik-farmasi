@@ -221,7 +221,7 @@ class PengingatObatController extends Controller
             ]);
         }
 
-        // Simpan ke detail_obat_pengingat - Universal untuk semua jenis
+        // Simpan ke detail_obat - Universal untuk semua jenis
         foreach ($request->namaObat as $i => $namaObat) {
             DetailObatPengingat::create([
                 'pengingat_obat_id' => $pengingat->id,

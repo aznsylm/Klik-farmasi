@@ -34,7 +34,7 @@
                                     <div class="download-badge">
                                         <i class="bi bi-file-earmark-arrow-down me-2"></i>GRATIS
                                     </div>
-                                    <a href="{{ $download->file_link }}" target="_blank" class="quick-download-btn">
+                                    <a href="{{ route('download.track', $download->id) }}" target="_blank" class="quick-download-btn">
                                         <i class="bi bi-download"></i>
                                     </a>
                                 </div>
@@ -53,7 +53,7 @@
                                 
                                 <!-- Download Button -->
                                 <div class="download-footer">
-                                    <a href="{{ $download->file_link }}" target="_blank" class="download-btn-main">
+                                    <a href="{{ route('download.track', $download->id) }}" target="_blank" class="download-btn-main">
                                         <i class="bi bi-cloud-download me-2"></i>
                                         <span>Download Sekarang</span>
                                         <i class="bi bi-arrow-right ms-2"></i>

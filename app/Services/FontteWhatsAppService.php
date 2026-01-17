@@ -84,81 +84,99 @@ class FontteWhatsAppService
         }
     }
 
-    public function buatPesanPengingatObat($namaPasien, $namaObat, $jumlahObat, $waktuMinum, $suplemen = null)
+    public function buatPesanPengingatObat($namaObat, $waktuMinum, $suplemen = null)
     {
+        // Deteksi konteks: obat, suplemen, atau keduanya
+        $adaObat = !empty($namaObat) && $namaObat !== '-' && strtolower($namaObat) !== 'tidak ada';
+        $adaSuplemen = !empty($suplemen) && $suplemen !== '-' && strtolower($suplemen) !== 'tidak ada';
+        
+        // Buat list item dengan bold
+        $itemLines = [];
+        if ($adaObat) $itemLines[] = "*{$namaObat}*";
+        if ($adaSuplemen) $itemLines[] = "*{$suplemen}*";
+        $namaLengkap = implode("\n", $itemLines);
+        
+        // Tentukan kata kunci berdasarkan konteks
+        if ($adaObat && $adaSuplemen) {
+            $jenis = 'obat dan suplemen';
+            $jenisShort = 'obat & suplemen';
+        } elseif ($adaSuplemen && !$adaObat) {
+            $jenis = 'suplemen';
+            $jenisShort = 'suplemen';
+        } else {
+            $jenis = 'obat';
+            $jenisShort = 'obat';
+        }
+        
+        // Motivasi universal (bisa untuk obat/suplemen/keduanya)
         $motivasi = [
-            "Waktunya minum obat nih. Jangan sampai kelewat ya!",
-            "Eh, udah waktunya lho. Yuk minum obatnya dulu.",
-            "Ingat, obat dulu baru aktivitas lain. Semangat!",
-            "Jangan lupa minum obat ya. Badan butuh ini.",
-            "Ayo dong, obatnya udah nungguin dari tadi.",
-            "Sebentar lagi waktunya. Siap-siap minum obat ya.",
+            "Waktunya minum {$jenis} nih. Jangan sampai kelewat ya!",
+            "Eh, udah waktunya lho. Yuk minum {$jenisShort}nya dulu.",
+            "Jangan lupa minum {$jenis} ya. Badan butuh ini.",
             "Tubuh kita butuh ini. Jangan ditunda-tunda.",
-            "Udah jam segini, saatnya minum obat nih.",
-            "Minum obat dulu yuk, biar badan tetep fit.",
+            "Udah jam segini, saatnya minum {$jenis} nih.",
             "Jangan sampai lupa ya. Kesehatan nomor satu.",
-            "Waktunya jagain kesehatan. Ayo minum obat!",
-            "Sebentar aja kok, minum obat terus lanjut aktivitas.",
-            "Badan udah ngasih sinyal nih. Waktunya obat.",
-            "Yuk, luangin waktu sebentar buat minum obat.",
-            "Jangan dilewatin ya. Obat ini penting banget.",
-            "Udah siap belum? Waktunya minum obat nih.",
-            "Ayo semangat! Minum obat dulu baru yang lain.",
-            "Ingat pesan dokter? Waktunya minum obat.",
-            "Sebentar lagi jam minum obat. Jangan lupa ya!",
+            "Waktunya jagain kesehatan. Ayo minum {$jenisShort}!",
+            "Sebentar aja kok, minum {$jenis} terus lanjut aktivitas.",
+            "Yuk, luangin waktu sebentar buat minum {$jenis}.",
+            "Jangan dilewatin ya. Ini penting banget.",
+            "Udah siap belum? Waktunya minum {$jenis} nih.",
+            "Ingat pesan dokter? Waktunya minum {$jenis}.",
+            "Sebentar lagi waktunya. Jangan lupa ya!",
             "Tubuh kita udah kerja keras. Kasih yang terbaik dong.",
-            "Halo! Sudah siap minum obat belum?",
-            "Reminder nih, jangan lupa konsumsi obatnya.",
-            "Hai, waktunya rutin minum obat lagi.",
-            "Ding dong! Alarm minum obat berbunyi.",
+            "Halo! Sudah siap minum {$jenis} belum?",
+            "Reminder nih, jangan lupa konsumsinya.",
+            "Hai, waktunya rutin minum {$jenis} lagi.",
+            "Ding dong! Alarm kesehatan berbunyi.",
             "Psst, ini pengingat penting buat kesehatan.",
-            "Cek jam deh, udah waktunya minum obat.",
+            "Cek jam deh, udah waktunya nih.",
             "Hei, jangan sampai terlewat ya jadwalnya.",
-            "Yuk konsisten, minum obat tepat waktu.",
-            "Badan lagi nunggu asupan obatnya nih.",
-            "Alarm kesehatan berbunyi! Waktunya minum obat.",
+            "Yuk konsisten, minum {$jenis} tepat waktu.",
+            "Badan lagi nunggu asupannya nih.",
+            "Alarm kesehatan berbunyi! Waktunya minum {$jenis}.",
             "Jangan ditunda lagi, langsung minum aja.",
-            "Kesehatan prioritas, yuk minum obatnya.",
-            "Sudah waktunya, jangan lupa minum obat.",
+            "Kesehatan prioritas, yuk minum {$jenisShort}nya.",
+            "Sudah waktunya, jangan lupa ya.",
             "Rutinitas sehat dimulai dari sekarang.",
-            "Obat sudah menunggu, ayo diminum.",
             "Tepat waktu itu penting, terutama untuk kesehatan.",
-            "Yuk jaga konsistensi minum obatnya.",
+            "Yuk jaga konsistensi minum {$jenisShort}nya.",
             "Badan butuh asupan rutin, jangan lupa ya.",
-            "Sekarang waktunya, minum obat dulu.",
-            "Pengingat ramah: sudah jam minum obat.",
-            "Halo sehat! Waktunya konsumsi obat rutin.",
+            "Sekarang waktunya, minum {$jenis} dulu.",
+            "Pengingat ramah: sudah waktunya nih.",
+            "Halo sehat! Waktunya konsumsi rutin.",
             "Jangan sampai lupa, ini penting banget.",
-            "Yuk disiplin, minum obat sesuai jadwal.",
-            "Badan udah ngasih tanda, waktunya obat.",
-            "Sebentar doang kok, minum obat terus lanjut.",
+            "Yuk disiplin, sesuai jadwal ya.",
+            "Badan udah ngasih tanda, waktunya nih.",
+            "Sebentar doang kok, terus lanjut aktivitas.",
             "Kesehatan nomor satu, jangan diabaikan.",
-            "Sudah jam segini, saatnya minum obat.",
+            "Sudah jam segini, saatnya minum {$jenis}.",
             "Yuk rutin, biar badan selalu sehat.",
             "Jangan ditunda, langsung minum sekarang.",
-            "Obat menunggu, tubuh juga butuh.",
             "Waktunya datang, jangan sampai terlewat.",
-            "Hei, sudah siap belum minum obatnya?",
-            "Reminder penting: jangan lupa obat rutin.",
+            "Hei, sudah siap belum?",
+            "Reminder penting: jangan lupa rutin ya.",
             "Yuk konsisten, demi kesehatan yang lebih baik.",
             "Badan lagi butuh, jangan diabaikan ya.",
-            "Sekarang waktunya, ayo minum obat.",
+            "Sekarang waktunya, ayo minum {$jenis}.",
             "Jangan lupa ya, ini untuk kebaikan sendiri.",
-            "Sudah jam minum obat, yuk langsung aja.",
+            "Sudah waktunya, yuk langsung aja.",
             "Kesehatan investasi terbaik, jaga terus.",
             "Waktunya tiba, jangan sampai kelewatan.",
-            "Yuk disiplin, minum obat tepat waktu."
+            "Yuk disiplin, tepat waktu ya."
         ];
         
         $pesanMotivasi = $motivasi[array_rand($motivasi)];
         
+        // Format waktu dengan bold
+        $waktuBold = "*" . substr($waktuMinum, 0, 5) . "*";
+        
         // Variasi format pesan untuk menghindari deteksi spam
         $formatVariasi = [
-            "Sebentar lagi\n{$namaObat} | {$waktuMinum}\n\n{$pesanMotivasi}\n\n— Klik Farmasi",
-            "{$waktuMinum} • {$namaObat}\n\n{$pesanMotivasi}\n\nSalam sehat, Klik Farmasi",
-            "{$waktuMinum}\n{$namaObat}\n\n{$pesanMotivasi}\n\n~ Klik Farmasi ~",
-            "Jadwal: {$waktuMinum}\nObat: {$namaObat}\n\n{$pesanMotivasi}\n\nKlik Farmasi",
-            "{$namaObat} • {$waktuMinum}\n\n{$pesanMotivasi}\n\nTerima kasih,\nKlik Farmasi"
+            "{$namaLengkap}\n{$waktuBold}\n\n{$pesanMotivasi}\n\n— Klik Farmasi",
+            "{$namaLengkap}\n{$waktuBold}\n\n{$pesanMotivasi}\n\nSalam sehat, Klik Farmasi",
+            "{$namaLengkap}\n{$waktuBold}\n\n{$pesanMotivasi}\n\n~ Klik Farmasi ~",
+            "{$namaLengkap}\n{$waktuBold}\n\n{$pesanMotivasi}\n\nKlik Farmasi",
+            "{$namaLengkap}\n{$waktuBold}\n\n{$pesanMotivasi}\n\nTerima kasih,\nKlik Farmasi"
         ];
         
         $pesan = $formatVariasi[array_rand($formatVariasi)];
@@ -166,14 +184,34 @@ class FontteWhatsAppService
         return $pesan;
     }
 
-    public function buatPesanReminderTekananDarah($namaPasien)
+    public function buatPesanReminderArtikel($judulArtikel, $linkArtikel)
     {
-        return "📊 *Pengingat TEKANAN DARAH*\n\n" .
-               "Halo {$namaPasien}! 👋\n\n" .
-               "Sudah seminggu Anda belum mencatat tekanan darah. 🩺\n\n" .
-               "Yuk, cek dan catat tekanan darah Anda hari ini untuk monitoring kesehatan yang lebih baik! 💙\n\n" .
-               "Login ke dashboard Klik Farmasi untuk mencatat: " . url('/user/dashboard') . "\n\n" .
-               "_Pesan otomatis dari Klik Farmasi_";
+        $hooks = [
+            "Hai! Jangan lupa baca artikel kesehatan hari ini ya!",
+            "Yuk, tingkatkan pengetahuan tentang hipertensi!",
+            "Ada artikel menarik nih, jangan sampai terlewat!",
+            "Baca artikel ini buat jaga kesehatan kamu!",
+            "Artikel baru menanti! Yuk dibaca!",
+            "Luangkan waktu sebentar untuk baca artikel ini ya!",
+            "Pengetahuan adalah kunci kesehatan. Yuk baca!",
+            "Artikel kesehatan spesial buat kamu!",
+            "Jangan lewatkan artikel penting ini!",
+            "Yuk update pengetahuan kesehatan kamu!",
+            "Artikel ini bisa bantu kamu lebih sehat!",
+            "Sempatkan baca artikel ini ya!",
+        ];
+        
+        $hook = $hooks[array_rand($hooks)];
+        
+        $formatVariasi = [
+            "{$hook}\n\n*{$judulArtikel}*\n\n{$linkArtikel}\n\n— Klik Farmasi",
+            "{$hook}\n\n*{$judulArtikel}*\n\n{$linkArtikel}\n\nSalam sehat, Klik Farmasi",
+            "{$hook}\n\n*{$judulArtikel}*\n\n{$linkArtikel}\n\n~ Klik Farmasi ~",
+            "{$hook}\n\n*{$judulArtikel}*\n\nBaca selengkapnya:\n{$linkArtikel}\n\nKlik Farmasi",
+            "{$hook}\n\n*{$judulArtikel}*\n\n{$linkArtikel}\n\nTerima kasih,\nKlik Farmasi"
+        ];
+        
+        return $formatVariasi[array_rand($formatVariasi)];
     }
 
     private function formatNomorWhatsApp($nomor)

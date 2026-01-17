@@ -10,3 +10,6 @@ Artisan::command('inspire', function () {
 
 // Jalankan setiap menit
 Schedule::command('pengingat:kirim-obat')->everyMinute();
+
+// Reminder artikel - Jalan setiap jam (batch 5 pasien per jam)
+Schedule::command('reminder:kirim-artikel')->hourly();

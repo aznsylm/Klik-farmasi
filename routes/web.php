@@ -30,6 +30,7 @@ Route::get('/artikel/hipertensi-non-kehamilan', [PageController::class, 'artikel
 Route::get('/artikel/hipertensi-kehamilan/{slug}', [PageController::class, 'artikelDetail'])->name('artikel.detail.kehamilan');
 Route::get('/artikel/hipertensi-non-kehamilan/{slug}', [PageController::class, 'artikelDetail'])->name('artikel.detail.non-kehamilan');
 Route::get('/unduhan', [PageController::class, 'unduhan'])->name('unduhan');
+Route::get('/download/{id}/track', [PageController::class, 'trackDownload'])->name('download.track');
 Route::get('/pengingat', [PengingatObatController::class, 'showForm'])->name('pengingat');
 Route::get('/berita', [PageController::class, 'berita'])->name('pages.berita');
 Route::get('/petunjuk', [PageController::class, 'petunjuk'])->name('petunjuk');

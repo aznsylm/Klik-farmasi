@@ -27,7 +27,10 @@ class SuperAdminController extends Controller
             $query->where(function($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
                   ->orWhere('email', 'like', "%{$search}%")
-                  ->orWhere('nomor_hp', 'like', "%{$search}%");
+                  ->orWhere('nomor_hp', 'like', "%{$search}%")
+                  ->orWhere('jenis_kelamin', 'like', "%{$search}%")
+                  ->orWhere('usia', 'like', "%{$search}%")
+                  ->orWhere('puskesmas', 'like', "%{$search}%");
             });
         }
         
@@ -44,7 +47,10 @@ class SuperAdminController extends Controller
             $query->where(function($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
                   ->orWhere('email', 'like', "%{$search}%")
-                  ->orWhere('nomor_hp', 'like', "%{$search}%");
+                  ->orWhere('nomor_hp', 'like', "%{$search}%")
+                  ->orWhere('jenis_kelamin', 'like', "%{$search}%")
+                  ->orWhere('usia', 'like', "%{$search}%")
+                  ->orWhere('puskesmas', 'like', "%{$search}%");
             });
         }
         
