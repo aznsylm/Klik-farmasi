@@ -280,7 +280,7 @@
                                     </div>
                                 </div>
                                 <p class="article-excerpt">
-                                    {{ Str::words($article->content, 30, '...') }}
+                                    {{ Str::words(strip_tags($article->content), 30, '...') }}
                                 </p><a
                                     href="{{ route($article->article_type === 'kehamilan' ? 'artikel.detail.kehamilan' : 'artikel.detail.non-kehamilan', $article->slug) }}"
                                     class="read-more">

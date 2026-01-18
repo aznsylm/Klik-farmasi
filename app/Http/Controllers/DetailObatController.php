@@ -37,6 +37,11 @@ class DetailObatController extends Controller
         $hasActiveObat = $pengingat->detailObat()->where('status_obat', 'aktif')->exists();
         $pengingat->update(['status' => $hasActiveObat ? 'aktif' : 'tidak_aktif']);
 
+        // Check if request is AJAX
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json(['success' => true, 'message' => 'Obat berhasil ditambahkan!']);
+        }
+
         return back()->with('obat_success', 'Obat berhasil ditambahkan!');
     }
 
@@ -59,6 +64,11 @@ class DetailObatController extends Controller
         $hasActiveObat = $pengingat->detailObat()->where('status_obat', 'aktif')->exists();
         $pengingat->update(['status' => $hasActiveObat ? 'aktif' : 'tidak_aktif']);
 
+        // Check if request is AJAX
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json(['success' => true, 'message' => 'Obat berhasil diperbarui!']);
+        }
+
         return back()->with('obat_success', 'Obat berhasil diperbarui!');
     }
 
@@ -71,6 +81,11 @@ class DetailObatController extends Controller
         // Auto-update pengingat status after deletion
         $hasActiveObat = $pengingat->detailObat()->where('status_obat', 'aktif')->exists();
         $pengingat->update(['status' => $hasActiveObat ? 'aktif' : 'tidak_aktif']);
+
+        // Check if request is AJAX
+        if (request()->ajax() || request()->wantsJson()) {
+            return response()->json(['success' => true, 'message' => 'Obat berhasil dihapus!']);
+        }
 
         return back()->with('obat_success', 'Obat berhasil dihapus!');
     }

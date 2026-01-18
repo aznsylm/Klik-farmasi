@@ -4,9 +4,13 @@
 
 @push('head')
     <!-- SEO Meta Tags -->
-    <meta name="description" content="Berita kesehatan terkini tentang hipertensi dan penyakit tidak menular. Informasi terpercaya dari sumber kesehatan nasional dan internasional.">
+    <meta name="description"
+        content="Berita kesehatan terkini tentang hipertensi dan penyakit tidak menular. Informasi terpercaya dari sumber kesehatan nasional dan internasional.">
     <meta name="keywords" content="berita kesehatan, berita hipertensi, informasi kesehatan terkini, news kesehatan, farmasi">
     <meta name="author" content="Tim Farmasi Universitas Alma Ata">
+
+    <!-- External CSS for optimized performance -->
+    <link rel="stylesheet" href="{{ asset('css/berita-pages.css') }}" media="screen">
 @endpush
 
 @section('content')
@@ -40,11 +44,11 @@
                                     </span>
                                 </div>
                             </div>
-                            
+
                             <!-- Card Body -->
                             <div class="news-body">
                                 <h5 class="news-title">{{ $news->title }}</h5>
-                                
+
                                 <!-- Read More Button -->
                                 <div class="news-footer">
                                     <a href="{{ $news->link }}" target="_blank" class="read-more-btn">
@@ -64,92 +68,6 @@
                     </div>
                 @endforelse
             </div>
-            
-            <!-- Custom Styles -->
-            <style>
-            .news-card {
-                background: #ffffff;
-                box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-                transition: all 0.3s ease;
-                border: 1px solid #e9ecef;
-                cursor: pointer;
-            }
-            
-            .news-card:hover {
-                transform: translateY(-5px);
-                box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-            }
-            
-            .news-header {
-                padding: 20px 20px 15px;
-                background: #0B5E91;
-                color: white;
-            }
-            
-            .source-badge, .date-badge {
-                font-size: 0.8rem;
-                font-weight: 600;
-            }
-            
-            .news-body {
-                padding: 25px 20px 20px;
-                flex-grow: 1;
-                display: flex;
-                flex-direction: column;
-            }
-            
-            .news-title {
-                font-size: 1.1rem;
-                font-weight: 700;
-                line-height: 1.4;
-                color: #2c3e50;
-                margin-bottom: 20px;
-                flex-grow: 1;
-                display: -webkit-box;
-                -webkit-line-clamp: 3;
-                -webkit-box-orient: vertical;
-                overflow: hidden;
-            }
-            
-            .news-footer {
-                margin-top: auto;
-            }
-            
-            .read-more-btn {
-                display: inline-flex;
-                align-items: center;
-                color: #0B5E91;
-                text-decoration: none;
-                font-weight: 600;
-                font-size: 0.9rem;
-                transition: all 0.3s ease;
-                padding: 8px 0;
-            }
-            
-            .read-more-btn:hover {
-                color: #083d5c;
-                transform: translateX(5px);
-            }
-            
-            .read-more-btn i {
-                transition: transform 0.3s ease;
-            }
-            
-            .read-more-btn:hover i {
-                transform: translateX(3px);
-            }
-            
-            /* Responsive adjustments */
-            @media (max-width: 768px) {
-                .news-header {
-                    padding: 15px 15px 10px;
-                }
-                
-                .news-body {
-                    padding: 20px 15px 15px;
-                }
-            }
-            </style>
 
             <!-- Pagination -->
             <div class="mt-5 d-flex justify-content-center">
@@ -159,6 +77,7 @@
             </div>
         </div>
     </section>
+
+    <!-- External JS for optimized performance -->
+    <script src="{{ asset('js/berita-pages.js') }}" defer></script>
 @endsection
-
-

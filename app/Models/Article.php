@@ -64,8 +64,14 @@ class Article extends Model
     // Get readers list filtered by puskesmas with access count
     public function getReadersByPuskesmas($puskesmas = null)
     {
+        // Get puskesmas from logged in user if not provided
         if (!$puskesmas && Auth::check()) {
             $puskesmas = Auth::user()->puskesmas;
+        }
+        
+        // If still no puskesmas, return empty collection
+        if (!$puskesmas) {
+            return collect();
         }
         
         return $this->reads()

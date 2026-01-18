@@ -34,10 +34,11 @@
                 </div>
                 <div class="card-body">
                     @if (session('success'))
-                        <div class="alert alert-success alert-dismissible">
-                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                            {{ session('success') }}
-                        </div>
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                                showToast('success', '{{ session('success') }}');
+                            });
+                        </script>
                     @endif
 
                     <div class="table-responsive">
@@ -58,7 +59,7 @@
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $download->title }}</td>
-                                        <td>{{ Str::limit($download->description, 50) }}</td>
+                                        <td>{!! Str::limit(strip_tags($download->description), 50) !!}</td>
                                         <td>
                                             @if ($download->image)
                                                 <img src="{{ asset('storage/' . $download->image) }}"
@@ -176,4 +177,6 @@
             </div>
         @endif
     @endforeach
+
+    @include('components.admin.modal-scripts')
 @endsection

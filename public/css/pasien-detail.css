@@ -1,0 +1,256 @@
+/*
+==================================================
+PATIENT DETAIL PAGE STYLES
+==================================================
+File: pasien-detail.css
+Purpose: External CSS untuk halaman detail pasien admin
+Author: Klik Farmasi Development Team
+==================================================
+*/
+
+/* ========================================
+   MOBILE RESPONSIVENESS IMPROVEMENTS
+======================================== */
+
+@media (max-width: 768px) {
+
+    /* Make cards more mobile-friendly */
+    .card {
+        margin-bottom: 1rem;
+        border-radius: 8px;
+    }
+
+    /* Adjust chart height for mobile */
+    #tekananDarahChart {
+        height: 250px !important;
+    }
+
+    /* Make tables scroll horizontally on mobile */
+    .table-responsive {
+        border: none;
+    }
+
+    /* Improve button spacing on mobile */
+    .btn-group .btn {
+        margin-bottom: 5px;
+    }
+
+    /* Stack card tools on mobile */
+    .card-tools {
+        flex-direction: column;
+        align-items: flex-end;
+    }
+
+    .card-tools .btn-group {
+        flex-wrap: wrap;
+        gap: 5px;
+    }
+
+    /* Improve tracking days display on mobile */
+    .tracking-day {
+        min-width: 35px !important;
+        max-width: 35px !important;
+        margin: 2px;
+    }
+
+    .tracking-day .badge {
+        font-size: 0.7rem;
+        padding: 2px 4px;
+    }
+
+    .tracking-day small {
+        font-size: 0.6rem;
+    }
+
+    /* Better spacing for profile section */
+    .profile-avatar {
+        margin-bottom: 1rem;
+    }
+
+    /* Improve form layout on mobile */
+    .input-group {
+        max-width: 100% !important;
+    }
+
+    /* Better alert spacing */
+    .alert {
+        margin-bottom: 1rem;
+        padding: 0.75rem;
+    }
+
+    /* Improve breadcrumb on mobile */
+    .breadcrumb {
+        font-size: 0.875rem;
+        padding: 0.5rem 0;
+    }
+}
+
+/* ========================================
+   EXTRA SMALL DEVICES (< 576px)
+======================================== */
+
+@media (max-width: 576px) {
+
+    /* Extra small devices adjustments */
+    .card-header h3 {
+        font-size: 1.1rem;
+    }
+
+    .btn-sm {
+        font-size: 0.8rem;
+        padding: 0.25rem 0.5rem;
+    }
+
+    /* Stack profile columns completely on very small screens */
+    .col-md-6.col-sm-6.col-12 {
+        margin-bottom: 1rem;
+    }
+
+    /* Adjust table font size */
+    .table {
+        font-size: 0.875rem;
+    }
+
+    /* Better spacing for legend */
+    .badge.me-1 {
+        margin-bottom: 5px;
+        display: inline-block;
+    }
+}
+
+/* ========================================
+   CHART CONTAINER STYLES
+======================================== */
+
+.chart-container {
+    position: relative;
+}
+
+.chart-container canvas {
+    max-width: 100%;
+    height: auto;
+}
+
+/* ========================================
+   BUTTON GROUP IMPROVEMENTS
+======================================== */
+
+.btn-group.flex-wrap {
+    flex-wrap: wrap;
+    gap: 2px;
+}
+
+/* ========================================
+   PROFILE AVATAR STYLES
+======================================== */
+
+.profile-avatar .bg-primary {
+    transition: transform 0.3s ease;
+}
+
+.profile-avatar .bg-primary:hover {
+    transform: scale(1.05);
+}
+
+/* ========================================
+   FORM IMPROVEMENTS
+======================================== */
+
+.form-control.is-invalid {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+.invalid-feedback {
+    display: block;
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+/* ========================================
+   TOAST STYLES (if not already defined)
+======================================== */
+
+#toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+}
+
+.toast {
+    min-width: 300px;
+    margin-bottom: 10px;
+    border: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* ========================================
+   TRACKING DAYS IMPROVEMENTS
+======================================== */
+
+.tracking-day.today {
+    background-color: rgba(11, 94, 145, 0.1);
+    border: 2px solid #0b5e91;
+    border-radius: 4px;
+}
+
+.tracking-day .badge {
+    transition: all 0.2s ease;
+}
+
+.tracking-day:hover .badge {
+    transform: scale(1.1);
+}
+
+/* ========================================
+   LOADING STATES
+======================================== */
+
+.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.spinner-border-sm {
+    width: 1rem;
+    height: 1rem;
+}
+
+/* ========================================
+   UTILITY CLASSES
+======================================== */
+
+.text-truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+/* ========================================
+   PRINT STYLES
+======================================== */
+
+@media print {
+
+    .card-tools,
+    .btn,
+    .modal,
+    #toast-container {
+        display: none !important;
+    }
+
+    .card {
+        border: 1px solid #dee2e6 !important;
+        box-shadow: none !important;
+    }
+
+    .chart-container {
+        page-break-inside: avoid;
+    }
+}

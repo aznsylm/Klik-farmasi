@@ -5,6 +5,7 @@ use App\Models\User;
 use App\Models\PengingatObat;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Validation\Rule;
 
 class AdminController extends Controller
 {
@@ -81,7 +82,9 @@ class AdminController extends Controller
             $query->where(function($q) use ($search) {
                 $q->where('name', 'like', "%$search%")
                   ->orWhere('email', 'like', "%$search%")
-                  ->orWhere('nomor_hp', 'like', "%$search%");
+                  ->orWhere('nomor_hp', 'like', "%$search%")
+                  ->orWhere('jenis_kelamin', 'like', "%$search%")
+                  ->orWhere('usia', 'like', "%$search%");
             });
         }
     
@@ -174,8 +177,8 @@ class AdminController extends Controller
             'email' => 'required|email|unique:users,email',
             'nomor_hp' => [
                 'required',
-                'unique:users,nomor_hp',
-                'regex:/^[0-9]{8,15}$/'
+                'regex:/^[0-9]{8,15}$/',
+                'unique:users,nomor_hp'
             ],
             'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
             'usia' => 'required|integer|min:1|max:120',
@@ -219,25 +222,72 @@ class AdminController extends Controller
                 'puskesmas' => $puskesmas
             ]);
 
+            // Check if request is AJAX
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json(['success' => true, 'message' => 'Pasien berhasil ditambahkan!']);
+            }
+
             return redirect()->route('admin.pasien')
                 ->with('success', 'Pasien berhasil ditambahkan!');
         } catch (\Exception $e) {
+            // Check if request is AJAX
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json(['success' => false, 'message' => 'Gagal menambahkan pasien. Silakan coba lagi.'], 400);
+            }
+            
             return back()
                 ->with('error', 'Gagal menambahkan pasien. Silakan coba lagi.')
                 ->withInput();
         }
     }
 
-
+    // API endpoints for real-time validation
+    public function checkEmail(Request $request)
+    {
+        $email = $request->input('email');
+        $excludeId = $request->input('exclude_id');
+        
+        $query = User::where('email', $email);
+        if ($excludeId) {
+            $query->where('id', '!=', $excludeId);
+        }
+        
+        $exists = $query->exists();
+        
+        return response()->json(['exists' => $exists]);
+    }
+    
+    public function checkPhone(Request $request)
+    {
+        $phone = $request->input('phone');
+        $excludeId = $request->input('exclude_id');
+        
+        $query = User::where('nomor_hp', $phone);
+        if ($excludeId) {
+            $query->where('id', '!=', $excludeId);
+        }
+        
+        $exists = $query->exists();
+        
+        return response()->json(['exists' => $exists]);
+    }
 
     public function resetPassword(Request $request, $id)
     {
         $request->validate([
             'new_password' => 'required|min:6'
+        ], [
+            'new_password.required' => 'Password baru wajib diisi',
+            'new_password.min' => 'Password minimal 6 karakter'
         ]);
 
         $user = User::findOrFail($id);
         $user->update(['password' => bcrypt($request->new_password)]);
+
+        // Check if request is AJAX
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json(['success' => true, 'message' => 'Password berhasil direset!']);
+        }
 
         return redirect()->route('admin.pasienDetail', $user->id)->with('success', 'Password berhasil diubah!');
     }

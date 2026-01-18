@@ -63,6 +63,13 @@
         /* Logo styling */
         .brand-image {
             max-height: 33px;
+            max-width: 150px;
+            object-fit: contain;
+        }
+
+        /* Override AdminLTE default float */
+        .brand-link .brand-image {
+            float: none !important;
         }
 
         .brand-text {
@@ -192,9 +199,8 @@
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
             <a href="{{ route('superadmin.dashboard') }}" class="brand-link">
-                <img src="{{ asset('assets/Favicon.png') }}" alt="Klik Farmasi"
-                    class="brand-image img-circle elevation-3">
-                <span class="brand-text font-weight-light">Klik Farmasi</span>
+                <img src="{{ asset('assets/LOGO KLIKFARMASI VEKTOR MIRING.png') }}" alt="Klik Farmasi"
+                    class="brand-image">
             </a>
 
             <!-- Sidebar -->
@@ -236,10 +242,10 @@
 
         <!-- Footer -->
         <footer class="main-footer">
-            <strong>Copyright &copy; {{ date('Y') }} <a href="{{ route('beranda') }}">Klik Farmasi</a>.</strong>
+            <strong>Copyright &copy; 2025 <a href="{{ route('beranda') }}">Klik Farmasi</a>.</strong>
             Platform Kesehatan Digital untuk Manajemen Hipertensi.
             <div class="float-right d-none d-sm-inline-block">
-                <b>Version</b> 1.0.0 | Developed by <a href="https://github.com/aznsylm" target="_blank"
+                <b>Version</b> 1.1.0 | Developed by <a href="https://github.com/aznsylm" target="_blank"
                     style="color: black;">Aizan</a> | <a href="https://www.linkedin.com/in/aizansyalim/" target="_blank"
                     style="color: black;"></a>
             </div>

@@ -8,25 +8,29 @@
                     <span>&times;</span>
                 </button>
             </div>
-            <form id="tambahTekananDarahForm">
+            <form id="tambahTekananDarahForm" action="{{ route('admin.tekanan-darah.store') }}" method="POST">
+                @csrf
+                <input type="hidden" name="user_id" id="hiddenUserId" value="{{ $user->id ?? '' }}">
                 <div class="modal-body">
                     <div class="form-group">
                         <label class="form-label">Tanggal</label>
-                        <input type="date" class="form-control" id="tambahTanggal" required>
+                        <input type="date" class="form-control" id="tambahTanggal" name="tanggal_input" required>
                         <div class="invalid-feedback" id="tambahTanggalError"></div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="form-label">Sistol (mmHg)</label>
-                                <input type="number" class="form-control" id="tambahSistol" min="70" max="250" required placeholder="120">
+                                <input type="number" class="form-control" id="tambahSistol" name="sistol"
+                                    min="70" max="250" required placeholder="120">
                                 <div class="invalid-feedback" id="tambahSistolError"></div>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="form-label">Diastol (mmHg)</label>
-                                <input type="number" class="form-control" id="tambahDiastol" min="40" max="150" required placeholder="80">
+                                <input type="number" class="form-control" id="tambahDiastol" name="diastol"
+                                    min="40" max="150" required placeholder="80">
                                 <div class="invalid-feedback" id="tambahDiastolError"></div>
                             </div>
                         </div>

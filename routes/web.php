@@ -17,11 +17,6 @@ Route::get('/', [PageController::class, 'beranda'])->name('beranda');
 Route::get('/test-wa', [TestController::class, 'testWhatsApp']);
 Route::get('/test-pengingat', [TestController::class, 'testPengingat']);
 
-// PWA Routes
-Route::get('/offline', function () {
-    return response()->file(public_path('offline.html'));
-})->name('offline');
-
 Route::get('/tanya-jawab/hipertensi-kehamilan', [PageController::class, 'tanyaJawabKehamilan'])->name('tanya-jawab.kehamilan');
 Route::get('/tanya-jawab/hipertensi-non-kehamilan', [PageController::class, 'tanyaJawabNonKehamilan'])->name('tanya-jawab.non-kehamilan');
 Route::get('/artikel', [PageController::class, 'artikel'])->name('artikel');
@@ -37,6 +32,10 @@ Route::get('/petunjuk', [PageController::class, 'petunjuk'])->name('petunjuk');
 Route::get('/tim-pengelola', [PageController::class, 'timPengelola'])->name('tim-pengelola');
 Route::post('/pengingat', [PengingatObatController::class, 'store'])->name('pengingat.store');
 
+// API routes for validation
+Route::post('/api/check-email', [AdminController::class, 'checkEmail']);
+Route::post('/api/check-phone', [AdminController::class, 'checkPhone']);
+
 Route::get('/dashboard', function () {
     $user = auth()->user();
     if ($user->isSuperAdmin()) {
@@ -44,7 +43,7 @@ Route::get('/dashboard', function () {
     } elseif ($user->role === 'admin') {
         return redirect()->route('admin.dashboard');
     } elseif ($user->role === 'pasien') {
-        return redirect()->route('user.dashboard');
+        return redirect()->route('pasien.dashboard');
     }
 })->middleware(['auth'])->name('dashboard');
 
@@ -112,12 +111,12 @@ Route::middleware(['auth', \App\Http\Middleware\RoleMiddleware::class . ':admin'
 });
 
 // Dashboard User - Multiple Pages
-Route::middleware(['auth', \App\Http\Middleware\RoleMiddleware::class . ':pasien'])->prefix('user')->name('user.')->group(function () {
+Route::middleware(['auth', \App\Http\Middleware\RoleMiddleware::class . ':pasien'])->prefix('pasien')->name('pasien.')->group(function () {
     // Dashboard - Overview
     Route::get('/dashboard', function() {
         $user = auth()->user();
         $latestPengingat = $user->pengingatObat()->latest()->first();
-        return view('user.dashboard', compact('user', 'latestPengingat'));
+        return view('pasien.dashboard', compact('user', 'latestPengingat'));
     })->name('dashboard');
     
     // Tekanan Darah - Chart & Input
@@ -127,12 +126,12 @@ Route::middleware(['auth', \App\Http\Middleware\RoleMiddleware::class . ':pasien
     Route::get('/obat', function() {
         $user = auth()->user();
         $latestPengingat = $user->pengingatObat()->latest()->first();
-        return view('user.obat', compact('latestPengingat'));
+        return view('pasien.obat', compact('latestPengingat'));
     })->name('obat');
     
     // Konsultasi
     Route::get('/konsultasi', function() {
-        return view('user.konsultasi');
+        return view('pasien.konsultasi');
     })->name('konsultasi');
     
     // PDF Download
@@ -144,7 +143,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/api/blood-pressure-data', [TekananDarahController::class, 'getChartData']);
     Route::post('/api/save-blood-pressure', [TekananDarahController::class, 'store']);
     Route::put('/api/user-blood-pressure/{id}', [TekananDarahController::class, 'userUpdate']);
-    Route::post('/api/obat/update-status', [\App\Http\Controllers\DetailObatController::class, 'updateStatus'])->name('user.obat.update-status');
+    Route::post('/api/obat/update-status', [\App\Http\Controllers\DetailObatController::class, 'updateStatus'])->name('pasien.obat.update-status');
 });
 
 // Legacy routes for backward compatibility

@@ -6,24 +6,24 @@
         min-height: 80vh;
         padding: 40px 0 30px;
     }
-    
+
     .hero-content {
         text-align: center;
         padding: 15px 10px !important;
     }
-    
+
     .hero-content h1 {
         font-size: 1.75rem !important;
         line-height: 1.3;
         margin-bottom: 1rem !important;
     }
-    
+
     .hero-content p {
         font-size: 0.95rem;
         line-height: 1.5;
         margin-bottom: 1.5rem !important;
     }
-    
+
     .hero-content .btn {
         font-size: 0.9rem;
         padding: 12px 24px !important;
@@ -31,11 +31,11 @@
         width: 100%;
         max-width: 280px;
     }
-    
+
     .clean-carousel-wrapper {
         margin-top: 20px;
     }
-    
+
     .carousel-inner .ratio {
         --bs-aspect-ratio: 75% !important;
     }
@@ -46,38 +46,38 @@
     .features-section {
         padding: 40px 0 !important;
     }
-    
+
     .features-header h2 {
         font-size: 1.75rem;
         margin-bottom: 1rem !important;
     }
-    
+
     .features-header p {
         font-size: 0.95rem;
         margin-bottom: 2rem !important;
     }
-    
+
     .enhanced-feature-card {
         margin-bottom: 20px;
         padding: 25px 20px;
         text-align: center;
     }
-    
+
     .feature-icon {
         width: 60px !important;
         height: 60px !important;
         margin: 0 auto 15px !important;
     }
-    
+
     .feature-icon i {
         font-size: 24px !important;
     }
-    
+
     .feature-title {
         font-size: 1.1rem;
         margin-bottom: 10px;
     }
-    
+
     .feature-description {
         font-size: 0.9rem;
         line-height: 1.5;
@@ -89,47 +89,47 @@
     .testimonial-section {
         padding: 40px 0 !important;
     }
-    
+
     .testimonial-section h2 {
         font-size: 1.75rem;
         margin-bottom: 1rem !important;
     }
-    
+
     .testimonial-section p {
         font-size: 0.95rem;
         margin-bottom: 2rem !important;
     }
-    
+
     .testimonial-marquee-container {
         height: auto;
         overflow: hidden;
     }
-    
+
     .testimonial-marquee-row {
         margin-bottom: 25px;
     }
-    
+
     .testimonial-marquee-track {
         gap: 25px !important;
     }
-    
+
     .testimonial-bubble {
         min-width: 280px !important;
         max-width: 320px;
         margin: 0 !important;
         padding: 20px 15px;
     }
-    
+
     .testimonial-quote {
         font-size: 0.9rem;
         line-height: 1.4;
         margin-bottom: 10px;
     }
-    
+
     .testimonial-author {
         font-size: 0.85rem;
     }
-    
+
     .testimonial-stars i {
         font-size: 12px;
     }
@@ -140,43 +140,43 @@
     .article-card {
         margin-bottom: 25px;
     }
-    
+
     .article-image {
         height: 200px;
         overflow: hidden;
     }
-    
+
     .article-image img {
         width: 100%;
         height: 100%;
         object-fit: cover;
     }
-    
+
     .article-content {
         padding: 15px !important;
     }
-    
+
     .article-title {
         font-size: 1.1rem;
         line-height: 1.3;
         margin-bottom: 10px;
     }
-    
+
     .article-meta {
         margin-bottom: 10px;
     }
-    
+
     .meta-item {
         font-size: 0.8rem;
         margin-bottom: 5px;
     }
-    
+
     .article-excerpt {
         font-size: 0.9rem;
         line-height: 1.4;
         margin-bottom: 15px;
     }
-    
+
     .read-more {
         font-size: 0.9rem;
     }
@@ -188,7 +188,7 @@
         font-size: 1rem;
         padding: 12px 30px;
     }
-    
+
     .btn-khusus {
         font-size: 0.9rem;
         padding: 10px 25px;
@@ -201,23 +201,23 @@
         padding-left: 15px;
         padding-right: 15px;
     }
-    
+
     .section-divider {
         width: 60px;
         height: 3px;
         margin: 15px auto;
     }
-    
+
     .py-5 {
         padding-top: 2.5rem !important;
         padding-bottom: 2.5rem !important;
     }
-    
+
     .my-5 {
         margin-top: 2rem !important;
         margin-bottom: 2rem !important;
     }
-    
+
     .mb-5 {
         margin-bottom: 2rem !important;
     }
@@ -228,7 +228,7 @@
     .navbar-brand {
         font-size: 1.1rem;
     }
-    
+
     .navbar-nav .nav-link {
         padding: 10px 15px;
         text-align: center;
@@ -240,7 +240,7 @@
     .modal-xl {
         max-width: 95%;
     }
-    
+
     #modalImage {
         max-height: 80vh !important;
         width: auto;
@@ -258,7 +258,7 @@
         z-index: 10;
         margin-top: 0;
     }
-    
+
     .carousel-control-prev,
     .carousel-control-next {
         position: absolute !important;
@@ -271,15 +271,15 @@
         background: rgba(11, 94, 145, 0.8) !important;
         border: 2px solid white;
     }
-    
+
     .carousel-control-prev {
         left: 10px !important;
     }
-    
+
     .carousel-control-next {
         right: 10px !important;
     }
-    
+
     .carousel-control-prev-icon,
     .carousel-control-next-icon {
         width: 16px;
@@ -292,13 +292,13 @@
     .text-center-mobile {
         text-align: center !important;
     }
-    
+
     .d-flex.flex-column.flex-sm-row {
         flex-direction: column !important;
         align-items: center;
     }
-    
-    .gap-3 > * {
+
+    .gap-3>* {
         margin-bottom: 10px;
     }
 }
@@ -308,12 +308,270 @@
     .fs-mobile-small {
         font-size: 0.85rem !important;
     }
-    
+
     .p-mobile-small {
         padding: 15px !important;
     }
-    
+
     .m-mobile-small {
         margin: 10px !important;
+    }
+}
+
+/* Article Detail Page Mobile Optimization */
+@media (max-width: 768px) {
+
+    /* Breadcrumb Mobile */
+    .breadcrumb-mobile {
+        font-size: 0.75rem;
+        padding: 8px 0;
+        margin-bottom: 15px;
+    }
+
+    .breadcrumb-mobile .breadcrumb-item+.breadcrumb-item::before {
+        font-size: 0.65rem;
+    }
+
+    /* Article Title Responsive */
+    .article-title-responsive {
+        font-size: 1.5rem !important;
+        line-height: 1.3;
+        color: #0b5e91 !important;
+    }
+
+    /* Article Meta Mobile */
+    .article-meta {
+        font-size: 0.8rem;
+    }
+
+    .meta-item {
+        margin-bottom: 5px;
+        flex: 1 1 auto;
+        min-width: fit-content;
+    }
+
+    .meta-item i {
+        font-size: 0.9rem;
+    }
+
+    /* Share Buttons Mobile */
+    .share-buttons-mobile {
+        flex-wrap: wrap;
+        gap: 8px !important;
+    }
+
+    .share-buttons-mobile .btn {
+        width: 35px;
+        height: 35px;
+        padding: 0;
+        font-size: 14px;
+    }
+
+    /* Featured Image Mobile */
+    .article-featured-image {
+        border-radius: 12px !important;
+        max-height: 250px;
+        object-fit: cover;
+        width: 100%;
+    }
+
+    /* Article Content Mobile */
+    .article-content-responsive {
+        line-height: 1.6;
+        text-align: left;
+        font-size: 0.95rem;
+    }
+
+    .article-content-responsive p {
+        margin-bottom: 1rem;
+    }
+
+    .article-content-responsive h1,
+    .article-content-responsive h2,
+    .article-content-responsive h3 {
+        font-size: 1.2rem;
+        margin-top: 1.5rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .article-content-responsive ul,
+    .article-content-responsive ol {
+        padding-left: 1.2rem;
+        margin-bottom: 1rem;
+    }
+
+    .article-content-responsive li {
+        margin-bottom: 0.3rem;
+    }
+
+    /* Sidebar Mobile */
+    .sidebar-mobile {
+        margin-top: 20px;
+    }
+
+    .sidebar-mobile .card {
+        margin-bottom: 20px;
+    }
+
+    .sidebar-mobile .card-body {
+        padding: 15px !important;
+    }
+
+    /* Contact Cards Mobile */
+    .contact-title-mobile {
+        font-size: 1.1rem;
+    }
+
+    .contact-item {
+        transition: all 0.2s ease;
+        padding: 12px !important;
+    }
+
+    .contact-item:hover {
+        background-color: #f8f9fa !important;
+        transform: none;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+    }
+
+    .contact-item h6 {
+        font-size: 0.95rem;
+        margin-bottom: 2px;
+    }
+
+    .contact-item small {
+        font-size: 0.8rem;
+    }
+
+    .contact-item .bg-success {
+        width: 30px !important;
+        height: 30px !important;
+    }
+
+    .contact-item .bi-whatsapp {
+        font-size: 14px;
+    }
+
+    /* Article Navigation Mobile */
+    .article-navigation {
+        flex-direction: column;
+        gap: 15px;
+        margin-top: 30px !important;
+    }
+
+    .article-navigation .btn {
+        width: 100%;
+        font-size: 0.9rem;
+        padding: 12px 20px;
+    }
+
+    /* Tags Mobile */
+    .article-tags .badge {
+        font-size: 0.8rem;
+        padding: 6px 12px;
+        margin-bottom: 5px;
+    }
+
+    /* Author Bio Mobile */
+    .author-bio {
+        padding: 20px !important;
+    }
+
+    .author-bio .author-image {
+        margin-bottom: 15px;
+        text-align: center;
+        margin-right: 0 !important;
+    }
+
+    .author-bio .author-image img {
+        width: 60px !important;
+        height: 60px !important;
+    }
+
+    .author-bio h5 {
+        font-size: 1rem;
+        text-align: center;
+    }
+
+    .author-bio p {
+        font-size: 0.9rem;
+        text-align: center;
+    }
+}
+
+/* Small Mobile Devices */
+@media (max-width: 576px) {
+
+    /* Container Padding */
+    .container {
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+    }
+
+    /* Article Title Extra Small */
+    .article-title-responsive {
+        font-size: 1.3rem !important;
+    }
+
+    /* Meta Items Stack */
+    .article-meta {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .meta-item {
+        margin-bottom: 8px;
+        width: 100%;
+    }
+
+    /* Share Buttons Stack */
+    .article-share {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .share-buttons-mobile {
+        margin-top: 10px;
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    /* Contact Items Simplified */
+    .contact-item h6 {
+        font-size: 0.9rem;
+    }
+
+    .contact-item small {
+        font-size: 0.75rem;
+    }
+
+    /* Featured Image Height */
+    .article-featured-image {
+        max-height: 200px;
+    }
+
+    /* Content Font Size */
+    .article-content-responsive {
+        font-size: 0.9rem;
+    }
+}
+
+/* Performance Optimizations */
+.hover-effect {
+    transition: all 0.2s ease !important;
+}
+
+.contact-item {
+    will-change: transform;
+}
+
+/* Reduce animations on mobile for better performance */
+@media (max-width: 768px) {
+    * {
+        animation-duration: 0.2s !important;
+        transition-duration: 0.2s !important;
+    }
+
+    .hover-effect:hover {
+        transform: none !important;
     }
 }

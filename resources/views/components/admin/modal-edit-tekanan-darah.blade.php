@@ -8,21 +8,25 @@
                     <span>&times;</span>
                 </button>
             </div>
-            <form id="editTekananDarahForm">
+            <form id="editTekananDarahForm" action="" method="POST">
+                @csrf
+                @method('PUT')
                 <div class="modal-body">
                     <div class="form-group">
                         <label>Tanggal</label>
-                        <input type="date" class="form-control" id="editTanggal" required>
+                        <input type="date" class="form-control" id="editTanggal" name="tanggal_input" required>
                         <div class="invalid-feedback" id="editTanggalError"></div>
                     </div>
                     <div class="form-group">
                         <label>Sistol (mmHg)</label>
-                        <input type="number" class="form-control" id="editSistol" min="70" max="250" required>
+                        <input type="number" class="form-control" id="editSistol" name="sistol" min="70"
+                            max="250" required>
                         <div class="invalid-feedback" id="editSistolError"></div>
                     </div>
                     <div class="form-group">
                         <label>Diastol (mmHg)</label>
-                        <input type="number" class="form-control" id="editDiastol" min="40" max="150" required>
+                        <input type="number" class="form-control" id="editDiastol" name="diastol" min="40"
+                            max="150" required>
                         <div class="invalid-feedback" id="editDiastolError"></div>
                     </div>
                 </div>

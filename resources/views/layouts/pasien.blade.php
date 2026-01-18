@@ -9,7 +9,7 @@
         <meta name="user-id" content="{{ auth()->id() }}">
     @endauth
 
-    <title>@yield('title', 'Dashboard Admin') | Klik Farmasi</title>
+    <title>@yield('title', 'Dashboard Pasien') | Klik Farmasi</title>
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="{{ asset('assets/Favicon.png') }}">
@@ -140,27 +140,6 @@
                 margin-left: 0 !important;
             }
         }
-
-        /* Ensure footer is visible */
-        .main-footer {
-            background-color: #fff;
-            border-top: 1px solid #dee2e6;
-            color: #495057;
-            padding: 1rem;
-            margin-left: 250px;
-            /* Match sidebar width */
-        }
-
-        /* When sidebar is collapsed */
-        .sidebar-collapse .main-footer {
-            margin-left: 60px;
-        }
-
-        @media (max-width: 768px) {
-            .main-footer {
-                margin-left: 0 !important;
-            }
-        }
     </style>
     @yield('additional_css')
 </head>
@@ -196,11 +175,12 @@
                         <span class="d-none d-md-inline ml-1">{{ Auth::user()->name }}</span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                        <span class="dropdown-item dropdown-header">Administrator</span>
+                        <span class="dropdown-item dropdown-header">Pasien</span>
                         <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item" data-toggle="modal" data-target="#modalProfilAdmin">
-                            <i class="fas fa-id-card mr-2"></i> Lihat Profil
+                        <a href="#" class="dropdown-item" data-toggle="modal" data-target="#profileModal">
+                            <i class="fas fa-user mr-2"></i> Profil Saya
                         </a>
+                        <div class="dropdown-divider"></div>
                         <a href="{{ route('beranda') }}" class="dropdown-item">
                             <i class="fas fa-home mr-2"></i> Lihat Website
                         </a>
@@ -219,7 +199,7 @@
         <!-- Main Sidebar Container -->
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
-            <a href="{{ route('admin.dashboard') }}" class="brand-link">
+            <a href="{{ route('pasien.dashboard') }}" class="brand-link">
                 <img src="{{ asset('assets/LOGO KLIKFARMASI VEKTOR MIRING.png') }}" alt="Klik Farmasi"
                     class="brand-image">
             </a>
@@ -231,71 +211,31 @@
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                         data-accordion="false">
                         <li class="nav-item">
-                            <a href="{{ route('admin.dashboard') }}"
-                                class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+                            <a href="{{ route('pasien.dashboard') }}"
+                                class="nav-link {{ request()->routeIs('pasien.dashboard') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>Dashboard</p>
                             </a>
                         </li>
-
                         <li class="nav-item">
-                            <a href="{{ route('admin.pasien') }}"
-                                class="nav-link {{ request()->routeIs('admin.pasien*') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-users"></i>
-                                <p>
-                                    Data Pasien
-                                    @if (isset($totalCatatanPasien) && $totalCatatanPasien > 0)
-                                        <span class="badge badge-danger right">{{ $totalCatatanPasien }}</span>
-                                    @endif
-                                </p>
+                            <a href="{{ route('pasien.tekanan-darah') }}"
+                                class="nav-link {{ request()->routeIs('pasien.tekanan-darah') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-chart-line"></i>
+                                <p>Tekanan Darah</p>
                             </a>
                         </li>
-
                         <li class="nav-item">
-                            <a href="{{ route('admin.kode-pendaftaran.index') }}"
-                                class="nav-link {{ request()->routeIs('admin.kode-pendaftaran.*') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-key"></i>
-                                <p>Kode Pendaftaran</p>
+                            <a href="{{ route('pasien.obat') }}"
+                                class="nav-link {{ request()->routeIs('pasien.obat') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-pills"></i>
+                                <p>Daftar Obat</p>
                             </a>
                         </li>
-
                         <li class="nav-item">
-                            <a href="{{ route('admin.artikel.index') }}"
-                                class="nav-link {{ request()->routeIs('admin.artikel.*') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-file-alt"></i>
-                                <p>Artikel</p>
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a href="{{ route('admin.berita.index') }}"
-                                class="nav-link {{ request()->routeIs('admin.berita.*') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-newspaper"></i>
-                                <p>Berita</p>
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a href="{{ route('admin.tanya-jawab.index') }}"
-                                class="nav-link {{ request()->routeIs('admin.tanya-jawab.*') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-question-circle"></i>
-                                <p>Tanya Jawab</p>
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a href="{{ route('admin.unduhan.index') }}"
-                                class="nav-link {{ request()->routeIs('admin.unduhan.*') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-download"></i>
-                                <p>Unduhan</p>
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a href="{{ route('admin.testimoni.index') }}"
-                                class="nav-link {{ request()->routeIs('admin.testimoni.*') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-quote-left"></i>
-                                <p>Testimoni</p>
+                            <a href="{{ route('pasien.konsultasi') }}"
+                                class="nav-link {{ request()->routeIs('pasien.konsultasi') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-comments"></i>
+                                <p>Konsultasi</p>
                             </a>
                         </li>
                     </ul>
@@ -318,6 +258,81 @@
                     target="_blank"><i class="fab fa-linkedin"></i></a>
             </div>
         </footer>
+    </div>
+
+    <!-- Profile Modal -->
+    <div class="modal fade" id="profileModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <h4 class="modal-title text-white">Profil Saya</h4>
+                    <button type="button" class="close text-white" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center mb-4">
+                        <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center"
+                            style="width: 80px; height: 80px; font-size: 2rem; color: white;">
+                            {{ substr(Auth::user()->name, 0, 1) }}
+                        </div>
+                    </div>
+                    <table class="table table-borderless">
+                        <tr>
+                            <td class="font-weight-bold">Nama:</td>
+                            <td>{{ Auth::user()->name }}</td>
+                        </tr>
+                        <tr>
+                            <td class="font-weight-bold">Email:</td>
+                            <td>{{ Auth::user()->email }}</td>
+                        </tr>
+                        <tr>
+                            <td class="font-weight-bold">Jenis Kelamin:</td>
+                            <td>{{ Auth::user()->jenis_kelamin ?? '-' }}</td>
+                        </tr>
+                        <tr>
+                            <td class="font-weight-bold">Usia:</td>
+                            <td>{{ Auth::user()->usia ?? '-' }} tahun</td>
+                        </tr>
+                        <tr>
+                            <td class="font-weight-bold">No. HP:</td>
+                            <td>{{ Auth::user()->nomor_hp ?? '-' }}</td>
+                        </tr>
+                        <tr>
+                            <td class="font-weight-bold">Puskesmas:</td>
+                            <td>
+                                @if (Auth::user()->puskesmas == 'kalasan')
+                                    Puskesmas Kalasan
+                                @elseif(Auth::user()->puskesmas == 'godean_2')
+                                    Puskesmas Godean 2
+                                @elseif(Auth::user()->puskesmas == 'umbulharjo')
+                                    Puskesmas Umbulharjo
+                                @else
+                                    {{ Auth::user()->puskesmas ?? '-' }}
+                                @endif
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="font-weight-bold">Keterangan:</td>
+                            <td>
+                                @php
+                                    $puskesmas = strtolower(Auth::user()->puskesmas ?? '');
+                                    if (str_contains($puskesmas, 'kalasan')) {
+                                        echo 'Hipertensi Non Kehamilan';
+                                    } elseif (str_contains($puskesmas, 'godean')) {
+                                        echo 'Hipertensi Kehamilan';
+                                    } elseif (str_contains($puskesmas, 'umbulharjo')) {
+                                        echo 'Hipertensi';
+                                    } else {
+                                        echo '-';
+                                    }
+                                @endphp
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- jQuery -->
@@ -366,57 +381,6 @@
         }
     </script>
     @yield('additional_scripts')
-
-    <!-- Modal Profil Admin -->
-    <div class="modal fade" id="modalProfilAdmin" tabindex="-1">
-        <div class="modal-dialog modal-md">
-            <div class="modal-content">
-                <div class="modal-header bg-primary">
-                    <h4 class="modal-title text-white">Profil Administrator</h4>
-                    <button type="button" class="close text-white" data-dismiss="modal">
-                        <span>&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="text-center mb-4">
-                        <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
-                            style="width: 100px; height: 100px; font-size: 2.5rem; color: white;">
-                            {{ substr(Auth::user()->name, 0, 1) }}
-                        </div>
-                        <h5>{{ Auth::user()->name }}</h5>
-                        <span class="badge">Administrator</span>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="font-weight-bold">Email</label>
-                                <p>{{ Auth::user()->email }}</p>
-                            </div>
-                            <div class="form-group">
-                                <label class="font-weight-bold">Puskesmas</label>
-                                <p>{{ Auth::user()->puskesmas ?? '-' }}</p>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="font-weight-bold">Role</label>
-                                <p>Administrator</p>
-                            </div>
-                            <div class="form-group">
-                                <label class="font-weight-bold">Terdaftar</label>
-                                <p>{{ Auth::user()->created_at->format('d M Y, H:i') }}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
 </body>
 
 </html>

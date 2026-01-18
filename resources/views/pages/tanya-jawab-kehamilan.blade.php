@@ -3,9 +3,14 @@
 
 @push('head')
     <!-- SEO Meta Tags -->
-    <meta name="description" content="FAQ dan tanya jawab seputar hipertensi kehamilan. Dapatkan jawaban dari ahli farmasi tentang preeklampsia, obat hipertensi saat hamil, dan tips kesehatan ibu hamil.">
-    <meta name="keywords" content="FAQ hipertensi kehamilan, tanya jawab preeklampsia, obat hipertensi hamil, konsultasi kehamilan, farmasi kehamilan">
+    <meta name="description"
+        content="FAQ dan tanya jawab seputar hipertensi kehamilan. Dapatkan jawaban dari ahli farmasi tentang preeklampsia, obat hipertensi saat hamil, dan tips kesehatan ibu hamil.">
+    <meta name="keywords"
+        content="FAQ hipertensi kehamilan, tanya jawab preeklampsia, obat hipertensi hamil, konsultasi kehamilan, farmasi kehamilan">
     <meta name="author" content="Tim Farmasi Universitas Alma Ata">
+
+    <!-- External CSS for FAQ pages -->
+    <link rel="stylesheet" href="{{ asset('css/faq-pages.css') }}" media="screen">
 @endpush
 
 @section('content')
@@ -28,7 +33,8 @@
                     <div class="faq-search mb-5">
                         <div class="input-group"><span class="input-group-text bg-white border-end-0"><i
                                     class="bi bi-search" aria-hidden="true"></i></span><input type="text" id="faqSearch"
-                                class="form-control border-start-0" placeholder="Cari pertanyaan..." aria-label="Cari pertanyaan tentang hipertensi kehamilan">
+                                class="form-control border-start-0" placeholder="Cari pertanyaan..."
+                                aria-label="Cari pertanyaan tentang hipertensi kehamilan">
                         </div>
                     </div>
                     <!-- FAQ Accordion: Hipertensi Kehamilan -->
@@ -37,136 +43,103 @@
                             <h2 class="fw-bold text-primary">
                                 Pertanyaan Seputar Hipertensi Kehamilan
                             </h2>
-                            <p>Informasi tentang hipertensi yang terjadi selama kehamilan</p>
+                            <p class="text-muted">Informasi tentang hipertensi yang terjadi selama kehamilan</p>
                         </div>
                         <div class="accordion custom-accordion" id="accordionHipertensiKehamilan">
-                            @foreach ($faqs as $faq)
-                                <div class="faq-item" data-aos="fade-up" data-aos-delay="{{ $loop->index * 50 }}">
-                                    <h2 class="faq-header" id="heading{{ $loop->index }}">
-                                        <button class="faq-button {{ $loop->first ? '' : 'collapsed' }}" type="button"
-                                            data-bs-toggle="collapse" data-bs-target="#collapse{{ $loop->index }}"
-                                            aria-expanded="{{ $loop->first ? 'true' : 'false' }}"
-                                            aria-controls="collapse{{ $loop->index }}">
-                                            <span class="question-number">{{ $loop->iteration }}</span>
-                                            <span class="question-text">{{ $faq->question }}</span>
+                            @php
+                                $perPage = 7;
+                                $currentPage = request()->get('page', 1);
+                                $offset = ($currentPage - 1) * $perPage;
+                                $paginatedFaqs = $faqs->slice($offset, $perPage)->values(); // Reset keys
+                                $totalPages = ceil($faqs->count() / $perPage);
+                            @endphp
+
+                            @foreach ($paginatedFaqs as $index => $faq)
+                                @php
+                                    $displayNumber = $offset + $index + 1; // Continuous numbering
+                                @endphp
+                                <div class="faq-item" data-aos="fade-up" data-aos-delay="{{ $index * 50 }}">
+                                    <h3 class="faq-header" id="heading{{ $index }}">
+                                        <button class="faq-button {{ $index == 0 ? '' : 'collapsed' }}" type="button"
+                                            data-bs-toggle="collapse" data-bs-target="#collapse{{ $index }}"
+                                            aria-expanded="{{ $index == 0 ? 'true' : 'false' }}"
+                                            aria-controls="collapse{{ $index }}">
+                                            <span class="question-number">{{ $displayNumber }}</span>
+                                            <span class="question-text">{!! $faq->question !!}</span>
                                             <i class="bi bi-chevron-down toggle-icon"></i>
                                         </button>
-                                    </h2>
-                                    <div class="accordion-collapse collapse {{ $loop->first ? 'show' : '' }}"
-                                        id="collapse{{ $loop->index }}" aria-labelledby="heading{{ $loop->index }}"
+                                    </h3>
+                                    <div class="accordion-collapse collapse {{ $index == 0 ? 'show' : '' }}"
+                                        id="collapse{{ $index }}" aria-labelledby="heading{{ $index }}"
                                         data-bs-parent="#accordionHipertensiKehamilan">
                                         <div class="faq-answer">
-                                            <p class="answer-text">{{ $faq->answer }}</p>
+                                            <div class="answer-text">{!! $faq->answer !!}</div>
                                         </div>
                                     </div>
                                 </div>
                             @endforeach
+
+                            @if ($totalPages > 1)
+                                <!-- Pagination -->
+                                <div class="d-flex justify-content-center mt-4">
+                                    <nav aria-label="FAQ Pagination">
+                                        <ul class="pagination pagination-sm">
+                                            {{-- Previous Page Link --}}
+                                            @if ($currentPage > 1)
+                                                <li class="page-item">
+                                                    <a class="page-link" href="?page={{ $currentPage - 1 }}"
+                                                        aria-label="Previous">
+                                                        <span aria-hidden="true">&laquo;</span>
+                                                    </a>
+                                                </li>
+                                            @else
+                                                <li class="page-item disabled">
+                                                    <span class="page-link">&laquo;</span>
+                                                </li>
+                                            @endif
+
+                                            {{-- Page Number Links --}}
+                                            @for ($i = 1; $i <= $totalPages; $i++)
+                                                @if ($i == $currentPage)
+                                                    <li class="page-item active" aria-current="page">
+                                                        <span class="page-link">{{ $i }}</span>
+                                                    </li>
+                                                @else
+                                                    <li class="page-item">
+                                                        <a class="page-link"
+                                                            href="?page={{ $i }}">{{ $i }}</a>
+                                                    </li>
+                                                @endif
+                                            @endfor
+
+                                            {{-- Next Page Link --}}
+                                            @if ($currentPage < $totalPages)
+                                                <li class="page-item">
+                                                    <a class="page-link" href="?page={{ $currentPage + 1 }}"
+                                                        aria-label="Next">
+                                                        <span aria-hidden="true">&raquo;</span>
+                                                    </a>
+                                                </li>
+                                            @else
+                                                <li class="page-item disabled">
+                                                    <span class="page-link">&raquo;</span>
+                                                </li>
+                                            @endif
+                                        </ul>
+                                    </nav>
+                                </div>
+
+                                <div class="text-center mt-3">
+                                    <small class="text-muted">
+                                        Menampilkan {{ $paginatedFaqs->count() }} dari {{ $faqs->count() }} FAQ
+                                        (Halaman {{ $currentPage }} dari {{ $totalPages }})
+                                    </small>
+                                </div>
+                            @endif
                         </div>
-                        
-                        <!-- FAQ Styles -->
-                        <style>
-                        .faq-item {
-                            background: #ffffff;
-                            border: 1px solid #e9ecef;
-                            margin-bottom: 15px;
-                            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-                            transition: all 0.3s ease;
-                        }
-                        
-                        .faq-item:hover {
-                            transform: translateY(-2px);
-                            box-shadow: 0 4px 20px rgba(0,0,0,0.12);
-                        }
-                        
-                        .faq-header {
-                            margin: 0;
-                        }
-                        
-                        .faq-button {
-                            background: #0B5E91;
-                            color: white;
-                            border: none;
-                            padding: 20px 25px;
-                            width: 100%;
-                            text-align: left;
-                            display: flex;
-                            align-items: center;
-                            gap: 15px;
-                            font-weight: 600;
-                            font-size: 1rem;
-                            transition: all 0.3s ease;
-                        }
-                        
-                        .faq-button:hover {
-                            background: #083d5c;
-                            color: white;
-                        }
-                        
-                        .faq-button:focus {
-                            box-shadow: none;
-                            background: #083d5c;
-                            color: white;
-                        }
-                        
-                        .question-number {
-                            background: rgba(255,255,255,0.2);
-                            color: white;
-                            width: 30px;
-                            height: 30px;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            font-weight: bold;
-                            font-size: 0.9rem;
-                            flex-shrink: 0;
-                        }
-                        
-                        .question-text {
-                            flex-grow: 1;
-                            line-height: 1.4;
-                        }
-                        
-                        .toggle-icon {
-                            transition: transform 0.3s ease;
-                            font-size: 1.2rem;
-                        }
-                        
-                        .faq-button:not(.collapsed) .toggle-icon {
-                            transform: rotate(180deg);
-                        }
-                        
-                        .faq-answer {
-                            padding: 25px;
-                            background: #f8f9fa;
-                            border-top: 2px solid #0B5E91;
-                        }
-                        
-                        .answer-text {
-                            color: #2c3e50;
-                            font-size: 1rem;
-                            line-height: 1.7;
-                            text-align: justify;
-                            margin: 0;
-                        }
-                        
-                        /* Responsive */
-                        @media (max-width: 768px) {
-                            .faq-button {
-                                padding: 15px 20px;
-                                font-size: 0.95rem;
-                            }
-                            
-                            .faq-answer {
-                                padding: 20px;
-                            }
-                            
-                            .question-number {
-                                width: 25px;
-                                height: 25px;
-                                font-size: 0.8rem;
-                            }
-                        }
-                        </style>
+
+                        <!-- External JavaScript for FAQ functionality -->
+                        <script src="{{ asset('js/faq-pages.js') }}" defer></script>
                     </div>
                 </div>
                 <!-- Sidebar -->
@@ -190,14 +163,17 @@
                             <div class="card-body p-4">
                                 <div class="mb-4">
                                     <h5 class="fw-bold text-success">Butuh Bantuan Cepat?</h5>
-                                    <p class="text-muted mb-0">Tim farmasi kami siap membantu Anda 24/7! Pilih kontak yang tersedia:</p>
+                                    <p class="text-muted mb-0">Tim farmasi kami siap membantu Anda 24/7! Pilih kontak yang
+                                        tersedia:</p>
                                 </div>
-                                
+
                                 <!-- WhatsApp Contacts -->
                                 <div class="contact-list">
-                                    <a href="https://wa.me/+6281292936247" class="d-flex align-items-center p-2 mb-2 text-decoration-none border rounded hover-effect" style="transition: all 0.3s ease;">
+                                    <a href="https://wa.me/+6281292936247"
+                                        class="d-flex align-items-center p-2 mb-2 text-decoration-none border rounded hover-effect">
                                         <div class="flex-shrink-0 me-3">
-                                            <div class="bg-success rounded-circle d-flex align-items-center justify-content-center" style="width: 35px; height: 35px;">
+                                            <div class="bg-success rounded-circle d-flex align-items-center justify-content-center"
+                                                style="width: 35px; height: 35px;">
                                                 <i class="bi bi-whatsapp text-white"></i>
                                             </div>
                                         </div>
@@ -207,10 +183,12 @@
                                         </div>
                                         <i class="bi bi-chevron-right text-muted"></i>
                                     </a>
-                                    
-                                    <a href="https://wa.me/+6281243983318" class="d-flex align-items-center p-2 mb-2 text-decoration-none border rounded hover-effect" style="transition: all 0.3s ease;">
+
+                                    <a href="https://wa.me/+6281243983318"
+                                        class="d-flex align-items-center p-2 mb-2 text-decoration-none border rounded hover-effect">
                                         <div class="flex-shrink-0 me-3">
-                                            <div class="bg-success rounded-circle d-flex align-items-center justify-content-center" style="width: 35px; height: 35px;">
+                                            <div class="bg-success rounded-circle d-flex align-items-center justify-content-center"
+                                                style="width: 35px; height: 35px;">
                                                 <i class="bi bi-whatsapp text-white"></i>
                                             </div>
                                         </div>
@@ -220,10 +198,12 @@
                                         </div>
                                         <i class="bi bi-chevron-right text-muted"></i>
                                     </a>
-                                    
-                                    <a href="https://wa.me/+6281271954082" class="d-flex align-items-center p-2 mb-2 text-decoration-none border rounded hover-effect" style="transition: all 0.3s ease;">
+
+                                    <a href="https://wa.me/+6281271954082"
+                                        class="d-flex align-items-center p-2 mb-2 text-decoration-none border rounded hover-effect">
                                         <div class="flex-shrink-0 me-3">
-                                            <div class="bg-success rounded-circle d-flex align-items-center justify-content-center" style="width: 35px; height: 35px;">
+                                            <div class="bg-success rounded-circle d-flex align-items-center justify-content-center"
+                                                style="width: 35px; height: 35px;">
                                                 <i class="bi bi-whatsapp text-white"></i>
                                             </div>
                                         </div>
@@ -233,10 +213,12 @@
                                         </div>
                                         <i class="bi bi-chevron-right text-muted"></i>
                                     </a>
-                                    
-                                    <a href="https://wa.me/+6282286438701" class="d-flex align-items-center p-2 mb-3 text-decoration-none border rounded hover-effect" style="transition: all 0.3s ease;">
+
+                                    <a href="https://wa.me/+6282286438701"
+                                        class="d-flex align-items-center p-2 mb-3 text-decoration-none border rounded hover-effect">
                                         <div class="flex-shrink-0 me-3">
-                                            <div class="bg-success rounded-circle d-flex align-items-center justify-content-center" style="width: 35px; height: 35px;">
+                                            <div class="bg-success rounded-circle d-flex align-items-center justify-content-center"
+                                                style="width: 35px; height: 35px;">
                                                 <i class="bi bi-whatsapp text-white"></i>
                                             </div>
                                         </div>
@@ -247,29 +229,26 @@
                                         <i class="bi bi-chevron-right text-muted"></i>
                                     </a>
                                 </div>
-                                
+
                                 <div class="text-center mb-4">
-                                    <small class="text-muted"><i class="bi bi-clock me-1"></i>Respon cepat dalam 1-24 jam</small>
+                                    <small class="text-muted"><i class="bi bi-clock me-1"></i>Respon cepat dalam 1-24
+                                        jam</small>
                                 </div>
-                                
+
                                 <hr class="my-4">
                                 <h5 class="fw-bold text-center mb-3">Ikuti Kami</h5>
                                 <div class="d-flex justify-content-center gap-3">
-                                    <a class="social-icon" href="https://wa.me/+6281292936247" target="_blank"><i class="bi bi-whatsapp"></i></a>
-                                    <a class="social-icon" href="https://www.instagram.com/klikfarmasi.official/" target="_blank"><i class="bi bi-instagram"></i></a>
-                                    <a class="social-icon" href="https://www.tiktok.com/@klikfarmasi.official" target="_blank"><i class="bi bi-tiktok"></i></a>
-                                    <a class="social-icon" href="mailto:klikfarmasi.official@gmail.com"><i class="bi bi-envelope"></i></a>
+                                    <a class="social-icon" href="https://wa.me/+6281292936247" target="_blank"><i
+                                            class="bi bi-whatsapp"></i></a>
+                                    <a class="social-icon" href="https://www.instagram.com/klikfarmasi.official/"
+                                        target="_blank"><i class="bi bi-instagram"></i></a>
+                                    <a class="social-icon" href="https://www.tiktok.com/@klikfarmasi.official"
+                                        target="_blank"><i class="bi bi-tiktok"></i></a>
+                                    <a class="social-icon" href="mailto:klikfarmasi.official@gmail.com"><i
+                                            class="bi bi-envelope"></i></a>
                                 </div>
                             </div>
                         </div>
-                        
-                        <style>
-                        .hover-effect:hover {
-                            background-color: #f8f9fa !important;
-                            transform: translateY(-2px);
-                            box-shadow: 0 4px 8px rgba(0,0,0,0.1) !important;
-                        }
-                        </style>
                     </div>
                 </div>
             </div>

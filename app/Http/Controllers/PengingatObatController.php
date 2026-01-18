@@ -44,7 +44,7 @@ class PengingatObatController extends Controller
             } else {
                 // Masih dalam periode aktif - redirect ke dashboard
                 $sisaHari = $today->diffInDays($tanggalSelesai);
-                return redirect()->route('user.dashboard')
+                return redirect()->route('pasien.dashboard')
                     ->with('info', "Anda masih memiliki pengingat aktif. Sisa waktu: {$sisaHari} hari lagi.");
             }
         }
@@ -84,7 +84,7 @@ class PengingatObatController extends Controller
         // Catatan system removed - set to 0
         $catatanBelumBaca = 0;
     
-        return view('user.dashboard', compact(
+        return view('pasien.dashboard', compact(
             'user', 
             'pengingatList',
             'latestPengingat',
@@ -113,7 +113,7 @@ class PengingatObatController extends Controller
             if ($today->lt($tanggalSelesai)) {
                 // Masih dalam periode aktif
                 $sisaHari = $today->diffInDays($tanggalSelesai);
-                return redirect()->route('user.dashboard')
+                return redirect()->route('pasien.dashboard')
                     ->with('error', "Anda masih memiliki pengingat aktif. Silakan tunggu {$sisaHari} hari lagi untuk membuat pengingat baru.");
             }
             
@@ -234,6 +234,6 @@ class PengingatObatController extends Controller
             ]);
         }
 
-        return redirect()->route('user.dashboard')->with('success', 'Pengingat berhasil disimpan! Anda akan mendapat notifikasi WhatsApp mulai besok.');
+        return redirect()->route('pasien.dashboard')->with('success', 'Pengingat berhasil disimpan! Anda akan mendapat notifikasi WhatsApp mulai besok.');
     }
 }

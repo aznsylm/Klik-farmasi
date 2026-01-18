@@ -4,10 +4,15 @@
 
 @push('head')
     <!-- SEO Meta Tags -->
-    <meta name="description" content="Artikel kesehatan tentang hipertensi umum dan tekanan darah tinggi. Tips pengelolaan hipertensi, obat-obatan, dan gaya hidup sehat dari ahli farmasi.">
-    <meta name="keywords" content="hipertensi, tekanan darah tinggi, obat hipertensi, gaya hidup sehat, pencegahan hipertensi, farmasi">
+    <meta name="description"
+        content="Artikel kesehatan tentang hipertensi umum dan tekanan darah tinggi. Tips pengelolaan hipertensi, obat-obatan, dan gaya hidup sehat dari ahli farmasi.">
+    <meta name="keywords"
+        content="hipertensi, tekanan darah tinggi, obat hipertensi, gaya hidup sehat, pencegahan hipertensi, farmasi">
     <meta name="author" content="Tim Farmasi Universitas Alma Ata">
-    
+
+    <!-- External CSS for optimized performance -->
+    <link rel="stylesheet" href="{{ asset('css/artikel-pages.css') }}" media="screen">
+
     @if (isset($latestArticle) && $latestArticle->image)
         <!-- Preload featured article image for LCP optimization -->
         <link rel="preload" as="image" href="{{ asset('storage/' . $latestArticle->image) }}" fetchpriority="high">
@@ -29,7 +34,7 @@
                             <div class="p-4 p-md-5">
                                 <div class="article-category-new"><span>{{ $latestArticle->category }}</span></div>
                                 <h1 class="article-title fs-2">{{ $latestArticle->title }}</h1>
-                                <p class="article-excerpt">{{ Str::words($latestArticle->content, 30, '...') }}</p>
+                                <div class="article-excerpt">{!! Str::words($latestArticle->content, 30, '...') !!}</div>
                                 <a href="{{ route('artikel.detail.non-kehamilan', $latestArticle->slug) }}"
                                     class="read-more">
                                     Baca Selengkapnya <i class="bi bi-arrow-right"></i>
@@ -39,11 +44,17 @@
                         <div class="col-lg-6 col-xl-7">
                             <div class="article-image-fixed">
                                 @if ($latestArticle->image)
-                                    <img src="{{ asset('storage/' . $latestArticle->image) }}" alt="{{ $latestArticle->title }} - Artikel hipertensi dan kesehatan"
-                                        loading="eager" fetchpriority="high" decoding="async" width="800" height="600">
+                                    <img src="{{ asset('storage/' . $latestArticle->image) }}"
+                                        alt="{{ $latestArticle->title }} - Artikel hipertensi dan kesehatan" loading="eager"
+                                        fetchpriority="high" decoding="async" width="800" height="600"
+                                        data-bs-toggle="modal" data-bs-target="#imageModal" style="cursor: pointer;"
+                                        title="Klik untuk memperbesar gambar">
                                 @else
-                                    <img src="{{ asset('assets/sample-1.jpg') }}" alt="Artikel hipertensi - informasi kesehatan dan tips pengelolaan" loading="eager"
-                                        fetchpriority="high" decoding="async" width="800" height="600">
+                                    <img src="{{ asset('assets/sample-1.jpg') }}"
+                                        alt="Artikel hipertensi - informasi kesehatan dan tips pengelolaan" loading="eager"
+                                        fetchpriority="high" decoding="async" width="800" height="600"
+                                        data-bs-toggle="modal" data-bs-target="#imageModal" style="cursor: pointer;"
+                                        title="Klik untuk memperbesar gambar">
                                 @endif
                             </div>
                         </div>
@@ -76,11 +87,17 @@
                         <div class="article-card">
                             <div class="article-image">
                                 @if ($article->image)
-                                    <img src="{{ asset('storage/' . $article->image) }}" alt="{{ $article->title }} - Artikel kesehatan hipertensi"
-                                        loading="lazy" decoding="async" width="400" height="250" class="lazy-image">
+                                    <img src="{{ asset('storage/' . $article->image) }}"
+                                        alt="{{ $article->title }} - Artikel kesehatan hipertensi" loading="lazy"
+                                        decoding="async" width="400" height="250" class="lazy-image"
+                                        data-bs-toggle="modal" data-bs-target="#imageModal" style="cursor: pointer;"
+                                        title="Klik untuk memperbesar gambar">
                                 @else
-                                    <img src="{{ asset('assets/sample-1.jpg') }}" alt="Artikel hipertensi - tips kesehatan dan pencegahan" loading="lazy"
-                                        decoding="async" width="400" height="250" class="lazy-image">
+                                    <img src="{{ asset('assets/sample-1.jpg') }}"
+                                        alt="Artikel hipertensi - tips kesehatan dan pencegahan" loading="lazy"
+                                        decoding="async" width="400" height="250" class="lazy-image"
+                                        data-bs-toggle="modal" data-bs-target="#imageModal" style="cursor: pointer;"
+                                        title="Klik untuk memperbesar gambar">
                                 @endif
                                 <div class="article-category">
                                     <span>{{ $article->category }}</span>
@@ -94,9 +111,9 @@
                                             {{ $article->published_at->format('d M Y') }}</span>
                                     </div>
                                 </div>
-                                <p class="article-excerpt">
-                                    {{ Str::words($article->content, 30, '...') }}
-                                </p>
+                                <div class="article-excerpt card-text">
+                                    {!! Str::words($article->content, 30, '...') !!}
+                                </div>
                                 <a href="{{ route('artikel.detail.non-kehamilan', $article->slug) }}" class="read-more">
                                     Baca Selengkapnya <i class="bi bi-arrow-right"></i>
                                 </a>
@@ -111,6 +128,20 @@
             </div>
         </div>
     </section>
+
+    <!-- Simple Image Modal -->
+    <div class="modal fade" id="imageModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                <div class="modal-body p-1">
+                    <button type="button" class="btn-close position-absolute top-0 end-0 m-2" data-bs-dismiss="modal"
+                        style="z-index: 1051;"></button>
+                    <img src="" alt="" id="modalImage" class="img-fluid rounded">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- External JS for optimized performance -->
+    <script src="{{ asset('js/artikel-pages.js') }}" defer></script>
 @endsection
-
-
