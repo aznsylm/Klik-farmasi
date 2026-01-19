@@ -25,17 +25,23 @@
         </div>
         <div class="container-fluid px-0 position-relative">
             <div class="hero-visual-section" data-aos="fade-down">
-                <div class="container-fluid px-2 py-2 py-md-5 px-lg-4">
+                <div class="container-fluid px-2 py-1 py-md-5 px-lg-4">
                     <div class="row align-items-center">
-                        <div class="col-12 col-lg-6 order-2 order-lg-1 mt-4 mt-lg-0" data-aos="fade-right">
+                        <div class="col-12 col-lg-6 order-2 order-lg-1 mt-2 mt-lg-0" data-aos="fade-right">
                             <div class="hero-content px-3">
-                                <h1 class="h2 fw-bold mb-3 text-white">Hipertensi Mengancam? Jangan Biarkan Obat Terlupakan!</h1>
-                                <p class="mb-4 text-light">Setiap 30 detik, seseorang meninggal karena hipertensi yang tidak terkontrol. Jangan jadi korban selanjutnya! Platform revolusioner ini akan memastikan Anda tidak pernah melewatkan obat lagi.</p>
-                                <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center justify-content-lg-start">
-                                    <a href="{{ route('pengingat') }}" class="btn btn-warning px-4 py-2 rounded-pill fw-bold">
+                                <h1 class="h2 fw-bold mb-3 text-white">Hipertensi Mengancam? Jangan Biarkan Obat Terlupakan!
+                                </h1>
+                                <p class="mb-4 text-light">Setiap 30 detik, seseorang meninggal karena hipertensi yang tidak
+                                    terkontrol. Jangan jadi korban selanjutnya! Platform revolusioner ini akan memastikan
+                                    Anda tidak pernah melewatkan obat lagi.</p>
+                                <div
+                                    class="d-flex flex-column flex-sm-row gap-3 justify-content-center justify-content-lg-start">
+                                    <a href="{{ route('pengingat') }}"
+                                        class="btn btn-warning px-4 py-2 rounded-pill fw-bold">
                                         Mulai Pengingat Obat
                                     </a>
-                                    <a href="{{ route('artikel.non-kehamilan') }}" class="btn btn-light px-4 py-2 rounded-pill fw-bold">
+                                    <a href="{{ route('artikel.non-kehamilan') }}"
+                                        class="btn btn-light px-4 py-2 rounded-pill fw-bold">
                                         Baca Artikel
                                     </a>
                                 </div>
@@ -98,7 +104,8 @@
                 <div class="modal-body p-0 text-center">
                     <button type="button" class="btn-close btn-close-white position-absolute top-0 end-0 m-3"
                         data-bs-dismiss="modal" style="z-index: 1050;"></button>
-                    <img id="modalImage" src="" alt="" class="img-fluid rounded" style="max-height: 90vh;">
+                    <img id="modalImage" src="" alt="" class="img-fluid rounded"
+                        style="max-height: 90vh;">
                 </div>
             </div>
         </div>
@@ -108,86 +115,59 @@
         <div class="container px-4 px-lg-5">
             <div class="features-header text-center mb-5" data-aos="fade-up">
                 <h2 class="fw-bolder mb-3 text-primary">Hidup Anda Berharga - Lindungi Sekarang!</h2>
-                <p class="lead text-muted mx-auto">Setiap penderita hipertensi berhak mendapat perawatan terbaik. Saatnya Anda mengambil kendali!</p>
+                <p class="lead text-muted mx-auto">Setiap penderita hipertensi berhak mendapat perawatan terbaik. Saatnya
+                    Anda mengambil kendali!</p>
                 <div class="section-divider mx-auto"></div>
             </div>
             <div class="features-grid">
                 <div class="row g-4">
                     <div class="col-12 col-md-6" data-aos="fade-up" data-aos-delay="100">
-                        <div class="enhanced-feature-card reminder-card">
-                            <div>
-                                <div class="feature-icon-wrapper">
-                                    <div
-                                        class="feature-icon reminder-icon bg-success bg-gradient rounded-circle d-flex mb-3">
-                                        <i class="bi bi-phone text-white" style="font-size:28px;"></i>
-                                    </div>
-                                    <div class="icon-glow"></div>
-                                </div>
-                            </div>
-                            <div class="feature-card-body">
-                                <h4 class="feature-title">Akses Multi-Platform</h4>
-                                <p class="feature-description">
-                                    Website responsive untuk semua device dan bisa diinstall seperti aplikasi di smartphone Anda. Akses cepat dengan notifikasi WhatsApp yang praktis.
+                        <div class="card h-100 border-0 shadow-sm"
+                            style="border-radius: 15px; background-color: #E3F2FD;">
+                            <div class="card-body p-4 text-center">
+                                <h4 class="card-title fw-bold text-primary mb-3">Pengingat Minum Obat</h4>
+                                <p class="card-text text-muted text-center">
+                                    Jangan biarkan obat terlewat! Dapatkan pengingat otomatis via WhatsApp setiap hari.
                                 </p>
                             </div>
                         </div>
                     </div>
                     <div class="col-12 col-md-6" data-aos="fade-up" data-aos-delay="200">
-                        <div class="enhanced-feature-card info-card">
-                            <div>
-                                <div class="feature-icon-wrapper">
-                                    <div class="feature-icon info-icon bg-success bg-gradient rounded-circle d-flex mb-3">
-                                        <i class="bi bi-graph-up-arrow text-white" style="font-size:28px;"></i>
-                                    </div>
-                                    <div class="icon-glow"></div>
-                                </div>
-                            </div>
-                            <div class="feature-card-body">
-                                <h4 class="feature-title">Monitoring Tekanan Darah</h4>
-                                <p class="feature-description">
-                                    Catat dan pantau riwayat tekanan darah harian Anda. Lihat perkembangan kesehatan dengan grafik yang mudah dipahami untuk kontrol yang lebih baik.
+                        <div class="card h-100 border-0 shadow-sm"
+                            style="border-radius: 15px; background-color: #E3F2FD;">
+                            <div class="card-body p-4 text-center">
+                                <h4 class="card-title fw-bold text-primary mb-3">Monitoring Tekanan Darah</h4>
+                                <p class="card-text text-muted text-center">
+                                    Pantau tekanan darah harian Anda dengan grafik yang mudah dipahami.
                                 </p>
                             </div>
                         </div>
                     </div>
                     <div class="col-12 col-md-6" data-aos="fade-up" data-aos-delay="300">
-                        <div class="enhanced-feature-card info-card">
-                            <div>
-                                <div class="feature-icon-wrapper">
-                                    <div class="feature-icon info-icon bg-success bg-gradient rounded-circle d-flex mb-3">
-                                        <i class="bi bi-question-circle text-white" style="font-size:28px;"></i>
-                                    </div>
-                                    <div class="icon-glow"></div>
-                                </div>
-                            </div>
-                            <div class="feature-card-body">
-                                <h4 class="feature-title">Tanya Jawab Hipertensi</h4>
-                                <p class="feature-description">
-                                    FAQ lengkap tentang hipertensi kehamilan & non-kehamilan. Dapatkan jawaban dari ahli kesehatan untuk semua pertanyaan Anda.
+                        <div class="card h-100 border-0 shadow-sm"
+                            style="border-radius: 15px; background-color: #E3F2FD;">
+                            <div class="card-body p-4 text-center">
+                                <h4 class="card-title fw-bold text-primary mb-3">Konsultasi Tenaga Kesehatan</h4>
+                                <p class="card-text text-muted text-center">
+                                    Tanyakan langsung kepada ahli kesehatan tentang kondisi hipertensi Anda.
                                 </p>
                             </div>
                         </div>
                     </div>
                     <div class="col-12 col-md-6" data-aos="fade-up" data-aos-delay="400">
-                        <div class="enhanced-feature-card info-card">
-                            <div>
-                                <div class="feature-icon-wrapper">
-                                    <div class="feature-icon info-icon bg-success bg-gradient rounded-circle d-flex mb-3">
-                                        <i class="bi bi-download text-white" style="font-size:28px;"></i>
-                                    </div>
-                                    <div class="icon-glow"></div>
-                                </div>
-                            </div>
-                            <div class="feature-card-body">
-                                <h4 class="feature-title">Materi Edukasi Gratis</h4>
-                                <p class="feature-description">
-                                    Download panduan diet hipertensi, brosur olahraga aman, dan materi edukasi kesehatan lainnya yang bisa diakses kapan saja.
+                        <div class="card h-100 border-0 shadow-sm"
+                            style="border-radius: 15px; background-color: #E3F2FD;">
+                            <div class="card-body p-4 text-center">
+                                <h4 class="card-title fw-bold text-primary mb-3">Edukasi Kesehatan Lengkap</h4>
+                                <p class="card-text text-muted text-center">
+                                    Akses artikel, berita terkini, FAQ, dan poster edukasi untuk hidup lebih sehat.
                                 </p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
     </section>
 
     <section class="py-5 testimonial-section overflow-hidden">
@@ -195,26 +175,28 @@
             <div class="row justify-content-center">
                 <div class="col-lg-8 text-center mb-5" data-aos="fade-up">
                     <h2 class="fw-bolder mb-3 text-primary">Mereka Sudah Merasakan Manfaatnya!</h2>
-                    <p class="lead text-muted">Testimoni nyata dari sesama penderita hipertensi yang telah merasakan perubahan positif</p>
+                    <p class="lead text-muted">Testimoni nyata dari sesama penderita hipertensi yang telah merasakan
+                        perubahan positif</p>
                     <div class="section-divider mx-auto"></div>
                 </div>
             </div>
-            
+
             <!-- Multi-Row Marquee Testimonials -->
             <div class="testimonial-marquee-container">
-                @php 
+                @php
                     $testimonialRows = $testimonials->chunk(ceil($testimonials->count() / 3));
                 @endphp
-                
+
                 @foreach ($testimonialRows as $rowIndex => $row)
-                    <div class="testimonial-marquee-row" data-direction="{{ $rowIndex % 2 === 0 ? 'left' : 'right' }}" data-speed="{{ 30 + ($rowIndex * 10) }}">
+                    <div class="testimonial-marquee-row" data-direction="{{ $rowIndex % 2 === 0 ? 'left' : 'right' }}"
+                        data-speed="{{ 50 }}">
                         <div class="testimonial-marquee-track">
-                            @for ($i = 0; $i < 3; $i++)
+                            @for ($i = 0; $i < 5; $i++)
                                 @foreach ($row as $testimonial)
-                                    <div class="testimonial-marquee-item">
+                                    <div class="testimonial-marquee-item" style="margin-right: 20px;">
                                         <div class="testimonial-bubble">
                                             <div class="testimonial-content">
-                                                <div class="testimonial-quote">"{{ $testimonial->quote }}"</div>
+                                                <div class="testimonial-quote">{!! $testimonial->quote !!}</div>
                                                 <div class="testimonial-author">
                                                     <strong>{{ $testimonial->name }}</strong>
                                                     <div class="testimonial-stars">
@@ -232,11 +214,11 @@
                     </div>
                 @endforeach
             </div>
-            
+
             <!-- Call to Action -->
             <div class="text-center mt-5">
                 <a href="{{ route('pengingat') }}" class="btn btn-primary btn-lg px-5 py-3">
-                    Mulai Sekarang - GRATIS! <i class="bi bi-arrow-right ms-2"></i>
+                    Mulai Sekarang!
                 </a>
             </div>
         </div>
@@ -248,7 +230,8 @@
                 <div class="col-lg-8 col-xl-6 mb-5" data-aos="zoom-in-up">
                     <div class="text-center">
                         <h2 class="fw-bolder mb-3 text-primary">Rahasia Mengalahkan Hipertensi</h2>
-                        <p class="lead text-muted mx-auto">Artikel eksklusif dari ahli kesehatan terpercaya. Pelajari cara menurunkan tekanan darah tanpa efek samping!</p>
+                        <p class="lead text-muted mx-auto">Artikel eksklusif dari ahli kesehatan terpercaya. Pelajari cara
+                            menurunkan tekanan darah tanpa efek samping!</p>
                         <div class="d-flex justify-content-center mt-4">
                             <div class="section-divider"></div>
                         </div>

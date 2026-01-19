@@ -31,21 +31,18 @@ class PengingatObatController extends Controller
             ->first();
 
         if ($activePengingat) {
-            // Cek apakah sudah 91 hari
-            $tanggalMulai = Carbon::parse($activePengingat->tanggal_mulai);
-            $tanggalSelesai = $tanggalMulai->copy()->addDays(91);
-            $today = Carbon::now();
+            // Cek apakah masih ada obat aktif
+            $hasActiveObat = $activePengingat->detailObat()->where('status_obat', 'aktif')->exists();
             
-            if ($today->gte($tanggalSelesai)) {
-                // Sudah >= 91 hari - update status jadi selesai
-                $activePengingat->update(['status' => 'selesai']);
+            if ($hasActiveObat) {
+                // Masih ada obat aktif - redirect ke dashboard
+                return redirect()->route('pasien.dashboard')
+                    ->with('info', 'Anda masih memiliki pengingat aktif. Ubah status obat menjadi tidak aktif untuk membuat pengingat baru.');
+            } else {
+                // Tidak ada obat aktif - update status pengingat jadi tidak_aktif
+                $activePengingat->update(['status' => 'tidak_aktif']);
                 // Tampilkan form untuk pengingat baru
                 return view('pages.pengingat');
-            } else {
-                // Masih dalam periode aktif - redirect ke dashboard
-                $sisaHari = $today->diffInDays($tanggalSelesai);
-                return redirect()->route('pasien.dashboard')
-                    ->with('info', "Anda masih memiliki pengingat aktif. Sisa waktu: {$sisaHari} hari lagi.");
             }
         }
 
@@ -105,20 +102,17 @@ class PengingatObatController extends Controller
             ->first();
 
         if ($activePengingat) {
-            // Hitung sisa hari
-            $tanggalMulai = \Carbon\Carbon::parse($activePengingat->tanggal_mulai);
-            $tanggalSelesai = $tanggalMulai->copy()->addDays(91);
-            $today = \Carbon\Carbon::now();
+            // Cek apakah masih ada obat aktif
+            $hasActiveObat = $activePengingat->detailObat()->where('status_obat', 'aktif')->exists();
             
-            if ($today->lt($tanggalSelesai)) {
-                // Masih dalam periode aktif
-                $sisaHari = $today->diffInDays($tanggalSelesai);
+            if ($hasActiveObat) {
+                // Masih ada obat aktif - tidak boleh buat pengingat baru
                 return redirect()->route('pasien.dashboard')
-                    ->with('error', "Anda masih memiliki pengingat aktif. Silakan tunggu {$sisaHari} hari lagi untuk membuat pengingat baru.");
+                    ->with('error', 'Anda masih memiliki pengingat aktif. Ubah status obat menjadi tidak aktif untuk membuat pengingat baru.');
+            } else {
+                // Tidak ada obat aktif - update status pengingat jadi tidak_aktif
+                $activePengingat->update(['status' => 'tidak_aktif']);
             }
-            
-            // Jika sudah >= 91 hari, update status pengingat lama
-            $activePengingat->update(['status' => 'selesai']);
         }
 
         return view('pages.pengingat');
@@ -140,19 +134,17 @@ class PengingatObatController extends Controller
             ->first();
     
         if ($activePengingat) {
-            // Cek apakah sudah 91 hari
-            $tanggalMulai = Carbon::parse($activePengingat->tanggal_mulai);
-            $tanggalSelesai = $tanggalMulai->copy()->addDays(91);
-            $today = Carbon::now();
+            // Cek apakah masih ada obat aktif
+            $hasActiveObat = $activePengingat->detailObat()->where('status_obat', 'aktif')->exists();
             
-            if ($today->gte($tanggalSelesai)) {
-                // Sudah >= 91 hari - update status jadi selesai
-                $activePengingat->update(['status' => 'selesai']);
-            } else {
-                // Masih aktif - tidak boleh buat baru
+            if ($hasActiveObat) {
+                // Masih ada obat aktif - tidak boleh buat pengingat baru
                 return redirect()->back()
-                    ->with('error', 'Anda masih memiliki pengingat aktif. Tidak dapat membuat pengingat baru.')
+                    ->with('error', 'Anda masih memiliki pengingat aktif. Ubah status obat menjadi tidak aktif untuk membuat pengingat baru.')
                     ->withInput();
+            } else {
+                // Tidak ada obat aktif - update status pengingat lama jadi tidak_aktif
+                $activePengingat->update(['status' => 'tidak_aktif']);
             }
         }
 

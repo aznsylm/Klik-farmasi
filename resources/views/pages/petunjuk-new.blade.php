@@ -16,7 +16,7 @@
         <div class="container px-4">
             <!-- Header Section -->
             <div class="text-center mb-5" data-aos="fade-up">
-                <h2 class="fw-bolder mb-3 text-primary">Panduan Penggunaan Website Klik Farmasi</h2>
+                <h2 class="fw-bolder mb-3 text-primary">anduan Penggunaan Website Klik Farmasi</h2>
                 <p class="lead text-muted mx-auto" style="max-width: 700px;">Selamat datang! Berikut
                     panduan sederhana untuk menjelajahi layanan kami</p>
                 <div class="d-flex justify-content-center mt-3">

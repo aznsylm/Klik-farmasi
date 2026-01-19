@@ -55,7 +55,7 @@
                                 @foreach ($testimonials as $testimonial)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
-                                        <td>{{ Str::limit($testimonial->quote, 100) }}</td>
+                                        <td>{!! Str::limit($testimonial->quote, 100) !!}</td>
                                         <td>{{ $testimonial->name }}</td>
                                         <td>
                                             <div class="btn-group" role="group">
