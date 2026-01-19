@@ -41,6 +41,9 @@
                         novalidate>
                         @csrf
 
+                        <!-- Hidden field for tekanan darah -->
+                        <input type="hidden" id="tekananDarah" name="tekanan_darah" value="">
+
                         <!-- Main Layout -->
                         <div class="row g-4">
                             <!-- Left Column: Tekanan Darah & Tanggal -->
@@ -100,8 +103,20 @@
                                 <div class="card bg-light border-0 h-100">
                                     <div
                                         class="card-header bg-primary text-white py-2 d-flex justify-content-between align-items-center">
-                                        <h6 class="mb-0 fw-bold">OBAT ANDA</h6>
-                                        <span class="badge bg-light text-dark" id="obatCounter">0/5 obat</span>
+                                        <h6 class="mb-0 fw-bold">
+                                            @auth
+                                                {{ auth()->user()->puskesmas === 'godean_2' ? 'SUPLEMEN ANDA' : 'OBAT ANDA' }}
+                                            @else
+                                                OBAT ANDA
+                                            @endauth
+                                        </h6>
+                                        <span class="badge bg-light text-dark" id="obatCounter">
+                                            @auth
+                                                {{ auth()->user()->puskesmas === 'godean_2' ? '0/5 suplemen' : '0/5 obat' }}
+                                            @else
+                                                0/5 obat
+                                            @endauth
+                                        </span>
                                     </div>
                                     <div class="card-body p-3">
                                         <div id="obatContainer">
@@ -109,7 +124,11 @@
                                         </div>
                                         <button type="button" class="btn btn-outline-primary btn-sm w-100 mt-2"
                                             id="tambahObat">
-                                            Tambah Obat Pertama
+                                            @auth
+                                                {{ auth()->user()->puskesmas === 'godean_2' ? 'Tambah Suplemen Pertama' : 'Tambah Obat Pertama' }}
+                                            @else
+                                                Tambah Obat Pertama
+                                            @endauth
                                         </button>
                                     </div>
                                 </div>
@@ -178,79 +197,91 @@
             const tekananDarahHidden = document.getElementById('tekananDarah');
             const obatCounter = document.getElementById('obatCounter');
 
-            // Daftar obat
-            const daftarObat = [
-                "Verapamil tab 80 mg",
-                "Verapamil tab lepas lambat 240 mg",
-                "Valsartan tab 80 mg",
-                "Valsartan tab 160 mg",
-                "Telmisartan tab 40 mg",
-                "Telmisartan tab 80 mg",
-                "Ramipril tab 2,5 mg",
-                "Ramipril tab 5 mg",
-                "Amlodipin tab 5 mg",
-                "Amlodipin tab 10 mg",
-                "Atenolol tab 50 mg",
-                "Atenolol tab 100 mg",
-                "Bisoprolol tab 2,5 mg",
-                "Bisoprolol tab 5 mg",
-                "Bisoprolol tab 10 mg",
-                "Diltiazem kapsul lepas lambat 100 mg",
-                "Diltiazem kapsul lepas lambat 200 mg",
-                "Hidroklorotiazid tab 25 mg",
-                "Imidapril tab 5 mg",
-                "Imidapril tab 10 mg",
-                "Irbesartan tab 150 mg",
-                "Irbesartan tab 300 mg",
-                "Kandesartan tab 8 mg",
-                "Kandesartan tab 16 mg",
-                "Kaptopril tab 12,5 mg",
-                "Kaptopril tab 25 mg",
-                "Kaptopril tab 50 mg",
-                "Klonidin tab 0,15 mg",
-                "Lisinopril tab 5 mg",
-                "Lisinopril tab 10 mg",
-                "Metildopa tab 250 mg",
-                "Nifedipin tab 10 mg",
-                "Furosemid tab 20 mg",
-                "Furosemid tab 40 mg",
-            ];
+            // Check user's puskesmas for conditional logic
+            @auth
+            const isGodean2 = {{ auth()->user()->puskesmas === 'godean_2' ? 'true' : 'false' }};
+        @else
+            const isGodean2 = false;
+        @endauth
 
-            // Update counter
-            function updateObatCounter() {
-                obatCounter.textContent = `${totalObat}/${maxObat} obat`;
+        // Daftar obat
+        const daftarObat = [
+            "Verapamil tab 80 mg",
+            "Verapamil tab lepas lambat 240 mg",
+            "Valsartan tab 80 mg",
+            "Valsartan tab 160 mg",
+            "Telmisartan tab 40 mg",
+            "Telmisartan tab 80 mg",
+            "Ramipril tab 2,5 mg",
+            "Ramipril tab 5 mg",
+            "Amlodipin tab 5 mg",
+            "Amlodipin tab 10 mg",
+            "Atenolol tab 50 mg",
+            "Atenolol tab 100 mg",
+            "Bisoprolol tab 2,5 mg",
+            "Bisoprolol tab 5 mg",
+            "Bisoprolol tab 10 mg",
+            "Diltiazem kapsul lepas lambat 100 mg",
+            "Diltiazem kapsul lepas lambat 200 mg",
+            "Hidroklorotiazid tab 25 mg",
+            "Imidapril tab 5 mg",
+            "Imidapril tab 10 mg",
+            "Irbesartan tab 150 mg",
+            "Irbesartan tab 300 mg",
+            "Kandesartan tab 8 mg",
+            "Kandesartan tab 16 mg",
+            "Kaptopril tab 12,5 mg",
+            "Kaptopril tab 25 mg",
+            "Kaptopril tab 50 mg",
+            "Klonidin tab 0,15 mg",
+            "Lisinopril tab 5 mg",
+            "Lisinopril tab 10 mg",
+            "Metildopa tab 250 mg",
+            "Nifedipin tab 10 mg",
+            "Furosemid tab 20 mg",
+            "Furosemid tab 40 mg",
+        ];
+
+        // Update counter
+        function updateObatCounter() {
+            const itemType = isGodean2 ? 'suplemen' : 'obat';
+            obatCounter.textContent = `${totalObat}/${maxObat} ${itemType}`;
+        }
+
+        // Update blood pressure hidden field
+        function updateTekananDarah() {
+            if (sistolInput.value && diastolInput.value) {
+                tekananDarahHidden.value = sistolInput.value + '/' + diastolInput.value;
             }
+        }
 
-            // Update blood pressure hidden field
-            function updateTekananDarah() {
-                if (sistolInput.value && diastolInput.value) {
-                    tekananDarahHidden.value = sistolInput.value + '/' + diastolInput.value;
-                }
-            }
+        // Add event listeners for blood pressure inputs
+        sistolInput.addEventListener('input', updateTekananDarah); diastolInput.addEventListener('input',
+            updateTekananDarah);
 
-            // Add event listeners for blood pressure inputs
-            sistolInput.addEventListener('input', updateTekananDarah);
-            diastolInput.addEventListener('input', updateTekananDarah);
+        // Add obat function
+        function addObat() {
+            if (totalObat >= maxObat) return;
 
-            // Add obat function
-            function addObat() {
-                if (totalObat >= maxObat) return;
+            totalObat++;
+            const obatId = totalObat;
 
-                totalObat++;
-                const obatId = totalObat;
+            const obatDiv = document.createElement('div');
+            obatDiv.className = 'obat-item border rounded p-3 mb-3 bg-white';
 
-                const obatDiv = document.createElement('div');
-                obatDiv.className = 'obat-item border rounded p-3 mb-3 bg-white';
+            const itemType = isGodean2 ? 'Suplemen' : 'Obat';
+            const obatRequired = isGodean2 ? '' : 'required';
+            const suplemenRequired = isGodean2 ? 'required' : '';
 
-                obatDiv.innerHTML = `
+            obatDiv.innerHTML = `
             <div class="d-flex justify-content-between align-items-center mb-2">
-                <span class="fw-bold text-primary">Obat #${obatId}</span>
+                <span class="fw-bold text-primary">${itemType} #${obatId}</span>
                 <button type="button" class="btn btn-outline-danger btn-sm remove-obat">Hapus</button>
             </div>
             <div class="row g-2">
                 <div class="col-12">
-                    <select class="form-select form-select-sm" name="namaObat[]" required>
-                        <option value="">-- Pilih Obat --</option>
+                    <select class="form-select form-select-sm" name="namaObat[]" ${obatRequired}>
+                        <option value="">-- ${isGodean2 ? 'Pilih Obat (Opsional)' : 'Pilih Obat'} --</option>
                         ${daftarObat.map(obat => `<option value="${obat}">${obat}</option>`).join('')}
                     </select>
                 </div>
@@ -279,8 +310,8 @@
                     </select>
                 </div>
                 <div class="col-4">
-                    <select class="form-select form-select-sm" name="suplemen[]">
-                        <option value="">Suplemen</option>
+                    <select class="form-select form-select-sm" name="suplemen[]" ${suplemenRequired}>
+                        <option value="">${isGodean2 ? 'Pilih Suplemen' : 'Suplemen (Opsional)'}</option>
                         <option value="Asam folat">Asam Folat</option>
                         <option value="Zat besi">Zat Besi</option>
                         <option value="Kalsium">Kalsium</option>
@@ -290,123 +321,160 @@
             </div>
         `;
 
-                obatContainer.appendChild(obatDiv);
+            obatContainer.appendChild(obatDiv);
+            updateObatCounter();
+            updateTambahObatButton();
+        }
+
+        // Remove obat function using event delegation
+        function removeObatItem(obatElement) {
+            if (obatElement) {
+                obatElement.remove();
+                totalObat--;
+                updateObatNumbers();
                 updateObatCounter();
                 updateTambahObatButton();
             }
+        }
 
-            // Remove obat function using event delegation
-            function removeObatItem(obatElement) {
-                if (obatElement) {
-                    obatElement.remove();
-                    totalObat--;
-                    updateObatNumbers();
-                    updateObatCounter();
-                    updateTambahObatButton();
-                }
-            }
-
-            // Update obat numbers after removal
-            function updateObatNumbers() {
-                const obatItems = document.querySelectorAll('.obat-item');
-                obatItems.forEach((item, index) => {
-                    const numberSpan = item.querySelector('span');
-                    numberSpan.textContent = `Obat #${index + 1}`;
-                });
-            }
-
-            // Update tambah obat button
-            function updateTambahObatButton() {
-                if (totalObat === 0) {
-                    tambahObat.textContent = 'Tambah Obat Pertama';
-                    tambahObat.disabled = false;
-                } else if (totalObat < maxObat) {
-                    tambahObat.textContent = `Tambah Obat Ke-${totalObat + 1}`;
-                    tambahObat.disabled = false;
-                } else {
-                    tambahObat.textContent = 'Maksimal 5 Obat';
-                    tambahObat.disabled = true;
-                }
-            }
-
-            // Tambah obat event listener
-            tambahObat.addEventListener('click', addObat);
-
-            // Event delegation for remove buttons
-            obatContainer.addEventListener('click', function(e) {
-                if (e.target.classList.contains('remove-obat')) {
-                    const obatItem = e.target.closest('.obat-item');
-                    removeObatItem(obatItem);
-                }
+        // Update obat numbers after removal
+        function updateObatNumbers() {
+            const obatItems = document.querySelectorAll('.obat-item');
+            const itemType = isGodean2 ? 'Suplemen' : 'Obat';
+            obatItems.forEach((item, index) => {
+                const numberSpan = item.querySelector('span');
+                numberSpan.textContent = `${itemType} #${index + 1}`;
             });
+        }
 
-            // Form validation and submission
-            if (formPengingat) {
-                formPengingat.addEventListener('submit', function(e) {
-                    e.preventDefault();
+        // Update tambah obat button
+        function updateTambahObatButton() {
+            const itemType = isGodean2 ? 'Suplemen' : 'Obat';
+            const maxText = isGodean2 ? 'Maksimal 5 Suplemen' : 'Maksimal 5 Obat';
 
-                    // Update hidden field
-                    updateTekananDarah();
+            if (totalObat === 0) {
+                tambahObat.textContent = `Tambah ${itemType} Pertama`;
+                tambahObat.disabled = false;
+            } else if (totalObat < maxObat) {
+                tambahObat.textContent = `Tambah ${itemType} Ke-${totalObat + 1}`;
+                tambahObat.disabled = false;
+            } else {
+                tambahObat.textContent = maxText;
+                tambahObat.disabled = true;
+            }
+        }
 
-                    // Basic validation
-                    const sistol = parseInt(sistolInput.value);
-                    const diastol = parseInt(diastolInput.value);
+        // Tambah obat event listener
+        tambahObat.addEventListener('click', addObat);
 
-                    let errorMessage = '';
+        // Event delegation for remove buttons
+        obatContainer.addEventListener('click', function(e) {
+            if (e.target.classList.contains('remove-obat')) {
+                const obatItem = e.target.closest('.obat-item');
+                removeObatItem(obatItem);
+            }
+        });
 
-                    // Check blood pressure
-                    if (!sistol || !diastol) {
-                        errorMessage = 'Mohon isi tekanan darah dengan lengkap.';
-                    } else if (sistol < 50 || sistol > 250 || diastol < 50 || diastol > 150) {
-                        errorMessage = 'Nilai tekanan darah tidak valid. Sistol: 50-250, Diastol: 50-150.';
-                    } else if (totalObat === 0) {
-                        errorMessage = 'Silakan tambahkan minimal satu obat.';
-                    } else {
-                        // Check obat validation
-                        const obatItems = document.querySelectorAll('.obat-item');
-                        let isValid = true;
+        // Form validation and submission
+        if (formPengingat) {
+            formPengingat.addEventListener('submit', function(e) {
+                e.preventDefault();
 
-                        obatItems.forEach((item, index) => {
-                            const namaObat = item.querySelector('select[name="namaObat[]"]').value;
-                            const waktuMinum = item.querySelector('select[name="waktuMinum[]"]')
-                                .value;
-                            const jumlahObat = item.querySelector('select[name="jumlahObat[]"]')
-                                .value;
+                // Update hidden field
+                updateTekananDarah();
 
-                            if (!namaObat || !waktuMinum || !jumlahObat) {
+                // Basic validation
+                const sistol = parseInt(sistolInput.value);
+                const diastol = parseInt(diastolInput.value);
+
+                let errorMessage = '';
+
+                // Check blood pressure
+                if (!sistol || !diastol) {
+                    errorMessage = 'Mohon isi tekanan darah dengan lengkap.';
+                } else if (sistol < 50 || sistol > 250 || diastol < 50 || diastol > 150) {
+                    errorMessage = 'Nilai tekanan darah tidak valid. Sistol: 50-250, Diastol: 50-150.';
+                } else if (totalObat === 0) {
+                    const itemType = isGodean2 ? 'suplemen' : 'obat';
+                    errorMessage = `Silakan tambahkan minimal satu ${itemType}.`;
+                } else {
+                    // Check obat validation
+                    const obatItems = document.querySelectorAll('.obat-item');
+                    let isValid = true;
+                    const itemType = isGodean2 ? 'suplemen' : 'obat';
+
+                    obatItems.forEach((item, index) => {
+                        const namaObat = item.querySelector('select[name="namaObat[]"]').value;
+                        const waktuMinum = item.querySelector('select[name="waktuMinum[]"]')
+                            .value;
+                        const jumlahObat = item.querySelector('select[name="jumlahObat[]"]')
+                            .value;
+                        const suplemen = item.querySelector('select[name="suplemen[]"]').value;
+
+                        // Conditional validation based on puskesmas
+                        if (isGodean2) {
+                            // For Godean 2: suplemen required, obat optional
+                            if (!suplemen || !waktuMinum || !jumlahObat) {
                                 errorMessage =
-                                    `Mohon lengkapi data obat #${index + 1} (nama obat, jam, dan jumlah wajib diisi).`;
+                                    `Mohon lengkapi data ${itemType} #${index + 1} (suplemen, jam, dan jumlah wajib diisi).`;
                                 isValid = false;
                                 return false;
                             }
-                        });
-
-                        if (isValid) {
-                            // All validation passed - submit form
-                            const submitBtn = this.querySelector('button[type="submit"]');
-                            if (submitBtn) {
-                                submitBtn.innerHTML =
-                                    '<span class="spinner-border spinner-border-sm me-2"></span>Memproses...';
-                                submitBtn.disabled = true;
+                        } else {
+                            // For others: obat required, suplemen optional  
+                            if (!namaObat || !waktuMinum || !jumlahObat) {
+                                errorMessage =
+                                    `Mohon lengkapi data ${itemType} #${index + 1} (nama obat, jam, dan jumlah wajib diisi).`;
+                                isValid = false;
+                                return false;
                             }
-
-                            setTimeout(() => {
-                                this.submit();
-                            }, 500);
-                            return;
                         }
-                    }
+                    });
 
-                    // Show error message
-                    if (errorMessage) {
-                        alert(errorMessage);
-                    }
-                });
-            }
+                    if (isValid) {
+                        console.log('Form validation passed, submitting...');
 
-            // Initialize
-            updateObatCounter();
-            updateTambahObatButton();
+                        // All validation passed - submit form
+                        const submitBtn = this.querySelector('button[type="submit"]');
+                        if (submitBtn) {
+                            submitBtn.innerHTML =
+                                '<span class="spinner-border spinner-border-sm me-2"></span>Memproses...';
+                            submitBtn.disabled = true;
+                        }
+
+                        // Submit immediately instead of setTimeout
+                        this.submit();
+                        return;
+                    }
+                }
+
+                // Show error message
+                if (errorMessage) {
+                    // Create error alert div instead of alert()
+                    const alertDiv = document.createElement('div');
+                    alertDiv.className = 'alert alert-danger alert-dismissible fade show mt-3';
+                    alertDiv.innerHTML = `
+                            ${errorMessage}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        `;
+
+                    // Insert at top of form
+                    const form = document.getElementById('formPengingat');
+                    const existingAlert = form.querySelector('.alert');
+                    if (existingAlert) existingAlert.remove();
+                    form.insertBefore(alertDiv, form.firstChild);
+
+                    // Scroll to top
+                    alertDiv.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'nearest'
+                    });
+                }
+            });
+        }
+
+        // Initialize
+        updateObatCounter(); updateTambahObatButton();
         });
     </script>
 

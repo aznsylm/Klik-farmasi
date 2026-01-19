@@ -16,7 +16,7 @@ class TekananDarahController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(10);
             
-        return view('user.tekanan-darah', compact('recentRecords'));
+        return view('pasien.tekanan-darah', compact('recentRecords'));
     }
 
     public function store(Request $request)

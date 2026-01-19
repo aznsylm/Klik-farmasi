@@ -88,7 +88,7 @@
                                             </tr>
                                             <tr>
                                                 <td class="font-weight-bold">Waktu Minum:</td>
-                                                <td>{{ $obat->waktu_minum }}</td>
+                                                <td>{{ substr($obat->waktu_minum, 0, 5) }}</td>
                                             </tr>
                                             <tr>
                                                 <td class="font-weight-bold">Urutan:</td>
@@ -105,7 +105,7 @@
                                             </tr>
                                             <tr>
                                                 <td class="font-weight-bold">Waktu Minum:</td>
-                                                <td>{{ $obat->waktu_minum }}</td>
+                                                <td>{{ substr($obat->waktu_minum, 0, 5) }}</td>
                                             </tr>
                                             <tr>
                                                 <td class="font-weight-bold">Suplemen:</td>
@@ -160,31 +160,44 @@
                                                         <td class="font-weight-bold">
                                                             {{ $obat->suplemen ?? $obat->nama_obat }}</td>
                                                         <td>{{ $obat->jumlah_obat }}</td>
-                                                        <td>{{ $obat->waktu_minum }}</td>
+                                                        <td>{{ substr($obat->waktu_minum, 0, 5) }}</td>
                                                         <td>
                                                             <form method="POST"
                                                                 action="{{ route('pasien.obat.update-status') }}"
-                                                                style="display: inline;">\n @csrf\n <input type="hidden"
-                                                                    name="obat_id" value="{{ $obat->id }}">\n <select
-                                                                    name="status" class="form-control form-control-sm"
-                                                                    onchange="this.form.submit()">\n <option value="aktif"
+                                                                style="display: inline;">
+                                                                @csrf
+                                                                <input type="hidden" name="obat_id" value="{{ $obat->id }}">
+                                                                <select name="status" class="form-control form-control-sm"
+                                                                    onchange="this.form.submit()">
+                                                                    <option value="aktif"
                                                                         {{ $obat->status_obat === 'aktif' ? 'selected' : '' }}>
-                                                                        Aktif</option>\n <option value="tidak_aktif"
+                                                                        Aktif</option>
+                                                                    <option value="tidak_aktif"
                                                                         {{ $obat->status_obat === 'tidak_aktif' ? 'selected' : '' }}>
-                                                                        Tidak Aktif</option>\n </select>\n </form>\n
-                                                    </td>\n @else\n <td class="font-weight-bold">{{ $obat->nama_obat }}
-                                                        </td>\n <td>{{ $obat->jumlah_obat }}</td>\n <td>
-                                                            {{ $obat->waktu_minum }}</td>\n <td>
-                                                            {{ $obat->suplemen ?? '-' }}</td>\n <td>\n <form method="POST"
+                                                                        Tidak Aktif</option>
+                                                                </select>
+                                                            </form>
+                                                        </td>
+                                                    @else
+                                                        <td class="font-weight-bold">{{ $obat->nama_obat }}</td>
+                                                        <td>{{ $obat->jumlah_obat }}</td>
+                                                        <td>{{ substr($obat->waktu_minum, 0, 5) }}</td>
+                                                        <td>{{ $obat->suplemen ?? '-' }}</td>
+                                                        <td>
+                                                            <form method="POST"
                                                                 action="{{ route('pasien.obat.update-status') }}"
-                                                                style="display: inline;">\n @csrf\n <input type="hidden"
-                                                                    name="obat_id" value="{{ $obat->id }}">\n <select
-                                                                    name="status" class="form-control form-control-sm"
-                                                                    onchange="this.form.submit()">\n <option value="aktif"
+                                                                style="display: inline;">
+                                                                @csrf
+                                                                <input type="hidden" name="obat_id" value="{{ $obat->id }}">
+                                                                <select name="status" class="form-control form-control-sm"
+                                                                    onchange="this.form.submit()">
+                                                                    <option value="aktif"
                                                                         {{ $obat->status_obat === 'aktif' ? 'selected' : '' }}>
-                                                                        Aktif</option>\n <option value="tidak_aktif"
+                                                                        Aktif</option>
+                                                                    <option value="tidak_aktif"
                                                                         {{ $obat->status_obat === 'tidak_aktif' ? 'selected' : '' }}>
-                                                                        Tidak Aktif</option>\n </select>
+                                                                        Tidak Aktif</option>
+                                                                </select>
                                                             </form>
                                                         </td>
                                                     @endif

@@ -153,11 +153,20 @@ class PengingatObatController extends Controller
             'diastol' => 'required|integer|min:50|max:150',
             'tanggal_mulai' => 'nullable|date|after_or_equal:today',
             'catatan' => 'nullable|string|max:3000',
-            'namaObat' => 'required|array|min:1|max:5',
-            'jumlahObat' => 'required|array|min:1|max:5',
             'waktuMinum' => 'required|array|min:1|max:5',
-            'suplemen' => 'nullable|array',
+            'jumlahObat' => 'required|array|min:1|max:5',
         ];
+
+        // Conditional validation based on puskesmas
+        if ($user->puskesmas === 'godean_2') {
+            // For Godean 2: suplemen is required, namaObat is optional
+            $rules['suplemen'] = 'required|array|min:1|max:5';
+            $rules['namaObat'] = 'nullable|array|max:5';
+        } else {
+            // For others: namaObat is required, suplemen is optional
+            $rules['namaObat'] = 'required|array|min:1|max:5';
+            $rules['suplemen'] = 'nullable|array|max:5';
+        }
         
         $request->validate($rules);
         
@@ -213,14 +222,43 @@ class PengingatObatController extends Controller
             ]);
         }
 
-        // Simpan ke detail_obat - Universal untuk semua jenis
-        foreach ($request->namaObat as $i => $namaObat) {
+        // Simpan ke detail_obat - Universal dengan conditional logic
+        $maxItems = max(
+            count($request->namaObat ?? []), 
+            count($request->suplemen ?? [])
+        );
+
+        for ($i = 0; $i < $maxItems; $i++) {
+            // Handle conditional data based on puskesmas
+            $namaObat = isset($request->namaObat[$i]) && !empty($request->namaObat[$i]) 
+                ? $request->namaObat[$i] 
+                : null;
+            
+            $suplemen = isset($request->suplemen[$i]) && !empty($request->suplemen[$i]) 
+                ? $request->suplemen[$i] 
+                : null;
+
+            // Skip if both are empty or required fields are missing
+            if (!isset($request->waktuMinum[$i]) || !isset($request->jumlahObat[$i])) {
+                continue;
+            }
+
+            // For Godean 2: suplemen is primary, namaObat is optional
+            // For others: namaObat is primary, suplemen is optional
+            if ($user->puskesmas === 'godean_2') {
+                // Skip if suplemen is empty (required for Godean 2)
+                if (empty($suplemen)) continue;
+            } else {
+                // Skip if namaObat is empty (required for others)
+                if (empty($namaObat)) continue;
+            }
+
             DetailObatPengingat::create([
                 'pengingat_obat_id' => $pengingat->id,
-                'nama_obat' => $namaObat,
+                'nama_obat' => $namaObat ?? '-', // Default to '-' if null
                 'jumlah_obat' => $request->jumlahObat[$i],
                 'waktu_minum' => $request->waktuMinum[$i],
-                'suplemen' => !empty($request->suplemen[$i]) ? $request->suplemen[$i] : '-',
+                'suplemen' => $suplemen ?? '-', // Default to '-' if null
                 'urutan' => $i + 1,
                 'status_obat' => 'aktif',
             ]);
