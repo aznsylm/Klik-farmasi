@@ -1,1 +1,31 @@
+name: Deploy Laravel ke Rumahweb
 
+on:
+  push:
+    branches:
+      - main  # Pastikan ini sesuai dengan nama branch utama kamu (main atau master)
+
+jobs:
+  web-deploy:
+    name: 🎉 Deploying...
+    runs-on: ubuntu-latest
+    steps:
+    - name: 🚚 Get latest code
+      uses: actions/checkout@v3
+
+    - name: 📂 Sync files to Rumahweb
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+      with:
+        server: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        # Pastikan folder tujuan di hosting sudah benar
+        server-dir: ./public_html/ 
+        # File yang TIDAK perlu dikirim ke hosting (biar cepat)
+        exclude: |
+          **/.git*
+          **/node_modules/**
+          **/vendor/**
+          .env
+          tests/
+          README.md
