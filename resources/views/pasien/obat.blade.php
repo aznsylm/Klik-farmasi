@@ -166,7 +166,8 @@
                                                                 action="{{ route('pasien.obat.update-status') }}"
                                                                 style="display: inline;">
                                                                 @csrf
-                                                                <input type="hidden" name="obat_id" value="{{ $obat->id }}">
+                                                                <input type="hidden" name="obat_id"
+                                                                    value="{{ $obat->id }}">
                                                                 <select name="status" class="form-control form-control-sm"
                                                                     onchange="this.form.submit()">
                                                                     <option value="aktif"
@@ -188,7 +189,8 @@
                                                                 action="{{ route('pasien.obat.update-status') }}"
                                                                 style="display: inline;">
                                                                 @csrf
-                                                                <input type="hidden" name="obat_id" value="{{ $obat->id }}">
+                                                                <input type="hidden" name="obat_id"
+                                                                    value="{{ $obat->id }}">
                                                                 <select name="status" class="form-control form-control-sm"
                                                                     onchange="this.form.submit()">
                                                                     <option value="aktif"
