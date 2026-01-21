@@ -1,4 +1,4 @@
-name: Deploy Laravel ke Rumahweb (Custom Structure)
+name: Deploy Laravel ke Rumahweb (Final Fix)
 
 on:
   push:
@@ -11,8 +11,10 @@ jobs:
     steps:
     - name: 🚚 Get latest code
       uses: actions/checkout@v3
+      with:
+        fetch-depth: 2
 
-    # TAHAP 1: Kirim isi folder 'public' lokal ke 'public_html' server
+    # TAHAP 1: Kirim isi folder 'public' lokal ke 'public_html' (Assets)
     - name: 📂 Deploy Public Assets
       uses: SamKirkland/FTP-Deploy-Action@v4.3.4
       with:
@@ -20,20 +22,22 @@ jobs:
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
         local-dir: ./public/
-        server-dir: ./public_html/
+        server-dir: public_html/ 
 
-    # TAHAP 2: Kirim folder inti (app, resources, dll) ke folder 'laravel' server
+    # TAHAP 2: Kirim sisanya ke folder 'laravel' (Core Logic)
     - name: 📂 Deploy Core Laravel
       uses: SamKirkland/FTP-Deploy-Action@v4.3.4
       with:
         server: ${{ secrets.FTP_SERVER }}
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
-        server-dir: ./laravel/
+        server-dir: laravel/ 
         exclude: |
           **/.git*
           **/node_modules/**
           **/vendor/**
           **/public/**
+          **/storage/**
+          **/tests/**
           .env
-          tests/
+          README.md
