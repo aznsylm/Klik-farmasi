@@ -1,9 +1,8 @@
-name: Deploy Laravel ke Rumahweb
+name: Deploy Laravel ke Rumahweb (Custom Structure)
 
 on:
   push:
-    branches:
-      - main  # Pastikan ini sesuai dengan nama branch utama kamu (main atau master)
+    branches: [ main ]
 
 jobs:
   web-deploy:
@@ -13,17 +12,28 @@ jobs:
     - name: 🚚 Get latest code
       uses: actions/checkout@v3
 
-    - name: 📂 Sync files to Rumahweb
+    # TAHAP 1: Kirim isi folder 'public' lokal ke 'public_html' server
+    - name: 📂 Deploy Public Assets
       uses: SamKirkland/FTP-Deploy-Action@v4.3.4
       with:
         server: ${{ secrets.FTP_SERVER }}
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
-        # Pastikan folder tujuan di hosting sudah benar
-        server-dir: ./
-        # File yang TIDAK perlu dikirim ke hosting (biar cepat)
+        local-dir: ./public/
+        server-dir: ./public_html/
+
+    # TAHAP 2: Kirim folder inti (app, resources, dll) ke folder 'laravel' server
+    - name: 📂 Deploy Core Laravel
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+      with:
+        server: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        server-dir: ./laravel/
         exclude: |
           **/.git*
           **/node_modules/**
           **/vendor/**
+          **/public/**
           .env
+          tests/
