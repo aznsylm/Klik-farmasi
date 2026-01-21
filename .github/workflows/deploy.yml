@@ -20,12 +20,10 @@ jobs:
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
         # Pastikan folder tujuan di hosting sudah benar
-        server-dir: ./public_html/ 
+        server-dir: ./
         # File yang TIDAK perlu dikirim ke hosting (biar cepat)
         exclude: |
           **/.git*
           **/node_modules/**
           **/vendor/**
           .env
-          tests/
-          README.md
