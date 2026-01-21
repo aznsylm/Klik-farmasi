@@ -14,7 +14,7 @@ jobs:
       with:
         fetch-depth: 2
 
-# TAHAP 1: Deploy Public Assets (Tanpa menimpa file konfigurasi hosting)
+    # TAHAP 1: Deploy ke public_html
     - name: 📂 Deploy Public Assets
       uses: SamKirkland/FTP-Deploy-Action@v4.3.4
       with:
@@ -26,12 +26,12 @@ jobs:
         exclude: |
           **/.git*
           **/.github*
-          index.php       # <--- JANGAN UPLOAD INI (Supaya settingan cPanel aman)
-          .htaccess       # <--- JANGAN UPLOAD INI (Supaya settingan cPanel aman)
-          laravel/** # <--- Mencegah folder laravel nyasar masuk ke public_html
+          index.php
+          .htaccess
+          laravel/**
           .ftp-deploy-sync-state.json
 
-    # TAHAP 2: Deploy file inti ke folder 'laravel' (Keluar dari public_html)
+    # TAHAP 2: Deploy file inti ke folder 'laravel'
     - name: 📂 Deploy Core Laravel
       uses: SamKirkland/FTP-Deploy-Action@v4.3.4
       with:
