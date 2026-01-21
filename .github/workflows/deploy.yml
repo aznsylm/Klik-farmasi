@@ -31,7 +31,7 @@ jobs:
         server: ${{ secrets.FTP_SERVER }}
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
-        server-dir: ./laravel/ # Pakai ./ agar merujuk ke root hosting
+        server-dir: ../laravel/ # Pakai ./ agar merujuk ke root hosting
         exclude: |
           **/.git*
           **/node_modules/**
