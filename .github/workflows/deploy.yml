@@ -11,10 +11,8 @@ jobs:
     steps:
     - name: 🚚 Get latest code
       uses: actions/checkout@v3
-      with:
-        fetch-depth: 2
 
-    # TAHAP 1: Kirim isi folder 'public' lokal ke 'public_html' yang sudah ada
+    # TAHAP 1: Deploy Public Assets
     - name: 📂 Deploy Public Assets
       uses: SamKirkland/FTP-Deploy-Action@v4.3.4
       with:
@@ -22,18 +20,22 @@ jobs:
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
         local-dir: ./public/
-        server-dir: ./public_html/ # Pakai ./ agar merujuk ke root hosting
+        server-dir: ./ 
+        exclude: |
+          **/.git*
+          **/.github*
 
-    # TAHAP 2: Kirim sisanya ke folder 'laravel' yang sudah ada
+    # TAHAP 2: Deploy Core Laravel
     - name: 📂 Deploy Core Laravel
       uses: SamKirkland/FTP-Deploy-Action@v4.3.4
       with:
         server: ${{ secrets.FTP_SERVER }}
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
-        server-dir: ../laravel/ # Pakai ./ agar merujuk ke root hosting
+        server-dir: ../laravel/
         exclude: |
           **/.git*
+          **/.github*
           **/node_modules/**
           **/vendor/**
           **/public/**
