@@ -1,4 +1,4 @@
-name: Deploy Laravel ke Rumahweb (Final Fix)
+name: Deploy Laravel Rumahweb Final
 
 on:
   push:
@@ -11,8 +11,10 @@ jobs:
     steps:
     - name: 🚚 Get latest code
       uses: actions/checkout@v3
+      with:
+        fetch-depth: 2
 
-    # TAHAP 1: Deploy Public Assets
+    # TAHAP 1: Deploy isi folder 'public' lokal ke 'public_html'
     - name: 📂 Deploy Public Assets
       uses: SamKirkland/FTP-Deploy-Action@v4.3.4
       with:
@@ -24,8 +26,9 @@ jobs:
         exclude: |
           **/.git*
           **/.github*
+          .ftp-deploy-sync-state.json
 
-    # TAHAP 2: Deploy Core Laravel
+    # TAHAP 2: Deploy file inti ke folder 'laravel' (Keluar dari public_html)
     - name: 📂 Deploy Core Laravel
       uses: SamKirkland/FTP-Deploy-Action@v4.3.4
       with:
@@ -42,3 +45,4 @@ jobs:
           **/storage/**
           **/tests/**
           .env
+          .ftp-deploy-sync-state.json

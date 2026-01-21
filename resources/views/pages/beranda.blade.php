@@ -29,11 +29,12 @@
                     <div class="row align-items-center">
                         <div class="col-12 col-lg-6 order-2 order-lg-1 mt-2 mt-lg-0" data-aos="fade-right">
                             <div class="hero-content px-3">
-                                <h1 class="h2 fw-bold mb-3 text-white">Tekanan Darah NAIK Mengancam? Jangan Biarkan Obat Terlupakan!
+                                <h1 class="h2 fw-bold mb-3 text-white">Hipertensi Mengancam? Jangan Biarkan Obat Terlupakan!
                                 </h1>
                                 <p class="mb-4 text-light">Setiap 30 detik, seseorang meninggal karena hipertensi yang tidak
                                     terkontrol. Jangan jadi korban selanjutnya! Platform revolusioner ini akan memastikan
                                     Anda tidak pernah melewatkan obat lagi.</p>
+                                <p>Tes Deploy Sukses</p>
                                 <div
                                     class="d-flex flex-column flex-sm-row gap-3 justify-content-center justify-content-lg-start">
                                     <a href="{{ route('pengingat') }}"
