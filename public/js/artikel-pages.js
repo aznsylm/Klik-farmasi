@@ -82,9 +82,13 @@ document.addEventListener("DOMContentLoaded", function () {
     const allImages = document.querySelectorAll("img");
     allImages.forEach((img) => {
         img.addEventListener("error", function () {
-            // Fallback to placeholder image
-            this.src = "/assets/placeholder-image.jpg";
-            this.alt = "Image not available";
+            // Prevent infinite loop by checking if we already tried the fallback
+            if (!this.dataset.errorHandled) {
+                this.dataset.errorHandled = "true";
+                // Fallback to existing sample image
+                this.src = "/assets/sample-1.jpg";
+                this.alt = "Image not available";
+            }
         });
     });
 

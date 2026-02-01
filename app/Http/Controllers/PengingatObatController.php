@@ -15,14 +15,14 @@ class PengingatObatController extends Controller
     {
         // Jika user belum login (guest)
         if (!auth()->check()) {
-            return view('pages.pengingat');
+            return view('pages.pengingat-medicio');
         }
 
         $user = auth()->user();
         
         // Jika bukan pasien (admin/super_admin) - hanya bisa lihat
         if ($user->role !== 'pasien') {
-            return view('pages.pengingat', ['readOnly' => true]);
+            return view('pages.pengingat-medicio', ['readOnly' => true]);
         }
 
         // Jika pasien - cek pengingat aktif
@@ -42,12 +42,12 @@ class PengingatObatController extends Controller
                 // Tidak ada obat aktif - update status pengingat jadi tidak_aktif
                 $activePengingat->update(['status' => 'tidak_aktif']);
                 // Tampilkan form untuk pengingat baru
-                return view('pages.pengingat');
+                return view('pages.pengingat-medicio');
             }
         }
 
         // Pasien belum ada pengingat aktif - tampilkan form
-        return view('pages.pengingat');
+        return view('pages.pengingat-medicio');
     }
     public function index()
     {
@@ -152,7 +152,6 @@ class PengingatObatController extends Controller
             'sistol' => 'required|integer|min:50|max:250',
             'diastol' => 'required|integer|min:50|max:150',
             'tanggal_mulai' => 'nullable|date|after_or_equal:today',
-            'catatan' => 'nullable|string|max:3000',
             'waktuMinum' => 'required|array|min:1|max:5',
             'jumlahObat' => 'required|array|min:1|max:5',
         ];
@@ -180,7 +179,7 @@ class PengingatObatController extends Controller
             'user_id' => auth()->id(),
             'tekanan_darah' => $request->tekananDarah,
             'tanggal_mulai' => $request->tanggal_mulai ?: \Carbon\Carbon::tomorrow('Asia/Jakarta')->toDateString(),
-            'catatan' => $request->catatan ?: '-',
+            'catatan' => '-',
             'status' => 'aktif',
         ]);
 
@@ -200,26 +199,21 @@ class PengingatObatController extends Controller
                     'sistol' => $request->sistol,
                     'diastol' => $request->diastol,
                 ]);
-                \Log::info('Updated existing blood pressure record:', ['id' => $existingRecord->id]);
+                \Log::info('Updated blood pressure record for user: ' . auth()->id());
             } else {
                 // Create new record
-                $bloodPressureData = CatatanTekananDarah::create([
+                CatatanTekananDarah::create([
                     'user_id' => auth()->id(),
                     'pengingat_obat_id' => $pengingat->id,
                     'sistol' => $request->sistol,
                     'diastol' => $request->diastol,
                     'sumber' => 'pengingat_awal'
                 ]);
-                \Log::info('Created new blood pressure record:', ['id' => $bloodPressureData->id]);
+                \Log::info('Created new blood pressure record for user: ' . auth()->id());
             }
             
         } catch (\Exception $e) {
-            \Log::error('Error saving initial blood pressure:', [
-                'user_id' => auth()->id(),
-                'error' => $e->getMessage(),
-                'sistol' => $request->sistol,
-                'diastol' => $request->diastol
-            ]);
+            \Log::error('Blood pressure save failed for user ' . auth()->id() . ': ' . $e->getMessage());
         }
 
         // Simpan ke detail_obat - Universal dengan conditional logic
@@ -228,6 +222,7 @@ class PengingatObatController extends Controller
             count($request->suplemen ?? [])
         );
 
+        $detailObatData = [];
         for ($i = 0; $i < $maxItems; $i++) {
             // Handle conditional data based on puskesmas
             $namaObat = isset($request->namaObat[$i]) && !empty($request->namaObat[$i]) 
@@ -253,15 +248,22 @@ class PengingatObatController extends Controller
                 if (empty($namaObat)) continue;
             }
 
-            DetailObatPengingat::create([
+            $detailObatData[] = [
                 'pengingat_obat_id' => $pengingat->id,
-                'nama_obat' => $namaObat ?? '-', // Default to '-' if null
+                'nama_obat' => $namaObat ?? '-',
                 'jumlah_obat' => $request->jumlahObat[$i],
                 'waktu_minum' => $request->waktuMinum[$i],
-                'suplemen' => $suplemen ?? '-', // Default to '-' if null
+                'suplemen' => $suplemen ?? '-',
                 'urutan' => $i + 1,
                 'status_obat' => 'aktif',
-            ]);
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+        }
+
+        // Bulk insert untuk performa yang lebih baik
+        if (!empty($detailObatData)) {
+            DetailObatPengingat::insert($detailObatData);
         }
 
         return redirect()->route('pasien.dashboard')->with('success', 'Pengingat berhasil disimpan! Anda akan mendapat notifikasi WhatsApp mulai besok.');

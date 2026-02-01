@@ -575,3 +575,101 @@
         transform: none !important;
     }
 }
+
+/* ==== FAQ PAGES MOBILE OPTIMIZATION ==== */
+
+/* FAQ Mobile Optimization - Tablet */
+@media (max-width: 768px) {
+    .faq-section .container {
+        padding-left: 15px !important;
+        padding-right: 15px !important;
+    }
+
+    .faq-section .row {
+        margin-left: -5px !important;
+        margin-right: -5px !important;
+    }
+
+    .faq-section .col-lg-8,
+    .faq-section .col-lg-4 {
+        padding-left: 5px !important;
+        padding-right: 5px !important;
+    }
+
+    .faq-search .input-group {
+        margin-bottom: 1rem;
+    }
+
+    .faq-item {
+        margin-bottom: 0.75rem;
+    }
+
+    .faq-button {
+        padding: 0.75rem !important;
+        font-size: 0.9rem;
+    }
+
+    .faq-answer {
+        padding: 0.75rem !important;
+    }
+
+    .faq-section .card {
+        margin-bottom: 1rem;
+    }
+
+    .faq-section .card-body {
+        padding: 1rem !important;
+    }
+
+    .contact-list a {
+        padding: 0.75rem !important;
+        margin-bottom: 0.5rem !important;
+    }
+
+    .faq-section .lead {
+        font-size: 1rem !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+}
+
+/* FAQ Mobile Optimization - Small Mobile */
+@media (max-width: 576px) {
+    .faq-section {
+        padding-top: 2rem !important;
+        padding-bottom: 2rem !important;
+    }
+
+    .faq-section .mb-5 {
+        margin-bottom: 2rem !important;
+    }
+
+    .faq-section .py-5 {
+        padding-top: 2rem !important;
+        padding-bottom: 2rem !important;
+    }
+
+    .faq-button {
+        padding: 0.5rem !important;
+        font-size: 0.85rem;
+    }
+
+    .question-number {
+        font-size: 0.8rem !important;
+        width: 20px !important;
+        height: 20px !important;
+        line-height: 20px !important;
+    }
+
+    .faq-section .card-body {
+        padding: 0.75rem !important;
+    }
+
+    .faq-section h2.fw-bolder {
+        font-size: 1.4rem !important;
+    }
+
+    .faq-section h5 {
+        font-size: 1.1rem !important;
+    }
+}

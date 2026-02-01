@@ -31,7 +31,7 @@
                 <div class="card border-0 shadow rounded-3 overflow-hidden mb-4 latest-article-card">
                     <div class="row gx-0">
                         <div class="col-lg-6 col-xl-5 py-lg-5 order-2 order-lg-1" data-aos="flip-left">
-                            <div class="p-3 p-lg-4">
+                            <div >
                                 <div class="article-category-new"><span>{{ $latestArticle->category }}</span></div>
                                 <h1 class="article-title fs-2">{{ $latestArticle->title }}</h1>
                                 <div class="article-excerpt">{!! Str::words($latestArticle->content, 30, '...') !!}</div>

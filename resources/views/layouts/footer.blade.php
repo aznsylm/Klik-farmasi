@@ -76,7 +76,7 @@
                 <p class="footer-copyright">&copy; 2025 Klik Farmasi | Hak Cipta Dilindungi</p>
             </div>
             <div class="col-md-4 text-md-end">
-                <p class="footer-copyright">Versi 1.1.0 | Dikelola Tim Farmasi Universitas Alma Ata</p>
+                <p class="footer-copyright">Versi 1.1.0 | Dikelola oleh Tim Farmasi Universitas Alma Ata</p>
             </div>
         </div>
     </div>
@@ -250,24 +250,32 @@
         gap: 1rem;
     }
 
-    .footer-partners p {
+    .footer-partners span {
         margin-bottom: 0;
         font-size: 0.85rem;
         white-space: nowrap;
+        color: #e3e3e3;
     }
 
-    .footer-partners img {
+    .footer-partner-logo {
         height: 40px;
         transition: transform 0.3s ease;
     }
 
-    .footer-partners img:hover {
+    .footer-partner-logo:hover {
         transform: scale(1.1);
     }
 
     .footer-copyright {
         font-size: 0.85rem;
         opacity: 0.8;
+        color: #e3e3e3;
+    }
+
+    .footer-bottom {
+        margin-top: 2.5rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     /* Tablet responsive styles */

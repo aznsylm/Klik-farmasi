@@ -316,7 +316,18 @@ class TekananDarahController extends Controller
                 'max_sistol' => $data->count() > 0 ? $data->max('sistol') : 0,
                 'max_diastol' => $data->count() > 0 ? $data->max('diastol') : 0
             ];
-        
+            
+            // Ensure temp directory exists
+            $tempDir = storage_path('app/temp/pdf');
+            if (!file_exists($tempDir)) {
+                mkdir($tempDir, 0755, true);
+            }
+            
+            // Generate unique filename
+            $filename = 'admin_tekanan_darah_' . $userId . '_' . date('Ymd_His') . '.pdf';
+            $filepath = $tempDir . '/' . $filename;
+            
+            // Generate PDF to temp file
             $pdf = Pdf::loadView('components.tekanan-darah-pdf', [
                 'user' => $user,
                 'pengingat' => $pengingat,
@@ -324,12 +335,15 @@ class TekananDarahController extends Controller
                 'stats' => $stats,
                 'generatedAt' => Carbon::now()->format('d M Y, H:i')
             ]);
-        
-            $filename = 'Laporan_Tekanan_Darah_' . $user->name . '_' . Carbon::now()->format('Y-m-d') . '.pdf';
             
-            return response($pdf->output(), 200)
-                ->header('Content-Type', 'application/pdf')
-                ->header('Content-Disposition', 'inline; filename="' . $filename . '"');
+            // Save PDF to temp file
+            file_put_contents($filepath, $pdf->output());
+            
+            // Return as download with auto-delete
+            $downloadName = 'Laporan_Tekanan_Darah_' . $user->name . '_' . Carbon::now()->format('Y-m-d') . '.pdf';
+            return response()->download($filepath, $downloadName)
+                ->deleteFileAfterSend(true);
+                
         } catch (\Exception $e) {
             \Log::error('PDF Generation Error: ' . $e->getMessage());
             return redirect()->back()->with('error', 'Gagal generate PDF: ' . $e->getMessage());
@@ -338,60 +352,82 @@ class TekananDarahController extends Controller
 
     public function generateUserPDFReport()
     {
-        $user = auth()->user();
-        $pengingat = $user->pengingatObat()->with('detailObat')->latest()->first();
-        
-        $data = CatatanTekananDarah::where('user_id', $user->id)
-            ->orderBy('created_at')
-            ->get();
-        
-        $chartData = [];
-        $sistolData = [];
-        $diastolData = [];
-        
-        foreach ($data as $item) {
-            // Klasifikasi berdasarkan panduan medis
-            if ($item->sistol < 120 && $item->diastol < 80) {
-                $category = 'NORMAL';
-            } elseif ($item->sistol >= 120 && $item->sistol <= 129 && $item->diastol < 80) {
-                $category = 'PRE HIPERTENSI';
-            } elseif (($item->sistol >= 130 && $item->sistol <= 139) || ($item->diastol >= 80 && $item->diastol <= 89)) {
-                $category = 'HIPERTENSI STAGE 1';
-            } else {
-                $category = 'HIPERTENSI STAGE 2';
+        try {
+            $user = auth()->user();
+            $pengingat = $user->pengingatObat()->with('detailObat')->latest()->first();
+            
+            $data = CatatanTekananDarah::where('user_id', $user->id)
+                ->orderBy('created_at')
+                ->get();
+            
+            $chartData = [];
+            $sistolData = [];
+            $diastolData = [];
+            
+            foreach ($data as $item) {
+                // Klasifikasi berdasarkan panduan medis
+                if ($item->sistol < 120 && $item->diastol < 80) {
+                    $category = 'NORMAL';
+                } elseif ($item->sistol >= 120 && $item->sistol <= 129 && $item->diastol < 80) {
+                    $category = 'PRE HIPERTENSI';
+                } elseif (($item->sistol >= 130 && $item->sistol <= 139) || ($item->diastol >= 80 && $item->diastol <= 89)) {
+                    $category = 'HIPERTENSI STAGE 1';
+                } else {
+                    $category = 'HIPERTENSI STAGE 2';
+                }
+                
+                $chartData[] = [
+                    'tanggal' => Carbon::parse($item->created_at)->format('d/m/Y'),
+                    'sistol' => $item->sistol,
+                    'diastol' => $item->diastol,
+                    'kategori' => $category
+                ];
+                
+                $sistolData[] = $item->sistol;
+                $diastolData[] = $item->diastol;
             }
             
-            $chartData[] = [
-                'tanggal' => Carbon::parse($item->created_at)->format('d/m/Y'),
-                'sistol' => $item->sistol,
-                'diastol' => $item->diastol,
-                'kategori' => $category
+            // Statistik
+            $stats = [
+                'total' => $data->count(),
+                'avg_sistol' => $data->count() > 0 ? round($data->avg('sistol'), 1) : 0,
+                'avg_diastol' => $data->count() > 0 ? round($data->avg('diastol'), 1) : 0,
+                'max_sistol' => $data->count() > 0 ? $data->max('sistol') : 0,
+                'max_diastol' => $data->count() > 0 ? $data->max('diastol') : 0,
+                'min_sistol' => $data->count() > 0 ? $data->min('sistol') : 0,
+                'min_diastol' => $data->count() > 0 ? $data->min('diastol') : 0,
             ];
             
-            $sistolData[] = $item->sistol;
-            $diastolData[] = $item->diastol;
+            // Ensure temp directory exists
+            $tempDir = storage_path('app/temp/pdf');
+            if (!file_exists($tempDir)) {
+                mkdir($tempDir, 0755, true);
+            }
+            
+            // Generate unique filename
+            $filename = 'tekanan_darah_' . $user->id . '_' . date('Ymd_His') . '.pdf';
+            $filepath = $tempDir . '/' . $filename;
+            
+            // Generate PDF to temp file
+            $pdf = Pdf::loadView('components.tekanan-darah-pdf', [
+                'user' => $user,
+                'pengingat' => $pengingat,
+                'chartData' => $chartData,
+                'stats' => $stats,
+                'generatedAt' => Carbon::now()->format('d M Y, H:i')
+            ]);
+            
+            // Save PDF to temp file
+            file_put_contents($filepath, $pdf->output());
+            
+            // Return as download with auto-delete
+            return response()->download($filepath, 'Laporan_Tekanan_Darah_' . $user->name . '_' . Carbon::now()->format('Y-m-d') . '.pdf')
+                ->deleteFileAfterSend(true);
+                
+        } catch (\Exception $e) {
+            \Log::error('PDF Generation Error: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Gagal generate PDF: ' . $e->getMessage());
         }
-        
-        // Statistik
-        $stats = [
-            'total' => $data->count(),
-            'avg_sistol' => $data->count() > 0 ? round($data->avg('sistol'), 1) : 0,
-            'avg_diastol' => $data->count() > 0 ? round($data->avg('diastol'), 1) : 0,
-            'max_sistol' => $data->count() > 0 ? $data->max('sistol') : 0,
-            'max_diastol' => $data->count() > 0 ? $data->max('diastol') : 0,
-            'min_sistol' => $data->count() > 0 ? $data->min('sistol') : 0,
-            'min_diastol' => $data->count() > 0 ? $data->min('diastol') : 0,
-        ];
-        
-        $pdf = Pdf::loadView('components.tekanan-darah-pdf', [
-            'user' => $user,
-            'pengingat' => $pengingat,
-            'chartData' => $chartData,
-            'stats' => $stats,
-            'generatedAt' => Carbon::now()->format('d M Y, H:i')
-        ]);
-        
-        return $pdf->stream('Laporan_Tekanan_Darah_' . $user->name . '_' . Carbon::now()->format('Y-m-d') . '.pdf');
     }
     
     public function getExistingDates($userId)

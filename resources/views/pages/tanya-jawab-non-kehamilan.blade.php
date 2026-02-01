@@ -11,6 +11,8 @@
 
     <!-- External CSS for FAQ pages -->
     <link rel="stylesheet" href="{{ asset('css/faq-pages.css') }}" media="screen">
+    <!-- Mobile Responsive CSS -->
+    <link rel="stylesheet" href="{{ asset('css/mobile-responsive.css') }}" media="all">
 @endpush
 
 @section('content')

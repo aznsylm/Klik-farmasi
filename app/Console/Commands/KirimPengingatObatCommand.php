@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Log;
 class KirimPengingatObatCommand extends Command
 {
     protected $signature = 'pengingat:kirim-obat';
-    protected $description = 'Kirim pengingat minum obat via WhatsApp 5 menit sebelum waktu minum';
+    protected $description = 'Kirim pengingat minum obat via WhatsApp 10 menit sebelum waktu minum';
 
     private $whatsappService;
 
@@ -28,13 +28,13 @@ class KirimPengingatObatCommand extends Command
         $this->info('Memulai pengiriman pengingat obat...');
         $waktuSekarang = Carbon::now('Asia/Jakarta');
         $tanggalHariIni = $waktuSekarang->toDateString();
-        $waktuTarget = $waktuSekarang->addMinutes(5)->format('H:i');
+        $waktuTarget = $waktuSekarang->addMinutes(10)->format('H:i');
         
         Log::info('Cron pengingat:kirim-obat dipanggil pada ' . $waktuSekarang->toDateTimeString());
         $this->info("Waktu sekarang: " . $waktuSekarang->format('Y-m-d H:i:s'));
         $this->info("Mencari obat dengan jadwal: {$waktuTarget}");
 
-        // Ambil pengingat aktif dengan obat yang jadwalnya 5 menit lagi
+        // Ambil pengingat aktif dengan obat yang jadwalnya 10 menit lagi
         $pengingatAktif = PengingatObat::with(['user', 'detailObat'])
             ->where('status', 'aktif')
             ->where('tanggal_mulai', '<=', $tanggalHariIni)

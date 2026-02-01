@@ -24,6 +24,19 @@ class PageController extends Controller
         return view('pages.beranda', compact('articles', 'testimonials'));
     }
 
+    public function berandaMedicio()
+    {
+        // Ambil semua artikel dari database
+        $articles = Article::latest()->take(3)->get();
+        $testimonials = Testimonial::latest()->get();
+        
+        // Ambil 5 FAQ acak dari database (gabungan kehamilan dan non-kehamilan)
+        $faqs = Faq::inRandomOrder()->take(5)->get();
+
+        // Kirim data ke view dengan template Medicio
+        return view('pages.beranda-medicio', compact('articles', 'testimonials', 'faqs'));
+    }
+
     public function artikel()
     {
         // Redirect to kehamilan articles by default
@@ -58,7 +71,7 @@ class PageController extends Controller
             ->when($latestArticle, function($query) use ($latestArticle) {
                 return $query->where('id', '!=', $latestArticle->id);
             })
-            ->get(); 
+            ->paginate(9); // 9 artikel per halaman 
 
         return view('pages.artikel-non-kehamilan', compact('latestArticle', 'otherArticles'));
     }
@@ -110,7 +123,7 @@ class PageController extends Controller
             ->orderBy('id', 'asc')
             ->first();
 
-        return view('pages.artikel-detail', compact('article', 'relatedArticles', 'previousArticle', 'nextArticle'));
+        return view('pages.artikel-detail-medicio', compact('article', 'relatedArticles', 'previousArticle', 'nextArticle'));
     }
 
     public function tanyaJawabKehamilan() {
@@ -176,5 +189,92 @@ class PageController extends Controller
     public function timPengelola()
     {
         return view('pages.tim-pengelola');
+    }
+
+    // Medicio Template Methods
+    public function artikelKehamilanMedicio()
+    {
+        // Ambil artikel terbaru untuk hipertensi kehamilan
+        $latestArticle = Article::where('article_type', 'kehamilan')->latest()->first();
+
+        // Ambil artikel lainnya untuk hipertensi kehamilan dengan pagination
+        $otherArticles = Article::where('article_type', 'kehamilan')
+                        ->latest()
+                        ->when($latestArticle, function($query) use ($latestArticle) {
+                            return $query->where('id', '!=', $latestArticle->id);
+                        })
+                        ->paginate(9); // 9 artikel per halaman
+
+        return view('pages.artikel-kehamilan-medicio', compact('latestArticle', 'otherArticles'));
+    }
+
+    public function artikelNonKehamilanMedicio()
+    {
+        // Ambil artikel terbaru untuk hipertensi non-kehamilan
+        $latestArticle = Article::where('article_type', 'non-kehamilan')->latest()->first();
+
+        // Ambil artikel lainnya untuk hipertensi non-kehamilan dengan pagination
+        $otherArticles = Article::where('article_type', 'non-kehamilan')
+                        ->latest()
+                        ->when($latestArticle, function($query) use ($latestArticle) {
+                            return $query->where('id', '!=', $latestArticle->id);
+                        })
+                        ->paginate(9); // 9 artikel per halaman
+
+        return view('pages.artikel-non-kehamilan-medicio', compact('latestArticle', 'otherArticles'));
+    }
+
+    public function tanyaJawabKehamilanMedicio()
+    {
+        // Ambil FAQ untuk hipertensi kehamilan
+        $faqs = Faq::where('category', 'Hipertensi Kehamilan')
+                   ->orderBy('created_at', 'desc')
+                   ->get();
+
+        return view('pages.tanya-jawab-kehamilan-medicio', compact('faqs'));
+    }
+
+    public function tanyaJawabNonKehamilanMedicio()
+    {
+        // Ambil FAQ untuk hipertensi non-kehamilan
+        $faqs = Faq::where('category', 'Hipertensi Non-Kehamilan')
+                   ->orderBy('created_at', 'desc')
+                   ->get();
+
+        return view('pages.tanya-jawab-non-kehamilan-medicio', compact('faqs'));
+    }
+
+    public function unduhanMedicio()
+    {
+        // Ambil data unduhan dengan pagination (9 items per page untuk 3x3 grid)
+        $downloads = Download::orderBy('created_at', 'desc')->paginate(9);
+        
+        // Total count untuk stats
+        $totalDownloads = Download::count();
+        
+        return view('pages.unduhan-medicio', compact('downloads', 'totalDownloads'));
+    }
+
+    public function timPengelolaMedicio()
+    {
+        return view('pages.tim-pengelola-medicio');
+    }
+
+    public function pengingatMedicio()
+    {
+        return view('pages.pengingat-medicio');
+    }
+
+    public function beritaMedicio()
+    {
+        // Ambil berita terbaru dengan pagination
+        $news = News::latest()->paginate(9);
+        
+        return view('pages.berita-medicio', compact('news'));
+    }
+
+    public function petunjukMedicio()
+    {
+        return view('pages.petunjuk-medicio');
     }
 }

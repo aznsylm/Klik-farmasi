@@ -10,11 +10,11 @@
     <meta name="author" content="Klik Farmasi - Universitas Alma Ata">
 
     <!-- Preload critical carousel image for LCP optimization -->
-    <link rel="preload" as="image" href="{{ asset('assets/Slideketiga.webp') }}" fetchpriority="high">
-    <!-- Preload critical CSS -->
-    <link rel="preload" as="style" href="{{ asset('css/main.css') }}">
-    <!-- Mobile Responsive CSS -->
-    <link rel="stylesheet" href="{{ asset('css/mobile-responsive.css') }}">
+    <link rel="preload" as="image" href="{{ asset('assets/welcome-hero.webp') }}" fetchpriority="high">
+    <!-- Preload critical CSS with proper loading -->
+    <link rel="preload" as="style" href="{{ asset('css/main.css') }}" onload="this.onload=null;this.rel='stylesheet'">
+    <!-- Mobile Responsive CSS - Defer loading -->
+    <link rel="stylesheet" href="{{ asset('css/mobile-responsive.css') }}" media="print" onload="this.media='all'">
 @endpush
 
 @section('content')
@@ -34,7 +34,6 @@
                                 <p class="mb-4 text-light">Setiap 30 detik, seseorang meninggal karena hipertensi yang tidak
                                     terkontrol. Jangan jadi korban selanjutnya! Platform revolusioner ini akan memastikan
                                     Anda tidak pernah melewatkan obat lagi.</p>
-                                <p>Tes Deploy Sukses</p>
                                 <div
                                     class="d-flex flex-column flex-sm-row gap-3 justify-content-center justify-content-lg-start">
                                     <a href="{{ route('pengingat') }}"
@@ -200,11 +199,6 @@
                                                 <div class="testimonial-quote">{!! $testimonial->quote !!}</div>
                                                 <div class="testimonial-author">
                                                     <strong>{{ $testimonial->name }}</strong>
-                                                    <div class="testimonial-stars">
-                                                        @for ($j = 1; $j <= 5; $j++)
-                                                            <i class="bi bi-star-fill"></i>
-                                                        @endfor
-                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

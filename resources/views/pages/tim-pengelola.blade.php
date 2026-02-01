@@ -4,10 +4,140 @@
 @push('head')
     <!-- SEO Meta Tags -->
     <meta name="description"
-        content="Kenali tim pengelola Klik Farmasi dari Program Studi Farmasi Universitas Alma Ata. Dosen pembimbing dan mahasiswa yang mengembangkan platform kesehatan digital.">
+        content="Kenali tim pengelola Klik Farmasi dari tim farmasi Universitas Alma Ata. Dosen pembimbing dan mahasiswa yang mengelola platform kesehatan digital.">
     <meta name="keywords"
         content="tim klik farmasi, mahasiswa farmasi UAA, dosen pembimbing, universitas alma ata, tim pengembang">
     <meta name="author" content="Tim Farmasi Universitas Alma Ata">
+
+    <style>
+        /* Team Grid Styles */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .team-card {
+            background: #E3F2FD;
+            border-radius: 5px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid #e0e0e0;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .team-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .team-photo {
+            margin-bottom: 1rem;
+        }
+
+        .team-photo img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            object-position: top;
+            border: 3px solid #1976d2;
+            transition: transform 0.3s ease;
+        }
+
+        .team-photo img:hover {
+            transform: scale(1.1);
+        }
+
+        .team-info {
+            text-align: center;
+        }
+
+        .team-name {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #1976d2;
+            margin-bottom: 0.5rem;
+        }
+
+        .team-id {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 0.75rem;
+            text-align: center;
+        }
+
+        .team-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #1976d2;
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .team-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 1rem;
+            }
+
+            .team-card {
+                padding: 1rem;
+            }
+
+            .team-photo img {
+                width: 80px;
+                height: 80px;
+                object-position: top;
+            }
+
+            .team-name {
+                font-size: 1rem;
+            }
+
+            .team-badge {
+                font-size: 0.75rem;
+                padding: 0.3rem 0.6rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .team-grid {
+                grid-template-columns: 1fr;
+                gap: 0.75rem;
+            }
+
+            .team-card {
+                padding: 0.75rem;
+            }
+
+            .team-photo img {
+                width: 70px;
+                height: 70px;
+                object-position: top;
+            }
+
+            .team-name {
+                font-size: 0.9rem;
+            }
+
+            .team-id {
+                font-size: 0.8rem;
+            }
+
+            .team-badge {
+                font-size: 0.7rem;
+                padding: 0.25rem 0.5rem;
+            }
+        }
+    </style>
 @endpush
 @section('content')
     <section class="team-section">
@@ -22,7 +152,7 @@
             </div>
             <div class="row mb-5">
                 <div class="col-12" data-aos="fade-up">
-                    <div class="card border-0 shadow-sm" style="background-color: #E3F2FD;">
+                    <div class="card border-0 shadow-sm" style="background-color: #E3F2FD; border-radius: 5px;">
                         <div class="card-body p-4">
                             <h3 class="fw-bold mb-3 text-primary text-start">Tentang Website Klik-Farmasi</h3>
                             <p class="text-dark mb-4">Klik Farmasi merupakan platform asuhan kefarmasian yang kelola oleh
@@ -66,13 +196,15 @@
 
                     <div class="row g-4">
                         <div class="col-md-4">
-                            <div class="card border-0 shadow-sm h-100" style="background-color: #E3F2FD;">
+                            <div class="card border-0 shadow-sm h-100"
+                                style="background-color: #E3F2FD; border-radius: 5px;">
                                 <div class="card-body text-center p-4">
                                     <img src="{{ asset('assets/tim/Foto Dosen apt.Nurul Kusumawardani.jpg') }}"
                                         alt="Apt. Nurul Kusumawardani, M.farm" class="rounded-circle mb-3 carousel-img"
-                                        width="80" height="80" style="object-fit: cover; cursor: pointer;">
+                                        width="80" height="80"
+                                        style="object-fit: cover; object-position: top; cursor: pointer;">
                                     <h5 class="fw-bold text-primary mb-2">Apt. Nurul Kusumawardani, M.farm</h5>
-                                    <p class="text-muted mb-3">Dosen Pembimbing I</p>
+                                    <p class="text-muted mb-3 text-center">Dosen Pembimbing I</p>
                                     <div class="d-flex justify-content-center gap-2">
                                         <a href="https://www.linkedin.com/in/nurul-kusumawardani-3623b2135/"
                                             class="btn btn-sm btn-outline-primary">
@@ -88,14 +220,15 @@
                         </div>
 
                         <div class="col-md-4">
-                            <div class="card border-0 shadow-sm h-100" style="background-color: #E3F2FD;">
+                            <div class="card border-0 shadow-sm h-100"
+                                style="background-color: #E3F2FD; border-radius: 5px;">
                                 <div class="card-body text-center p-4">
                                     <img src="{{ asset('assets/tim/Foto Dosen apt.Danang Prasetyaning Amukti.jpeg') }}"
                                         alt="apt. Danang Prasetyaning Amukti, M.Farm"
                                         class="rounded-circle mb-3 carousel-img" width="80" height="80"
                                         style="object-fit: cover; object-position: top; cursor: pointer;">
                                     <h5 class="fw-bold text-primary mb-2">apt. Danang Prasetyaning Amukti, M.Farm</h5>
-                                    <p class="text-muted mb-3">Dosen Pembimbing II</p>
+                                    <p class="text-muted mb-3 text-center">Dosen Pembimbing II</p>
                                     <div class="d-flex justify-content-center gap-2">
                                         <a href="https://www.linkedin.com/in/danang-prasetya-a48076173/"
                                             class="btn btn-sm btn-outline-primary">
@@ -110,13 +243,14 @@
                         </div>
 
                         <div class="col-md-4">
-                            <div class="card border-0 shadow-sm h-100" style="background-color: #E3F2FD;">
+                            <div class="card border-0 shadow-sm h-100"
+                                style="background-color: #E3F2FD; border-radius: 5px;">
                                 <div class="card-body text-center p-4">
                                     <img src="{{ asset('assets/tim/Aizan.jpg') }}" alt="Aizan Syalim"
                                         class="rounded-circle mb-3 carousel-img" width="80" height="80"
                                         style="object-fit: cover; object-position: top; cursor: pointer;">
                                     <h5 class="fw-bold text-primary mb-2">Aizan Syalim</h5>
-                                    <p class="text-muted mb-3">Programmer Website</p>
+                                    <p class="text-muted mb-3 text-center">Programmer Website</p>
                                     <div class="d-flex justify-content-center gap-2">
                                         <a href="https://www.instagram.com/zansylm/" class="btn btn-sm btn-outline-primary">
                                             <i class="bi bi-instagram"></i>
@@ -138,8 +272,8 @@
                         <p class="section-subtitle">Mahasiswa farmasi yang aktif mengelola website Klik Farmasi</p>
                     </div>
 
-                    <!-- Multi-Row Marquee Team Members -->
-                    <div class="testimonial-marquee-container">
+                    <!-- Team Members Cards -->
+                    <div class="team-grid">
                         @php
                             $teamMembers = [
                                 [
@@ -203,35 +337,21 @@
                                     'photo' => 'assets/tim/Farmasi_Elda Samsudin.png',
                                 ],
                             ];
-                            $teamRows = collect($teamMembers)->chunk(4);
                         @endphp
 
-                        @foreach ($teamRows as $rowIndex => $row)
-                            <div class="testimonial-marquee-row"
-                                data-direction="{{ $rowIndex % 2 === 0 ? 'left' : 'right' }}"
-                                data-speed="{{ 40 + $rowIndex * 15 }}">
-                                <div class="testimonial-marquee-track">
-                                    @for ($i = 0; $i < 3; $i++)
-                                        @foreach ($row as $member)
-                                            <div class="testimonial-marquee-item">
-                                                <div class="team-member-bubble">
-                                                    <div class="member-photo-small">
-                                                        <img src="{{ asset($member['photo']) }}"
-                                                            alt="{{ $member['name'] }}" class="img-fluid carousel-img"
-                                                            style="cursor: pointer;">
-                                                    </div>
-                                                    <div class="member-info-small">
-                                                        <h5 class="member-name-small">{{ $member['name'] }}</h5>
-                                                        <p class="member-id-small">{{ $member['id'] }}</p>
-                                                        <div class="member-badge">
-                                                            <i class="bi bi-mortarboard me-1"></i>
-                                                            Mahasiswa Farmasi
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @endforeach
-                                    @endfor
+                        @foreach ($teamMembers as $member)
+                            <div class="team-card" data-aos="fade-up" data-aos-delay="{{ $loop->index * 50 }}">
+                                <div class="team-photo">
+                                    <img src="{{ asset($member['photo']) }}" alt="{{ $member['name'] }}"
+                                        class="carousel-img" style="cursor: pointer;">
+                                </div>
+                                <div class="team-info">
+                                    <h5 class="team-name">{{ $member['name'] }}</h5>
+                                    <p class="team-id">{{ $member['id'] }}</p>
+                                    <div class="team-badge">
+                                        <i class="bi bi-mortarboard"></i>
+                                        <span>Mahasiswa Farmasi</span>
+                                    </div>
                                 </div>
                             </div>
                         @endforeach

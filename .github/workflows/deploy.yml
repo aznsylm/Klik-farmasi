@@ -1,51 +1,51 @@
-name: Deploy Laravel Rumahweb Final
+# name: Deploy Laravel Rumahweb Final
 
-on:
-  push:
-    branches: [ main ]
+# on:
+#   push:
+#     branches: [ main ]
 
-jobs:
-  web-deploy:
-    name: 🎉 Deploying...
-    runs-on: ubuntu-latest
-    steps:
-    - name: 🚚 Get latest code
-      uses: actions/checkout@v3
-      with:
-        fetch-depth: 2
+# jobs:
+#   web-deploy:
+#     name: 🎉 Deploying...
+#     runs-on: ubuntu-latest
+#     steps:
+#     - name: 🚚 Get latest code
+#       uses: actions/checkout@v3
+#       with:
+#         fetch-depth: 2
 
-    # TAHAP 1: Deploy ke public_html
-    - name: 📂 Deploy Public Assets
-      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
-      with:
-        server: ${{ secrets.FTP_SERVER }}
-        username: ${{ secrets.FTP_USERNAME }}
-        password: ${{ secrets.FTP_PASSWORD }}
-        local-dir: ./public/
-        server-dir: ./ 
-        exclude: |
-          **/.git*
-          **/.github*
-          index.php
-          .htaccess
-          laravel/**
-          .ftp-deploy-sync-state.json
+#     # TAHAP 1: Deploy ke public_html
+#     - name: 📂 Deploy Public Assets
+#       uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+#       with:
+#         server: ${{ secrets.FTP_SERVER }}
+#         username: ${{ secrets.FTP_USERNAME }}
+#         password: ${{ secrets.FTP_PASSWORD }}
+#         local-dir: ./public/
+#         server-dir: ./ 
+#         exclude: |
+#           **/.git*
+#           **/.github*
+#           index.php
+#           .htaccess
+#           laravel/**
+#           .ftp-deploy-sync-state.json
 
-    # TAHAP 2: Deploy file inti ke folder 'laravel'
-    - name: 📂 Deploy Core Laravel
-      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
-      with:
-        server: ${{ secrets.FTP_SERVER }}
-        username: ${{ secrets.FTP_USERNAME }}
-        password: ${{ secrets.FTP_PASSWORD }}
-        server-dir: ../laravel/
-        exclude: |
-          **/.git*
-          **/.github*
-          **/node_modules/**
-          **/vendor/**
-          **/public/**
-          **/storage/**
-          **/tests/**
-          .env
-          .ftp-deploy-sync-state.json
+#     # TAHAP 2: Deploy file inti ke folder 'laravel'
+#     - name: 📂 Deploy Core Laravel
+#       uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+#       with:
+#         server: ${{ secrets.FTP_SERVER }}
+#         username: ${{ secrets.FTP_USERNAME }}
+#         password: ${{ secrets.FTP_PASSWORD }}
+#         server-dir: ../laravel/
+#         exclude: |
+#           **/.git*
+#           **/.github*
+#           **/node_modules/**
+#           **/vendor/**
+#           **/public/**
+#           **/storage/**
+#           **/tests/**
+#           .env
+#           .ftp-deploy-sync-state.json

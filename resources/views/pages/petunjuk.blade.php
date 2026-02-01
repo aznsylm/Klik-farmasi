@@ -9,15 +9,19 @@
     <meta name="keywords"
         content="panduan klik farmasi, tutorial pengingat obat, cara menggunakan, petunjuk website, bantuan pengguna">
     <meta name="author" content="Tim Farmasi Universitas Alma Ata">
+
+    <!-- Mobile Responsive CSS -->
+    <link rel="stylesheet" href="{{ asset('css/petunjuk-mobile.css') }}">
 @endpush
 
 @section('content')
-    <section class="py-5 guide-section">
-        <div class="container px-4">
+    <section class="py-3 py-md-5 guide-section">
+        <div class="container px-3 px-md-4">
             <!-- Header Section -->
-            <div class="text-center mb-5" data-aos="fade-up">
-                <h2 class="fw-bolder mb-3 text-primary">Panduan Penggunaan Website Klik Farmasi</h2>
-                <p class="lead text-muted mx-auto" style="max-width: 700px;">Hai! Yuk ikuti panduan mudah ini buat kamu yang
+            <div class="text-center mb-4 mb-md-5" data-aos="fade-up">
+                <h2 class="fw-bolder mb-3 text-primary fs-4 fs-md-2">Panduan Penggunaan Website Klik Farmasi</h2>
+                <p class="lead text-muted mx-auto fs-6 fs-md-5" style="max-width: 700px;">Hai! Yuk ikuti panduan mudah ini
+                    buat kamu yang
                     baru pertama kali pakai website Klik Farmasi</p>
                 <div class="d-flex justify-content-center mt-3">
                     <div class="section-divider"></div>
@@ -25,21 +29,22 @@
             </div>
 
             <!-- Navigation Guide -->
-            <div class="row mb-5">
+            <div class="row mb-4 mb-md-5">
                 <div class="col-12">
                     <div class="guide-card" data-aos="fade-up" data-aos-delay="100">
-                        <div class="card-body p-4">
+                        <div class="card-body p-3 p-md-4">
                             <div class="d-flex align-items-center mb-3">
                                 <div class="step-number">
                                     <span>1</span>
                                 </div>
-                                <h4 class="mb-0 step-title">Beranda</h4>
+                                <h4 class="mb-0 step-title fs-5 fs-md-4">Beranda</h4>
                             </div>
-                            <p class="step-description mb-3">"Mulai dari sini! Di halaman utama kamu bisa langsung lihat
+                            <p class="step-description mb-3 fs-6">"Mulai dari sini! Di halaman utama kamu bisa langsung
+                                lihat
                                 info kesehatan terbaru tentang hipertensi dan semua layanan yang tersedia."</p>
                             <div class="step-content">
-                                <h6 class="fw-bold mb-3">Cara Menggunakannya:</h6>
-                                <ol class="step-list numbered">
+                                <h6 class="fw-bold mb-3 fs-6">Cara Menggunakannya:</h6>
+                                <ol class="step-list numbered fs-6">
                                     <li>Buka halaman utama dengan <a href="{{ route('beranda') }}">klik di sini</a></li>
                                     <li>Scroll ke bawah untuk lihat artikel dan info kesehatan terbaru</li>
                                     <li>Semua bisa dibaca langsung tanpa perlu daftar atau login dulu</li>
@@ -51,23 +56,23 @@
             </div>
 
             <!-- Two Column Layout for Steps 2-3 -->
-            <div class="row mb-5">
-                <div class="col-md-6 mb-4">
+            <div class="row mb-4 mb-md-5">
+                <div class="col-lg-6 mb-3 mb-lg-4">
                     <div class="guide-card h-100" data-aos="fade-up" data-aos-delay="200">
-                        <div class="card-body p-4">
+                        <div class="card-body p-3 p-md-4">
                             <div class="d-flex align-items-center mb-3">
                                 <div class="step-number">
                                     <span>2</span>
                                 </div>
-                                <h4 class="mb-0 step-title">Artikel Kesehatan</h4>
+                                <h4 class="mb-0 step-title fs-5 fs-md-4">Artikel Kesehatan</h4>
                             </div>
-                            <p class="step-description mb-3">"Cari info lengkap tentang hipertensi? Di sini ada banyak
+                            <p class="step-description mb-3 fs-6">"Cari info lengkap tentang hipertensi? Di sini ada banyak
                                 artikel berguna mulai dari tips hidup sehat, cara minum obat yang benar, sampai penjelasan
                                 tentang penyakit hipertensi."
                             </p>
                             <div class="step-content">
-                                <h6 class="fw-bold mb-3">Cara Menggunakannya:</h6>
-                                <ol class="step-list numbered">
+                                <h6 class="fw-bold mb-3 fs-6">Cara Menggunakannya:</h6>
+                                <ol class="step-list numbered fs-6">
                                     <li>Klik menu <strong>"Artikel"</strong> yang ada di bagian atas website</li>
                                     <li>Pilih kategori yang kamu butuhkan:
                                         <ul class="ms-3 mt-2">
@@ -87,21 +92,22 @@
                     </div>
                 </div>
 
-                <div class="col-md-6 mb-4">
+                <div class="col-lg-6 mb-3 mb-lg-4">
                     <div class="guide-card h-100" data-aos="fade-up" data-aos-delay="300">
-                        <div class="card-body p-4">
+                        <div class="card-body p-3 p-md-4">
                             <div class="d-flex align-items-center mb-3">
                                 <div class="step-number">
                                     <span>3</span>
                                 </div>
-                                <h4 class="mb-0 step-title">Tanya Jawab (FAQ)</h4>
+                                <h4 class="mb-0 step-title fs-5 fs-md-4">Tanya Jawab (FAQ)</h4>
                             </div>
-                            <p class="step-description mb-3">"Ada pertanyaan tentang hipertensi? Cek dulu di bagian FAQ,
+                            <p class="step-description mb-3 fs-6">"Ada pertanyaan tentang hipertensi? Cek dulu di bagian
+                                FAQ,
                                 siapa tau pertanyaan kamu sudah ada jawabannya dari ahli farmasi!"
                             </p>
                             <div class="step-content">
-                                <h6 class="fw-bold mb-3">Cara Menggunakannya:</h6>
-                                <ol class="step-list numbered">
+                                <h6 class="fw-bold mb-3 fs-6">Cara Menggunakannya:</h6>
+                                <ol class="step-list numbered fs-6">
                                     <li>Klik menu <strong>"Tanya Jawab"</strong> di bagian atas website</li>
                                     <li>Pilih kategori sesuai kebutuhan kamu:
                                         <ul class="ms-3 mt-2">
@@ -121,22 +127,23 @@
             </div>
 
             <!-- Two Column Layout for Steps 4-5 -->
-            <div class="row mb-5">
-                <div class="col-md-6 mb-4">
+            <div class="row mb-4 mb-md-5">
+                <div class="col-lg-6 mb-3 mb-lg-4">
                     <div class="guide-card h-100" data-aos="fade-up" data-aos-delay="400">
-                        <div class="card-body p-4">
+                        <div class="card-body p-3 p-md-4">
                             <div class="d-flex align-items-center mb-3">
                                 <div class="step-number">
                                     <span>4</span>
                                 </div>
-                                <h4 class="mb-0 step-title">Unduhan Poster</h4>
+                                <h4 class="mb-0 step-title fs-5 fs-md-4">Unduhan Poster</h4>
                             </div>
-                            <p class="step-description mb-3">"Butuh materi edukasi yang bisa dicetak? Download poster-poster
+                            <p class="step-description mb-3 fs-6">"Butuh materi edukasi yang bisa dicetak? Download
+                                poster-poster
                                 kesehatan gratis buat kamu dan keluarga di rumah!"
                             </p>
                             <div class="step-content">
-                                <h6 class="fw-bold mb-3">Cara Menggunakannya:</h6>
-                                <ol class="step-list numbered">
+                                <h6 class="fw-bold mb-3 fs-6">Cara Menggunakannya:</h6>
+                                <ol class="step-list numbered fs-6">
                                     <li>Klik menu <a href="{{ route('unduhan') }}"
                                             class="text-primary"><strong>"Unduhan"</strong></a> di bagian atas</li>
                                     <li>Lihat-lihat koleksi poster yang tersedia, pilih yang kamu butuhkan</li>
@@ -155,21 +162,21 @@
                     </div>
                 </div>
 
-                <div class="col-md-6 mb-4">
+                <div class="col-lg-6 mb-3 mb-lg-4">
                     <div class="guide-card h-100" data-aos="fade-up" data-aos-delay="500">
-                        <div class="card-body p-4">
+                        <div class="card-body p-3 p-md-4">
                             <div class="d-flex align-items-center mb-3">
                                 <div class="step-number">
                                     <span>5</span>
                                 </div>
-                                <h4 class="mb-0 step-title">Konsultasi Langsung</h4>
+                                <h4 class="mb-0 step-title fs-5 fs-md-4">Konsultasi Langsung</h4>
                             </div>
-                            <p class="step-description mb-3">"Punya pertanyaan khusus tentang obat atau kesehatan? Chat
+                            <p class="step-description mb-3 fs-6">"Punya pertanyaan khusus tentang obat atau kesehatan? Chat
                                 langsung sama ahli farmasi lewat WhatsApp, gratis!"
                             </p>
                             <div class="step-content">
-                                <h6 class="fw-bold mb-3">Cara Menggunakannya:</h6>
-                                <ol class="step-list numbered">
+                                <h6 class="fw-bold mb-3 fs-6">Cara Menggunakannya:</h6>
+                                <ol class="step-list numbered fs-6">
                                     <li><strong>Cara 1:</strong> Klik ikon WhatsApp hijau yang ada di pojok kanan bawah
                                         layar</li>
                                     <li><strong>Cara 2:</strong> Langsung klik tombol <a href="https://wa.me/+6281292936247"
@@ -239,7 +246,8 @@
                                 <ol class="step-list numbered">
                                     <li>Login ke akun pasien kamu yang sudah terdaftar</li>
                                     <li>Di halaman dashboard, cari dan klik menu <strong>"Pengingat"</strong> atau
-                                        <strong>"Buat Pengingat Baru"</strong></li>
+                                        <strong>"Buat Pengingat Baru"</strong>
+                                    </li>
                                     <li>Isi form pengingat dengan lengkap:
                                         <ul class="ms-3 mt-2">
                                             <li>Kondisi kesehatan kamu</li>
@@ -252,7 +260,8 @@
                                     <li>Kalau ada catatan khusus untuk admin, tulis juga ya</li>
                                     <li>Klik <strong>"Simpan Pengingat Saya"</strong></li>
                                     <li>Sistem akan kirim konfirmasi ke WhatsApp kamu yang terdaftar</li>
-                                    <li>Mulai sekarang, kamu akan dapat notifikasi WhatsApp 5 menit sebelum waktu minum obat
+                                    <li>Mulai sekarang, kamu akan dapat notifikasi WhatsApp 10 menit sebelum waktu minum
+                                        obat
                                     </li>
                                     <li>
                                         <div class="p-2 bg-info bg-opacity-25 rounded mt-2"><small><i

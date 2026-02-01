@@ -1210,25 +1210,25 @@ p {
         font-size: 0.75rem;
     }
 
-    /* Faster animation for mobile */
+    /* Slower animation for mobile */
     .testimonial-marquee-row[data-speed="30"] {
-        animation-duration: 5s;
+        animation-duration: 15s;
     }
 
     .testimonial-marquee-row[data-speed="40"] {
-        animation-duration: 5s;
+        animation-duration: 15s;
     }
 
     .testimonial-marquee-row[data-speed="50"] {
-        animation-duration: 5s;
+        animation-duration: 15s;
     }
 
     .testimonial-marquee-row[data-speed="55"] {
-        animation-duration: 5s;
+        animation-duration: 15s;
     }
 
     .testimonial-marquee-row[data-speed="70"] {
-        animation-duration: 5s;
+        animation-duration: 15s;
     }
 }
 
@@ -1246,25 +1246,25 @@ p {
         height: 45px;
     }
 
-    /* Even faster for small mobile */
+    /* Even slower for small mobile */
     .testimonial-marquee-row[data-speed="30"] {
-        animation-duration: 5s;
+        animation-duration: 18s;
     }
 
     .testimonial-marquee-row[data-speed="40"] {
-        animation-duration: 5s;
+        animation-duration: 18s;
     }
 
     .testimonial-marquee-row[data-speed="50"] {
-        animation-duration: 5s;
+        animation-duration: 18s;
     }
 
     .testimonial-marquee-row[data-speed="55"] {
-        animation-duration: 5s;
+        animation-duration: 18s;
     }
 
     .testimonial-marquee-row[data-speed="70"] {
-        animation-duration: 5s;
+        animation-duration: 18s;
     }
 }
 
@@ -1344,25 +1344,9 @@ p {
 }
 
 .testimonial-author {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.testimonial-author strong {
     color: var(--primary-color);
     font-weight: 700;
     font-size: 1rem;
-}
-
-.testimonial-stars {
-    display: flex;
-    gap: 2px;
-}
-
-.testimonial-stars i {
-    color: #ffc107;
-    font-size: 0.8rem;
 }
 
 @keyframes marqueeLeft {
@@ -2304,10 +2288,6 @@ p {
 
     .enhanced-feature-card {
         padding: 1.5rem;
-    }
-
-    .article-container {
-        padding: 1.5rem !important;
     }
 
     .team-title {

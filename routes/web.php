@@ -11,26 +11,46 @@ use App\Http\Controllers\TestController;
 
 
 
-Route::get('/', [PageController::class, 'beranda'])->name('beranda');
+Route::get('/', [PageController::class, 'berandaMedicio'])->name('beranda');
+
+// Original templates (kept for backup)
+Route::get('/beranda-original', [PageController::class, 'beranda'])->name('beranda.original');
+Route::get('/artikel/hipertensi-kehamilan-original', [PageController::class, 'artikelKehamilan'])->name('artikel.kehamilan.original');
+Route::get('/artikel/hipertensi-non-kehamilan-original', [PageController::class, 'artikelNonKehamilan'])->name('artikel.non-kehamilan.original');
+Route::get('/tanya-jawab/hipertensi-kehamilan-original', [PageController::class, 'tanyaJawabKehamilan'])->name('tanya-jawab.kehamilan.original');
+Route::get('/tanya-jawab/hipertensi-non-kehamilan-original', [PageController::class, 'tanyaJawabNonKehamilan'])->name('tanya-jawab.non-kehamilan.original');
+Route::get('/unduhan-original', [PageController::class, 'unduhan'])->name('unduhan.original');
+Route::get('/tim-pengelola-original', [PageController::class, 'timPengelola'])->name('tim-pengelola.original');
+Route::get('/berita-original', [PageController::class, 'berita'])->name('berita.original');
+Route::get('/petunjuk-original', [PageController::class, 'petunjuk'])->name('petunjuk.original');
+Route::get('/pengingat-original', [PengingatObatController::class, 'showForm'])->name('pengingat.original');
+
+// Medicio Template Routes (Now default)
+Route::get('/artikel/hipertensi-kehamilan', [PageController::class, 'artikelKehamilanMedicio'])->name('artikel.kehamilan');
+Route::get('/artikel/hipertensi-non-kehamilan', [PageController::class, 'artikelNonKehamilanMedicio'])->name('artikel.non-kehamilan');
+Route::get('/tanya-jawab/hipertensi-kehamilan', [PageController::class, 'tanyaJawabKehamilanMedicio'])->name('tanya-jawab.kehamilan');
+Route::get('/tanya-jawab/hipertensi-non-kehamilan', [PageController::class, 'tanyaJawabNonKehamilanMedicio'])->name('tanya-jawab.non-kehamilan');
+Route::get('/unduhan', [PageController::class, 'unduhanMedicio'])->name('unduhan');
+Route::get('/tim-pengelola', [PageController::class, 'timPengelolaMedicio'])->name('tim-pengelola');
+Route::get('/berita', [PageController::class, 'beritaMedicio'])->name('berita');
+Route::get('/petunjuk', [PageController::class, 'petunjukMedicio'])->name('petunjuk');
+Route::get('/pengingat', [PengingatObatController::class, 'showForm'])->name('pengingat');
+
+// Testing Medicio Template
+Route::get('/beranda-medicio', [PageController::class, 'berandaMedicio'])->name('beranda.medicio');
 
 // Testing WhatsApp Service
 Route::get('/test-wa', [TestController::class, 'testWhatsApp']);
 Route::get('/test-pengingat', [TestController::class, 'testPengingat']);
 
-Route::get('/tanya-jawab/hipertensi-kehamilan', [PageController::class, 'tanyaJawabKehamilan'])->name('tanya-jawab.kehamilan');
-Route::get('/tanya-jawab/hipertensi-non-kehamilan', [PageController::class, 'tanyaJawabNonKehamilan'])->name('tanya-jawab.non-kehamilan');
-Route::get('/artikel', [PageController::class, 'artikel'])->name('artikel');
-Route::get('/artikel/hipertensi-kehamilan', [PageController::class, 'artikelKehamilan'])->name('artikel.kehamilan');
-Route::get('/artikel/hipertensi-non-kehamilan', [PageController::class, 'artikelNonKehamilan'])->name('artikel.non-kehamilan');
+// Article detail routes tetap sama
 Route::get('/artikel/hipertensi-kehamilan/{slug}', [PageController::class, 'artikelDetail'])->name('artikel.detail.kehamilan');
 Route::get('/artikel/hipertensi-non-kehamilan/{slug}', [PageController::class, 'artikelDetail'])->name('artikel.detail.non-kehamilan');
-Route::get('/unduhan', [PageController::class, 'unduhan'])->name('unduhan');
 Route::get('/download/{id}/track', [PageController::class, 'trackDownload'])->name('download.track');
-Route::get('/pengingat', [PengingatObatController::class, 'showForm'])->name('pengingat');
-Route::get('/berita', [PageController::class, 'berita'])->name('pages.berita');
-Route::get('/petunjuk', [PageController::class, 'petunjuk'])->name('petunjuk');
-Route::get('/tim-pengelola', [PageController::class, 'timPengelola'])->name('tim-pengelola');
 Route::post('/pengingat', [PengingatObatController::class, 'store'])->name('pengingat.store');
+
+// Redirect old routes to keep original functionality
+Route::get('/artikel', [PageController::class, 'artikel'])->name('artikel');
 
 // API routes for validation
 Route::post('/api/check-email', [AdminController::class, 'checkEmail']);

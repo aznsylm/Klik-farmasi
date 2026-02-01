@@ -189,13 +189,16 @@ document.addEventListener("DOMContentLoaded", function () {
     // AOS initialization with performance optimization
     if (window.requestIdleCallback) {
         window.requestIdleCallback(function () {
-            if (typeof AOS !== "undefined") {
+            if (
+                typeof AOS !== "undefined" &&
+                !document.getElementById("publicPreloader")
+            ) {
                 AOS.init({
-                    duration: 800,
+                    duration: 600,
                     easing: "ease-in-out",
                     once: true,
-                    offset: 100,
-                    disable: "mobile",
+                    offset: 80,
+                    delay: 50,
                 });
             }
         });

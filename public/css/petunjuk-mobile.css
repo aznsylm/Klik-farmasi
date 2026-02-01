@@ -1,0 +1,111 @@
+/* Mobile Responsive Improvements for Petunjuk Page */
+@media (max-width: 768px) {
+    .guide-section {
+        padding-top: 1rem !important;
+        padding-bottom: 1rem !important;
+    }
+
+    .guide-card {
+        margin-bottom: 1rem !important;
+    }
+
+    .guide-card .card-body {
+        padding: 1rem !important;
+    }
+
+    .step-number {
+        width: 35px !important;
+        height: 35px !important;
+        min-width: 35px !important;
+        font-size: 0.9rem !important;
+    }
+
+    .step-title {
+        font-size: 1.1rem !important;
+        line-height: 1.3 !important;
+    }
+
+    .step-description {
+        font-size: 0.9rem !important;
+        margin-bottom: 1rem !important;
+    }
+
+    .step-list {
+        font-size: 0.85rem !important;
+        padding-left: 1rem !important;
+    }
+
+    .step-list li {
+        margin-bottom: 0.5rem !important;
+    }
+
+    .step-content h6 {
+        font-size: 0.9rem !important;
+        margin-bottom: 0.75rem !important;
+    }
+
+    .info-badge {
+        font-size: 0.8rem !important;
+        padding: 0.5rem !important;
+    }
+
+    /* Reduce margins between rows */
+    .row.mb-4, .row.mb-md-5 {
+        margin-bottom: 1.5rem !important;
+    }
+
+    /* Container padding */
+    .container {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+
+    /* Header adjustments */
+    .text-center.mb-4, .text-center.mb-md-5 {
+        margin-bottom: 1.5rem !important;
+    }
+
+    .lead {
+        font-size: 1rem !important;
+        margin-bottom: 1rem !important;
+    }
+
+    /* Column spacing */
+    .col-lg-6.mb-3, .col-lg-6.mb-lg-4 {
+        margin-bottom: 1rem !important;
+    }
+
+    /* Nested lists - Remove excessive margin-left */
+    .step-list ul {
+        margin-top: 0.5rem !important;
+        margin-bottom: 0.5rem !important;
+        margin-left: 0 !important;
+        padding-left: 0.75rem !important;
+    }
+
+    .step-list ul li {
+        margin-bottom: 0.25rem !important;
+    }
+
+    /* All ul elements inside guide cards */
+    .guide-card ul {
+        margin-left: 0 !important;
+        padding-left: 0.75rem !important;
+    }
+
+    .guide-card .ms-3 {
+        margin-left: 0 !important;
+        padding-left: 0.75rem !important;
+    }
+
+    /* Example text */
+    .bg-light.rounded {
+        padding: 0.5rem !important;
+        margin-top: 0.5rem !important;
+    }
+
+    .bg-info.bg-opacity-25.rounded {
+        padding: 0.5rem !important;
+        margin-top: 0.5rem !important;
+    }
+}
