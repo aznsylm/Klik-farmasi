@@ -199,21 +199,21 @@ class PengingatObatController extends Controller
                     'sistol' => $request->sistol,
                     'diastol' => $request->diastol,
                 ]);
-                \Log::info('Updated blood pressure record for user: ' . auth()->id());
             } else {
                 // Create new record
                 CatatanTekananDarah::create([
                     'user_id' => auth()->id(),
                     'pengingat_obat_id' => $pengingat->id,
-                    'sistol' => $request->sistol,
-                    'diastol' => $request->diastol,
-                    'sumber' => 'pengingat_awal'
+                    'sistol' => (int)$request->sistol,
+                    'diastol' => (int)$request->diastol,
+                    'sumber' => 'pengingat_awal',
+                    'catatan' => 'Data awal dari pengingat obat',
+                    'tanggal_input' => today()->toDateString()
                 ]);
-                \Log::info('Created new blood pressure record for user: ' . auth()->id());
             }
             
         } catch (\Exception $e) {
-            \Log::error('Blood pressure save failed for user ' . auth()->id() . ': ' . $e->getMessage());
+            \Log::warning('Blood pressure save failed: ' . $e->getMessage());
         }
 
         // Simpan ke detail_obat - Universal dengan conditional logic

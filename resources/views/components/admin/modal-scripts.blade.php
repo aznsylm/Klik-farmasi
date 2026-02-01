@@ -523,11 +523,30 @@
         const tambahObatForm = document.getElementById('tambahObatForm');
         if (tambahObatForm) {
             tambahObatForm.setAttribute('novalidate', 'novalidate');
-            tambahObatForm.addEventListener('submit', function(e) {
+
+            // Remove any existing listeners to prevent double execution
+            const newForm = tambahObatForm.cloneNode(true);
+            tambahObatForm.parentNode.replaceChild(newForm, tambahObatForm);
+
+            let isSubmitting = false; // Add submission flag
+
+            newForm.addEventListener('submit', function(e) {
                 e.preventDefault();
+
+                if (isSubmitting) {
+                    console.log('Form already submitting, ignoring...');
+                    return;
+                }
 
                 if (!validateMedicationForm('tambah')) {
                     return;
+                }
+
+                isSubmitting = true;
+                const submitBtn = document.getElementById('tambahObatBtn');
+                if (submitBtn) {
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i>Menyimpan...';
                 }
 
                 const formData = new FormData(this);
@@ -541,6 +560,12 @@
                         }
                     })
                     .then(response => {
+                        isSubmitting = false;
+                        if (submitBtn) {
+                            submitBtn.disabled = false;
+                            submitBtn.innerHTML = '<i class="fas fa-save mr-1"></i>Tambah Obat';
+                        }
+
                         if (response.ok) {
                             location.reload();
                         } else {
@@ -548,6 +573,11 @@
                         }
                     })
                     .catch(error => {
+                        isSubmitting = false;
+                        if (submitBtn) {
+                            submitBtn.disabled = false;
+                            submitBtn.innerHTML = '<i class="fas fa-save mr-1"></i>Tambah Obat';
+                        }
                         console.error('Error:', error);
                         alert('Terjadi kesalahan');
                     });
@@ -654,6 +684,11 @@
 
         // Universal form handler dengan toast notifications
         document.querySelectorAll('form[data-toast="true"]').forEach(form => {
+            // Skip forms that have specific handlers
+            if (form.id === 'tambahObatForm' || form.id === 'editObatForm') {
+                return;
+            }
+
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
 

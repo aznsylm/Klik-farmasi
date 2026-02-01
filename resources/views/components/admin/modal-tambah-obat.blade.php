@@ -8,7 +8,7 @@
                     <span>&times;</span>
                 </button>
             </div>
-            <form id="tambahObatForm" action="{{ route('admin.obat.store') }}" method="POST" data-toast="true">
+            <form id="tambahObatForm" action="{{ route('admin.obat.store') }}" method="POST">
                 @csrf
                 <input type="hidden" name="pengingat_obat_id" value="{{ $pengingatId ?? '' }}">
                 <div class="modal-body">

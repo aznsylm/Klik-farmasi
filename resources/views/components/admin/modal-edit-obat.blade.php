@@ -8,7 +8,7 @@
                     <span>&times;</span>
                 </button>
             </div>
-            <form id="editObatForm" method="POST" data-toast="true">
+            <form id="editObatForm" method="POST">
                 @csrf
                 @method('PUT')
                 <div class="modal-body">

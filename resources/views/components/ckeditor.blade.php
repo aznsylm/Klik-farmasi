@@ -60,7 +60,7 @@
                     .then(editor => {
                         // Store editor instance for later access
                         element.ckeditorInstance = editor;
-                        
+
                         // Sync data to original textarea before form submission
                         const form = element.closest('form');
                         if (form) {
@@ -69,7 +69,7 @@
                                 element.value = editor.getData();
                             });
                         }
-                        
+
                         // Also sync on CKEditor data change for real-time sync
                         editor.model.document.on('change:data', () => {
                             element.value = editor.getData();

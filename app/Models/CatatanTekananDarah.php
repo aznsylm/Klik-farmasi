@@ -17,7 +17,8 @@ class CatatanTekananDarah extends Model
         'sistol',
         'diastol',
         'catatan',
-        'sumber'
+        'sumber',
+        'tanggal_input'
     ];
 
     protected $casts = [

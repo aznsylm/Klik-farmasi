@@ -115,7 +115,8 @@
                                                 <tr>
                                                     <td>{{ ($recentRecords->currentPage() - 1) * $recentRecords->perPage() + $index + 1 }}
                                                     </td>
-                                                    <td>{{ $record->created_at->format('d M Y, H:i') }}</td>
+                                                    <td>{{ $record->tanggal_input ? \Carbon\Carbon::parse($record->tanggal_input)->format('d M Y') : $record->created_at->format('d M Y, H:i') }}
+                                                    </td>
                                                     <td>{{ $record->sistol }}</td>
                                                     <td>{{ $record->diastol }}</td>
                                                     <td>
@@ -291,9 +292,15 @@
                                 diastol
                             })
                         })
-                        .then(response => response.json())
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! status: ${response.status}`);
+                            }
+                            return response.json();
+                        })
                         .then(data => {
                             if (data.success) {
+                                alert('Data tekanan darah berhasil disimpan!');
                                 location.reload();
                             } else {
                                 alert(data.message || 'Gagal menyimpan data');
@@ -301,7 +308,7 @@
                         })
                         .catch(err => {
                             console.error('Error:', err);
-                            alert('Terjadi kesalahan');
+                            alert('Terjadi kesalahan saat menyimpan data. Silakan coba lagi.');
                         });
                 });
             }
