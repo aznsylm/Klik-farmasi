@@ -11,23 +11,39 @@ class DetailObatController extends Controller
 {
     public function store(Request $request)
     {
-        $request->validate([
-            'pengingat_obat_id' => 'required|exists:pengingat_obat,id',
-            'nama_obat' => 'required|string|max:255',
-            'jumlah_obat' => 'required|string|max:100',
-            'waktu_minum' => 'required',
-            'suplemen' => 'nullable|string|max:255'
-        ]);
+        // Get user's puskesmas to determine validation rules
+        $user = Auth::user();
+        $isGodean2 = $user && $user->puskesmas === 'godean_2';
+        
+        if ($isGodean2) {
+            // For Godean 2: suplemen required, nama_obat optional
+            $request->validate([
+                'pengingat_obat_id' => 'required|exists:pengingat_obat,id',
+                'nama_obat' => 'nullable|string|max:255',
+                'jumlah_obat' => 'required|string|max:100',
+                'waktu_minum' => 'required',
+                'suplemen' => 'required|string|max:255'
+            ]);
+        } else {
+            // For others: nama_obat required, suplemen optional
+            $request->validate([
+                'pengingat_obat_id' => 'required|exists:pengingat_obat,id',
+                'nama_obat' => 'required|string|max:255',
+                'jumlah_obat' => 'required|string|max:100',
+                'waktu_minum' => 'required',
+                'suplemen' => 'nullable|string|max:255'
+            ]);
+        }
 
         // Get next urutan
         $maxUrutan = DetailObatPengingat::where('pengingat_obat_id', $request->pengingat_obat_id)->max('urutan');
         
         $obat = DetailObatPengingat::create([
             'pengingat_obat_id' => $request->pengingat_obat_id,
-            'nama_obat' => $request->nama_obat,
+            'nama_obat' => !empty($request->nama_obat) ? $request->nama_obat : null,
             'jumlah_obat' => $request->jumlah_obat,
             'waktu_minum' => $request->waktu_minum,
-            'suplemen' => !empty($request->suplemen) ? $request->suplemen : '-',
+            'suplemen' => !empty($request->suplemen) ? $request->suplemen : null,
             'urutan' => ($maxUrutan ?? 0) + 1,
             'status_obat' => 'aktif' // Default status aktif
         ]);
@@ -47,16 +63,58 @@ class DetailObatController extends Controller
 
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'nama_obat' => 'required|string|max:255',
-            'jumlah_obat' => 'required|string|max:100',
-            'waktu_minum' => 'required',
-            'suplemen' => 'nullable|string|max:255'
-        ]);
+        try {
+            // Get user's puskesmas to determine validation rules
+            $user = Auth::user();
+            $isGodean2 = $user && $user->puskesmas === 'godean_2';
+            
+            \Log::info('Update obat request', [
+                'id' => $id,
+                'user_puskesmas' => $user->puskesmas,
+                'isGodean2' => $isGodean2,
+                'request_data' => $request->all()
+            ]);
+            
+            if ($isGodean2) {
+                // For Godean 2: suplemen required, nama_obat optional
+                $request->validate([
+                    'nama_obat' => 'nullable|string|max:255',
+                    'jumlah_obat' => 'required|string|max:100',
+                    'waktu_minum' => 'required',
+                    'suplemen' => 'required|string|max:255'
+                ]);
+            } else {
+                // For others: nama_obat required, suplemen optional
+                $request->validate([
+                    'nama_obat' => 'required|string|max:255',
+                    'jumlah_obat' => 'required|string|max:100',
+                    'waktu_minum' => 'required',
+                    'suplemen' => 'nullable|string|max:255'
+                ]);
+            }
+        } catch (\Exception $e) {
+            \Log::error('Update obat error: ' . $e->getMessage());
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
 
         $obat = DetailObatPengingat::findOrFail($id);
-        $data = $request->only(['nama_obat', 'jumlah_obat', 'waktu_minum']);
-        $data['suplemen'] = !empty($request->suplemen) ? $request->suplemen : '-';
+        
+        // Prepare data based on what's available in request
+        $data = [
+            'jumlah_obat' => $request->jumlah_obat,
+            'waktu_minum' => $request->waktu_minum,
+        ];
+        
+        // Only update nama_obat if it's provided in request
+        if ($request->has('nama_obat')) {
+            $data['nama_obat'] = !empty($request->nama_obat) ? $request->nama_obat : null;
+        }
+        
+        // Only update suplemen if it's provided in request
+        if ($request->has('suplemen')) {
+            $data['suplemen'] = !empty($request->suplemen) ? $request->suplemen : null;
+        }
+        
         $obat->update($data);
 
         // Auto-update pengingat status

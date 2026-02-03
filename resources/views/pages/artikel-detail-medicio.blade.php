@@ -124,7 +124,6 @@
         }
 
         .reading-time {
-            background: {{ $article->article_type === 'kehamilan' ? '#fce4ec' : '#e3f2fd' }};
             color: {{ $article->article_type === 'kehamilan' ? '#e91e63' : '#1e3c72' }};
             padding: 5px 12px;
             border-radius: 15px;
@@ -250,7 +249,6 @@
 
         .contact-admin {
             background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            border: 2px solid {{ $article->article_type === 'kehamilan' ? '#e91e63' : '#1e3c72' }};
             border-radius: 15px;
             padding: 25px;
             margin-top: 30px;
@@ -391,16 +389,10 @@
                                 </a>
                                 <a href="{{ route('tanya-jawab.' . ($article->article_type === 'kehamilan' ? 'kehamilan' : 'non-kehamilan')) }}"
                                     class="contact-button">
-                                    <i class="bi bi-chat-dots"></i> FAQ
+                                    <i class="bi bi-chat-dots"></i> Tanya Jawab
                                 </a>
                             </div>
 
-                            <div class="mt-3">
-                                <small class="text-muted">
-                                    <i class="bi bi-clock me-1"></i>
-                                    Respon dalam 1x24 jam
-                                </small>
-                            </div>
                         </div>
                     </div>
                 </div>

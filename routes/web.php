@@ -13,17 +13,17 @@ use App\Http\Controllers\TestController;
 
 Route::get('/', [PageController::class, 'berandaMedicio'])->name('beranda');
 
-// Original templates (kept for backup)
-Route::get('/beranda-original', [PageController::class, 'beranda'])->name('beranda.original');
-Route::get('/artikel/hipertensi-kehamilan-original', [PageController::class, 'artikelKehamilan'])->name('artikel.kehamilan.original');
-Route::get('/artikel/hipertensi-non-kehamilan-original', [PageController::class, 'artikelNonKehamilan'])->name('artikel.non-kehamilan.original');
-Route::get('/tanya-jawab/hipertensi-kehamilan-original', [PageController::class, 'tanyaJawabKehamilan'])->name('tanya-jawab.kehamilan.original');
-Route::get('/tanya-jawab/hipertensi-non-kehamilan-original', [PageController::class, 'tanyaJawabNonKehamilan'])->name('tanya-jawab.non-kehamilan.original');
-Route::get('/unduhan-original', [PageController::class, 'unduhan'])->name('unduhan.original');
-Route::get('/tim-pengelola-original', [PageController::class, 'timPengelola'])->name('tim-pengelola.original');
-Route::get('/berita-original', [PageController::class, 'berita'])->name('berita.original');
-Route::get('/petunjuk-original', [PageController::class, 'petunjuk'])->name('petunjuk.original');
-Route::get('/pengingat-original', [PengingatObatController::class, 'showForm'])->name('pengingat.original');
+// Original templates (DISABLED - Replaced by Medicio Template)
+// Route::get('/beranda-original', [PageController::class, 'beranda'])->name('beranda.original');
+// Route::get('/artikel/hipertensi-kehamilan-original', [PageController::class, 'artikelKehamilan'])->name('artikel.kehamilan.original');
+// Route::get('/artikel/hipertensi-non-kehamilan-original', [PageController::class, 'artikelNonKehamilan'])->name('artikel.non-kehamilan.original');
+// Route::get('/tanya-jawab/hipertensi-kehamilan-original', [PageController::class, 'tanyaJawabKehamilan'])->name('tanya-jawab.kehamilan.original');
+// Route::get('/tanya-jawab/hipertensi-non-kehamilan-original', [PageController::class, 'tanyaJawabNonKehamilan'])->name('tanya-jawab.non-kehamilan.original');
+// Route::get('/unduhan-original', [PageController::class, 'unduhan'])->name('unduhan.original');
+// Route::get('/tim-pengelola-original', [PageController::class, 'timPengelola'])->name('tim-pengelola.original');
+// Route::get('/berita-original', [PageController::class, 'berita'])->name('berita.original');
+// Route::get('/petunjuk-original', [PageController::class, 'petunjuk'])->name('petunjuk.original');
+// Route::get('/pengingat-original', [PengingatObatController::class, 'showForm'])->name('pengingat.original');
 
 // Medicio Template Routes (Now default)
 Route::get('/artikel/hipertensi-kehamilan', [PageController::class, 'artikelKehamilanMedicio'])->name('artikel.kehamilan');

@@ -1,5 +1,5 @@
 @extends('layouts.medicio')
-@section('title', 'Petunjuk Penggunaan - Klik Farmasi (Medicio Template)')
+@section('title', 'Petunjuk Penggunaan - Klik Farmasi')
 
 @push('head')
     <!-- SEO Meta Tags -->
@@ -638,7 +638,7 @@
 
         /* Service item hover effect for h3 color */
         .service-item:hover h3 {
-            color: white !important;
+            color: #0b5e91 !important;
         }
 
         /* Responsive */

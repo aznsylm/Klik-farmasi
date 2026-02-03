@@ -80,8 +80,14 @@
                                         @if (Auth::user()->puskesmas === 'godean_2')
                                             <tr>
                                                 <td class="font-weight-bold">Nama Suplemen:</td>
-                                                <td>{{ $obat->suplemen ?? $obat->nama_obat }}</td>
+                                                <td>{{ $obat->suplemen ?? '-' }}</td>
                                             </tr>
+                                            @if ($obat->nama_obat)
+                                                <tr>
+                                                    <td class="font-weight-bold">Obat Tambahan:</td>
+                                                    <td>{{ $obat->nama_obat }}</td>
+                                                </tr>
+                                            @endif
                                             <tr>
                                                 <td class="font-weight-bold">Jumlah:</td>
                                                 <td>{{ $obat->jumlah_obat }}</td>
@@ -140,6 +146,7 @@
                                                 <th>No</th>
                                                 @if (Auth::user()->puskesmas === 'godean_2')
                                                     <th>Nama Suplemen</th>
+                                                    <th>Obat Tambahan</th>
                                                     <th>Jumlah</th>
                                                     <th>Waktu Minum</th>
                                                     <th>Status</th>
@@ -158,7 +165,8 @@
                                                     <td>{{ $index + 1 }}</td>
                                                     @if (Auth::user()->puskesmas === 'godean_2')
                                                         <td class="font-weight-bold">
-                                                            {{ $obat->suplemen ?? $obat->nama_obat }}</td>
+                                                            {{ $obat->suplemen ?? '-' }}</td>
+                                                        <td>{{ $obat->nama_obat ?? '-' }}</td>
                                                         <td>{{ $obat->jumlah_obat }}</td>
                                                         <td>{{ substr($obat->waktu_minum, 0, 5) }}</td>
                                                         <td>

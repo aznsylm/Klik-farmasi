@@ -115,7 +115,7 @@
                                                 <tr>
                                                     <td>{{ ($recentRecords->currentPage() - 1) * $recentRecords->perPage() + $index + 1 }}
                                                     </td>
-                                                    <td>{{ $record->tanggal_input ? \Carbon\Carbon::parse($record->tanggal_input)->format('d M Y') : $record->created_at->format('d M Y, H:i') }}
+                                                    <td>{{ $record->created_at->format('d M Y, H:i') }}
                                                     </td>
                                                     <td>{{ $record->sistol }}</td>
                                                     <td>{{ $record->diastol }}</td>

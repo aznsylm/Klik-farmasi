@@ -1,5 +1,5 @@
 @extends('layouts.medicio')
-@section('title', 'Berita - Klik Farmasi (Medicio Template)')
+@section('title', 'Berita - Klik Farmasi')
 
 @push('head')
     <!-- SEO Meta Tags -->
@@ -56,7 +56,7 @@
                                     </div>
                                 </div>
 
-                                <a href="{{ $berita->url ?? '#' }}" target="_blank" class="readmore">
+                                <a href="{{ $berita->link ?? '#' }}" target="_blank" class="readmore">
                                     <span>Baca Selengkapnya</span>
                                     <i class="bi bi-arrow-right"></i>
                                 </a>
@@ -138,7 +138,7 @@
                 <div class="col-xl-10">
                     <div class="text-center">
                         <h3>Mulai Kelola Hipertensi Anda Hari Ini</h3>
-                        <p>Jangan biarkan hipertensi menguasai hidup Anda. Bergabunglah dengan ribuan pengguna yang telah
+                        <p>Jangan biarkan hipertensi menguasai hidup Anda. Bergabunglah dengan pengguna yang telah
                             merasakan manfaat Klik Farmasi dalam mengelola tekanan darah tinggi.</p>
                         <a class="cta-btn" href="{{ route('pengingat') }}">Buat Pengingat Obat</a>
                     </div>
@@ -201,7 +201,7 @@
             background: var(--accent-color);
             color: var(--contrast-color);
             padding: 12px 30px;
-            border-radius: 25px;
+            border-radius: 5px;
             text-decoration: none;
             font-weight: 600;
             display: inline-flex;

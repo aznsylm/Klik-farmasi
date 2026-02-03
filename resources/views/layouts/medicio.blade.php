@@ -9,8 +9,8 @@
     <meta name="keywords" content="@yield('keywords', 'hipertensi, pengingat obat, kesehatan, farmasi')">
 
     <!-- Favicons -->
-    <link href="{{ asset('assets/img/favicon.png') }}" rel="icon">
-    <link href="{{ asset('assets/img/apple-touch-icon.png') }}" rel="apple-touch-icon">
+    <link href="{{ asset('assets/Favicon.png') }}" rel="icon" type="image/webp">
+    <link href="{{ asset('assets/Favicon.png') }}" rel="apple-touch-icon">
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com" rel="preconnect">
@@ -409,8 +409,7 @@
                     Rights
                     Reserved</span></p>
             <div class="credits small">
-                Developed by <a href="#">Tim Farmasi UAA</a> | Template by <a
-                    href="https://bootstrapmade.com/">BootstrapMade</a>
+                Developed by <a href="https://www.instagram.com/zansylm/">Aizan Syalim</a>
             </div>
         </div>
 

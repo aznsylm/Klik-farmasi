@@ -13,7 +13,7 @@ class TekananDarahController extends Controller
     public function userIndex()
     {
         $recentRecords = CatatanTekananDarah::where('user_id', auth()->id())
-            ->orderByRaw('COALESCE(tanggal_input, DATE(created_at)) desc, created_at desc')
+            ->orderBy('created_at', 'desc')
             ->paginate(10);
             
         return view('pasien.tekanan-darah', compact('recentRecords'));
@@ -37,9 +37,10 @@ class TekananDarahController extends Controller
 
             $today = Carbon::now('Asia/Jakarta')->toDateString();
             
-            // Check if already input today (anti-redundansi)
+            // Check if already input today (anti-redundansi) - check by date part of created_at
             $existing = CatatanTekananDarah::where('user_id', auth()->id())
-                ->where('tanggal_input', $today)
+                ->whereDate('created_at', $today)
+                ->where('sumber', 'input_harian')
                 ->first();
 
             if ($existing) {
@@ -54,8 +55,7 @@ class TekananDarahController extends Controller
                 'pengingat_obat_id' => null, // Tidak terikat pengingat obat
                 'sistol' => $request->sistol,
                 'diastol' => $request->diastol,
-                'sumber' => 'input_harian',
-                'tanggal_input' => $today
+                'sumber' => 'input_harian'
             ]);
 
             return response()->json([
@@ -122,9 +122,9 @@ class TekananDarahController extends Controller
     public function getChartData()
     {
         try {
-            // Ambil semua data tekanan darah user, urutkan berdasarkan tanggal_input jika ada, fallback ke created_at
+            // Ambil semua data tekanan darah user, urutkan berdasarkan created_at
             $tekananDarah = CatatanTekananDarah::where('user_id', auth()->id())
-                ->orderByRaw('COALESCE(tanggal_input, DATE(created_at)) asc')
+                ->orderBy('created_at', 'asc')
                 ->get();
 
             // Siapkan data untuk chart
@@ -136,8 +136,8 @@ class TekananDarahController extends Controller
 
             // Jika ada data, format untuk chart
             foreach ($tekananDarah as $data) {
-                // Gunakan tanggal_input jika ada, fallback ke created_at
-                $date = $data->tanggal_input ? Carbon::parse($data->tanggal_input) : Carbon::parse($data->created_at);
+                // Gunakan created_at
+                $date = Carbon::parse($data->created_at);
                 $chartData['labels'][] = $date->format('d M');
                 $chartData['sistol'][] = (int) $data->sistol;
                 $chartData['diastol'][] = (int) $data->diastol;
@@ -222,14 +222,15 @@ class TekananDarahController extends Controller
                 'user_id' => 'required|exists:users,id',
                 'sistol' => 'required|integer|min:50|max:250',
                 'diastol' => 'required|integer|min:50|max:150',
-                'tanggal_input' => 'required|date'
+                'tanggal' => 'required|date'
             ]);
 
-            $targetDate = Carbon::parse($request->tanggal_input)->toDateString();
+            $targetDate = Carbon::parse($request->tanggal)->toDateString();
             
-            // Check if already exists on target date (anti-redundansi)
+            // Check if already exists on target date (anti-redundansi) using created_at
             $existing = CatatanTekananDarah::where('user_id', $request->user_id)
-                ->where('tanggal_input', $targetDate)
+                ->whereDate('created_at', $targetDate)
+                ->where('sumber', 'admin_input')
                 ->first();
                 
             if ($existing) {
@@ -245,7 +246,8 @@ class TekananDarahController extends Controller
                 'sistol' => $request->sistol,
                 'diastol' => $request->diastol,
                 'sumber' => 'admin_input',
-                'tanggal_input' => $targetDate
+                'created_at' => Carbon::parse($request->tanggal),
+                'updated_at' => now()
             ]);
 
             return response()->json([
@@ -264,7 +266,7 @@ class TekananDarahController extends Controller
             $request->validate([
                 'sistol' => 'required|integer|min:50|max:250',
                 'diastol' => 'required|integer|min:50|max:150',
-                'tanggal_input' => 'required|date'
+                'tanggal' => 'required|date'
             ]);
 
             $catatan = CatatanTekananDarah::findOrFail($id);
@@ -272,7 +274,8 @@ class TekananDarahController extends Controller
                 'sistol' => $request->sistol,
                 'diastol' => $request->diastol,
                 'sumber' => 'admin_edit',
-                'tanggal_input' => Carbon::parse($request->tanggal_input)->toDateString()
+                'created_at' => Carbon::parse($request->tanggal),
+                'updated_at' => now()
             ]);
 
             return response()->json(['success' => true, 'message' => 'Data berhasil diupdate']);

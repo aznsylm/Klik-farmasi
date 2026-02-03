@@ -73,20 +73,22 @@
 
         .team-member .social {
             margin-top: 15px;
-            display: flex !important;
-            opacity: 1 !important;
-            visibility: visible !important;
+            display: flex;
+            opacity: 1;
+            visibility: visible;
             justify-content: center;
-            transform: translateY(0) !important;
-            transition: none !important;
+            transform: translateY(0);
+            transition: none;
+            position: relative;
+            z-index: 1;
         }
 
-        /* Override any hover-only behavior */
+        /* Remove hover behavior - always show social icons */
         .team-member:hover .social {
-            display: flex !important;
-            opacity: 1 !important;
-            visibility: visible !important;
-            transform: translateY(0) !important;
+            display: flex;
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
         }
 
         .team-member .social a {
@@ -132,7 +134,6 @@
             /* Same color as other text */
             width: 25px;
             height: 25px;
-            border: 2px solid #2c4964;
             /* Add border instead */
             border-radius: 50%;
             display: inline-flex;
@@ -217,6 +218,133 @@
     </div>
     <!-- End Page Title -->
 
+    <!-- Gallery Section -->
+    <section id="gallery" class="gallery section light-background">
+        <div class="container section-title" data-aos="fade-up">
+            <h2>Dokumentasi Kegiatan</h2>
+            <p>Galeri dokumentasi kegiatan penelitian dan pengabdian masyarakat tim Klik Farmasi</p>
+        </div>
+
+        <div class="container" data-aos="fade-up" data-aos-delay="100">
+            <div class="swiper init-swiper">
+                <script type="application/json" class="swiper-config">
+                {
+                  "loop": true,
+                  "speed": 600,
+                  "autoplay": {
+                    "delay": 5000
+                  },
+                  "slidesPerView": "auto",
+                  "centeredSlides": true,
+                  "pagination": {
+                    "el": ".swiper-pagination",
+                    "type": "bullets",
+                    "clickable": true
+                  },
+                  "breakpoints": {
+                    "320": {
+                      "slidesPerView": 1,
+                      "spaceBetween": 0
+                    },
+                    "768": {
+                      "slidesPerView": 3,
+                      "spaceBetween": 20
+                    },
+                    "1200": {
+                      "slidesPerView": 5,
+                      "spaceBetween": 20
+                    }
+                  }
+                }
+                </script>
+                <div class="swiper-wrapper align-items-center">
+                    <!-- Dokumentasi kegiatan tim Klik Farmasi -->
+                    <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery"
+                            href="{{ asset('assets/gallery/dokumentasi-1.webp') }}"><img
+                                src="{{ asset('assets/gallery/dokumentasi-1.webp') }}" class="img-fluid"
+                                alt="Dokumentasi Kegiatan 1"></a></div>
+                    <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery"
+                            href="{{ asset('assets/gallery/dokumentasi-2.webp') }}"><img
+                                src="{{ asset('assets/gallery/dokumentasi-2.webp') }}" class="img-fluid"
+                                alt="Dokumentasi Kegiatan 2"></a></div>
+                    <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery"
+                            href="{{ asset('assets/gallery/dokumentasi-3.webp') }}"><img
+                                src="{{ asset('assets/gallery/dokumentasi-3.webp') }}" class="img-fluid"
+                                alt="Dokumentasi Kegiatan 3"></a></div>
+                    <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery"
+                            href="{{ asset('assets/gallery/dokumentasi-4.webp') }}"><img
+                                src="{{ asset('assets/gallery/dokumentasi-4.webp') }}" class="img-fluid"
+                                alt="Dokumentasi Kegiatan 4"></a></div>
+                    <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery"
+                            href="{{ asset('assets/gallery/dokumentasi-5.webp') }}"><img
+                                src="{{ asset('assets/gallery/dokumentasi-5.webp') }}" class="img-fluid"
+                                alt="Dokumentasi Kegiatan 5"></a></div>
+                    <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery"
+                            href="{{ asset('assets/gallery/dokumentasi-6.webp') }}"><img
+                                src="{{ asset('assets/gallery/dokumentasi-6.webp') }}" class="img-fluid"
+                                alt="Dokumentasi Kegiatan 6"></a></div>
+                    <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery"
+                            href="{{ asset('assets/gallery/dokumentasi-7.webp') }}"><img
+                                src="{{ asset('assets/gallery/dokumentasi-7.webp') }}" class="img-fluid"
+                                alt="Dokumentasi Kegiatan 7"></a></div>
+                    <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery"
+                            href="{{ asset('assets/gallery/dokumentasi-8.webp') }}"><img
+                                src="{{ asset('assets/gallery/dokumentasi-8.webp') }}" class="img-fluid"
+                                alt="Dokumentasi Kegiatan 8"></a></div>
+                    <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery"
+                            href="{{ asset('assets/gallery/dokumentasi-9.webp') }}"><img
+                                src="{{ asset('assets/gallery/dokumentasi-9.webp') }}" class="img-fluid"
+                                alt="Dokumentasi Kegiatan 9"></a></div>
+                    <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery"
+                            href="{{ asset('assets/gallery/dokumentasi-10.webp') }}"><img
+                                src="{{ asset('assets/gallery/dokumentasi-10.webp') }}" class="img-fluid"
+                                alt="Dokumentasi Kegiatan 10"></a></div>
+                    <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery"
+                            href="{{ asset('assets/gallery/dokumentasi-11.webp') }}"><img
+                                src="{{ asset('assets/gallery/dokumentasi-11.webp') }}" class="img-fluid"
+                                alt="Dokumentasi Kegiatan 11"></a></div>
+                    <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery"
+                            href="{{ asset('assets/gallery/dokumentasi-12.webp') }}"><img
+                                src="{{ asset('assets/gallery/dokumentasi-12.webp') }}" class="img-fluid"
+                                alt="Dokumentasi Kegiatan 12"></a></div>
+                    <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery"
+                            href="{{ asset('assets/gallery/dokumentasi-13.webp') }}"><img
+                                src="{{ asset('assets/gallery/dokumentasi-13.webp') }}" class="img-fluid"
+                                alt="Dokumentasi Kegiatan 13"></a></div>
+                    <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery"
+                            href="{{ asset('assets/gallery/dokumentasi-14.webp') }}"><img
+                                src="{{ asset('assets/gallery/dokumentasi-14.webp') }}" class="img-fluid"
+                                alt="Dokumentasi Kegiatan 14"></a></div>
+                    <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery"
+                            href="{{ asset('assets/gallery/dokumentasi-15.webp') }}"><img
+                                src="{{ asset('assets/gallery/dokumentasi-15.webp') }}" class="img-fluid"
+                                alt="Dokumentasi Kegiatan 15"></a></div>
+                    <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery"
+                            href="{{ asset('assets/gallery/dokumentasi-16.webp') }}"><img
+                                src="{{ asset('assets/gallery/dokumentasi-16.webp') }}" class="img-fluid"
+                                alt="Dokumentasi Kegiatan 16"></a></div>
+                    <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery"
+                            href="{{ asset('assets/gallery/dokumentasi-17.webp') }}"><img
+                                src="{{ asset('assets/gallery/dokumentasi-17.webp') }}" class="img-fluid"
+                                alt="Dokumentasi Kegiatan 17"></a></div>
+                    <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery"
+                            href="{{ asset('assets/gallery/dokumentasi-18.webp') }}"><img
+                                src="{{ asset('assets/gallery/dokumentasi-18.webp') }}" class="img-fluid"
+                                alt="Dokumentasi Kegiatan 18"></a></div>
+                    <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery"
+                            href="{{ asset('assets/gallery/dokumentasi-19.webp') }}"><img
+                                src="{{ asset('assets/gallery/dokumentasi-19.webp') }}" class="img-fluid"
+                                alt="Dokumentasi Kegiatan 19"></a></div>
+                    <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery"
+                            href="{{ asset('assets/gallery/dokumentasi-20.webp') }}"><img
+                                src="{{ asset('assets/gallery/dokumentasi-20.webp') }}" class="img-fluid"
+                                alt="Dokumentasi Kegiatan 20"></a></div>
+                </div>
+                <div class="swiper-pagination"></div>
+            </div>
+        </div>
+    </section>
+
     <!-- About Section -->
     <section id="about" class="about section">
 
@@ -269,7 +397,7 @@
         </div>
     </section>
 
-    <!-- Doctors/Supervisors Section -->
+    <!-- Supervisors Section -->
     <section id="doctors" class="doctors section light-background">
         <div class="container section-title" data-aos="fade-up">
             <h2>Tim Pembimbing</h2>
@@ -314,7 +442,8 @@
 
                 <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
                     <div class="team-member">
-                        <img src="{{ asset('assets/tim/Aizan.jpg') }}" alt="Aizan Syalim" class="img-fluid clickable-image">
+                        <img src="{{ asset('assets/tim/Aizan.jpg') }}" alt="Aizan Syalim"
+                            class="img-fluid clickable-image">
                         <h4>Aizan Syalim</h4>
                         <span>Programmer Website</span>
                         <div class="social">
@@ -420,100 +549,7 @@
         </div>
     </section>
 
-    <!-- Gallery Section -->
-    <section id="gallery" class="gallery section light-background">
-        <div class="container section-title" data-aos="fade-up">
-            <h2>Dokumentasi Kegiatan</h2>
-            <p>Galeri dokumentasi kegiatan penelitian dan pengabdian masyarakat tim Klik Farmasi</p>
-        </div>
 
-        <div class="container" data-aos="fade-up" data-aos-delay="100">
-            <div class="swiper init-swiper">
-                <script type="application/json" class="swiper-config">
-                {
-                  "loop": true,
-                  "speed": 600,
-                  "autoplay": {
-                    "delay": 5000
-                  },
-                  "slidesPerView": "auto",
-                  "centeredSlides": true,
-                  "pagination": {
-                    "el": ".swiper-pagination",
-                    "type": "bullets",
-                    "clickable": true
-                  },
-                  "breakpoints": {
-                    "320": {
-                      "slidesPerView": 1,
-                      "spaceBetween": 0
-                    },
-                    "768": {
-                      "slidesPerView": 3,
-                      "spaceBetween": 20
-                    },
-                    "1200": {
-                      "slidesPerView": 5,
-                      "spaceBetween": 20
-                    }
-                  }
-                }
-                </script>
-                <div class="swiper-wrapper align-items-center">
-                    <!-- Dokumentasi kegiatan tim Klik Farmasi -->
-                    <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery"
-                            href="{{ asset('assets/gallery/dokumentasi-1.webp') }}"><img
-                                src="{{ asset('assets/gallery/dokumentasi-1.webp') }}" class="img-fluid"
-                                alt="Dokumentasi Kegiatan 1"></a></div>
-                    <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery"
-                            href="{{ asset('assets/gallery/dokumentasi-2.webp') }}"><img
-                                src="{{ asset('assets/gallery/dokumentasi-2.webp') }}" class="img-fluid"
-                                alt="Dokumentasi Kegiatan 2"></a></div>
-                    <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery"
-                            href="{{ asset('assets/gallery/dokumentasi-3.webp') }}"><img
-                                src="{{ asset('assets/gallery/dokumentasi-3.webp') }}" class="img-fluid"
-                                alt="Dokumentasi Kegiatan 3"></a></div>
-                    <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery"
-                            href="{{ asset('assets/gallery/dokumentasi-4.webp') }}"><img
-                                src="{{ asset('assets/gallery/dokumentasi-4.webp') }}" class="img-fluid"
-                                alt="Dokumentasi Kegiatan 4"></a></div>
-                    <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery"
-                            href="{{ asset('assets/gallery/dokumentasi-5.webp') }}"><img
-                                src="{{ asset('assets/gallery/dokumentasi-5.webp') }}" class="img-fluid"
-                                alt="Dokumentasi Kegiatan 5"></a></div>
-                    <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery"
-                            href="{{ asset('assets/gallery/dokumentasi-6.webp') }}"><img
-                                src="{{ asset('assets/gallery/dokumentasi-6.webp') }}" class="img-fluid"
-                                alt="Dokumentasi Kegiatan 6"></a></div>
-                    <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery"
-                            href="{{ asset('assets/gallery/dokumentasi-7.webp') }}"><img
-                                src="{{ asset('assets/gallery/dokumentasi-7.webp') }}" class="img-fluid"
-                                alt="Dokumentasi Kegiatan 7"></a></div>
-                    <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery"
-                            href="{{ asset('assets/gallery/dokumentasi-8.webp') }}"><img
-                                src="{{ asset('assets/gallery/dokumentasi-8.webp') }}" class="img-fluid"
-                                alt="Dokumentasi Kegiatan 8"></a></div>
-                    <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery"
-                            href="{{ asset('assets/gallery/dokumentasi-9.webp') }}"><img
-                                src="{{ asset('assets/gallery/dokumentasi-9.webp') }}" class="img-fluid"
-                                alt="Dokumentasi Kegiatan 9"></a></div>
-                    <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery"
-                            href="{{ asset('assets/gallery/dokumentasi-10.webp') }}"><img
-                                src="{{ asset('assets/gallery/dokumentasi-10.webp') }}" class="img-fluid"
-                                alt="Dokumentasi Kegiatan 10"></a></div>
-                    <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery"
-                            href="{{ asset('assets/gallery/dokumentasi-11.webp') }}"><img
-                                src="{{ asset('assets/gallery/dokumentasi-11.webp') }}" class="img-fluid"
-                                alt="Dokumentasi Kegiatan 11"></a></div>
-                    <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery"
-                            href="{{ asset('assets/gallery/dokumentasi-12.webp') }}"><img
-                                src="{{ asset('assets/gallery/dokumentasi-12.webp') }}" class="img-fluid"
-                                alt="Dokumentasi Kegiatan 12"></a></div>
-                </div>
-                <div class="swiper-pagination"></div>
-            </div>
-        </div>
-    </section>
 
     <!-- Call to Action Section -->
     <section id="call-to-action" class="call-to-action section accent-background">

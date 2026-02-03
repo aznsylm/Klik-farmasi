@@ -1,5 +1,5 @@
 @extends('layouts.medicio')
-@section('title', 'Beranda - Klik Farmasi (Medicio Template)')
+@section('title', 'Beranda - Klik Farmasi')
 
 @push('head')
     <!-- SEO Meta Tags -->
@@ -249,7 +249,7 @@
                         <div class="icon">
                             <i class="fas fa-comments"></i>
                         </div>
-                        <a href="{{ route('tanya-jawab.non-kehamilan') }}" class="stretched-link">
+                        <a href="#form-contact" class="stretched-link">
                             <h3>Konsultasi Online</h3>
                         </a>
                         <p>Tanya jawab langsung dengan tim farmasi untuk mendapatkan solusi masalah hipertensi Anda</p>
@@ -459,45 +459,56 @@
 
                         <div class="faq-container">
 
-                            @forelse($faqs as $index => $faq)
-                                <div class="faq-item {{ $index === 0 ? 'faq-active' : '' }}">
-                                    <h3>{{ $faq->question }}</h3>
-                                    <div class="faq-content">
-                                        <p>{!! $faq->answer !!}</p>
-                                    </div>
-                                    <i class="faq-toggle bi bi-chevron-right"></i>
-                                </div><!-- End Faq item-->
-                            @empty
-                                <div class="faq-item faq-active">
-                                    <h3>Apa itu Klik Farmasi?</h3>
-                                    <div class="faq-content">
-                                        <p>Klik Farmasi adalah platform kesehatan digital yang dikembangkan khusus untuk
-                                            membantu pengelolaan hipertensi melalui sistem pengingat obat, artikel
-                                            kesehatan,
-                                            dan konsultasi dengan tim farmasi.</p>
-                                    </div>
-                                    <i class="faq-toggle bi bi-chevron-right"></i>
-                                </div><!-- End Faq item-->
+                            <div class="faq-item faq-active">
+                                <h3>Apa itu Klik Farmasi?</h3>
+                                <div class="faq-content">
+                                    <p>Klik Farmasi adalah platform kesehatan digital yang dikembangkan khusus untuk
+                                        membantu pengelolaan hipertensi melalui sistem pengingat obat, artikel
+                                        kesehatan,
+                                        dan konsultasi dengan tim farmasi Universitas Alma Ata.</p>
+                                </div>
+                                <i class="faq-toggle bi bi-chevron-right"></i>
+                            </div><!-- End Faq item-->
 
-                                <div class="faq-item">
-                                    <h3>Bagaimana cara menggunakan pengingat obat?</h3>
-                                    <div class="faq-content">
-                                        <p>Anda dapat mengatur jadwal minum obat melalui formulir pengingat di website.
-                                            Sistem
-                                            akan mengirimkan notifikasi via WhatsApp sesuai jadwal yang Anda tentukan.</p>
-                                    </div>
-                                    <i class="faq-toggle bi bi-chevron-right"></i>
-                                </div><!-- End Faq item-->
+                            <div class="faq-item">
+                                <h3>Bagaimana cara menggunakan pengingat obat?</h3>
+                                <div class="faq-content">
+                                    <p>Anda dapat mengatur jadwal minum obat melalui formulir pengingat di website.
+                                        Sistem akan mengirimkan notifikasi via WhatsApp sesuai jadwal yang Anda tentukan.
+                                        Cukup isi nama obat, dosis, dan waktu minum obat.</p>
+                                </div>
+                                <i class="faq-toggle bi bi-chevron-right"></i>
+                            </div><!-- End Faq item-->
 
-                                <div class="faq-item">
-                                    <h3>Apakah layanan konsultasi berbayar?</h3>
-                                    <div class="faq-content">
-                                        <p>Tidak, semua layanan konsultasi dan tanya jawab di platform Klik Farmasi tersedia
-                                            secara gratis untuk membantu pengelolaan hipertensi Anda.</p>
-                                    </div>
-                                    <i class="faq-toggle bi bi-chevron-right"></i>
-                                </div><!-- End Faq item-->
-                            @endforelse
+                            <div class="faq-item">
+                                <h3>Apakah layanan konsultasi berbayar?</h3>
+                                <div class="faq-content">
+                                    <p>Tidak, semua layanan konsultasi dan tanya jawab di platform Klik Farmasi tersedia
+                                        secara gratis untuk membantu pengelolaan hipertensi Anda. Tim farmasi kami
+                                        siap membantu tanpa dipungut biaya.</p>
+                                </div>
+                                <i class="faq-toggle bi bi-chevron-right"></i>
+                            </div><!-- End Faq item-->
+
+                            <div class="faq-item">
+                                <h3>Siapa yang bisa menggunakan platform ini?</h3>
+                                <div class="faq-content">
+                                    <p>Platform Klik Farmasi dapat digunakan oleh siapa saja, terutama penderita hipertensi,
+                                        keluarga penderita hipertensi, atau masyarakat umum yang ingin belajar tentang
+                                        pengelolaan tekanan darah tinggi.</p>
+                                </div>
+                                <i class="faq-toggle bi bi-chevron-right"></i>
+                            </div><!-- End Faq item-->
+
+                            <div class="faq-item">
+                                <h3>Bagaimana cara mengakses artikel kesehatan?</h3>
+                                <div class="faq-content">
+                                    <p>Anda dapat mengakses artikel kesehatan melalui menu "Artikel" di website.
+                                        Tersedia artikel untuk hipertensi umum dan hipertensi pada kehamilan.
+                                        Semua artikel ditulis oleh tim ahli farmasi Universitas Alma Ata.</p>
+                                </div>
+                                <i class="faq-toggle bi bi-chevron-right"></i>
+                            </div><!-- End Faq item-->
 
                         </div>
 
@@ -517,13 +528,16 @@
             <h2>Kontak</h2>
 
             <div class="mb-5" data-aos="fade-up" data-aos-delay="200">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3952.7283658691113!2d110.32211627484463!3d-7.818550292202166!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7af7e2b2acea97%3A0xa3cb91d3e65407b2!2sUniversitas%20Alma%20Ata%20Yogyakarta!5e0!3m2!1sid!2sid!4v1769938446606!5m2!1sid!2sid" width="1250" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3952.7283658691113!2d110.32211627484463!3d-7.818550292202166!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7af7e2b2acea97%3A0xa3cb91d3e65407b2!2sUniversitas%20Alma%20Ata%20Yogyakarta!5e0!3m2!1sid!2sid!4v1769938446606!5m2!1sid!2sid"
+                    width="1250" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"></iframe>
             </div><!-- End Google Maps -->
 
             <div class="container" data-aos="fade-up" data-aos-delay="100">
 
-                <div class="row gy-4">
-                    <div class="col-lg-6 ">
+                <div class="row gy-4" id="form-contact">
+                    <div class="col-lg-6">
                         <div class="row gy-4">
                             <div class="col-md-12">
                                 <div class="info-item text-center" data-aos="fade" data-aos-delay="200">
@@ -594,7 +608,7 @@
                 </div>
 
             </div>
-
+        </div>
     </section><!-- /Contact Section -->
 
 @endsection
@@ -605,20 +619,44 @@
         document.addEventListener('DOMContentLoaded', function() {
             console.log('Halaman Beranda Medicio Template siap!');
 
+            // Function to sanitize input
+            function sanitizeInput(input) {
+                if (!input) return '';
+                return input
+                    .replace(/[<>]/g, '') // Remove < dan >
+                    .replace(/javascript:/gi, '') // Remove javascript: protocol
+                    .replace(/on\w+\s*=/gi, '') // Remove event handlers
+                    .replace(/script/gi, '') // Remove script tags
+                    .trim()
+                    .substring(0, 500); // Limit length
+            }
+
+            // Function to encode for URL
+            function encodeForWhatsApp(text) {
+                return encodeURIComponent(sanitizeInput(text));
+            }
+
             // Handle contact form submission to WhatsApp
             const contactForm = document.getElementById('contactForm');
             if (contactForm) {
                 contactForm.addEventListener('submit', function(e) {
                     e.preventDefault();
 
-                    const name = this.name.value;
-                    const email = this.email.value;
-                    const subject = this.subject.value;
-                    const message = this.message.value;
+                    // Get and sanitize input values
+                    const name = sanitizeInput(this.name.value);
+                    const email = sanitizeInput(this.email.value);
+                    const subject = sanitizeInput(this.subject.value);
+                    const message = sanitizeInput(this.message.value);
 
-                    // Format WhatsApp message
+                    // Validate required fields after sanitization
+                    if (!name || !email || !subject || !message) {
+                        alert('Mohon isi semua field yang diperlukan.');
+                        return;
+                    }
+
+                    // Format WhatsApp message with encoded values
                     const whatsappMessage =
-                        `*Pesan dari Website Klik Farmasi*%0A%0A*Nama:* ${name}%0A*Email:* ${email}%0A*Subject:* ${subject}%0A*Pesan:* ${message}`;
+                        `*Pesan dari Website Klik Farmasi*%0A%0A*Nama:* ${encodeForWhatsApp(name)}%0A*Email:* ${encodeForWhatsApp(email)}%0A*Subject:* ${encodeForWhatsApp(subject)}%0A*Pesan:* ${encodeForWhatsApp(message)}`;
 
                     // WhatsApp number for Klik Farmasi
                     const whatsappNumber = '6285280909235'; // Nomor WhatsApp Klik Farmasi
@@ -735,11 +773,22 @@
         }
 
         /* Center icon di contact info */
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
         .info-item i {
             font-size: 2rem;
             color: #0b5e91;
             margin-bottom: 10px;
-            display: block;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
         }
 
         /* Responsive */

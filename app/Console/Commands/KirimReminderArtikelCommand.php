@@ -35,12 +35,27 @@ class KirimReminderArtikelCommand extends Command
             return 0;
         }
 
+        // Log statistik pasien untuk debugging
+        $totalPasien = User::where('role', 'pasien')->count();
+        $pasienDenganObatAktif = User::where('role', 'pasien')
+            ->whereHas('pengingatObat', function($pengingat) {
+                $pengingat->where('status', 'aktif')
+                    ->whereHas('detailObat', function($detail) {
+                        $detail->where('status', 'aktif');
+                    });
+            })->count();
+        
+        $this->info("Total pasien: {$totalPasien}, dengan obat aktif: {$pasienDenganObatAktif}");
+        Log::info("Statistik pasien - Total: {$totalPasien}, dengan obat aktif: {$pasienDenganObatAktif}");
+
         // Ambil pasien yang eligible (sudah 3 hari sejak reminder terakhir atau belum pernah)
+        // dan PUNYA pengingat obat aktif dengan detail obat aktif
         $eligibleUsers = $this->getEligibleUsers();
 
         if ($eligibleUsers->isEmpty()) {
             $this->info('Tidak ada pasien yang perlu dikirim reminder hari ini.');
-            Log::info('Tidak ada pasien eligible untuk reminder artikel');
+            $this->info('(Pasien harus memiliki pengingat obat aktif dengan obat status aktif)');
+            Log::info('Tidak ada pasien eligible untuk reminder artikel - tidak ada yang punya obat aktif');
             return 0;
         }
 
@@ -112,33 +127,44 @@ class KirimReminderArtikelCommand extends Command
     private function getEligibleUsers()
     {
         // Ambil pasien yang:
-        // 1. Belum pernah dapat reminder & sudah 3 hari sejak daftar
-        // 2. Sudah pernah dapat & sudah 3 hari sejak reminder terakhir
-        // 3. BELUM dapat reminder hari ini (PENTING!)
+        // 1. WAJIB: Memiliki pengingat obat AKTIF dengan detail obat AKTIF
+        // 2. Belum pernah dapat reminder & sudah 3 hari sejak daftar
+        //    ATAU sudah pernah dapat & sudah 3 hari sejak reminder terakhir
+        // 3. BELUM dapat reminder hari ini
         
         $threeDaysAgo = now()->subDays(3);
         $today = now()->toDateString();
 
         return User::where('role', 'pasien')
-            ->where(function($query) use ($threeDaysAgo) {
-                // Kondisi 1: Belum pernah dapat reminder & sudah 3 hari sejak daftar
-                $query->whereDoesntHave('whatsappLogs', function($log) {
-                    $log->where('jenis_pesan', 'reminder_artikel')
-                        ->where('status', 'sent');
-                })
-                ->where('created_at', '<=', $threeDaysAgo);
+            // KONDISI WAJIB PERTAMA: Harus punya pengingat obat aktif dengan detail obat aktif
+            ->whereHas('pengingatObat', function($pengingat) {
+                $pengingat->where('status', 'aktif')
+                    ->whereHas('detailObat', function($detail) {
+                        $detail->where('status', 'aktif');
+                    });
             })
-            ->orWhere(function($query) use ($threeDaysAgo) {
-                // Kondisi 2: Sudah pernah dapat & sudah 3 hari dari reminder terakhir
-                $query->whereHas('whatsappLogs', function($log) use ($threeDaysAgo) {
-                    $log->select(DB::raw('MAX(created_at) as last_sent'))
-                        ->where('jenis_pesan', 'reminder_artikel')
-                        ->where('status', 'sent')
-                        ->groupBy('user_id')
-                        ->having('last_sent', '<=', $threeDaysAgo);
+            // KONDISI KEDUA: Filter berdasarkan waktu reminder
+            ->where(function($query) use ($threeDaysAgo) {
+                // Kondisi 2a: Belum pernah dapat reminder & sudah 3 hari sejak daftar
+                $query->where(function($subQuery) use ($threeDaysAgo) {
+                    $subQuery->whereDoesntHave('whatsappLogs', function($log) {
+                        $log->where('jenis_pesan', 'reminder_artikel')
+                            ->where('status', 'sent');
+                    })
+                    ->where('created_at', '<=', $threeDaysAgo);
+                })
+                // ATAU Kondisi 2b: Sudah pernah dapat & sudah 3 hari dari reminder terakhir
+                ->orWhere(function($subQuery) use ($threeDaysAgo) {
+                    $subQuery->whereHas('whatsappLogs', function($log) use ($threeDaysAgo) {
+                        $log->select(DB::raw('MAX(created_at) as last_sent'))
+                            ->where('jenis_pesan', 'reminder_artikel')
+                            ->where('status', 'sent')
+                            ->groupBy('user_id')
+                            ->having('last_sent', '<=', $threeDaysAgo);
+                    });
                 });
             })
-            // FILTER PENTING: Exclude pasien yang sudah dapat reminder HARI INI
+            // KONDISI KETIGA: Exclude yang sudah dapat reminder hari ini
             ->whereDoesntHave('whatsappLogs', function($log) use ($today) {
                 $log->where('jenis_pesan', 'reminder_artikel')
                     ->where('status', 'sent')

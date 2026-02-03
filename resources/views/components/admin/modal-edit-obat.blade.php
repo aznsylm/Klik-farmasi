@@ -8,7 +8,7 @@
                     <span>&times;</span>
                 </button>
             </div>
-            <form id="editObatForm" method="POST">
+            <form id="editObatForm" method="POST" action="">
                 @csrf
                 @method('PUT')
                 <div class="modal-body">
@@ -17,10 +17,10 @@
                             <label class="form-label">Suplemen Utama</label>
                             <select class="form-control" name="suplemen" id="editSuplemen" required>
                                 <option value="">-- Pilih suplemen --</option>
-                                <option value="Asam folat 400mcg">Asam Folat 400mcg</option>
-                                <option value="Zat besi + Folat">Zat Besi + Folat</option>
-                                <option value="Kalsium laktat">Kalsium Laktat</option>
-                                <option value="Vitamin B kompleks">Vitamin B Kompleks</option>
+                                <option value="Asam folat">Asam Folat</option>
+                                <option value="Zat besi">Zat Besi</option>
+                                <option value="Kalsium">Kalsium</option>
+                                <option value="Suplemen Multivitamin">Multivitamin</option>
                             </select>
                             <div class="invalid-feedback" id="editSuplemenError"></div>
                         </div>
@@ -40,12 +40,14 @@
                                 <option value="">-- Pilih jam --</option>
                                 <option value="06:00">06.00 (Pagi)</option>
                                 <option value="07:00">07.00 (Pagi)</option>
+                                <option value="08:00">08.00 (Pagi)</option>
                                 <option value="09:00">09.00 (Pagi)</option>
                                 <option value="12:00">12.00 (Siang)</option>
                                 <option value="13:00">13.00 (Siang)</option>
                                 <option value="15:00">15.00 (Sore)</option>
                                 <option value="18:00">18.00 (Sore)</option>
                                 <option value="19:00">19.00 (Malam)</option>
+                                <option value="20:00">20.00 (Malam)</option>
                                 <option value="21:00">21.00 (Malam)</option>
                             </select>
                             <div class="invalid-feedback" id="editWaktuMinumError"></div>
@@ -82,12 +84,14 @@
                                 <option value="">-- Pilih jam --</option>
                                 <option value="06:00">06.00 (Pagi)</option>
                                 <option value="07:00">07.00 (Pagi)</option>
+                                <option value="08:00">08.00 (Pagi)</option>
                                 <option value="09:00">09.00 (Pagi)</option>
                                 <option value="12:00">12.00 (Siang)</option>
                                 <option value="13:00">13.00 (Siang)</option>
                                 <option value="15:00">15.00 (Sore)</option>
                                 <option value="18:00">18.00 (Sore)</option>
                                 <option value="19:00">19.00 (Malam)</option>
+                                <option value="20:00">20.00 (Malam)</option>
                                 <option value="21:00">21.00 (Malam)</option>
                             </select>
                             <div class="invalid-feedback" id="editWaktuMinumError"></div>
@@ -99,7 +103,7 @@
                                 <option value="Asam folat">Asam Folat</option>
                                 <option value="Zat besi">Zat Besi</option>
                                 <option value="Kalsium">Kalsium</option>
-                                <option value="Suplemen Multivitamin">Multivitamin untuk Ibu Hamil</option>
+                                <option value="Suplemen Multivitamin">Multivitamin</option>
                             </select>
                         </div>
                     @endif

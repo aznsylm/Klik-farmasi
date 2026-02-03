@@ -13,6 +13,15 @@
     <link rel="stylesheet" href="{{ asset('css/faq-pages.css') }}" media="screen">
     <!-- Mobile Responsive CSS -->
     <link rel="stylesheet" href="{{ asset('css/mobile-responsive.css') }}" media="all">
+
+    <!-- Custom CSS for text justification -->
+    <style>
+        .faq-button .question-text,
+        .answer-text,
+        .answer-text p {
+            text-align: justify !important;
+        }
+    </style>
 @endpush
 
 @section('content')

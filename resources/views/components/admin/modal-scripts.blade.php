@@ -402,18 +402,33 @@
 
     // Edit obat function
     function editObat(id, namaObat, jumlahObat, waktuMinum, suplemen) {
-        // Set form action URL
+        // Set form action URL - using direct URL path
         document.getElementById('editObatForm').action = `/admin/obat/${id}`;
 
-        // Fill form fields
-        document.getElementById('editNamaObat').value = namaObat;
+        // Fill form fields based on user's puskesmas
+        @if (auth()->user()->puskesmas === 'godean_2')
+            // For Godean 2 - suplemen first, nama_obat optional
+            document.getElementById('editSuplemen').value = suplemen || '';
+            // Make sure nama_obat field exists and set its value
+            const editNamaObatField = document.getElementById('editNamaObat');
+            if (editNamaObatField) {
+                editNamaObatField.value = namaObat || '';
+            }
+        @else
+            // For others - nama_obat first, suplemen optional
+            document.getElementById('editNamaObat').value = namaObat || '';
+            // Make sure suplemen field exists and set its value
+            const editSuplemenField = document.getElementById('editSuplemen');
+            if (editSuplemenField) {
+                editSuplemenField.value = suplemen || '';
+            }
+        @endif
+
         document.getElementById('editJumlahObat').value = jumlahObat;
 
         // Fix waktu_minum format - convert from HH:MM:SS to HH:MM
         const timeValue = waktuMinum.substring(0, 5); // Get only HH:MM part
         document.getElementById('editWaktuMinum').value = timeValue;
-
-        document.getElementById('editSuplemen').value = suplemen || '';
 
         // Show modal
         $('#editObatModal').modal('show');
@@ -551,6 +566,12 @@
 
                 const formData = new FormData(this);
 
+                // Debug log
+                console.log('Form action:', this.action);
+                for (let [key, value] of formData.entries()) {
+                    console.log(key, value);
+                }
+
                 fetch(this.action, {
                         method: 'POST',
                         body: formData,
@@ -566,9 +587,15 @@
                             submitBtn.innerHTML = '<i class="fas fa-save mr-1"></i>Tambah Obat';
                         }
 
+                        console.log('Response status:', response.status);
+                        console.log('Response ok:', response.ok);
+
                         if (response.ok) {
                             location.reload();
                         } else {
+                            response.text().then(text => {
+                                console.log('Error response:', text);
+                            });
                             alert('Gagal menambah obat');
                         }
                     })
@@ -598,6 +625,12 @@
                 const formData = new FormData(this);
                 const actionUrl = this.action;
 
+                // Debug log for edit
+                console.log('Edit form action:', actionUrl);
+                for (let [key, value] of formData.entries()) {
+                    console.log(key, value);
+                }
+
                 fetch(actionUrl, {
                         method: 'POST',
                         body: formData,
@@ -607,9 +640,15 @@
                         }
                     })
                     .then(response => {
+                        console.log('Edit response status:', response.status);
+                        console.log('Edit response ok:', response.ok);
+
                         if (response.ok) {
                             location.reload();
                         } else {
+                            response.text().then(text => {
+                                console.log('Edit error response:', text);
+                            });
                             alert('Gagal mengupdate obat');
                         }
                     })

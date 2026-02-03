@@ -207,8 +207,7 @@ class PengingatObatController extends Controller
                     'sistol' => (int)$request->sistol,
                     'diastol' => (int)$request->diastol,
                     'sumber' => 'pengingat_awal',
-                    'catatan' => 'Data awal dari pengingat obat',
-                    'tanggal_input' => today()->toDateString()
+                    'catatan' => 'Data awal dari pengingat obat'
                 ]);
             }
             

@@ -32,6 +32,7 @@
             font-weight: 700;
             color: #0b5e91;
             cursor: pointer;
+            text-align: justify;
         }
 
         .faq-container .faq-item .faq-content {
@@ -42,6 +43,7 @@
         .faq-container .faq-item .faq-content p {
             color: #6c757d;
             line-height: 24px;
+            text-align: justify;
         }
 
         .faq-container .faq-item .faq-toggle {

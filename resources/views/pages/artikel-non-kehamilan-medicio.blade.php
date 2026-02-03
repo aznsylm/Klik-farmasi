@@ -123,7 +123,9 @@
         }
 
         .featured-article .article-image {
-            height: 400px;
+            height: 500px;
+            object-fit: cover;
+            object-position: center;
         }
 
         .breadcrumb-style {
