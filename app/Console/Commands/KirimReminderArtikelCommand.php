@@ -77,14 +77,15 @@ class KirimReminderArtikelCommand extends Command
                     $this->warn("Artikel tidak ditemukan, skip user {$user->name}");
                     continue;
                 }
-
-                // Tentukan kategori untuk URL berdasarkan article_type
-                $kategori = strtolower($artikel->article_type) === 'hipertensi kehamilan' 
+                // Tentukan kategori untuk URL berdasarkan article_type (sesuai dengan PageController)
+                // Di database: 'kehamilan' atau 'non-kehamilan' (default)
+                $kategori = $artikel->article_type === 'kehamilan' 
                     ? 'hipertensi-kehamilan' 
                     : 'hipertensi-non-kehamilan';
 
-                // Buat link artikel: https://klikfarmasi.com/artikel/{kategori}/{slug}
-                $link = "https://klikfarmasi.com/artikel/{$kategori}/{$artikel->slug}";
+                // Buat link artikel menggunakan APP_URL dari config
+                $baseUrl = rtrim(config('app.url'), '/');
+                $link = "{$baseUrl}/artikel/{$kategori}/{$artikel->slug}";
 
                 // Buat pesan
                 $pesan = $this->whatsappService->buatPesanReminderArtikel($artikel->title, $link);
