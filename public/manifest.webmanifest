@@ -1,0 +1,25 @@
+{
+    "name": "Klik Farmasi",
+    "short_name": "Klik Farmasi",
+    "description": "Platform kesehatan digital untuk manajemen hipertensi",
+    "start_url": "/",
+    "scope": "/",
+    "display": "standalone",
+    "orientation": "portrait-primary",
+    "theme_color": "#0b5e91",
+    "background_color": "#ffffff",
+    "icons": [
+        {
+            "src": "/assets/Favicon.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "/assets/Favicon.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ]
+}

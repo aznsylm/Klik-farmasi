@@ -11,6 +11,8 @@
     <!-- Favicons -->
     <link href="{{ asset('assets/Favicon.png') }}" rel="icon" type="image/webp">
     <link href="{{ asset('assets/Favicon.png') }}" rel="apple-touch-icon">
+    <link rel="manifest" href="{{ asset('manifest.webmanifest') }}">
+    <meta name="theme-color" content="#0b5e91">
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com" rel="preconnect">
@@ -432,6 +434,18 @@
 
     <!-- Main JS File -->
     <script src="{{ asset('medicio/js/main.js') }}"></script>
+
+    <script>
+        if ('serviceWorker' in navigator && window.location.pathname === '/') {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/sw.js', {
+                    scope: '/'
+                }).catch(function(error) {
+                    console.error('Service Worker registration failed:', error);
+                });
+            });
+        }
+    </script>
 
     @stack('scripts')
 
