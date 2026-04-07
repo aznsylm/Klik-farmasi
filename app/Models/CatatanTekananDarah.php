@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class CatatanTekananDarah extends Model
 {
     use HasFactory;
+    use \App\Traits\UseWIBTimezone;
 
     protected $table = 'catatan_tekanan_darah';
 

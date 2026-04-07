@@ -10,6 +10,64 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class TekananDarahController extends Controller
 {
+    private function resolveDompdfPublicPath(): string
+    {
+        $candidates = [];
+
+        try {
+            $candidates[] = public_path();
+        } catch (\Throwable $e) {
+            // Ignore and continue with other candidates.
+        }
+
+        $candidates[] = base_path('public');
+        $candidates[] = base_path('public_html');
+        $candidates[] = base_path();
+
+        foreach (array_unique(array_filter($candidates)) as $candidate) {
+            if (is_dir($candidate)) {
+                $resolved = realpath($candidate);
+                if ($resolved !== false) {
+                    return $resolved;
+                }
+            }
+        }
+
+        throw new \RuntimeException('Unable to resolve a valid DomPDF public path');
+    }
+
+    private function prepareDompdfRuntime(): array
+    {
+        $runtimePath = $this->getDompdfRuntimePath();
+        $publicPath = $this->resolveDompdfPublicPath();
+
+        // DomPDF service provider requires a resolvable public path on some production layouts.
+        config(['dompdf.public_path' => $publicPath]);
+
+        return [
+            'runtime_path' => $runtimePath,
+            'public_path' => $publicPath,
+        ];
+    }
+
+    private function getDompdfRuntimePath(): string
+    {
+        $runtimePath = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'klik-farmasi-dompdf';
+
+        if (!is_dir($runtimePath)) {
+            @mkdir($runtimePath, 0755, true);
+        }
+
+        return $runtimePath;
+    }
+
+    private function getSafePdfFilename(string $baseName): string
+    {
+        $safeName = preg_replace('/[^A-Za-z0-9._-]+/', '_', $baseName) ?: 'laporan_tekanan_darah';
+
+        return trim($safeName, '._-');
+    }
+
     public function userIndex()
     {
         $recentRecords = CatatanTekananDarah::where('user_id', auth()->id())
@@ -178,7 +236,7 @@ class TekananDarahController extends Controller
             $diastol[] = $item->diastol;
             $rawData[] = [
                 'id' => $item->id,
-                'tanggal' => $item->created_at->format('Y-m-d'),
+                'tanggal' => Carbon::parse($item->created_at)->format('Y-m-d'),
                 'sistol' => $item->sistol,
                 'diastol' => $item->diastol,
                 'sumber' => $item->sumber
@@ -204,7 +262,15 @@ class TekananDarahController extends Controller
         $total = $query->count();
         $records = $query->skip(($page - 1) * $perPage)
             ->take($perPage)
-            ->get();
+            ->get()
+            ->map(function($record) {
+                // Parse created_at in WIB timezone
+                $dateWIB = Carbon::parse($record->created_at)->setTimezone('Asia/Jakarta');
+                // Store both date-only (for input field) and formatted (for display)
+                $record->created_at = $dateWIB->format('Y-m-d');
+                $record->created_at_formatted = $dateWIB->format('d M Y');
+                return $record;
+            });
         
         return response()->json([
             'data' => $records,
@@ -225,7 +291,8 @@ class TekananDarahController extends Controller
                 'tanggal' => 'required|date'
             ]);
 
-            $targetDate = Carbon::parse($request->tanggal)->toDateString();
+            $inputDate = Carbon::createFromFormat('Y-m-d', $request->tanggal, 'Asia/Jakarta')->startOfDay();
+            $targetDate = $inputDate->toDateString();
             
             // Check if already exists on target date (anti-redundansi) using created_at
             $existing = CatatanTekananDarah::where('user_id', $request->user_id)
@@ -240,15 +307,15 @@ class TekananDarahController extends Controller
                 ]);
             }
 
-            $catatan = CatatanTekananDarah::create([
-                'user_id' => $request->user_id,
-                'pengingat_obat_id' => null, // Tidak terikat pengingat obat
-                'sistol' => $request->sistol,
-                'diastol' => $request->diastol,
-                'sumber' => 'admin_input',
-                'created_at' => Carbon::parse($request->tanggal),
-                'updated_at' => now()
-            ]);
+            $catatan = new CatatanTekananDarah();
+            $catatan->user_id = $request->user_id;
+            $catatan->pengingat_obat_id = null; // Tidak terikat pengingat obat
+            $catatan->sistol = $request->sistol;
+            $catatan->diastol = $request->diastol;
+            $catatan->sumber = 'admin_input';
+            $catatan->created_at = $inputDate;
+            $catatan->updated_at = now();
+            $catatan->save();
 
             return response()->json([
                 'success' => true,
@@ -269,14 +336,15 @@ class TekananDarahController extends Controller
                 'tanggal' => 'required|date'
             ]);
 
+            $inputDate = Carbon::createFromFormat('Y-m-d', $request->tanggal, 'Asia/Jakarta')->startOfDay();
+            
             $catatan = CatatanTekananDarah::findOrFail($id);
-            $catatan->update([
-                'sistol' => $request->sistol,
-                'diastol' => $request->diastol,
-                'sumber' => 'admin_edit',
-                'created_at' => Carbon::parse($request->tanggal),
-                'updated_at' => now()
-            ]);
+            $catatan->sistol = $request->sistol;
+            $catatan->diastol = $request->diastol;
+            $catatan->sumber = 'admin_edit';
+            $catatan->created_at = $inputDate;
+            $catatan->updated_at = now();
+            $catatan->save();
 
             return response()->json(['success' => true, 'message' => 'Data berhasil diupdate']);
         } catch (\Exception $e) {
@@ -337,36 +405,39 @@ class TekananDarahController extends Controller
                 'max_diastol' => $data->count() > 0 ? $data->max('diastol') : 0
             ];
             
-            // Ensure temp directory exists
-            $tempDir = storage_path('app/temp/pdf');
-            if (!file_exists($tempDir)) {
-                mkdir($tempDir, 0755, true);
-            }
-            
-            // Generate unique filename
-            $filename = 'admin_tekanan_darah_' . $userId . '_' . date('Ymd_His') . '.pdf';
-            $filepath = $tempDir . '/' . $filename;
-            
-            // Generate PDF to temp file
-            $pdf = Pdf::loadView('components.tekanan-darah-pdf', [
+            // Generate and stream PDF directly to response to avoid filesystem permission issues.
+            $dompdfRuntime = $this->prepareDompdfRuntime();
+            $runtimePath = $dompdfRuntime['runtime_path'];
+            $publicPath = $dompdfRuntime['public_path'];
+
+            $pdf = Pdf::setOption([
+                'tempDir' => $runtimePath,
+                'fontDir' => $runtimePath,
+                'fontCache' => $runtimePath,
+                'chroot' => $publicPath,
+                'isRemoteEnabled' => false,
+            ])->loadView('components.tekanan-darah-pdf', [
                 'user' => $user,
                 'pengingat' => $pengingat,
                 'chartData' => $chartData,
                 'stats' => $stats,
                 'generatedAt' => Carbon::now()->format('d M Y, H:i')
             ]);
-            
-            // Save PDF to temp file
-            file_put_contents($filepath, $pdf->output());
-            
-            // Return as download with auto-delete
-            $downloadName = 'Laporan_Tekanan_Darah_' . $user->name . '_' . Carbon::now()->format('Y-m-d') . '.pdf';
-            return response()->download($filepath, $downloadName)
-                ->deleteFileAfterSend(true);
+
+            $downloadName = $this->getSafePdfFilename(
+                'Laporan_Tekanan_Darah_' . $user->name . '_' . Carbon::now()->format('Y-m-d') . '.pdf'
+            );
+
+            return $pdf->download($downloadName);
                 
         } catch (\Exception $e) {
-            \Log::error('PDF Generation Error: ' . $e->getMessage());
-            return redirect()->back()->with('error', 'Gagal generate PDF: ' . $e->getMessage());
+            \Log::error('PDF Generation Error (admin): ' . $e->getMessage(), [
+                'user_id' => $userId,
+                'exception' => get_class($e),
+                    'dompdf_public_path' => config('dompdf.public_path'),
+            ]);
+
+            return redirect()->back()->with('error', 'Gagal mengunduh laporan PDF. Silakan coba lagi.');
         }
     }
 
@@ -418,35 +489,39 @@ class TekananDarahController extends Controller
                 'min_diastol' => $data->count() > 0 ? $data->min('diastol') : 0,
             ];
             
-            // Ensure temp directory exists
-            $tempDir = storage_path('app/temp/pdf');
-            if (!file_exists($tempDir)) {
-                mkdir($tempDir, 0755, true);
-            }
-            
-            // Generate unique filename
-            $filename = 'tekanan_darah_' . $user->id . '_' . date('Ymd_His') . '.pdf';
-            $filepath = $tempDir . '/' . $filename;
-            
-            // Generate PDF to temp file
-            $pdf = Pdf::loadView('components.tekanan-darah-pdf', [
+            // Generate and stream PDF directly to response to avoid filesystem permission issues.
+            $dompdfRuntime = $this->prepareDompdfRuntime();
+            $runtimePath = $dompdfRuntime['runtime_path'];
+            $publicPath = $dompdfRuntime['public_path'];
+
+            $pdf = Pdf::setOption([
+                'tempDir' => $runtimePath,
+                'fontDir' => $runtimePath,
+                'fontCache' => $runtimePath,
+                'chroot' => $publicPath,
+                'isRemoteEnabled' => false,
+            ])->loadView('components.tekanan-darah-pdf', [
                 'user' => $user,
                 'pengingat' => $pengingat,
                 'chartData' => $chartData,
                 'stats' => $stats,
                 'generatedAt' => Carbon::now()->format('d M Y, H:i')
             ]);
-            
-            // Save PDF to temp file
-            file_put_contents($filepath, $pdf->output());
-            
-            // Return as download with auto-delete
-            return response()->download($filepath, 'Laporan_Tekanan_Darah_' . $user->name . '_' . Carbon::now()->format('Y-m-d') . '.pdf')
-                ->deleteFileAfterSend(true);
+
+            $downloadName = $this->getSafePdfFilename(
+                'Laporan_Tekanan_Darah_' . $user->name . '_' . Carbon::now()->format('Y-m-d') . '.pdf'
+            );
+
+            return $pdf->download($downloadName);
                 
         } catch (\Exception $e) {
-            \Log::error('PDF Generation Error: ' . $e->getMessage());
-            return redirect()->back()->with('error', 'Gagal generate PDF: ' . $e->getMessage());
+            \Log::error('PDF Generation Error (pasien): ' . $e->getMessage(), [
+                'user_id' => auth()->id(),
+                'exception' => get_class($e),
+                    'dompdf_public_path' => config('dompdf.public_path'),
+            ]);
+
+            return redirect()->back()->with('error', 'Gagal mengunduh laporan PDF. Silakan coba lagi.');
         }
     }
     

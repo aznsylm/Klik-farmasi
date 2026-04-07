@@ -21,6 +21,24 @@
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
+            @if (session('error'))
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ session('error') }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            @endif
+
+            @if (session('success'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ session('success') }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            @endif
+
             <div class="row">
                 <!-- Input Form -->
                 <div class="col-md-4">
@@ -57,7 +75,7 @@
                                         Terakhir: {{ $latestTekananDarah->sistol }}/{{ $latestTekananDarah->diastol }} mmHg
                                         <br>
                                         <span
-                                            class="text-muted">{{ $latestTekananDarah->created_at->format('d M Y, H:i') }}</span>
+                                            class="text-muted">{{ $latestTekananDarah->created_at->format('d M Y') }}</span>
                                     </small>
                                 </div>
                             @endif
@@ -115,7 +133,7 @@
                                                 <tr>
                                                     <td>{{ ($recentRecords->currentPage() - 1) * $recentRecords->perPage() + $index + 1 }}
                                                     </td>
-                                                    <td>{{ $record->created_at->format('d M Y, H:i') }}
+                                                    <td>{{ $record->created_at->format('d M Y') }}
                                                     </td>
                                                     <td>{{ $record->sistol }}</td>
                                                     <td>{{ $record->diastol }}</td>
@@ -213,7 +231,7 @@
                             Batal
                         </button>
                         <button type="submit" class="btn btn-warning">
-                            Update
+                            Simpan
                         </button>
                     </div>
                 </form>
@@ -349,6 +367,7 @@
                         .then(response => response.json())
                         .then(data => {
                             if (data.success) {
+                                alert('Data tekanan darah berhasil diupdate!');
                                 $('#editModal').modal('hide');
                                 location.reload();
                             } else {

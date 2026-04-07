@@ -316,12 +316,12 @@ function loadModalData(page = 1) {
                     tbody.innerHTML += `
                         <tr>
                             <td>${startIndex + index + 1}</td>
-                            <td>${formatDate(record.tanggal_input || record.created_at)}</td>
+                            <td>${record.created_at_formatted}</td>
                             <td>${record.sistol}</td>
                             <td>${record.diastol}</td>
                             <td><span class="${category.color}">${category.text}</span></td>
                             <td>
-                                <button class="btn btn-warning btn-sm mr-1" onclick="editTekananDarah(${record.id}, '${record.tanggal_input || record.created_at.split("T")[0]}', ${record.sistol}, ${record.diastol})" title="Edit">
+                                <button class="btn btn-warning btn-sm mr-1" onclick="editTekananDarah(${record.id}, '${record.created_at}', ${record.sistol}, ${record.diastol})" title="Edit">
                                     <i class="fas fa-edit"></i>
                                 </button>
                                 <button class="btn btn-danger btn-sm" onclick="deleteTekananDarah(${record.id})" title="Hapus">
@@ -540,7 +540,7 @@ function initializeFormHandlers() {
 
             const formData = {
                 user_id: window.currentUserId,
-                tanggal_input: tanggal,
+                tanggal: tanggal,
                 sistol: sistol,
                 diastol: diastol,
             };
@@ -610,7 +610,7 @@ function initializeFormHandlers() {
             }
 
             const formData = {
-                tanggal_input: tanggal,
+                tanggal: tanggal,
                 sistol: sistol,
                 diastol: diastol,
             };
