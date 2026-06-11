@@ -38,10 +38,10 @@ class KirimReminderArtikelCommand extends Command
         // Log statistik pasien untuk debugging
         $totalPasien = User::where('role', 'pasien')->count();
         $pasienDenganObatAktif = User::where('role', 'pasien')
-            ->whereHas('pengingatObat', function($pengingat) {
+            ->whereHas('latestPengingatObat', function($pengingat) {
                 $pengingat->where('status', 'aktif')
                     ->whereHas('detailObat', function($detail) {
-                        $detail->where('status', 'aktif');
+                        $detail->where('status_obat', 'aktif');
                     });
             })->count();
         
@@ -138,10 +138,10 @@ class KirimReminderArtikelCommand extends Command
 
         return User::where('role', 'pasien')
             // KONDISI WAJIB PERTAMA: Harus punya pengingat obat aktif dengan detail obat aktif
-            ->whereHas('pengingatObat', function($pengingat) {
+            ->whereHas('latestPengingatObat', function($pengingat) {
                 $pengingat->where('status', 'aktif')
                     ->whereHas('detailObat', function($detail) {
-                        $detail->where('status', 'aktif');
+                        $detail->where('status_obat', 'aktif');
                     });
             })
             // KONDISI KEDUA: Filter berdasarkan waktu reminder

@@ -59,6 +59,11 @@ class User extends Authenticatable
         return $this->hasMany(PengingatObat::class);
     }
 
+    public function latestPengingatObat()
+    {
+        return $this->hasOne(PengingatObat::class)->latestOfMany();
+    }
+
     public function catatanTekananDarah(): HasMany
     {
         return $this->hasMany(CatatanTekananDarah::class);

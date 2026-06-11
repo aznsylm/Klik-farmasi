@@ -35,9 +35,15 @@ class KirimPengingatObatCommand extends Command
         $this->info("Mencari obat dengan jadwal: {$waktuTarget}");
 
         // Ambil pengingat aktif dengan obat yang jadwalnya 10 menit lagi
+        // Hanya ambil pengingat obat terbaru (latest) untuk masing-masing pasien
         $pengingatAktif = PengingatObat::with(['user', 'detailObat'])
             ->where('status', 'aktif')
             ->where('tanggal_mulai', '<=', $tanggalHariIni)
+            ->whereIn('id', function ($query) {
+                $query->selectRaw('MAX(id)')
+                      ->from('pengingat_obat')
+                      ->groupBy('user_id');
+            })
             ->whereHas('detailObat', function ($q) use ($waktuTarget) {
                 $q->where('status_obat', 'aktif')
                   ->whereRaw('TIME_FORMAT(waktu_minum, "%H:%i") = ?', [$waktuTarget]);
