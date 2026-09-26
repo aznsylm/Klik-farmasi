@@ -158,22 +158,6 @@
             color: #163057;
             background-color: #e9ecef;
         }
-
-        /* Pagination Styling */
-        .pagination .page-link {
-            color: #1e3c72;
-            border-color: #e9ecef;
-        }
-
-        .pagination .page-item.active .page-link {
-            background-color: #1e3c72;
-            border-color: #1e3c72;
-        }
-
-        .pagination .page-link:hover {
-            color: #163057;
-            background-color: #e9ecef;
-        }
     </style>
 @endpush
 

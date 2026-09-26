@@ -1,13 +1,13 @@
 @extends('layouts.medicio')
 
-@section('title', 'Tanya Jawab Hipertensi Non-Kehamilan - Klik Farmasi')
+@section('title', 'Tanya Jawab Hipertensi Kehamilan - Klik Farmasi')
 
 @push('head')
     <!-- SEO Meta Tags -->
     <meta name="description"
-        content="FAQ dan tanya jawab seputar hipertensi umum. Dapatkan jawaban dari ahli farmasi tentang obat hipertensi, gaya hidup sehat, dan tips pengelolaan tekanan darah tinggi.">
+        content="FAQ dan tanya jawab seputar hipertensi kehamilan. Dapatkan jawaban dari ahli farmasi tentang preeklampsia, obat hipertensi saat hamil, dan tips kesehatan ibu hamil.">
     <meta name="keywords"
-        content="FAQ hipertensi, tanya jawab tekanan darah tinggi, obat hipertensi, konsultasi farmasi, tips kesehatan">
+        content="FAQ hipertensi kehamilan, tanya jawab preeklampsia, obat hipertensi hamil, konsultasi kehamilan, farmasi kehamilan">
     <meta name="author" content="Tim Farmasi Universitas Alma Ata">
 
     <!-- Custom CSS for FAQ Medicio Style -->
@@ -16,58 +16,70 @@
             padding: 60px 0;
         }
 
-        .faq-container .faq-item {
+        .faq .faq-container .faq-item {
             position: relative;
             padding: 20px;
             margin-bottom: 15px;
             background: #fff;
-            border-radius: 4px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+            border: 1px solid #eef2f5;
+            overflow: hidden;
+            transition: all 0.3s ease;
         }
 
-        .faq-container .faq-item h3 {
+        .faq .faq-container .faq-item h3 {
             font-size: 16px;
             line-height: 24px;
-            margin: 0 30px 0 0;
+            margin: 0 35px 0 0;
             font-weight: 700;
-            color: #1e3c72;
+            color: #0b5e91;
             cursor: pointer;
-            text-align: justify;
         }
 
-        .faq-container .faq-item .faq-content {
-            display: none;
-            padding: 20px 0 0 0;
+        .faq .faq-container .faq-item .faq-content {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: all 0.3s ease-in-out;
+            visibility: hidden;
+            opacity: 0;
+            padding-top: 0;
         }
 
-        .faq-container .faq-item .faq-content p {
+        .faq .faq-container .faq-item .faq-content p,
+        .faq .faq-container .faq-item .faq-content div {
+            overflow: hidden;
             color: #6c757d;
-            line-height: 24px;
+            line-height: 1.6;
+            margin-bottom: 0;
             text-align: justify;
         }
 
-        .faq-container .faq-item .faq-toggle {
+        .faq .faq-container .faq-item .faq-toggle {
             position: absolute;
             top: 20px;
             right: 20px;
             font-size: 16px;
             line-height: 24px;
             cursor: pointer;
-            color: #1e3c72;
-            transition: transform 0.3s;
+            color: #0b5e91;
+            transition: transform 0.3s ease;
         }
 
-        .faq-container .faq-item.faq-active .faq-content {
-            display: block;
+        .faq .faq-container .faq-item.faq-active .faq-content {
+            grid-template-rows: 1fr;
+            visibility: visible;
+            opacity: 1;
+            padding-top: 12px;
         }
 
-        .faq-container .faq-item.faq-active .faq-toggle {
+        .faq .faq-container .faq-item.faq-active .faq-toggle {
             transform: rotate(90deg);
-            color: #2a5298;
+            color: #e91e63;
         }
 
         .quick-help-card {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            background: linear-gradient(135deg, #0b5e91 0%, #89cef4 100%);
             color: white;
             border-radius: 15px;
             padding: 30px;
@@ -160,9 +172,9 @@
             <div class="container">
                 <div class="row d-flex justify-content-center text-center">
                     <div class="col-lg-8">
-                        <h1>Tanya Jawab Hipertensi</h1>
-                        <p class="mb-0">Temukan jawaban untuk pertanyaan umum tentang hipertensi dari tim farmasi
-                            Universitas Alma Ata</p>
+                        <h1>Tanya Jawab Hipertensi Kehamilan</h1>
+                        <p class="mb-0">Temukan jawaban untuk pertanyaan umum tentang hipertensi selama kehamilan dari tim
+                            farmasi Universitas Alma Ata</p>
                     </div>
                 </div>
             </div>
@@ -171,12 +183,11 @@
             <div class="container">
                 <ol>
                     <li><a href="{{ route('beranda') }}">Beranda</a></li>
-                    <li class="current">Tanya Jawab Hipertensi</li>
+                    <li class="current">Tanya Jawab Hipertensi Kehamilan</li>
                 </ol>
             </div>
         </nav>
-    </div>
-    <!-- End Page Title -->
+    </div><!-- End Page Title -->
 
     <!-- Main Content -->
     <section id="faq" class="faq section light-background">
@@ -197,7 +208,7 @@
                                 <div class="faq-item {{ $index == 0 ? 'faq-active' : '' }}">
                                     <h3>{!! $faq->question !!}</h3>
                                     <div class="faq-content">
-                                        <p>{!! $faq->answer !!}</p>
+                                        <div>{!! $faq->answer !!}</div>
                                     </div>
                                     <i class="faq-toggle bi bi-chevron-right"></i>
                                 </div><!-- End FAQ item-->
@@ -207,7 +218,7 @@
                                 <h3>Belum ada FAQ tersedia</h3>
                                 <div class="faq-content">
                                     <p>Saat ini belum ada pertanyaan yang sering diajukan untuk kategori hipertensi
-                                        non-kehamilan. Tim kami sedang menyiapkan konten FAQ yang bermanfaat untuk Anda.</p>
+                                        kehamilan. Tim kami sedang menyiapkan konten FAQ yang bermanfaat untuk Anda.</p>
                                 </div>
                                 <i class="faq-toggle bi bi-chevron-right"></i>
                             </div>
@@ -267,7 +278,7 @@
                 once: true
             });
 
-            console.log('Halaman FAQ Hipertensi Non-Kehamilan (Medicio) siap!');
+            console.log('Halaman FAQ Hipertensi Kehamilan (Medicio) siap!');
             console.log('FAQ items found:', document.querySelectorAll('.faq-item').length);
         });
     </script>

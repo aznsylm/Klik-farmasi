@@ -10,6 +10,8 @@ use App\Models\DownloadRead;
 use App\Models\Testimonial;
 use App\Models\News;
 use App\Models\Faq;
+use App\Models\User;
+use App\Models\WhatsappLog;
 use Illuminate\Support\Facades\Auth;
 
 class PageController extends Controller
@@ -33,8 +35,16 @@ class PageController extends Controller
         // Ambil 5 FAQ acak dari database (gabungan kehamilan dan non-kehamilan)
         $faqs = Faq::inRandomOrder()->take(5)->get();
 
+        // Hitung statistik real dari database
+        $stats = [
+            'users' => User::where('role', 'pasien')->count(),
+            'articles' => Article::count(),
+            'reminders' => WhatsappLog::count(),
+            'testimonials' => Testimonial::count(),
+        ];
+
         // Kirim data ke view dengan template Medicio
-        return view('pages.beranda-medicio', compact('articles', 'testimonials', 'faqs'));
+        return view('pages.beranda-medicio', compact('articles', 'testimonials', 'faqs', 'stats'));
     }
 
     public function artikel()

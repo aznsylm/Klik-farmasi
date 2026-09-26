@@ -16,37 +16,46 @@
             padding: 60px 0;
         }
 
-        .faq-container .faq-item {
+        .faq .faq-container .faq-item {
             position: relative;
             padding: 20px;
             margin-bottom: 15px;
             background: #fff;
-            border-radius: 4px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+            border: 1px solid #eef2f5;
+            overflow: hidden;
+            transition: all 0.3s ease;
         }
 
-        .faq-container .faq-item h3 {
+        .faq .faq-container .faq-item h3 {
             font-size: 16px;
             line-height: 24px;
-            margin: 0 30px 0 0;
+            margin: 0 35px 0 0;
             font-weight: 700;
             color: #0b5e91;
             cursor: pointer;
-            text-align: justify;
         }
 
-        .faq-container .faq-item .faq-content {
-            display: none;
-            padding: 20px 0 0 0;
+        .faq .faq-container .faq-item .faq-content {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: all 0.3s ease-in-out;
+            visibility: hidden;
+            opacity: 0;
+            padding-top: 0;
         }
 
-        .faq-container .faq-item .faq-content p {
+        .faq .faq-container .faq-item .faq-content p,
+        .faq .faq-container .faq-item .faq-content div {
+            overflow: hidden;
             color: #6c757d;
-            line-height: 24px;
+            line-height: 1.6;
+            margin-bottom: 0;
             text-align: justify;
         }
 
-        .faq-container .faq-item .faq-toggle {
+        .faq .faq-container .faq-item .faq-toggle {
             position: absolute;
             top: 20px;
             right: 20px;
@@ -54,14 +63,17 @@
             line-height: 24px;
             cursor: pointer;
             color: #0b5e91;
-            transition: transform 0.3s;
+            transition: transform 0.3s ease;
         }
 
-        .faq-container .faq-item.faq-active .faq-content {
-            display: block;
+        .faq .faq-container .faq-item.faq-active .faq-content {
+            grid-template-rows: 1fr;
+            visibility: visible;
+            opacity: 1;
+            padding-top: 12px;
         }
 
-        .faq-container .faq-item.faq-active .faq-toggle {
+        .faq .faq-container .faq-item.faq-active .faq-toggle {
             transform: rotate(90deg);
             color: #e91e63;
         }
@@ -196,7 +208,7 @@
                                 <div class="faq-item {{ $index == 0 ? 'faq-active' : '' }}">
                                     <h3>{!! $faq->question !!}</h3>
                                     <div class="faq-content">
-                                        <p>{!! $faq->answer !!}</p>
+                                        <div>{!! $faq->answer !!}</div>
                                     </div>
                                     <i class="faq-toggle bi bi-chevron-right"></i>
                                 </div><!-- End FAQ item-->

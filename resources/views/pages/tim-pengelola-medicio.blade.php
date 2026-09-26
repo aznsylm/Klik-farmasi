@@ -444,13 +444,13 @@
                     <div class="team-member">
                         <img src="{{ asset('assets/tim/Aizan.jpg') }}" alt="Aizan Syalim"
                             class="img-fluid clickable-image">
-                        <h4>Aizan Syalim</h4>
+                        <h4>Aizan Syalim, S.Kom</h4>
                         <span>Programmer Website</span>
                         <div class="social">
                             <a href="https://www.instagram.com/zansylm/" target="_blank">
                                 <i class="bi bi-instagram"></i>
                             </a>
-                            <a href="mailto:223200231@almaata.ac.id">
+                            <a href="mailto:aizansyalim25@gmail.com">
                                 <i class="bi bi-envelope"></i>
                             </a>
                         </div>
